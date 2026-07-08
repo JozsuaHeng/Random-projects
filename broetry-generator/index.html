@@ -1,0 +1,79 @@
+<meta charset="UTF-8">
+<title>Broetry Generator</title>
+<link rel="stylesheet" href="style.css">
+
+<header class="site-header">
+  <div class="header-left">
+    <svg class="logo" width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0a66c2" />
+          <stop offset="100%" stop-color="#f5a623" />
+        </linearGradient>
+      </defs>
+      <circle cx="26" cy="26" r="25" fill="url(#logo-grad)" />
+      <text x="26" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="bold" fill="white">B</text>
+      <text x="40" y="14" font-size="16">🔥</text>
+    </svg>
+    <div class="wordmark">
+      <span class="wordmark-main">Broetry</span>
+      <span class="wordmark-sub">GENERATOR</span>
+    </div>
+  </div>
+  <button id="theme-toggle" title="Toggle dark mode">🌙</button>
+</header>
+
+<p class="subtitle">A satirical LinkedIn "thought leadership" post machine.</p>
+
+<div class="app-grid">
+  <aside class="controls">
+    <label class="slider-label" for="insufferability">
+      <span>😤 Insufferability</span>
+      <input type="number" id="insufferability-value" class="value-input" min="0" max="100" value="50">
+    </label>
+    <input type="range" id="insufferability" min="0" max="100" value="50">
+
+    <label class="slider-label" for="emoji-density">
+      <span>🎉 Emoji Density</span>
+      <input type="number" id="emoji-density-value" class="value-input" min="0" max="100" value="50">
+    </label>
+    <input type="range" id="emoji-density" min="0" max="100" value="50">
+
+    <label class="slider-label" for="humble-brag">
+      <span>💪 Humble-Brag Intensity</span>
+      <input type="number" id="humble-brag-value" class="value-input" min="0" max="100" value="50">
+    </label>
+    <input type="range" id="humble-brag" min="0" max="100" value="50">
+
+    <label class="slider-label" for="corporate-jargon">
+      <span>💼 Corporate Jargon</span>
+      <input type="number" id="corporate-jargon-value" class="value-input" min="0" max="100" value="50">
+    </label>
+    <input type="range" id="corporate-jargon" min="0" max="100" value="50">
+
+    <label class="slider-label" for="post-length">
+      <span>📏 Post Length</span>
+      <input type="number" id="post-length-value" class="value-input" min="0" max="100" value="50">
+    </label>
+    <input type="range" id="post-length" min="0" max="100" value="50">
+
+    <label class="toggle-row" for="roast-mode">
+      <span>🎭 Roast Mode</span>
+      <input type="checkbox" id="roast-mode">
+    </label>
+
+    <div class="button-row">
+      <button id="generate-btn">Generate Post</button>
+      <button id="randomize-btn" title="Randomize all sliders">🎲 Randomize</button>
+    </div>
+
+    <div class="history-section">
+      <h2>Recent Posts</h2>
+      <div id="history" class="history-strip"></div>
+    </div>
+  </aside>
+
+  <section id="output" class="preview"></section>
+</div>
+
+<script type="module" src="ui.js"></script>
