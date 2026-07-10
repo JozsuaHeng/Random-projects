@@ -1,0 +1,2 @@
+- **[Broetry Generator](https://jozsuaheng.github.io/Random-projects/broetry-generator/)** — Slider-controlled generator for cringe LinkedIn "broetry" posts (insufferability, emoji density, humble-brag intensity, and more).
+- **[Thought Leadership Mad-Libs Engine](https://jozsuaheng.github.io/Random-projects/thought-leadership-madlibs/)** — A literal mad-libs engine that guarantees zero information content, one buzzword-filled blank at a time.
