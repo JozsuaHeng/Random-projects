@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Thought Leadership Mad-Libs Engine</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>The Thought Leadership Mad-Libs Engine</h1>
+    <p class="tagline">Guaranteed Zero Information Content&trade;</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel form-panel">
+      <div class="template-picker">
+        <label for="template-select">Story:</label>
+        <select id="template-select"></select>
+        <button id="surprise-btn" class="btn btn-primary">🎲 Surprise Me</button>
+      </div>
+
+      <ol id="blanks-list" class="blanks-list"></ol>
+
+      <label class="roast-toggle">
+        <input type="checkbox" id="roast-toggle" />
+        🔥 Roast mode (adds a self-aware closing line)
+      </label>
+
+      <button id="generate-btn" class="btn btn-generate">Publish My Thought Leadership ✅</button>
+      <p class="jargon-hint">Tip: once published, click any underlined word for a translation.</p>
+    </section>
+
+    <section class="panel output-panel">
+      <div id="empty-state" class="empty-state">
+        <p>Fill in the blanks, or hit <strong>Surprise Me</strong>, then publish.</p>
+      </div>
+
+      <article id="post-card" class="post-card hidden">
+        <div class="post-header">
+          <div class="avatar" id="post-avatar"></div>
+          <div class="post-author">
+            <div class="author-name" id="post-name"></div>
+            <div class="author-headline" id="post-headline"></div>
+            <div class="post-meta">2h &middot; 🌐</div>
+          </div>
+        </div>
+        <div class="post-body" id="post-body"></div>
+        <p class="roast-line hidden" id="roast-line"></p>
+        <div class="post-engagement">
+          <span id="post-reactions"></span>
+          <span id="post-comments"></span>
+          <span id="post-reposts"></span>
+        </div>
+        <div class="comments-section hidden" id="comments-section"></div>
+      </article>
+
+      <button id="copy-btn" class="btn btn-copy hidden">📋 Copy post text</button>
+
+      <div id="audit-panel" class="audit-panel hidden">
+        <h2>Content Audit</h2>
+        <div class="audit-row">
+          <span>Information Content</span>
+          <strong class="audit-zero">0%</strong>
+        </div>
+        <div class="audit-row">
+          <span>Actionable Advice</span>
+          <strong>None detected</strong>
+        </div>
+        <div class="audit-row">
+          <span>Buzzword Density</span>
+          <strong id="audit-buzzword">—</strong>
+        </div>
+        <div class="audit-row">
+          <span>Verdict</span>
+          <strong>Certified Thought Leadership™</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Part of the <a href="../">ai-slop</a> collection. No data leaves your browser.</p>
+  </footer>
+
+  <div id="jargon-tooltip" class="jargon-tooltip hidden"></div>
+
+  <script type="module" src="ui.js"></script>
+</body>
+</html>
