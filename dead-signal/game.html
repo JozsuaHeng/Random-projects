@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEAD SIGNAL — An Interactive Gamebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="titlebar">
+  <a href="home.html" id="btn-library" class="ui-btn">← LIBRARY</a>
+  <div id="game-title">DEAD SIGNAL</div>
+  <div id="page-indicator">— PAGE <span id="page-num">1</span> —</div>
+  <div id="titlebar-buttons">
+    <button id="btn-help" class="ui-btn">HOW TO PLAY</button>
+    <button id="btn-newgame" class="ui-btn">NEW GAME</button>
+  </div>
+</header>
+
+<main id="layout">
+
+  <!-- LEFT: the storybook page -->
+  <section id="book">
+    <div id="book-page">
+      <div id="book-pagenum">· 1 ·</div>
+      <div id="book-text"></div>
+      <div id="book-effects"></div>
+      <div id="book-choices"></div>
+      <div id="book-dice" class="hidden">
+        <div class="dice-label">TEST YOUR LUCK</div>
+        <div class="dice-row">
+          <span class="die" id="die1">?</span>
+          <span class="die" id="die2">?</span>
+        </div>
+        <div id="dice-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT column -->
+  <aside id="sidebar">
+
+    <!-- TOP RIGHT: ship map -->
+    <section id="map-panel" class="panel">
+      <canvas id="starfield"></canvas>
+      <div id="map-content">
+        <div class="panel-title">ISV VESPER — DECK SCHEMATIC</div>
+        <div id="ship-map"></div>
+        <div id="location-line">LOCATION: <span id="location-name">CRYO BAY</span></div>
+      </div>
+    </section>
+
+    <!-- BOTTOM RIGHT: character / stats / backpack -->
+    <section id="char-panel" class="panel">
+      <div id="char-header">
+        <canvas id="portrait" width="64" height="64"></canvas>
+        <div id="char-id">
+          <div id="char-name">SPC. M. REYES</div>
+          <div id="char-role">SALVAGE &amp; RESCUE, 3RD CLASS</div>
+        </div>
+      </div>
+
+      <div id="stats">
+        <div class="stat-row">
+          <span class="stat-label hp">HEALTH</span>
+          <span class="stat-blocks" id="stat-health"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label o2">OXYGEN</span>
+          <span class="stat-blocks" id="stat-oxygen"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label sn">SANITY</span>
+          <span class="stat-blocks" id="stat-sanity"></span>
+        </div>
+      </div>
+
+      <div id="equip-row">
+        <canvas id="paperdoll" width="72" height="120"></canvas>
+        <div id="equip-slots">
+          <div class="eq-slot" data-slot="head" title="Head"><span class="eq-label">HEAD</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="body" title="Body"><span class="eq-label">BODY</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="hands" title="Hands"><span class="eq-label">HANDS</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="feet" title="Feet"><span class="eq-label">FEET</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="back" title="Back"><span class="eq-label">BACK</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="held" title="Held"><span class="eq-label">HELD</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel-title small">BACKPACK</div>
+      <div id="backpack"></div>
+      <div id="item-info">Click an item to inspect, use, or equip it.</div>
+    </section>
+
+  </aside>
+</main>
+
+<!-- How-to-play overlay -->
+<div id="help-overlay" class="hidden">
+  <div id="help-box">
+    <div class="panel-title">HOW TO PLAY</div>
+    <p>This is a gamebook — like the paperbacks where every choice tells you
+    which page to turn to. Read the page on the left, then pick a choice to
+    turn to that page.</p>
+    <p><b>ITEMS</b> you find go into your backpack (bottom right). Some choices
+    only unlock if you're carrying the right item. Click items marked USE to
+    consume them for a boost.</p>
+    <p><b>STATS:</b> if HEALTH, OXYGEN, or SANITY hits zero, your story ends.
+    Watch the bars.</p>
+    <p><b>TEST YOUR LUCK:</b> some moments roll two dice. Roll 7 or less to
+    succeed. Carrying the Luck Charm lets you succeed on 8.</p>
+    <p>Progress autosaves. NEW GAME wipes it and starts over.</p>
+    <button id="btn-help-close" class="ui-btn">CLOSE</button>
+  </div>
+</div>
+
+<div id="crt-overlay"></div>
+
+<script src="sprites.js"></script>
+<script src="story.js"></script>
+<script src="engine.js"></script>
+</body>
+</html>
