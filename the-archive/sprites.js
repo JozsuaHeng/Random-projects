@@ -301,27 +301,289 @@ const SPRITES = {
     "............",
     "............",
   ],
-};
 
-// 16x16 portrait: Specialist Reyes in an orange salvage jumpsuit.
-const PORTRAIT = [
-  "................",
-  ".....kkkkkk.....",
-  "....khhhhhhk....",
-  "...khhhhhhhhk...",
-  "...khhffffhhk...",
-  "...kffffffffk...",
-  "...kfkwfkwffk...",
-  "...kffffffffk...",
-  "...kffkkkfffk...",
-  "...kfffffffk....",
-  "....kffffk......",
-  "...kkoookkk.....",
-  "..koooooooook...",
-  ".kooookkoooook..",
-  ".koook..kooook..",
-  ".kkkk....kkkk...",
-];
+  // --- The Last Warden items ---
+  shortsword: [
+    "......kk....",
+    ".....kssk...",
+    ".....kssk...",
+    ".....kssk...",
+    ".....kssk...",
+    ".....kssk...",
+    "....kkkkkk..",
+    ".....kmmk...",
+    ".....kmmk...",
+    "....kddddk..",
+    "............",
+    "............",
+  ],
+  silverblade: [
+    "......kk....",
+    ".....kwwk...",
+    "....kwwwwk..",
+    ".....kwwk...",
+    ".....kwwk...",
+    ".....kwwk...",
+    "....kkkkkk..",
+    ".....kyyk...",
+    ".....kyyk...",
+    "....kddddk..",
+    "............",
+    "............",
+  ],
+  woodtorch: [
+    "....k..kk...",
+    "...ko.okk...",
+    "..koooook...",
+    "..kyyyyyk...",
+    "...kyyyk....",
+    "....kkk.....",
+    "....kmmk....",
+    "....kmmk....",
+    "....kmmk....",
+    "....kmmk....",
+    ".....kk.....",
+    "............",
+  ],
+  chainmail: [
+    "...kkkkkk...",
+    "..ksssssssk.",
+    "..kssssssk..",
+    ".kssssssssk.",
+    ".kssssssssk.",
+    ".kssssssssk.",
+    ".kssssssssk.",
+    "..ksssssssk.",
+    "..kssssssk..",
+    "...kssssk...",
+    "............",
+    "............",
+  ],
+  greathelm: [
+    "...kkkkkk...",
+    "..kddddddk..",
+    ".kddwwwwddk.",
+    ".kdd.kk.ddk.",
+    ".kddwwwwddk.",
+    ".kddd..dddk.",
+    ".kdddkkdddk.",
+    "..kddkkddk..",
+    "...kdkkdk...",
+    "....kkkk....",
+    "............",
+    "............",
+  ],
+  gauntlets: [
+    "............",
+    "..kkk..kkk..",
+    ".ksssk.ksssk",
+    ".ksssk.ksssk",
+    ".ksssksksssk",
+    ".ksssssssssk",
+    ".ksssssssssk",
+    "..ksssssssk.",
+    "...kkkkkkk..",
+    "............",
+    "............",
+    "............",
+  ],
+  warboots: [
+    "............",
+    "...kk..kk...",
+    "..kmmk.kmmk.",
+    "..kmmk.kmmk.",
+    "..kmmk.kmmk.",
+    ".kdddkkdddk.",
+    ".kdddkkdddk.",
+    "kddddkkddddk",
+    "kddddkkddddk",
+    "............",
+    "............",
+    "............",
+  ],
+  wardencloak: [
+    "....kkkk....",
+    "...kbbbbk...",
+    "..kbbbbbbk..",
+    "..kbbbbbbk..",
+    ".kbbbbbbbbk.",
+    ".kbbbbbbbbk.",
+    ".kbbbbbbbbk.",
+    ".kbb....bbk.",
+    ".kb......bk.",
+    "kb........bk",
+    "............",
+    "............",
+  ],
+  bread: [
+    "............",
+    "...kkkkkk...",
+    "..kmmmmmmk..",
+    ".kmyyyyyymk.",
+    ".kmyyyyyymk.",
+    ".kmyyyyyymk.",
+    ".kmmmmmmmmk.",
+    "..kmmmmmmk..",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  draught: [
+    "............",
+    "....kkkk....",
+    "....kwwk....",
+    "...kkwwkk...",
+    "...krrrrk...",
+    "..krrrrrrk..",
+    "..krrrrrrk..",
+    "..krrrrrrk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  holywater: [
+    "............",
+    "....kkkk....",
+    "....kssk....",
+    "...kkttkk...",
+    "...ktttttk..",
+    "..kttttttk..",
+    "..ktttttttk.",
+    "..kttttttk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  relic: [
+    ".....kk.....",
+    "....kyyk....",
+    "...kyyyyk...",
+    "..kyyyyyyk..",
+    ".kyyyyyyyyk.",
+    "..kyyyyyyk..",
+    "...kyyyyk...",
+    "....kyyk....",
+    ".....kk.....",
+    "............",
+    "............",
+    "............",
+  ],
+  ironkey: [
+    "............",
+    "....kkk.....",
+    "...kdddk....",
+    "...kdddk....",
+    "....kkk.....",
+    "....kdk.....",
+    "....kdk.....",
+    "...kdddk....",
+    "...kd.dk....",
+    "...kd.dk....",
+    "............",
+    "............",
+  ],
+  wardenseal: [
+    "....kkkk....",
+    "...kyyyyk...",
+    "..kyywwyyk..",
+    "..kywwwwyk..",
+    "..kywwwwyk..",
+    "..kyywwyyk..",
+    "...kyyyyk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  bandage: [
+    "............",
+    "..kkkkkkkk..",
+    ".kwwwwwwwwk.",
+    ".kwwwwwwwwk.",
+    ".kwwrrrrwwk.",
+    ".kwwrrrrwwk.",
+    ".kwwwwwwwwk.",
+    "..kkkkkkkk..",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  shield: [
+    "...kkkkkk...",
+    "..kddddddk..",
+    ".kdyyyyyydk.",
+    ".kdyy..yydk.",
+    ".kdy.kk.ydk.",
+    ".kdyy..yydk.",
+    ".kdyyyyyydk.",
+    "..kdddddk...",
+    "...kdddk....",
+    "....kdk.....",
+    "............",
+    "............",
+  ],
+  warhorn: [
+    "............",
+    "........kk..",
+    ".......kyyk.",
+    "......kyyyk.",
+    "....kkyyk...",
+    "...kyyyk....",
+    "..kyyyk.....",
+    ".kyyyk......",
+    "kdyk........",
+    "kdk.........",
+    "............",
+    "............",
+  ],
+  kingsbane: [
+    ".......kk...",
+    "......kwwk..",
+    ".....kwwwwk.",
+    "......kwwk..",
+    "......kwwk..",
+    "......kwwk..",
+    "......kwwk..",
+    "....kkkkkkk.",
+    ".....kyyk...",
+    "....kdddddk.",
+    ".....kdk....",
+    "............",
+  ],
+  phoenixdraught: [
+    "............",
+    "....kkkk....",
+    "....kwwk....",
+    "...kkwwkk...",
+    "...koooook..",
+    "..koyyyyook.",
+    "..koyyyyook.",
+    "..koooooook.",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  boneward: [
+    "............",
+    "....kwwk....",
+    "...kwwwwk...",
+    "....kwwk....",
+    ".....kk.....",
+    "....kwwk....",
+    "...kw..wk...",
+    "....kwwk....",
+    ".....kk.....",
+    "............",
+    "............",
+    "............",
+  ],
+};
 
 function drawSprite(canvas, sprite, scale) {
   const ctx = canvas.getContext("2d");
@@ -408,6 +670,122 @@ function startStarfield(canvas) {
       ctx.fillStyle = `rgba(220, 230, 255, ${0.35 + 0.55 * a})`;
       ctx.fillRect(Math.round(st.x), Math.round(st.y), st.s, st.s);
     }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Embers (top-right panel backdrop, torchlit dungeon stone) ---
+function startEmbers(canvas) {
+  const ctx = canvas.getContext("2d");
+  let embers = [];
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    embers = [];
+    const n = Math.floor((canvas.width * canvas.height) / 1400);
+    for (let i = 0; i < n; i++) {
+      embers.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() < 0.8 ? 1 : 2,
+        vy: 0.05 + Math.random() * 0.14,
+        drift: (Math.random() - 0.5) * 0.05,
+        tw: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  resize();
+  window.addEventListener("resize", resize);
+  function frame(t) {
+    // dark stone base with a faint warm vignette, as if lit from one corner
+    ctx.fillStyle = "#0e0a06";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const glow = ctx.createRadialGradient(
+      canvas.width * 0.18, canvas.height * 1.05, 0,
+      canvas.width * 0.18, canvas.height * 1.05, canvas.width * 0.9
+    );
+    const flicker = 0.5 + 0.5 * Math.sin(t / 260) * 0.15 + 0.35;
+    glow.addColorStop(0, `rgba(120, 70, 20, ${0.25 + flicker * 0.1})`);
+    glow.addColorStop(1, "rgba(14, 10, 6, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (const em of embers) {
+      em.y -= em.vy;
+      em.x += em.drift;
+      if (em.y < 0) { em.y = canvas.height; em.x = Math.random() * canvas.width; }
+      const a = 0.4 + 0.6 * Math.sin(t / 500 + em.tw);
+      ctx.fillStyle = `rgba(255, ${140 + Math.round(60 * a)}, 60, ${0.3 + 0.5 * a})`;
+      ctx.fillRect(Math.round(em.x), Math.round(em.y), em.s, em.s);
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Parchment map (top-right panel backdrop: an aged, hand-charted map) ---
+function startParchmentMap(canvas) {
+  const ctx = canvas.getContext("2d");
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  function compassRose(cx, cy, r, alpha) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.strokeStyle = `rgba(217,164,65,${alpha})`;
+    ctx.fillStyle = `rgba(217,164,65,${alpha})`;
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      const angle = (Math.PI / 4) * i;
+      const len = i % 2 === 0 ? r : r * 0.5;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(angle) * len, Math.sin(angle) * len);
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  const stains = [[0.15, 0.2, 0.5], [0.82, 0.15, 0.4], [0.6, 0.85, 0.55], [0.22, 0.78, 0.45]];
+
+  function frame(t) {
+    ctx.fillStyle = "#120c07";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (const [sx, sy, sr] of stains) {
+      const g = ctx.createRadialGradient(
+        canvas.width * sx, canvas.height * sy, 0,
+        canvas.width * sx, canvas.height * sy, canvas.width * sr
+      );
+      g.addColorStop(0, "rgba(90,60,25,0.14)");
+      g.addColorStop(1, "rgba(90,60,25,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.strokeStyle = "rgba(140,110,60,0.12)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      const yBase = canvas.height * (0.22 + i * 0.3);
+      ctx.moveTo(0, yBase);
+      for (let x = 0; x <= canvas.width; x += 18) {
+        ctx.lineTo(x, yBase + Math.sin(x / 45 + i * 1.7) * 7);
+      }
+      ctx.stroke();
+    }
+
+    const glow = 0.3 + 0.15 * Math.sin(t / 900);
+    compassRose(canvas.width - 24, canvas.height - 24, 15, glow);
+
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

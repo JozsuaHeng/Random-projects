@@ -2,6 +2,26 @@
 // Page numbers are deliberately scattered, like the old paperbacks.
 // Gaps in numbering are reserved for Acts Two and Three.
 
+// 16x16 portrait: Specialist Reyes in an orange salvage jumpsuit.
+const PLAYER_PORTRAIT = [
+  "................",
+  ".....kkkkkk.....",
+  "....khhhhhhk....",
+  "...khhhhhhhhk...",
+  "...khhffffhhk...",
+  "...kffffffffk...",
+  "...kfkwfkwffk...",
+  "...kffffffffk...",
+  "...kffkkkfffk...",
+  "...kfffffffk....",
+  "....kffffk......",
+  "...kkoookkk.....",
+  "..koooooooook...",
+  ".kooookkoooook..",
+  ".koook..kooook..",
+  ".kkkk....kkkk...",
+];
+
 const META = {
   title: "DEAD SIGNAL",
   subtitle: "An Interactive Gamebook — Acts One & Two",
@@ -26,7 +46,7 @@ const ITEMS = {
   flashlight:{ name: "Flashlight",    desc: "Heavy-duty beam. The dark is negotiable now.", slot: "held" },
   sample:    { name: "Spore Sample",  desc: "A sealed vial of pale dust. It settles when you stop looking at it." },
   toolbelt:  { name: "Chief's Toolbelt", desc: "Rahal's belt. Spanners, fuses, a lifetime of fixes." },
-  charm:     { name: "Luck Charm",    desc: "Captain Ferro's St. Christopher medal. +1 on luck tests." },
+  charm:     { name: "Luck Charm",    desc: "Captain Ferro's St. Christopher medal. +1 on luck tests.", luckBonus: true },
   candle:    { name: "Oxygen Candle", desc: "Chemical O2 generator. USE: +3 oxygen.", use: { oxygen: +3 } },
   sedative:  { name: "Sedative",      desc: "Medbay-grade calm in a vial. USE: +3 sanity, -1 health.", use: { sanity: +3, health: -1 } },
   // --- wearable EVA gear (equip on the paper doll) ---

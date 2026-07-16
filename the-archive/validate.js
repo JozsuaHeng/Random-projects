@@ -1,4 +1,6 @@
-// Story-graph validator. Run: node validate.js
+// Story-graph validator. Run: node validate.js [story-folder]
+// Defaults to the current directory (dead-signal lives at the-archive root).
+// For a story in its own subfolder: node validate.js the-last-warden
 // Fails loudly if any choice points at a missing page, any page is
 // unreachable, or items/rooms/sprites are referenced but not defined.
 
@@ -6,10 +8,12 @@ const fs = require("fs");
 const vm = require("vm");
 const path = require("path");
 
+const storyDir = path.join(__dirname, process.argv[2] || ".");
+
 const ctx = { window: {}, requestAnimationFrame: () => {} };
 vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(path.join(__dirname, "sprites.js"), "utf8"), ctx);
-vm.runInContext(fs.readFileSync(path.join(__dirname, "story.js"), "utf8"), ctx);
+vm.runInContext(fs.readFileSync(path.join(storyDir, "story.js"), "utf8"), ctx);
 
 // const/let declarations live in the context's shared lexical scope,
 // not on the context object — pull them out with an expression.

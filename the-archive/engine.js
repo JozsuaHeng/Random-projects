@@ -1,6 +1,8 @@
-// DEAD SIGNAL — game engine: state, rendering, choices, luck tests, saving.
+// THE ARCHIVE — shared game engine: state, rendering, choices, luck tests,
+// saving. Loaded by every story's game.html after that story's story.js, so
+// META/ITEMS/ROOMS/PAGES/SPRITES/PALETTE are already in scope.
 
-const SAVE_KEY = "dead-signal-save-v1";
+const SAVE_KEY = "archive-save-" + META.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-v1";
 
 let state = null;
 let selectedItem = null;
@@ -163,7 +165,7 @@ function runLuckTest(luck) {
     const b = 1 + Math.floor(Math.random() * 6);
     d1.textContent = a;
     d2.textContent = b;
-    const threshold = state.items.includes("charm") ? 8 : 7;
+    const threshold = state.items.some(id => ITEMS[id] && ITEMS[id].luckBonus) ? 8 : 7;
     const pass = a + b <= threshold;
     res.textContent = a + b <= threshold
       ? `${a + b} — YOU ARE LUCKY` : `${a + b} — YOU ARE UNLUCKY`;
@@ -257,15 +259,16 @@ function renderMap() {
     div.className = "map-room";
     div.style.gridColumn = room.col + 1;
     div.style.gridRow = room.row + 1;
+    const label = (room.icon ? room.icon + " " : "") + room.name.toUpperCase();
     if (state.visitedRooms.includes(id)) {
       div.classList.add("visited");
-      div.textContent = room.name.toUpperCase();
+      div.textContent = label;
     } else {
       div.textContent = "▒▒▒";
     }
     if (id === currentRoom) {
       div.classList.add("current");
-      div.textContent = room.name.toUpperCase();
+      div.textContent = label;
     }
     mapEl.appendChild(div);
   }
@@ -421,8 +424,11 @@ function escapeHtml(s) {
 function boot() {
   state = load() || newState();
 
-  drawSprite(document.getElementById("portrait"), PORTRAIT, 4);
-  startStarfield(document.getElementById("starfield"));
+  drawSprite(document.getElementById("portrait"), PLAYER_PORTRAIT, 4);
+  const backdropCanvas = document.getElementById("starfield");
+  if (META.backdrop === "embers") startEmbers(backdropCanvas);
+  else if (META.backdrop === "parchmentmap") startParchmentMap(backdropCanvas);
+  else startStarfield(backdropCanvas);
 
   document.getElementById("char-name").textContent = META.player.name.toUpperCase();
   document.getElementById("char-role").textContent = META.player.role.toUpperCase();
