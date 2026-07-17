@@ -1,0 +1,232 @@
+/* FIRST CONTACT PROTOCOL — xenobiological / deep-space theme override.
+   Loaded after the shared ../style.css. Where Dead Signal is sharp
+   tech-HUD rectangles and The Last Warden is chamfered carved plate,
+   this game is soft, asymmetric, organic — bioluminescent membrane
+   instead of hard borders, pill/pod shapes instead of angles, a
+   translucent alien data-slate instead of paper or parchment. */
+
+:root {
+  --bg: #07050c;
+  --panel: #120a1c;
+  --panel-edge: #4a3070;
+  --ink: #d8ece6;
+  --dim: #6d7a92;
+  --phosphor: #4fe8d0;
+  --amber: #c07be0;
+  --alert: #d43f6a;
+  --paper: #150f24;
+  --paper-ink: #cfe8e0;
+  --font-pixel: "Orbitron", sans-serif;
+  --font-body: "Space Mono", monospace;
+}
+
+body {
+  background: radial-gradient(ellipse at 30% 10%, rgba(90,40,120,0.18), transparent 55%), var(--bg);
+}
+
+@keyframes bioglow {
+  0%, 100% { box-shadow: 0 0 16px rgba(79,232,208,0.15), inset 0 0 40px rgba(90,40,120,0.20); }
+  50%      { box-shadow: 0 0 26px rgba(79,232,208,0.28), inset 0 0 46px rgba(90,40,120,0.28); }
+}
+
+/* ---------- scanlines -> bioluminescent haze ---------- */
+#crt-overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(168,107,220,0.05), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(79,232,208,0.04), transparent 60%);
+  mix-blend-mode: screen;
+}
+#crt-overlay::after {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(4,3,8,0.6) 100%);
+}
+
+/* ---------- title bar: a soft console membrane ---------- */
+#titlebar {
+  background: linear-gradient(180deg, #1a1030, #0d0816);
+  border: none;
+  border-bottom: 2px solid var(--panel-edge);
+  border-radius: 0 0 22px 22px;
+  box-shadow: 0 3px 18px rgba(90,40,120,0.25);
+}
+#game-title {
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--phosphor);
+  text-shadow: 0 0 12px rgba(79,232,208,0.6);
+}
+.ui-btn, #btn-library {
+  font-weight: 500;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  background: linear-gradient(180deg, #241640, #160d28);
+  border: 1px solid var(--panel-edge);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.ui-btn:hover, #btn-library:hover {
+  border-color: var(--phosphor);
+  color: var(--phosphor);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 12px rgba(79,232,208,0.4);
+}
+
+/* ---------- panels: soft asymmetric membrane, glow instead of hard edge ---------- */
+.panel {
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(168,107,220,0.10), transparent 55%),
+    radial-gradient(ellipse at 90% 100%, rgba(79,232,208,0.08), transparent 55%),
+    linear-gradient(160deg, #150e26, #0e0918);
+  border: 1px solid var(--panel-edge);
+  border-radius: 26px 10px 26px 10px;
+  box-shadow: 0 0 20px rgba(90,40,120,0.15), inset 0 0 30px rgba(0,0,0,0.4);
+}
+.panel-title {
+  font-size: 9px;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid var(--panel-edge);
+  border-radius: 26px 10px 0 0;
+  color: var(--dim);
+}
+.panel-title.small { border-top: 1px solid var(--panel-edge); border-radius: 0; }
+
+/* ---------- the storybook page: a living data-slate ---------- */
+#book {
+  background: radial-gradient(ellipse at 50% 0%, rgba(90,40,120,0.15), transparent 60%), #0a0714;
+  border: 1px solid #2a1a44;
+  border-radius: 20px;
+}
+#book-page {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(168,107,220,0.16), transparent 40%),
+    radial-gradient(circle at 88% 85%, rgba(79,232,208,0.14), transparent 42%),
+    radial-gradient(circle at 60% 45%, rgba(168,107,220,0.06), transparent 60%),
+    var(--paper);
+  border-radius: 18px;
+  border: 1px solid rgba(79,232,208,0.25);
+  box-shadow: none;
+  animation: pageturn 0.35s ease-out, bioglow 5s ease-in-out infinite;
+}
+#book-text::first-letter { color: var(--phosphor); text-shadow: 0 0 8px rgba(79,232,208,0.6); }
+#book-pagenum { font-family: var(--font-pixel); font-size: 10px; color: #7a6a9a; }
+#book-choices { border-top: 1px dashed #3a2a5a; }
+.choice { color: var(--paper-ink); }
+.choice .arrow { color: var(--phosphor); }
+.choice .turnto { font-family: var(--font-pixel); font-size: 8px; color: #7a6a9a; }
+.choice:hover { background: rgba(79,232,208,0.06); }
+.choice.locked { color: #4a4a5a; }
+.effect-tag { border-color: #5a4a7a; color: #9a8aba; background: rgba(90,40,120,0.14); }
+.effect-tag.gain { border-color: var(--phosphor); color: #2fae9a; background: rgba(79,232,208,0.10); }
+.effect-tag.loss { border-color: var(--alert); color: #b43a5a; background: rgba(212,63,106,0.10); }
+.endcap { font-family: var(--font-pixel); color: var(--phosphor); }
+
+/* dice: bio-luminescent crystal, not bone or plastic */
+.die {
+  font-family: var(--font-pixel);
+  background: #1a1030;
+  color: var(--phosphor);
+  border: 1px solid var(--phosphor);
+  border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+  box-shadow: 0 0 10px rgba(79,232,208,0.35);
+}
+.dice-label { font-family: var(--font-pixel); font-size: 9px; color: #9a8aba; }
+#dice-result.pass { color: var(--phosphor); }
+#dice-result.fail { color: var(--alert); }
+
+/* ---------- map: a pulsing listening array, not a HUD grid ---------- */
+#map-content .panel-title { background: rgba(10,7,20,0.75); }
+.map-room {
+  font-family: var(--font-body);
+  font-size: 7px;
+  border: 1px solid #3a2a5a;
+  border-radius: 12px 4px 12px 4px;
+  background: rgba(15,10,26,0.6);
+  color: #4a3a6a;
+}
+.map-room.visited { color: var(--dim); border-color: #5a4a80; background: rgba(30,20,46,0.7); }
+.map-room.current {
+  color: var(--phosphor);
+  border-color: var(--phosphor);
+  background: rgba(79,232,208,0.12);
+  text-shadow: 0 0 6px rgba(79,232,208,0.7);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(79,232,208, 0.0); }
+  50% { box-shadow: 0 0 12px rgba(79,232,208, 0.55); }
+}
+#location-line { background: rgba(10,7,20,0.75); font-family: var(--font-body); }
+#location-name { color: var(--phosphor); }
+
+/* ---------- character panel: research suit, bio-pods ---------- */
+#char-name { font-family: var(--font-pixel); font-size: 10px; letter-spacing: 0.5px; }
+#char-role { font-family: var(--font-pixel); font-size: 6.5px; }
+#portrait {
+  background: #0e0918;
+  border: 1px solid var(--panel-edge);
+  border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+}
+.stat-label { font-family: var(--font-pixel); font-size: 8px; }
+.stat-label.o2 { color: #6db6d8; }
+.stat-label.sn { color: var(--amber); }
+.stat-block {
+  border: 1px solid #3a2a5a;
+  background: #0e0918;
+  border-radius: 3px 8px 3px 8px;
+}
+.stat-block.o2.on { background: #6db6d8; box-shadow: 0 0 5px rgba(109,182,216,0.6); }
+.stat-block.sn.on { background: var(--amber); box-shadow: 0 0 5px rgba(192,123,224,0.6); }
+
+/* the paper doll: a suited silhouette in a soft bio-pod alcove */
+#equip-row {
+  background: radial-gradient(ellipse at 50% 30%, rgba(79,232,208,0.06), transparent 65%);
+  padding: 14px 10px;
+}
+#paperdoll {
+  background: radial-gradient(ellipse at 50% 30%, rgba(90,40,120,0.25), #0e0918 70%);
+  border: 1px solid var(--panel-edge);
+  border-radius: 45% 55% 50% 50% / 55% 50% 50% 45%;
+  box-shadow: inset 0 0 16px rgba(0,0,0,0.6);
+}
+.eq-label { font-family: var(--font-pixel); font-size: 6px; }
+.eq-slot {
+  border: 1px solid #3a2a5a;
+  background: radial-gradient(circle at 35% 30%, #241640, #0e0918 70%);
+  border-radius: 42% 58% 60% 40% / 45% 40% 60% 55%;
+}
+.eq-slot.filled { border-color: var(--phosphor); box-shadow: 0 0 8px rgba(79,232,208,0.35); }
+
+/* the field cache: bioluminescent specimen pods, not squares */
+#backpack {
+  background: radial-gradient(ellipse at 20% 0%, rgba(168,107,220,0.08), transparent 55%);
+}
+.slot {
+  border: 1px solid #3a2a5a;
+  background: radial-gradient(circle at 35% 30%, #241640, #0e0918 70%);
+  border-radius: 45% 55% 60% 40% / 40% 55% 45% 60%;
+}
+.slot.filled:hover { border-color: var(--amber); }
+.slot.selected { border-color: var(--phosphor); box-shadow: 0 0 8px rgba(79,232,208,0.4); }
+.slot .usable-dot { color: var(--phosphor); }
+
+#item-info { font-family: var(--font-body); }
+#item-info b { color: var(--phosphor); }
+
+/* toast: a soft alert pod */
+.toast {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  background: linear-gradient(180deg, #1a1030, #0d0816);
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(79,232,208,0.3);
+}
+
+/* ---------- help overlay ---------- */
+#help-box {
+  background: linear-gradient(160deg, #150e26, #0e0918);
+  border: 1px solid var(--phosphor);
+  border-radius: 26px 10px 26px 10px;
+}
+#help-box .panel-title { font-family: var(--font-pixel); font-size: 11px; border-radius: 26px 10px 0 0; }
+#help-box p { font-family: var(--font-body); font-size: 17px; }
+#help-box b { color: var(--phosphor); }

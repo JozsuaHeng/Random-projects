@@ -18,6 +18,8 @@ const PALETTE = {
   f: "#e8a06a", // skin
   h: "#3a2a1e", // hair
   v: "#7de07d", // phosphor green
+  x: "#a86bdc", // xeno violet
+  n: "#4fe8d0", // bioluminescent cyan
 };
 
 const SPRITES = {
@@ -583,6 +585,259 @@ const SPRITES = {
     "............",
     "............",
   ],
+
+  // --- First Contact Protocol items ---
+  scanner: [
+    ".......kk...",
+    "......kyyk..",
+    ".......kk...",
+    "....kkkkkkk.",
+    "...kssssssk.",
+    "...ksnnnnsk.",
+    "...ksnnnnsk.",
+    "...kssssssk.",
+    "....kkkkkkk.",
+    "......kk....",
+    ".............",
+  ],
+  headlamp: [
+    "............",
+    "....kkkk....",
+    "...knnnnk...",
+    "..knnnnnnk..",
+    "..knnnnnnk..",
+    "...knnnnk...",
+    "....kddk....",
+    "...kddddk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  cutter: [
+    "..........nn",
+    ".........nyy",
+    "........nyy.",
+    ".......nyy..",
+    "......kk....",
+    ".....kssk...",
+    "....kssssk..",
+    "...kddddddk.",
+    "....kkkkkk..",
+    "............",
+    "............",
+    "............",
+  ],
+  traumakit: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kwwwwwwwwk.",
+    ".kwwwnnwwwk.",
+    ".kwwwnnwwwk.",
+    ".kwnnnnnnwk.",
+    ".kwnnnnnnwk.",
+    ".kwwwnnwwwk.",
+    ".kwwwnnwwwk.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+  ],
+  sealant: [
+    "............",
+    "...kkkkkk...",
+    "..ksssssssk.",
+    "..ksnnnnnsk.",
+    "..ksnnnnnsk.",
+    "..ksssssssk.",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  stabilizer: [
+    "............",
+    "....kkkk....",
+    "....kssk....",
+    "...kkkkkk...",
+    "...kxxxxk...",
+    "...kxnxnk...",
+    "...kxxxxk...",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  evagloves: [
+    "............",
+    "...k....k...",
+    "..kfk..kfk..",
+    "..kfk..kfk..",
+    ".kffffkffffk",
+    ".kffffkffffk",
+    ".kfffffffffk",
+    "..kffnffnfk.",
+    "...kkkkkkk..",
+    "............",
+    "............",
+    "............",
+  ],
+  evaboots: [
+    "............",
+    "...kk..kk...",
+    "..ksk..ksk..",
+    "..ksk..ksk..",
+    "..ksk..ksk..",
+    ".kdddkkdddk.",
+    ".kdnnkkdnnk.",
+    "kddddkkddddk",
+    "kddddkkddddk",
+    "............",
+    "............",
+    "............",
+  ],
+  o2pack: [
+    "....kkkk....",
+    "...ksssssk..",
+    "...ksnnnsk..",
+    "...ksnnnsk..",
+    "...ksnnnsk..",
+    "...ksssssk..",
+    "....kkkk....",
+    "....k..k....",
+    "....k..k....",
+    "............",
+    "............",
+    "............",
+  ],
+  override: [
+    "............",
+    "............",
+    ".kkkkkkkkkk.",
+    ".kxxxxxxxxk.",
+    ".kxwwxxxxxk.",
+    ".kxwwxxxxxk.",
+    ".kxxxxxxxxk.",
+    ".kxddddddxk.",
+    ".kxxxxxxxxk.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+  ],
+  shard: [
+    ".....kk.....",
+    "....kxxk....",
+    "...kxxxxk...",
+    "..kxxnnxxk..",
+    ".kxxnnnnxxk.",
+    "..kxxnnxxk..",
+    "...kxxxxk...",
+    "....kxxk....",
+    ".....kk.....",
+    "............",
+    "............",
+    "............",
+  ],
+  blackbox: [
+    "............",
+    "..kkkkkkkk..",
+    ".korrrrrrok.",
+    ".korrrrrrok.",
+    ".korrrrrrok.",
+    ".kooooooook.",
+    "..kkkkkkkk..",
+    "....k..k....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  xenosample: [
+    "....kkkk....",
+    "....kssk....",
+    "....kssk....",
+    "...k....k...",
+    "...k....k...",
+    "...k.nn.k...",
+    "...k.xx.k...",
+    "...knnxxk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+  ],
+  translator: [
+    "............",
+    "..kkkkkkkk..",
+    ".ksnnnnnnsk.",
+    ".ksnkkkknsk.",
+    ".ksnkxxknsk.",
+    ".ksnkkkknsk.",
+    ".ksnnnnnnsk.",
+    "..kkkkkkkk..",
+    "....kssk....",
+    "............",
+    "............",
+    "............",
+  ],
+  gift: [
+    "............",
+    ".....kk.....",
+    "....kxxk....",
+    "...kxxxxk...",
+    "..kxxnnxxk..",
+    ".kxnnnnnnxk.",
+    "..kxxnnxxk..",
+    "...kxxxxk...",
+    "....kxxk....",
+    ".....kk.....",
+    "............",
+    "............",
+  ],
+  resonantcore: [
+    "............",
+    "....kxxk....",
+    "...kxnnxk...",
+    "..kxnnnnxk..",
+    ".kxnnnnnnxk.",
+    ".kxnnnnnnxk.",
+    "..kxnnnnxk..",
+    "...kxnnxk...",
+    "....kxxk....",
+    "............",
+    "............",
+    "............",
+  ],
+  codexfragment: [
+    "............",
+    "..kkkkkkkk..",
+    ".knnnnnnnnk.",
+    ".knxxxxxxnk.",
+    ".knxnnnnxnk.",
+    ".knxnxxnxnk.",
+    ".knxnnnnxnk.",
+    ".knxxxxxxnk.",
+    ".knnnnnnnnk.",
+    "..kkkkkkkk..",
+    "............",
+    "............",
+  ],
+  relaykey: [
+    "............",
+    "....kkkk....",
+    "...kxxxxk...",
+    "...kxnnxk...",
+    "....kxxk.....",
+    ".....kk......",
+    ".....kk......",
+    "....kkkk.....",
+    "...kd..dk....",
+    "...kd..dk....",
+    "............",
+    "............",
+  ],
 };
 
 function drawSprite(canvas, sprite, scale) {
@@ -785,6 +1040,74 @@ function startParchmentMap(canvas) {
 
     const glow = 0.3 + 0.15 * Math.sin(t / 900);
     compassRose(canvas.width - 24, canvas.height - 24, 15, glow);
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Xenoscan (top-right panel backdrop: a deep-space listening array,
+// bioluminescent pulses radiating outward like something answering back) ---
+function startXenoscan(canvas) {
+  const ctx = canvas.getContext("2d");
+  let motes = [];
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    motes = [];
+    const n = Math.floor((canvas.width * canvas.height) / 1100);
+    for (let i = 0; i < n; i++) {
+      motes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() < 0.75 ? 1 : 2,
+        vx: (Math.random() - 0.5) * 0.06,
+        vy: (Math.random() - 0.5) * 0.06,
+        tw: Math.random() * Math.PI * 2,
+        hue: Math.random() < 0.5 ? "168,224,208" : "168,107,220",
+      });
+    }
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const cx = () => canvas.width * 0.5;
+  const cy = () => canvas.height * 0.46;
+
+  function frame(t) {
+    ctx.fillStyle = "#07050c";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const vg = ctx.createRadialGradient(cx(), cy(), 0, cx(), cy(), canvas.width * 0.7);
+    vg.addColorStop(0, "rgba(70,30,90,0.20)");
+    vg.addColorStop(1, "rgba(7,5,12,0)");
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // outward-pulsing listening rings, like a radar answering something distant
+    const period = 3200;
+    for (let i = 0; i < 3; i++) {
+      const phase = ((t + i * (period / 3)) % period) / period;
+      const r = phase * canvas.width * 0.65;
+      const a = (1 - phase) * 0.28;
+      if (a <= 0) continue;
+      ctx.strokeStyle = `rgba(120,220,200,${a})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(cx(), cy(), r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    for (const m of motes) {
+      m.x += m.vx; m.y += m.vy;
+      if (m.x < 0) m.x = canvas.width; if (m.x > canvas.width) m.x = 0;
+      if (m.y < 0) m.y = canvas.height; if (m.y > canvas.height) m.y = 0;
+      const a = 0.35 + 0.55 * Math.sin(t / 650 + m.tw);
+      ctx.fillStyle = `rgba(${m.hue},${0.25 + 0.55 * a})`;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     requestAnimationFrame(frame);
   }

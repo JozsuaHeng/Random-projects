@@ -7,8 +7,9 @@ gamebooks, in the style of the old Fighting Fantasy / CYOA paperbacks, with
 a retro pixel-art (CRT terminal) aesthetic. Pure static HTML/CSS/JS, no
 build step, no dependencies.
 
-`home.html` is the library entry point — a shelf of story cards. Two
-playable stories so far:
+`home.html` is the library entry point — a shelf of story cards, each with
+a small live canvas preview (via `META.backdrop`) matching that story's
+actual in-game atmosphere. Three playable stories so far:
 - **DEAD SIGNAL** (`game.html`, repo root) — you wake from cryosleep aboard
   the derelict salvage ship ISV Vesper. Sci-fi mystery/horror. 93 pages,
   Acts One & Two, 6 endings.
@@ -16,9 +17,15 @@ playable stories so far:
   a keep whose garrison went silent forty years ago, and finds out the
   watch never actually ended. Dungeon fantasy. 90 pages, Acts One & Two,
   6 endings.
+- **FIRST CONTACT PROTOCOL** (`first-contact-protocol/game.html`) — a
+  xenolinguist is sent to a lunar-farside listening array whose crew
+  stopped transmitting five weeks after receiving a genuine reply from
+  something else. First-contact sci-fi (tonally distinct from Dead
+  Signal — wonder/isolation rather than body-horror). 101 pages, Acts
+  One & Two, 6 endings.
 
-Other genres (alien, Egyptian, Amazonian, post-apocalyptic) are listed on
-the shelf as "Coming Soon" placeholders.
+Other genres (Egyptian, Amazonian, post-apocalyptic) are listed on the
+shelf as "Coming Soon" placeholders.
 
 ## Architecture: shared engine, per-story folders
 
@@ -97,7 +104,7 @@ but referenced by the shared `engine.js`:
    `start<Name>(canvas)` function to the shared `sprites.js` for other
    settings and wire it into the `if (META.backdrop === ...)` chain in
    `engine.js`'s `boot()`.
-4. Run `node validate.js <story-name>` from the repo root.
+5. Run `node validate.js <story-name>` from the repo root.
 
 ## Checking your work
 

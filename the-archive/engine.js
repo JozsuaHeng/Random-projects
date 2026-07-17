@@ -428,6 +428,7 @@ function boot() {
   const backdropCanvas = document.getElementById("starfield");
   if (META.backdrop === "embers") startEmbers(backdropCanvas);
   else if (META.backdrop === "parchmentmap") startParchmentMap(backdropCanvas);
+  else if (META.backdrop === "xenoscan") startXenoscan(backdropCanvas);
   else startStarfield(backdropCanvas);
 
   document.getElementById("char-name").textContent = META.player.name.toUpperCase();

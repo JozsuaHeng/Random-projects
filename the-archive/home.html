@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THE ARCHIVE — Gamebook Library</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Cinzel+Decorative:wght@700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
   body { overflow-y: auto; }
-  #lib-wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px 60px; }
+  #lib-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 20px 60px; }
   #lib-title {
     font-family: var(--font-pixel); font-size: 22px; color: var(--alert);
     text-shadow: 0 0 10px rgba(226,59,59,0.6); text-align: center; letter-spacing: 3px;
@@ -20,8 +20,8 @@
   }
   #lib-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
   }
   .book-card {
     background: var(--panel);
@@ -29,31 +29,44 @@
     padding: 0;
     text-decoration: none;
     color: var(--ink);
-    display: block;
+    display: flex;
+    flex-direction: column;
     cursor: pointer;
-    transition: border-color 0.15s, transform 0.15s;
+    overflow: hidden;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
-  .book-card.available:hover { border-color: var(--phosphor); transform: translateY(-3px); }
-  .book-card.locked { cursor: default; opacity: 0.55; }
+  .book-card.available:hover {
+    border-color: var(--accent, var(--phosphor));
+    transform: translateY(-4px);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.45), 0 0 22px var(--accent-glow, rgba(125,224,125,0.25));
+  }
+  .book-card.locked { cursor: default; opacity: 0.6; }
   .book-cover {
-    height: 130px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px;
+    position: relative;
+    height: 220px;
+    flex-shrink: 0;
     border-bottom: 2px solid var(--panel-edge);
+    overflow: hidden;
+    background: #05070d;
   }
-  .book-info { padding: 14px; }
-  .book-name {
-    font-family: var(--font-pixel); font-size: 11px; color: var(--amber);
-    line-height: 1.5; margin-bottom: 8px;
+  .scene-canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+  .cover-title {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+    padding: 26px 16px 12px;
+    text-align: center;
+    line-height: 1.3;
+    color: var(--accent, var(--ink));
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    background: linear-gradient(0deg, rgba(3,3,6,0.85) 0%, rgba(3,3,6,0.5) 55%, transparent 100%);
   }
-  .book-card.locked .book-name { color: var(--dim); }
-  .book-desc { font-size: 19px; line-height: 1.3; color: var(--dim); }
+  .book-info { padding: 14px 18px 18px; display: flex; flex-direction: column; flex: 1; }
+  .book-desc { font-size: 20px; line-height: 1.35; color: var(--dim); flex: 1; }
   .book-tag {
-    display: inline-block; margin-top: 10px;
-    font-family: var(--font-pixel); font-size: 7px;
-    padding: 4px 7px; border: 1px solid var(--panel-edge); color: var(--dim);
+    display: inline-block; margin-top: 12px; align-self: flex-start;
+    font-family: var(--font-pixel); font-size: 7.5px;
+    padding: 5px 8px; border: 1px solid var(--panel-edge); color: var(--dim);
   }
-  .book-tag.ready { border-color: var(--phosphor); color: var(--phosphor); }
+  .book-tag.ready { border-color: var(--accent, var(--phosphor)); color: var(--accent, var(--phosphor)); }
 </style>
 </head>
 <body>
@@ -69,55 +82,67 @@
 
   <div id="lib-grid">
 
-    <a href="game.html" class="book-card available">
-      <div class="book-cover">🛰️</div>
+    <a href="game.html" class="book-card available" style="--accent:#8fe0a8; --accent-glow:rgba(125,224,125,0.28);">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="deadsignal"></canvas>
+        <div class="cover-title" style="font-family:'Press Start 2P',monospace; font-size:14px; letter-spacing:2px;">DEAD<br>SIGNAL</div>
+      </div>
       <div class="book-info">
-        <div class="book-name">DEAD SIGNAL</div>
         <div class="book-desc">You wake from cryosleep aboard a silent salvage ship. Something answered a signal it shouldn't have.</div>
         <span class="book-tag ready">93 PAGES · PLAYABLE</span>
       </div>
     </a>
 
-    <a href="the-last-warden/game.html" class="book-card available">
-      <div class="book-cover">🏰</div>
+    <a href="the-last-warden/game.html" class="book-card available" style="--accent:#f0c05a; --accent-glow:rgba(217,164,65,0.28);">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="lastwarden"></canvas>
+        <div class="cover-title" style="font-family:'Cinzel Decorative',serif; font-size:18px;">The Last<br>Warden</div>
+      </div>
       <div class="book-info">
-        <div class="book-name">THE LAST WARDEN</div>
         <div class="book-desc">A silent keep, an oath-bound garrison that never stood down, and a seal that's waited forty years for someone to choose its fate.</div>
         <span class="book-tag ready">90 PAGES · PLAYABLE</span>
       </div>
     </a>
 
-    <div class="book-card locked">
-      <div class="book-cover">👽</div>
-      <div class="book-info">
-        <div class="book-name">FIRST CONTACT PROTOCOL</div>
-        <div class="book-desc">A research outpost, a visitor from somewhere else, and a decision only you can make.</div>
-        <span class="book-tag">COMING SOON</span>
+    <a href="first-contact-protocol/game.html" class="book-card available" id="card-fcp" style="--accent:#b899e8; --accent-glow:rgba(156,107,216,0.28);">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="firstcontact"></canvas>
+        <div class="cover-title" style="font-family:'Orbitron',sans-serif; font-size:15px; letter-spacing:1px;">FIRST CONTACT<br>PROTOCOL</div>
       </div>
-    </div>
-
-    <div class="book-card locked">
-      <div class="book-cover">𓂀</div>
       <div class="book-info">
-        <div class="book-name">TOMB OF THE UNBROKEN SEAL</div>
+        <div class="book-desc">A listening post on the lunar farside got a reply it wasn't expecting. Then it stopped transmitting.</div>
+        <span class="book-tag ready" id="tag-fcp">101 PAGES · PLAYABLE</span>
+      </div>
+    </a>
+
+    <div class="book-card locked" style="--accent:#e0b878;">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="tomb"></canvas>
+        <div class="cover-title" style="font-family:'Cinzel Decorative',serif; font-size:16px;">Tomb of the<br>Unbroken Seal</div>
+      </div>
+      <div class="book-info">
         <div class="book-desc">A buried dynasty, a curse that keeps its word, and sand that remembers everything.</div>
         <span class="book-tag">COMING SOON</span>
       </div>
     </div>
 
-    <div class="book-card locked">
-      <div class="book-cover">🌴</div>
+    <div class="book-card locked" style="--accent:#8fcf9a;">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="jungle"></canvas>
+        <div class="cover-title" style="font-family:'Cinzel Decorative',serif; font-size:17px;">Green<br>Silence</div>
+      </div>
       <div class="book-info">
-        <div class="book-name">GREEN SILENCE</div>
         <div class="book-desc">A lost expedition, a river with no source, and a city the maps refuse to show.</div>
         <span class="book-tag">COMING SOON</span>
       </div>
     </div>
 
-    <div class="book-card locked">
-      <div class="book-cover">☢️</div>
+    <div class="book-card locked" style="--accent:#e09858;">
+      <div class="book-cover">
+        <canvas class="scene-canvas" data-scene="ashfall"></canvas>
+        <div class="cover-title" style="font-family:'Press Start 2P',monospace; font-size:13px; letter-spacing:1px;">ASH<br>FALL</div>
+      </div>
       <div class="book-info">
-        <div class="book-name">ASHFALL</div>
         <div class="book-desc">The world ended quietly. Scavenge what's left, and decide what you're willing to trade for it.</div>
         <span class="book-tag">COMING SOON</span>
       </div>
@@ -127,5 +152,278 @@
 </div>
 
 <div id="crt-overlay"></div>
+
+<script src="sprites.js"></script>
+<script>
+// Each card gets a painted pixel scene instead of an icon or a plain
+// backdrop — a close-up illustration of that story's world. Drawn with
+// canvas primitives (gradients + paths), not external images, snapped to
+// a coarse pixel grid so it reads as art in the same house style as the
+// games' hand-drawn sprites, not a photo.
+
+function resizeCanvas(c) { c.width = c.clientWidth; c.height = c.clientHeight; return c; }
+function px(canvas, cols) { return canvas.width / cols; }
+
+function sceneDeadSignal(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  const w = canvas.width, h = canvas.height, u = px(canvas, 48);
+
+  function paint(t) {
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, "#050810"); sky.addColorStop(1, "#0c1424");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+
+    // distant stars
+    ctx.fillStyle = "rgba(220,230,255,0.7)";
+    for (let i = 0; i < 40; i++) {
+      const sx = (i * 53) % w, sy = (i * 97) % (h * 0.55);
+      ctx.fillRect(sx, sy, 1.5, 1.5);
+    }
+
+    // derelict hull, close-up, filling the lower frame
+    ctx.fillStyle = "#232a3a";
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.55);
+    ctx.lineTo(w * 0.15, h * 0.4);
+    ctx.lineTo(w * 0.4, h * 0.44);
+    ctx.lineTo(w * 0.55, h * 0.3);
+    ctx.lineTo(w * 0.8, h * 0.38);
+    ctx.lineTo(w, h * 0.5);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#171c28";
+    ctx.fillRect(0, h * 0.72, w, h * 0.28);
+
+    // hull plating seams
+    ctx.strokeStyle = "rgba(0,0,0,0.4)";
+    ctx.lineWidth = 1;
+    for (let i = 1; i < 6; i++) {
+      ctx.beginPath(); ctx.moveTo(i * w / 6, h * 0.42); ctx.lineTo(i * w / 6, h); ctx.stroke();
+    }
+
+    // windows: mostly dark, a few lit, one blinking red
+    const winY = h * 0.58, winRows = [0, 1];
+    for (let col = 0; col < 9; col++) {
+      for (const row of winRows) {
+        const wx = w * 0.06 + col * u * 1.1, wy = winY + row * u * 1.3;
+        const lit = (col + row * 3) % 5 === 0;
+        ctx.fillStyle = lit ? "rgba(232,184,96,0.9)" : "rgba(10,14,22,0.9)";
+        ctx.fillRect(wx, wy, u * 0.6, u * 0.6);
+      }
+    }
+    const blink = 0.4 + 0.6 * Math.max(0, Math.sin(t / 500));
+    ctx.fillStyle = `rgba(226,59,59,${blink})`;
+    ctx.beginPath(); ctx.arc(w * 0.5, h * 0.28, u * 0.35, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#3a4356"; ctx.beginPath(); ctx.moveTo(w * 0.5, h * 0.3); ctx.lineTo(w * 0.5, h * 0.42); ctx.stroke();
+
+    requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+  window.addEventListener("resize", () => resizeCanvas(canvas));
+}
+
+function sceneLastWarden(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  const w = canvas.width, h = canvas.height, u = px(canvas, 40);
+
+  function paint(t) {
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, "#241534"); sky.addColorStop(0.55, "#5a3324"); sky.addColorStop(1, "#8a5a2c");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+
+    // tower, close-up, filling most of the frame
+    const tX = w * 0.22, tW = w * 0.56, tY = h * 0.1;
+    ctx.fillStyle = "#1c140c";
+    ctx.fillRect(tX, tY, tW, h - tY);
+    // crenellations
+    const teeth = 6, toothW = tW / (teeth * 2);
+    for (let i = 0; i < teeth; i++) {
+      ctx.fillRect(tX + i * toothW * 2, tY - u * 0.8, toothW, u * 0.8);
+    }
+    // conical roof accent (small turret peeking on the left)
+    ctx.beginPath();
+    ctx.moveTo(tX - u * 2, tY);
+    ctx.lineTo(tX - u, tY - u * 2.2);
+    ctx.lineTo(tX, tY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(tX - u * 2, tY, u * 2, h - tY);
+
+    // windows, warm flicker
+    const flick = 0.75 + 0.25 * Math.sin(t / 300);
+    ctx.fillStyle = `rgba(240,192,90,${flick})`;
+    for (let row = 0; row < 3; row++) {
+      ctx.fillRect(tX + tW * 0.3, tY + u * 2 + row * u * 3.2, u * 1.4, u * 2);
+    }
+    ctx.fillStyle = `rgba(240,192,90,${flick * 0.8})`;
+    ctx.fillRect(tX - u * 1.4, tY + u * 3, u * 0.9, u * 1.3);
+
+    // banner on the tower top
+    const sway = Math.sin(t / 600) * u * 0.3;
+    ctx.strokeStyle = "#1c140c"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(tX + tW * 0.5, tY - u * 0.8); ctx.lineTo(tX + tW * 0.5, tY - u * 3); ctx.stroke();
+    ctx.fillStyle = "#8b2635";
+    ctx.beginPath();
+    ctx.moveTo(tX + tW * 0.5, tY - u * 3);
+    ctx.lineTo(tX + tW * 0.5 + u * 2.4 + sway, tY - u * 2.5);
+    ctx.lineTo(tX + tW * 0.5, tY - u * 2);
+    ctx.closePath(); ctx.fill();
+
+    // torch glow at the base
+    const tf = 0.5 + 0.5 * Math.sin(t / 220);
+    const g = ctx.createRadialGradient(tX + u, h * 0.9, 0, tX + u, h * 0.9, u * 4);
+    g.addColorStop(0, `rgba(255,180,80,${0.5 * tf})`); g.addColorStop(1, "rgba(255,180,80,0)");
+    ctx.fillStyle = g; ctx.fillRect(tX - u * 4, h * 0.9 - u * 4, u * 8, u * 8);
+
+    // foreground battlement silhouette
+    ctx.fillStyle = "#100a06";
+    ctx.fillRect(0, h * 0.92, w, h * 0.08);
+
+    requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+  window.addEventListener("resize", () => resizeCanvas(canvas));
+}
+
+function sceneFirstContact(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  const w = canvas.width, h = canvas.height, u = px(canvas, 44);
+
+  function paint(t) {
+    ctx.fillStyle = "#07050c"; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(200,180,230,0.6)";
+    for (let i = 0; i < 30; i++) {
+      const sx = (i * 61) % w, sy = (i * 83) % (h * 0.5);
+      ctx.fillRect(sx, sy, 1.4, 1.4);
+    }
+
+    // glowing structure, upper frame
+    const gx = w * 0.55, gy = h * 0.32;
+    for (let i = 0; i < 3; i++) {
+      const phase = ((t + i * 1100) % 3200) / 3200;
+      const r = phase * w * 0.35, a = (1 - phase) * 0.3;
+      ctx.strokeStyle = `rgba(120,220,200,${a})`; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(gx, gy, r, 0, Math.PI * 2); ctx.stroke();
+    }
+    const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, u * 5);
+    glow.addColorStop(0, "rgba(168,107,220,0.55)"); glow.addColorStop(1, "rgba(168,107,220,0)");
+    ctx.fillStyle = glow; ctx.fillRect(gx - u * 5, gy - u * 5, u * 10, u * 10);
+    ctx.fillStyle = "rgba(79,232,208,0.85)";
+    ctx.beginPath(); ctx.ellipse(gx, gy, u * 1.6, u * 0.9, 0, 0, Math.PI * 2); ctx.fill();
+
+    // station dome, mid frame
+    const dx = w * 0.18, dy = h * 0.68;
+    ctx.fillStyle = "#1a1424";
+    ctx.beginPath(); ctx.arc(dx, dy, u * 3.2, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = "rgba(79,232,208,0.7)";
+    ctx.fillRect(dx - u * 2.4, dy - u * 0.6, u * 4.8, u * 0.5);
+
+    // cratered moon surface, foreground
+    ctx.fillStyle = "#100c18";
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.82);
+    ctx.lineTo(w * 0.3, h * 0.78);
+    ctx.lineTo(w * 0.5, h * 0.85);
+    ctx.lineTo(w * 0.75, h * 0.76);
+    ctx.lineTo(w, h * 0.82);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath(); ctx.fill();
+
+    requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+  window.addEventListener("resize", () => resizeCanvas(canvas));
+}
+
+function sceneTomb(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, "#3a1f18"); sky.addColorStop(0.6, "#8a4a24"); sky.addColorStop(1, "#d4a24a");
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "rgba(230,160,60,0.7)";
+  ctx.beginPath(); ctx.arc(w * 0.7, h * 0.62, w * 0.16, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#241408";
+  ctx.beginPath(); ctx.moveTo(w * 0.5, h * 0.28); ctx.lineTo(w * 0.82, h * 0.86); ctx.lineTo(w * 0.18, h * 0.86); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.beginPath(); ctx.moveTo(w * 0.5, h * 0.28); ctx.lineTo(w * 0.6, h * 0.86); ctx.lineTo(w * 0.82, h * 0.86); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "#1a0e06";
+  ctx.beginPath(); ctx.moveTo(0, h * 0.92); ctx.lineTo(w * 0.35, h * 0.86); ctx.lineTo(w * 0.55, h * 0.94); ctx.lineTo(w, h * 0.88); ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath(); ctx.fill();
+  window.addEventListener("resize", () => { resizeCanvas(canvas); sceneTomb(canvas); });
+}
+
+function sceneJungle(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, "#c8dcc0"); sky.addColorStop(1, "#8fae86");
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#a08040";
+  ctx.fillRect(w * 0.38, h * 0.3, w * 0.24, h * 0.55);
+  for (let i = 0; i < 3; i++) {
+    ctx.fillRect(w * (0.38 - i * 0.03), h * (0.3 + i * 0.16), w * (0.24 + i * 0.06), h * 0.08);
+  }
+  ctx.fillStyle = "#1e3a22";
+  const blobs = [[0.1, 0.55, 0.28], [0.32, 0.65, 0.22], [0.62, 0.6, 0.26], [0.85, 0.68, 0.24], [0.48, 0.78, 0.3]];
+  for (const [bx, by, br] of blobs) {
+    ctx.beginPath(); ctx.arc(w * bx, h * by, w * br, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.fillStyle = "rgba(200,220,195,0.35)";
+  ctx.fillRect(0, h * 0.5, w, h * 0.06);
+  ctx.fillRect(0, h * 0.7, w, h * 0.05);
+  window.addEventListener("resize", () => { resizeCanvas(canvas); sceneJungle(canvas); });
+}
+
+function sceneAshfall(canvas) {
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  const w = canvas.width, h = canvas.height, u = px(canvas, 40);
+
+  function paint(t) {
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, "#2a1810"); sky.addColorStop(1, "#8a5030");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(220,140,60,0.55)";
+    ctx.beginPath(); ctx.arc(w * 0.55, h * 0.42, w * 0.14, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = "#160d08";
+    const bldgs = [[0, 0.62, 0.12], [0.1, 0.5, 0.1], [0.22, 0.68, 0.14], [0.38, 0.55, 0.09], [0.48, 0.72, 0.16],
+                   [0.66, 0.58, 0.11], [0.78, 0.66, 0.13], [0.9, 0.5, 0.1]];
+    for (const [bx, by, bw] of bldgs) ctx.fillRect(w * bx, h * by, w * bw, h);
+    ctx.fillStyle = "#0e0806";
+    ctx.fillRect(0, h * 0.86, w, h * 0.14);
+
+    ctx.fillStyle = "rgba(180,170,160,0.5)";
+    for (let i = 0; i < 22; i++) {
+      const ax = (i * 47 + t / 30) % w, ay = (i * 71 + t / 18) % h;
+      ctx.fillRect(ax, ay, 1.3, 1.3);
+    }
+    requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+  window.addEventListener("resize", () => resizeCanvas(canvas));
+}
+
+const SCENES = {
+  deadsignal: sceneDeadSignal, lastwarden: sceneLastWarden, firstcontact: sceneFirstContact,
+  tomb: sceneTomb, jungle: sceneJungle, ashfall: sceneAshfall,
+};
+document.querySelectorAll(".scene-canvas").forEach(canvas => {
+  const fn = SCENES[canvas.dataset.scene];
+  if (fn) fn(canvas);
+});
+</script>
 </body>
 </html>
