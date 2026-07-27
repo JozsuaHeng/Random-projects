@@ -7,9 +7,11 @@ gamebooks, in the style of the old Fighting Fantasy / CYOA paperbacks, with
 a retro pixel-art (CRT terminal) aesthetic. Pure static HTML/CSS/JS, no
 build step, no dependencies.
 
-`home.html` is the library entry point — a shelf of story cards, each with
-a small live canvas preview (via `META.backdrop`) matching that story's
-actual in-game atmosphere. Three playable stories so far:
+`home.html` is the library entry point — a shelf of story cards. Each
+cover is a painted pixel scene (procedural canvas art, not an icon or
+photo) with the title as a poster-style caption, and for playable
+stories a live `META.backdrop` preview layered in. Four playable
+stories so far:
 - **DEAD SIGNAL** (`game.html`, repo root) — you wake from cryosleep aboard
   the derelict salvage ship ISV Vesper. Sci-fi mystery/horror. 93 pages,
   Acts One & Two, 6 endings.
@@ -23,9 +25,14 @@ actual in-game atmosphere. Three playable stories so far:
   something else. First-contact sci-fi (tonally distinct from Dead
   Signal — wonder/isolation rather than body-horror). 101 pages, Acts
   One & Two, 6 endings.
+- **TOMB OF THE UNBROKEN SEAL** (`tomb-of-the-unbroken-seal/game.html`) —
+  an epigrapher's expedition finally breaches a tomb that no robber or
+  scholar ever managed to in three thousand years, then stops
+  transmitting. Egyptian mythology (a bound entity, not a body-horror
+  curse). 47 pages, Act One, Act Two pending.
 
-Other genres (Egyptian, Amazonian, post-apocalyptic) are listed on the
-shelf as "Coming Soon" placeholders.
+Other genres (Amazonian, post-apocalyptic) are listed on the shelf as
+"Coming Soon" placeholders.
 
 ## Architecture: shared engine, per-story folders
 

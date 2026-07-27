@@ -20,6 +20,7 @@ const PALETTE = {
   v: "#7de07d", // phosphor green
   x: "#a86bdc", // xeno violet
   n: "#4fe8d0", // bioluminescent cyan
+  e: "#d4a15c", // sandstone tan
 };
 
 const SPRITES = {
@@ -838,6 +839,260 @@ const SPRITES = {
     "............",
     "............",
   ],
+
+  // --- Tomb of the Unbroken Seal items ---
+  lamp: [
+    "............",
+    "....kk......",
+    "...koyk.....",
+    "..keeeek....",
+    ".keeeeeek...",
+    ".keeeeeek...",
+    "..keeeek....",
+    "...kkkk.....",
+    "....kk......",
+    "............",
+    "............",
+    "............",
+  ],
+  chisel: [
+    "..........kk",
+    ".........kek",
+    "........kek.",
+    ".......kek..",
+    "......kek...",
+    ".....kek....",
+    "....kek.....",
+    "...kmmk.....",
+    "..kmmk......",
+    "............",
+    "............",
+    "............",
+  ],
+  blade: [
+    ".......kk...",
+    "......kyyk..",
+    ".....kyyk...",
+    "....kyyk....",
+    "...kyyk.....",
+    "..kyyk......",
+    ".kkkk.......",
+    "kmmk........",
+    "kmmk........",
+    "............",
+    "............",
+    "............",
+  ],
+  tonic: [
+    "............",
+    "....kkkk....",
+    "....kssk....",
+    "...kkkkkk...",
+    "...kggggk...",
+    "...kggggk...",
+    "...kggggk...",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  waterskin: [
+    "............",
+    "....kkk.....",
+    "...kmemk....",
+    "..kmeeemk...",
+    ".kmeeeeemk..",
+    ".kmeeeeemk..",
+    ".kmeeeeemk..",
+    "..kmeeemk...",
+    "...kmmmk....",
+    "............",
+    "............",
+    "............",
+  ],
+  linenwrap: [
+    "............",
+    "..kkkkkkkk..",
+    ".kwwwwwwwwk.",
+    ".kwewewewwk.",
+    ".kwewewewwk.",
+    ".kwwwwwwwwk.",
+    "..kkkkkkkk..",
+    "............",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  calmherb: [
+    "............",
+    "....k.k.....",
+    "...kgkgk....",
+    "..kgggggk...",
+    "...kgkgk....",
+    "....k.k.....",
+    ".....k......",
+    ".....k......",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  scarab: [
+    "............",
+    "....kkkk....",
+    "...kyyyyk...",
+    "..kytytytk..",
+    ".kyyyyyyyk..",
+    ".kytytytk...",
+    "..kyyyyk....",
+    "...k..k.....",
+    "..k....k....",
+    "............",
+    "............",
+    "............",
+  ],
+  priestmask: [
+    "....kkkk....",
+    "...kbbbbk...",
+    "..kbbbbbbk..",
+    "..kbeeebbk..",
+    "..kbebebbk..",
+    "..kbeeebbk..",
+    "..kbbkkbbk..",
+    "...kbggbk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+  ],
+  ceremonialrobe: [
+    "....kkkk....",
+    "...keeeek...",
+    "..keeeeeek..",
+    ".keeybyeeek.",
+    ".keeeeeeeek.",
+    ".keeeeeeeek.",
+    "..keeeeeek..",
+    "...ke..ek...",
+    "...ke..ek...",
+    "............",
+    "............",
+    "............",
+  ],
+  ritualgloves: [
+    "............",
+    "...k....k...",
+    "..kek..kek..",
+    "..kek..kek..",
+    ".keeek.keeek",
+    ".keeekkkeeek",
+    ".keeeeeeeek.",
+    "..keeeeeek..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  sacredsandals: [
+    "............",
+    "...kk..kk...",
+    "..kek..kek..",
+    "..kek..kek..",
+    "..kek..kek..",
+    ".keeekkeeek.",
+    ".keeekkeeek.",
+    "keeeekkeeeek",
+    "keeeekkeeeek",
+    "............",
+    "............",
+    "............",
+  ],
+  amuletcord: [
+    "....kkkk....",
+    "...k....k...",
+    "..k......k..",
+    "..k......k..",
+    "...k....k...",
+    "....kyyk....",
+    "...kytytk...",
+    "....kyyk.....",
+    ".....kk......",
+    "............",
+    "............",
+    "............",
+  ],
+  sealring: [
+    "............",
+    "...kkkkkk...",
+    "..kyyyyyyk..",
+    ".kyybkbyyk..",
+    ".kyybkbyyk..",
+    ".kyyyyyyyk..",
+    "..kyyyyyk...",
+    "...kkkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  papyrus: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".keeeeeeeek.",
+    ".keytytytek.",
+    ".keeeeeeeek.",
+    ".keytytytek.",
+    ".keeeeeeeek.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  canopicjar: [
+    "............",
+    "....kkkk....",
+    "...keeeek...",
+    "...kfeeek...",
+    "...keeeek...",
+    "..kyeeeeyk..",
+    "..kyeeeeyk..",
+    "..kyeeeeyk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  heartweight: [
+    "............",
+    "...kk..kk...",
+    "..krrk.kwwk.",
+    ".krrrrkkwwwk",
+    ".krrrrkkwwwk",
+    "..krrrkwwwk.",
+    "...krkkwwk..",
+    "....kk.kk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  ankh: [
+    "....kkk.....",
+    "...kyyyk....",
+    "...ky.yk....",
+    "....kyk.....",
+    "..kkkykkk...",
+    ".kyyyyyyyk..",
+    "....kyk.....",
+    "....kyk.....",
+    "....kyk.....",
+    "....kkk.....",
+    "............",
+    "............",
+  ],
 };
 
 function drawSprite(canvas, sprite, scale) {
@@ -1107,6 +1362,63 @@ function startXenoscan(canvas) {
       ctx.beginPath();
       ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2);
       ctx.fill();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Dune Drift (top-right panel backdrop: desert night, drifting sand,
+// a slow-pulsing ankh glow — the tomb's threshold, not yet breached) ---
+function startDuneDrift(canvas) {
+  const ctx = canvas.getContext("2d");
+  let grains = [];
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    grains = [];
+    const n = Math.floor((canvas.width * canvas.height) / 1300);
+    for (let i = 0; i < n; i++) {
+      grains.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() < 0.8 ? 1 : 2,
+        vx: 0.04 + Math.random() * 0.1,
+        tw: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  function frame(t) {
+    const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    sky.addColorStop(0, "#1a1006"); sky.addColorStop(1, "#0d0804");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // dune silhouette horizon
+    ctx.fillStyle = "#241708";
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height * 0.7);
+    ctx.quadraticCurveTo(canvas.width * 0.3, canvas.height * 0.58, canvas.width * 0.55, canvas.height * 0.72);
+    ctx.quadraticCurveTo(canvas.width * 0.8, canvas.height * 0.62, canvas.width, canvas.height * 0.75);
+    ctx.lineTo(canvas.width, canvas.height); ctx.lineTo(0, canvas.height);
+    ctx.closePath(); ctx.fill();
+
+    // pulsing ankh glow, low on the horizon
+    const cx = canvas.width * 0.5, cy = canvas.height * 0.68;
+    const glow = 0.35 + 0.25 * Math.sin(t / 1000);
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, canvas.width * 0.22);
+    g.addColorStop(0, `rgba(212,161,92,${glow})`); g.addColorStop(1, "rgba(212,161,92,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (const gr of grains) {
+      gr.x += gr.vx;
+      if (gr.x > canvas.width) { gr.x = 0; gr.y = Math.random() * canvas.height; }
+      const a = 0.3 + 0.5 * Math.sin(t / 700 + gr.tw);
+      ctx.fillStyle = `rgba(212,161,92,${a})`;
+      ctx.fillRect(Math.round(gr.x), Math.round(gr.y), gr.s, gr.s);
     }
 
     requestAnimationFrame(frame);
