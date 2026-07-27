@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Subscription Price Board</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span class="brand-name">Pulse</span>
+    <span class="brand-tag">Subscription Price Board</span>
+  </div>
+  <div class="topbar-controls">
+    <div class="price-mode-toggle" id="priceModeToggle" role="group" aria-label="Monthly or annual pricing">
+      <button class="mode-btn active" data-mode="monthly">/mo</button>
+      <button class="mode-btn" data-mode="annual">/yr</button>
+    </div>
+    <select id="currencySelect" class="currency-select" aria-label="Display currency">
+      <option value="USD">USD $</option>
+      <option value="EUR">EUR €</option>
+      <option value="GBP">GBP £</option>
+      <option value="IDR">IDR Rp</option>
+      <option value="AUD">AUD $</option>
+    </select>
+    <button class="icon-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
+      <span class="theme-icon-dark">🌙</span>
+      <span class="theme-icon-light">☀️</span>
+    </button>
+  </div>
+</header>
+
+<main class="app">
+
+  <p class="board-caveat">
+    A hand-researched, point-in-time snapshot — not a live feed. Ask me to refresh it whenever you want the latest.
+    Consumer-price coloring: <span class="legend-up">red = price went up</span>, <span class="legend-down">green = price went down</span>
+    (the opposite of a stock chart, on purpose). Display currencies use static approximate conversion rates, not live FX. See <code>CLAUDE.md</code> for details.
+  </p>
+
+  <div class="board-controls">
+    <input type="text" id="companySearch" class="search-input" placeholder="Search companies…" autocomplete="off">
+  </div>
+
+  <div class="chip-row" id="categoryChips"></div>
+
+  <div class="table-scroll">
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th class="col-rank">#</th>
+          <th class="col-name sortable" data-sort="name">Company</th>
+          <th class="col-price sortable" data-sort="price" id="priceHeader">Price /mo</th>
+          <th class="col-change sortable" data-sort="last">Last Change</th>
+          <th class="col-change sortable" data-sort="since">Since Tracked</th>
+          <th class="col-change sortable" data-sort="freq">Hike Frequency</th>
+          <th class="col-change sortable" data-sort="catavg">vs Category Avg</th>
+          <th class="col-forecast">Forecast</th>
+          <th class="col-trend">Trend</th>
+        </tr>
+      </thead>
+      <tbody id="companyTableBody"></tbody>
+    </table>
+  </div>
+  <p class="empty-note" id="boardEmpty" hidden>No companies match your filters.</p>
+
+</main>
+
+<script src="data.js"></script>
+<script src="storage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
