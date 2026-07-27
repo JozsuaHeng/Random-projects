@@ -1,0 +1,196 @@
+/* TOMB OF THE UNBROKEN SEAL — ancient Egyptian theme override.
+   Loaded after the shared ../style.css. A third distinct box language:
+   where Dead Signal is sharp tech rectangles, The Last Warden is
+   chamfered carved plate, and First Contact is organic bio-pods, this
+   game is monumental — tapered pylon-gate trapezoids, sandstone and
+   gold, lapis and turquoise inlay, papyrus instead of paper or vellum. */
+
+:root {
+  --bg: #120c06;
+  --panel: #1e1408;
+  --panel-edge: #8a6428;
+  --ink: #e8d8b8;
+  --dim: #8a7452;
+  --phosphor: #e8c468;
+  --amber: #4fb8a8;
+  --alert: #b8402c;
+  --paper: #e4c98a;
+  --paper-ink: #241a0a;
+  --font-pixel: "Marcellus", serif;
+  --font-body: "Cormorant Garamond", serif;
+}
+
+body {
+  background: radial-gradient(ellipse at 30% 0%, rgba(212,161,92,0.12), transparent 55%), var(--bg);
+}
+
+#game-title, .panel-title, .ui-btn, #btn-library, #char-name, #char-role,
+.stat-label, .eq-label, #book-pagenum, .choice .turnto, .dice-label,
+#page-indicator, #location-line {
+  letter-spacing: 1.2px;
+}
+
+/* ---------- scanlines -> heat-shimmer over stone dust ---------- */
+#crt-overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(212,161,92,0.05), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(79,184,168,0.04), transparent 60%);
+  mix-blend-mode: screen;
+}
+#crt-overlay::after {
+  background: radial-gradient(ellipse at center, transparent 42%, rgba(10,7,3,0.6) 100%);
+}
+
+/* ---------- shared pylon-trapezoid shape ---------- */
+.panel, .ui-btn, #btn-library, .die, .slot, .eq-slot, .toast, #help-box {
+  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+}
+
+/* ---------- title bar: a lintel over a gate ---------- */
+#titlebar {
+  background: linear-gradient(180deg, #241a0c, #150e06);
+  border: none;
+  border-bottom: 3px solid var(--panel-edge);
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+#game-title {
+  font-weight: 400;
+  color: var(--phosphor);
+  text-shadow: 0 0 10px rgba(232,196,104,0.5);
+}
+#game-title::before { content: "𓂀 "; color: var(--amber); }
+#game-title::after { content: " 𓂀"; color: var(--amber); }
+.ui-btn, #btn-library {
+  font-size: 10px;
+  padding: 9px 16px;
+  background: linear-gradient(180deg, #2c2010, #180f06);
+  border: 1px solid var(--panel-edge);
+}
+.ui-btn:hover, #btn-library:hover {
+  border-color: var(--phosphor);
+  color: var(--phosphor);
+  box-shadow: 0 0 10px rgba(232,196,104,0.3);
+}
+
+/* ---------- panels: sandstone pylon, gold inlay edge ---------- */
+.panel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 10px),
+    linear-gradient(160deg, #241a0c, #170f07);
+  border: 1px solid var(--panel-edge);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+}
+.panel-title {
+  font-size: 10px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 2px solid var(--panel-edge);
+  color: var(--dim);
+}
+.panel-title.small { border-top: 2px solid var(--panel-edge); }
+
+/* ---------- the storybook page: papyrus, not paper ---------- */
+#book {
+  background: linear-gradient(160deg, #1a1206, #100a04);
+  border: 2px solid #3a2810;
+}
+#book-page {
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(138,100,40,0.18), transparent 45%),
+    radial-gradient(ellipse at 90% 90%, rgba(138,100,40,0.14), transparent 50%),
+    var(--paper);
+  box-shadow: inset 0 0 60px rgba(120, 84, 30, 0.30), 0 0 0 1px #a8823e;
+}
+#book-text::first-letter {
+  font-family: "Marcellus", serif;
+  font-size: 1.5em;
+  color: var(--alert);
+}
+#book-pagenum { color: #7a5a24; }
+#book-choices { border-top: 2px dashed #a8823e; }
+.choice .arrow { color: var(--alert); }
+.choice .turnto { color: #7a5a24; }
+.effect-tag { border-color: #7a5a24; color: #5a4014; background: rgba(122,90,36,0.12); }
+.effect-tag.gain { border-color: #3a7a5c; color: #245c42; background: rgba(58,122,92,0.12); }
+.effect-tag.loss { border-color: var(--alert); color: #8c2c1c; background: rgba(184,64,44,0.12); }
+.endcap { color: var(--alert); }
+
+/* dice: carved stone counters */
+.die {
+  background: #e4c98a;
+  color: #241a0a;
+  border: 2px solid #241a0a;
+  box-shadow: 3px 3px 0 #241a0a;
+}
+.dice-label { color: #5a4014; }
+#dice-result.pass { color: #245c42; }
+#dice-result.fail { color: #8c2c1c; }
+
+/* ---------- map: desert dune drift, not a HUD grid ---------- */
+#map-content .panel-title { background: rgba(18,12,6,0.8); }
+.map-room {
+  border: 1px solid #4a3418;
+  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+  background: rgba(18,12,6,0.6);
+  color: #4a3418;
+  font-size: 7px;
+}
+.map-room.visited { color: var(--dim); border-color: #6a4c20; background: rgba(40,28,12,0.7); }
+.map-room.current {
+  color: var(--phosphor);
+  border-color: var(--phosphor);
+  background: rgba(232,196,104,0.14);
+  text-shadow: 0 0 6px rgba(232,196,104,0.7);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(232,196,104, 0.0); }
+  50% { box-shadow: 0 0 10px rgba(232,196,104, 0.5); }
+}
+#location-line { background: rgba(18,12,6,0.8); }
+#location-name { color: var(--phosphor); }
+
+/* ---------- character panel: linen, gold, faience ---------- */
+#portrait {
+  background: #150e06;
+  border-color: var(--panel-edge);
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+}
+.stat-label.o2 { color: #c9a876; }
+.stat-label.sn { color: var(--amber); }
+.stat-block {
+  border-color: #4a3418;
+  background: #150e06;
+}
+.stat-block.o2.on { background: #c9a876; box-shadow: 0 0 4px rgba(201,168,118,0.6); }
+.stat-block.sn.on { background: var(--amber); box-shadow: 0 0 4px rgba(79,184,168,0.6); }
+
+#paperdoll {
+  background: radial-gradient(ellipse at 50% 20%, rgba(232,196,104,0.10), #150e06 70%);
+  border: 1px solid var(--panel-edge);
+  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+}
+.eq-slot, .slot {
+  border-color: #4a3418;
+  background: radial-gradient(circle at 35% 25%, #2c2010, #150e06 70%);
+}
+.eq-slot.filled { border-color: var(--phosphor); box-shadow: 0 0 6px rgba(232,196,104,0.35); }
+.slot.filled:hover { border-color: var(--amber); }
+.slot.selected { border-color: var(--phosphor); box-shadow: 0 0 8px rgba(232,196,104,0.4); }
+.slot .usable-dot { color: var(--phosphor); }
+
+/* toast: a small carved stela */
+.toast {
+  font-family: "Marcellus", serif;
+  font-size: 9px;
+  background: linear-gradient(180deg, #241a0c, #150e06);
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+}
+
+/* ---------- help overlay ---------- */
+#help-box {
+  background: linear-gradient(160deg, #241a0c, #170f07);
+  border: 1px solid var(--phosphor);
+}
+#help-box .panel-title { font-size: 12px; }
+#help-box p { font-size: 19px; }
+#help-box b { color: var(--phosphor); }
