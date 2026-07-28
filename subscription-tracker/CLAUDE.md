@@ -4,7 +4,7 @@
 
 **SubScreener** — a subscription price board, styled a bit like a stock/crypto
 screener (think CoinMarketCap), for subscription companies instead of
-coins. Full-width, sortable table of ~38 well-known subscription
+coins. Full-width, sortable table of ~56 well-known subscription
 companies (streaming, music, software, gaming, fitness, etc), each row
 showing:
 
@@ -34,7 +34,7 @@ showing:
 - **vs Category Avg** — how this company's current price compares to the
   average current price across its whole category (e.g. "+18% vs
   Streaming avg"). Computed purely from current prices, so it works for
-  all 38 companies regardless of how much price-change history exists —
+  all companies regardless of how much price-change history exists —
   the one column that's never gated by research depth.
 - **Forecast** — either a **Confirmed** publicly-announced future price
   change (from `company.forecast`, sourced), or — when nothing official
@@ -174,6 +174,8 @@ too (for its logo). No other file needs to change. If a plan's official
 name is ambiguous, verify it rather than guessing — e.g. Disney+'s ad
 tier is officially "Disney+ Basic", not just "with ads".
 
-Currently 75 companies are planned but only ~38 are in `data.js` — the
-remaining ~37 (plus filling any newly-noticed gaps) are a deliberately
+Currently 75 companies are planned; ~56 are in `data.js` as of this pass
+(a first batch of ~18 new companies — AI tools, live TV, and a handful of
+Education/Fitness/Productivity/Security additions — landed alongside
+deeper tier/history coverage). The remaining ~19 are a deliberately
 separate follow-up pass, not forgotten.

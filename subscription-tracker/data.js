@@ -139,6 +139,34 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "espn", name: "ESPN", category: "Live TV", domain: "espn.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "ESPN Unlimited", oldPrice: null, newPrice: 29.99, currency: "USD", note: "Current reference price for ESPN's direct-to-consumer streaming tier. No confirmed prior change found.", source: "https://www.pcworld.com/article/582896/best-streaming-tv-service.html" }
+    ]
+  },
+  {
+    id: "sling-tv", name: "Sling TV", category: "Live TV", domain: "sling.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Orange", oldPrice: null, newPrice: 45.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
+      { date: "2026-01-01", planLabel: "Blue", oldPrice: null, newPrice: 45.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
+      { date: "2026-01-01", planLabel: "Orange & Blue", oldPrice: null, newPrice: 60.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" }
+    ]
+  },
+  {
+    id: "youtube-tv", name: "YouTube TV", category: "Live TV", domain: "youtube.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Sports + News", oldPrice: null, newPrice: 55.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.pcworld.com/article/582896/best-streaming-tv-service.html" },
+      { date: "2026-01-01", planLabel: "Base plan", oldPrice: null, newPrice: 82.99, currency: "USD", note: "", source: "https://www.pcworld.com/article/582896/best-streaming-tv-service.html" }
+    ]
+  },
+  {
+    id: "fubotv", name: "fuboTV", category: "Live TV", domain: "fubo.tv",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Fubo Sports", oldPrice: null, newPrice: 64.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
+      { date: "2026-01-01", planLabel: "Pro", oldPrice: null, newPrice: 73.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" }
+    ]
+  },
+  {
     id: "apple-tv-plus", name: "Apple TV+", category: "Streaming", domain: "apple.com",
     priceHistory: [
       { date: "2025-08-01", planLabel: "Standard", oldPrice: 9.99, newPrice: 12.99, currency: "USD", note: "", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" }
@@ -165,6 +193,19 @@ const SUBSCRIPTION_CATALOG = [
       { date: "2026-03-05", planLabel: "Individual", oldPrice: null, newPrice: 12.99, currency: "USD", note: "$11.99/mo for Amazon Prime members. Current reference price.", source: "https://musically.com/2026/02/06/amazon-music-increases-subscription-prices-in-the-us-and-uk/" },
       { date: "2026-03-05", planLabel: "Family", oldPrice: 16.58, newPrice: 18.25, annualPrice: 219, currency: "USD", note: "Family plan (up to 6 accounts) is billed annually only — real annual price rose from $199 to $219/yr; monthly-equivalent shown here for comparison.", source: "https://musically.com/2026/02/06/amazon-music-increases-subscription-prices-in-the-us-and-uk/" }
     ]
+  },
+  {
+    id: "tidal", name: "Tidal", category: "Music", domain: "tidal.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Individual", oldPrice: null, newPrice: 10.99, currency: "USD", note: "Current reference price, ahead of the confirmed August 2026 increase (see forecast).", source: "https://basic-tutorials.com/news/tidal-price-increase-in-2026-individual-subscription-to-cost-12-99-euros-starting-in-august/" },
+      { date: "2026-01-01", planLabel: "Family", oldPrice: null, newPrice: 19.99, currency: "USD", note: "", source: "https://support.tidal.com/hc/en-us/articles/115003662825-Subscription-Types" },
+      { date: "2026-01-01", planLabel: "Student", oldPrice: null, newPrice: 6.99, currency: "USD", note: "", source: "https://support.tidal.com/hc/en-us/articles/115003662825-Subscription-Types" }
+    ],
+    forecast: {
+      date: "2026-08-03",
+      note: "Individual rising to $12.99/mo (Family and Student tiers also rising, by roughly $3 and $1.50/mo respectively) — officially announced.",
+      source: "https://basic-tutorials.com/news/tidal-price-increase-in-2026-individual-subscription-to-cost-12-99-euros-starting-in-august/"
+    }
   },
   {
     id: "audible", name: "Audible", category: "News & Reading", domain: "audible.com",
@@ -204,6 +245,24 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "chatgpt-plus", name: "ChatGPT Plus", category: "AI Tools", domain: "openai.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Plus", oldPrice: null, newPrice: 20, currency: "USD", note: "Current reference price. Has held at $20/mo since its Feb 2023 launch, as far as could be confirmed here.", source: "https://aipricecompare.org/" }
+    ]
+  },
+  {
+    id: "perplexity-pro", name: "Perplexity Pro", category: "AI Tools", domain: "perplexity.ai",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Pro", oldPrice: null, newPrice: 20, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://aipricecompare.org/" }
+    ]
+  },
+  {
+    id: "claude-pro", name: "Claude Pro", category: "AI Tools", domain: "anthropic.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Pro", oldPrice: null, newPrice: 20, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://aipricecompare.org/" }
+    ]
+  },
+  {
     id: "notion", name: "Notion", category: "Productivity", domain: "notion.so",
     priceHistory: [
       { date: "2026-01-01", planLabel: "Plus", oldPrice: null, newPrice: 10, annualPrice: 120, currency: "USD", note: "Per member, billed annually; $12/mo if billed monthly. No confirmed prior change found.", source: "https://www.eesel.ai/blog/notion-pricing" },
@@ -232,6 +291,13 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "todoist", name: "Todoist", category: "Productivity", domain: "todoist.com",
+    priceHistory: [
+      { date: "2025-12-01", planLabel: "Pro", oldPrice: 4, newPrice: 5, currency: "USD", note: "Billed annually ($60/yr); $7/mo if billed monthly. Exact December 2025 date approximate.", source: "https://www.todoist.com/help/articles/todoist-pro-pricing-update-in-2025-bxBvHZuJZ" },
+      { date: "2025-12-01", planLabel: "Business (per user)", oldPrice: null, newPrice: 8, annualPrice: 96, currency: "USD", note: "Billed annually; $10/mo if billed monthly.", source: "https://www.todoist.com/help/articles/todoist-pro-pricing-update-in-2025-bxBvHZuJZ" }
+    ]
+  },
+  {
     id: "1password", name: "1Password", category: "Security", domain: "1password.com",
     priceHistory: [
       { date: "2026-03-27", planLabel: "Individual", oldPrice: 3.99, newPrice: 4.99, currency: "USD", note: "Up to a 33% increase; pricing had been largely unchanged for years.", source: "https://alternativeto.net/news/2026/2/1password-to-raise-subscription-prices-for-individual-and-family-plans-by-up-to-33-" },
@@ -242,6 +308,18 @@ const SUBSCRIPTION_CATALOG = [
     id: "nordvpn", name: "NordVPN", category: "Security", domain: "nordvpn.com",
     priceHistory: [
       { date: "2026-01-01", planLabel: "Basic (1-month)", oldPrice: null, newPrice: 12.99, currency: "USD", note: "Current reference price; four tiers exist (Basic, Plus, Complete, Prime). No confirmed prior change found.", source: "https://cybernews.com/best-vpn/nordvpn-review/nordvpn-cost/" }
+    ]
+  },
+  {
+    id: "bitwarden", name: "Bitwarden", category: "Security", domain: "bitwarden.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium", oldPrice: 0.83, newPrice: 1.65, annualPrice: 19.8, currency: "USD", note: "Real change was to the annual price: $9.99/yr → $19.80/yr — a 98% increase and the first Premium price hike in Bitwarden's 10-year history. Monthly-equivalent shown here for consistency.", source: "https://safepasswordgenerator.net/blog/bitwarden-pricing-2026/" }
+    ]
+  },
+  {
+    id: "expressvpn", name: "ExpressVPN", category: "Security", domain: "expressvpn.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Basic (2-year plan)", oldPrice: null, newPrice: 2.49, currency: "USD", note: "Current reference price; rate applies to the 2-year term. No confirmed prior change found.", source: "https://cybernews.com/best-vpn/expressvpn-review/expressvpn-cost/" }
     ]
   },
   {
@@ -319,10 +397,50 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "strava", name: "Strava", category: "Fitness", domain: "strava.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Individual", oldPrice: null, newPrice: 11.99, annualPrice: 79.99, currency: "USD", note: "Family plan also available at $139.99/yr, and a Strava + Runna bundle at $149.99/yr. No confirmed prior change found.", source: "https://www.strava.com/pricing" }
+    ]
+  },
+  {
+    id: "weightwatchers", name: "WeightWatchers (WW)", category: "Fitness", domain: "weightwatchers.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Core (digital)", oldPrice: null, newPrice: 23, currency: "USD", note: "Regular price after the promotional period; some new members pay a temporary $10/mo intro rate.", source: "https://currywurstmuseum.com/weight-watchers-cost/" },
+      { date: "2026-01-01", planLabel: "Premium (with workshops)", oldPrice: null, newPrice: 54.95, currency: "USD", note: "Regular price after a 6-month promotional rate of $49.95.", source: "https://currywurstmuseum.com/weight-watchers-cost/" }
+    ]
+  },
+  {
     id: "duolingo-super", name: "Duolingo Super", category: "Education", domain: "duolingo.com",
     subscribers: { count: "12.5M", asOf: "Q1 2026", note: "Paid subscribers.", source: "https://www.classcentral.com/report/duolingo-q1-2026" },
     priceHistory: [
       { date: "2026-01-01", planLabel: "Super (individual)", oldPrice: null, newPrice: 12.99, annualPrice: 95.99, currency: "USD", note: "Annual works out to roughly 38% cheaper than paying monthly. No confirmed prior change found.", source: "https://www.myengineeringbuddy.com/blog/duolingo-reviews-pricing-alternatives-2026/" }
+    ]
+  },
+  {
+    id: "skillshare", name: "Skillshare", category: "Education", domain: "skillshare.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Annual", oldPrice: null, newPrice: 13.99, annualPrice: 168, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://studelp.com/how-much-does-skillshare-cost.html" }
+    ]
+  },
+  {
+    id: "coursera-plus", name: "Coursera Plus", category: "Education", domain: "coursera.org",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Coursera Plus", oldPrice: null, newPrice: 59, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.coursera.org/courseraplus/special/new-year-2026-global" }
+    ]
+  },
+  {
+    id: "masterclass", name: "MasterClass", category: "Education", domain: "masterclass.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Standard", oldPrice: null, newPrice: 10, annualPrice: 120, currency: "USD", note: "Annual-only plan, no monthly option — monthly-equivalent shown for comparison. No confirmed prior change found.", source: "https://onlinecourseing.com/masterclass-pricing/" },
+      { date: "2026-01-01", planLabel: "Plus", oldPrice: null, newPrice: 15, annualPrice: 180, currency: "USD", note: "Annual-only plan.", source: "https://onlinecourseing.com/masterclass-pricing/" },
+      { date: "2026-01-01", planLabel: "Premium", oldPrice: null, newPrice: 20, annualPrice: 240, currency: "USD", note: "Annual-only plan.", source: "https://onlinecourseing.com/masterclass-pricing/" }
+    ]
+  },
+  {
+    id: "chegg-study", name: "Chegg Study", category: "Education", domain: "chegg.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Basic", oldPrice: null, newPrice: 15.95, currency: "USD", note: "Current reference price; capped at 20 expert questions/mo. No confirmed prior change found.", source: "https://edureviewer.com/blog/how-much-is-chegg/" },
+      { date: "2026-01-01", planLabel: "Study Pack", oldPrice: null, newPrice: 19.95, currency: "USD", note: "Adds unlimited questions, a math equation solver, and writing help.", source: "https://edureviewer.com/blog/how-much-is-chegg/" }
     ]
   },
   {
@@ -338,6 +456,13 @@ const SUBSCRIPTION_CATALOG = [
     priceHistory: [
       { date: "2024-09-01", planLabel: "Gold Star", oldPrice: 60, newPrice: 65, currency: "USD", note: "First increase since June 2017.", source: "https://www.today.com/food/news/costco-raising-membership-fees-rcna169309" },
       { date: "2024-09-01", planLabel: "Executive", oldPrice: 120, newPrice: 130, currency: "USD", note: "2% reward cap also rose, from $1,000 to $1,250/yr.", source: "https://www.today.com/food/news/costco-raising-membership-fees-rcna169309" }
+    ]
+  },
+  {
+    id: "sams-club", name: "Sam's Club", category: "Membership", domain: "samsclub.com",
+    priceHistory: [
+      { date: "2026-05-01", planLabel: "Club", oldPrice: null, newPrice: 60, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" },
+      { date: "2026-05-01", planLabel: "Plus", oldPrice: null, newPrice: 120, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" }
     ]
   }
 ];
