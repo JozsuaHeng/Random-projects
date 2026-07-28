@@ -10,11 +10,14 @@ showing:
 
 - **Price** — every tracked plan/tier for that company (e.g. Netflix
   shows Standard-with-ads, Standard, and Premium as three lines), not
-  just one number. Toggle `/mo` vs `/yr` in the top bar — `/yr` uses a
-  real published annual price when one is known, otherwise falls back to
-  a clearly-tagged "est." (monthly × 12).
-- **Last Change** — the most recent sourced price change (for the
-  row's "headline" plan — see below), and how long ago it was.
+  just one number. Each tier shows its monthly price and its annual price
+  together, inline — a real published annual price when one is known,
+  otherwise a clearly-tagged "est." (monthly × 12). No toggle to click;
+  both units are just always visible.
+- **Change % / Price Movement / Changed** — the most recent sourced price
+  change (for the row's "headline" plan — see below), split into three
+  columns instead of one crowded cell: the percentage, the actual dollar
+  move (e.g. "$15.49 → $17.99"), and how long ago it was.
 - **Since Tracked** — cumulative % change from whatever the *earliest*
   tracked price point actually is, to today. This replaced a rigid "1Y /
   2Y / 3Y ago" trio that was empty for most companies whenever research
@@ -37,10 +40,22 @@ showing:
   and worded differently from a confirmed one so the two are never
   confused. "Unknown" only appears when there's too little history (0-1
   tracked changes) to estimate a cadence at all.
-- **Trend** — a step-chart sparkline (flat while the price holds, a
-  sharp jump on the change date) rather than a smooth diagonal line —
-  prices don't glide from A to B, they jump on a specific date, so the
-  chart shouldn't imply otherwise.
+- **Subscribers** — a real disclosed subscriber/member count for the ~14
+  companies (mostly large public ones) where one has been publicly
+  reported, e.g. via earnings. "Not disclosed" for the rest — most
+  private companies (VPNs, meditation apps, most SaaS tools) simply don't
+  publish this, and that's shown honestly rather than guessed.
+- **Trend** — a small sparkline: each real price point connected by a
+  smooth "ease" curve (not a harsh diagonal or a jagged step), with a
+  soft area wash and a small end-dot marking the current price. The
+  precise numbers already live in the columns beside it, so this chart's
+  only job is to be a pleasant at-a-glance shape — see the "sparkline
+  redesign" note in `app.js` above `sparklineSvg()` for the reasoning.
+
+Each row's logo is fetched live from the company's own domain via a
+public favicon service (`logoUrl()` in `app.js`) — not a hosted image
+asset. If it fails to load, it's removed and the colored-initial avatar
+underneath shows through automatically.
 
 Click any row to expand its full sourced price-change history for every
 tracked plan (not just the row's "headline" one), plus a summary line
@@ -58,9 +73,11 @@ Plain HTML/CSS/vanilla JS, no build step, matching the rest of this
 
 - `data.js` — `SUBSCRIPTION_CATALOG`: the hand-curated, hand-researched
   dataset. See the comment at the top of the file for the exact entry
-  shape (including the optional `forecast` field). **This is a
-  point-in-time snapshot, not a live feed** — nothing in this app scrapes
-  the internet or calls any API.
+  shape (including the optional `forecast` and `subscribers` fields, and
+  the required `domain` field used for logos). **This is a point-in-time
+  snapshot, not a live feed** — nothing in this app scrapes the internet
+  or calls any API for price data. The one live network call is the logo
+  fetch (see below) — display only, never data.
 - `storage.js` — tiny `localStorage` wrapper for exactly two UI
   preferences: theme (light/dark) and display currency. That's the only
   thing this app ever persists.
@@ -81,11 +98,15 @@ Plain HTML/CSS/vanilla JS, no build step, matching the rest of this
   - `categoryAverages()` / `categoryAvgPct()` drive "vs Category Avg" —
     averaged across the whole catalog (not the current filter/search) so
     the comparison stays stable while browsing.
-  - Sortable column headers (click to sort by Price / Last Change / Since
+  - `logoUrl()` fetches a small favicon by domain from a public favicon
+    service at render time — the one external network dependency in this
+    app (display only; see "Why there's no live scraping" below for why
+    that's a deliberate, narrow exception). `onerror="this.remove()"` on
+    the `<img>` is the entire fallback mechanism — no JS state to track.
+  - Sortable column headers (click to sort by Price / Change % / Since
     Tracked / Hike Frequency / vs Category Avg / Company name), category
-    filter chips, search, a monthly/annual price toggle, a currency
-    toggle (static approximate FX rates in `FX_RATES_PER_USD` — not
-    live), and a light/dark theme toggle.
+    filter chips, search, a currency toggle (static approximate FX rates
+    in `FX_RATES_PER_USD` — not live), and a light/dark theme toggle.
 - `style.css` — full-width table layout; dark theme is the base `:root`,
   light theme overrides live under `:root[data-theme="light"]`.
 
@@ -96,6 +117,11 @@ pages needs a hosted server, a database, and a scheduled job — and
 scrapers break constantly when vendor sites change their markup, plus
 some sites' terms of service don't allow it. That's a different, much
 bigger project than anything else on this shelf.
+
+(The one exception is the company logos, which load live from a public
+favicon service by domain — display polish, not data. If that ever feels
+like the wrong tradeoff, the fallback is already there: remove the
+`<img>` and every row's colored-initial avatar carries on unchanged.)
 
 Instead, the dataset is refreshed **on request**: when asked to "update
 the price tracker" (or similar), research current price-change news (and
@@ -108,13 +134,15 @@ commitments.
 
 ## Refreshing / extending the dataset later
 
-To add companies, newer price changes, a newly-announced forecast, or a
-real annual price (`annualPrice` field —
-only set it from an actually-published annual plan, never a guess):
-research it (get a real source URL), then add/edit an entry in
-`SUBSCRIPTION_CATALOG` in `data.js`. No other file needs to change. If a
-plan's official name is ambiguous, verify it rather than guessing — e.g.
-Disney+'s ad tier is officially "Disney+ Basic", not just "with ads".
+To add companies, newer price changes, a newly-announced forecast, a real
+annual price (`annualPrice` field — only set it from an actually-
+published annual plan, never a guess), or a disclosed subscriber count
+(`subscribers` field — only from a real, sourced figure; omit rather than
+estimate): research it (get a real source URL), then add/edit an entry in
+`SUBSCRIPTION_CATALOG` in `data.js`. A new company entry needs a `domain`
+too (for its logo). No other file needs to change. If a plan's official
+name is ambiguous, verify it rather than guessing — e.g. Disney+'s ad
+tier is officially "Disney+ Basic", not just "with ads".
 
 Currently 50 companies are planned but only ~38 are in `data.js` — the
 remaining ~12 (plus filling any newly-noticed gaps) are a deliberately

@@ -6,7 +6,6 @@
 const FX_RATES_PER_USD = { USD: 1, EUR: 0.92, GBP: 0.79, IDR: 15800, AUD: 1.52 };
 
 let displayCurrency = "USD";
-let priceMode = "monthly"; // "monthly" | "annual"
 let activeCategories = new Set();
 let searchQuery = "";
 let sortColumn = "last";
@@ -79,6 +78,15 @@ function initials(name) {
   return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase() || "?";
 }
 
+// Small favicon for a company, fetched by domain from a public favicon
+// service — no logo files to source or host ourselves. This is an
+// external network request (the one part of this app that isn't fully
+// offline); if it fails to load, onerror removes the broken <img> and
+// the colored-initial avatar underneath shows through untouched.
+function logoUrl(domain) {
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+}
+
 // ---------- Company price-history analysis ----------
 
 // A company can have multiple tracked plans (e.g. Netflix has Standard,
@@ -120,7 +128,8 @@ function sparklinePrices(numericEntries) {
 // Every tracked plan's current price, cheapest first — this is what
 // drives the multi-tier breakdown in the Price column (e.g. Netflix
 // shows "Standard with ads / Standard / Premium" as three lines, not
-// just one "headline" number).
+// just one "headline" number). Each tier carries both its monthly price
+// and (when known) a real annual price, shown inline together.
 function allTierPrices(company) {
   const groups = planGroups(company);
   const tiers = [];
@@ -232,31 +241,55 @@ function pctChange(from, to) {
   return ((to - from) / from) * 100;
 }
 
-// A price only ever moves on the date a change is reported — it doesn't
-// glide there. So instead of a smooth diagonal line (which implies a
-// gradual change that never happened), this draws a step/staircase: flat
-// while the price holds, a sharp jump on the change date. More visually
-// "jagged," and more honest about what the data actually is.
+// A small trend chart, not a rigorous one: the exact numbers already live
+// in the columns beside it, so this can prioritize being legible and
+// pleasant at a glance. Each real price point is connected with a smooth
+// "ease" curve (a cubic bezier with a horizontal tangent at both ends)
+// rather than a harsh diagonal or a right-angle step — it still lands
+// exactly on every recorded price, it just doesn't look like a jagged
+// EKG doing it. A soft area wash under the line and a small end-dot
+// (ringed in the row's background color, per the usual sparkline/stat-
+// tile treatment) add just enough visual weight without shouting.
 function sparklineSvg(points) {
+  const w = 72, h = 30, pad = 5;
+
   if (points.length < 2) {
-    return `<svg class="sparkline" viewBox="0 0 60 24"><line x1="4" y1="12" x2="56" y2="12" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3" opacity="0.4"/></svg>`;
+    // Not enough data for a trend yet — a quiet placeholder, not a
+    // dashed "in progress" line (dashing reads as a threshold/projection,
+    // which this isn't).
+    return `<svg class="sparkline" viewBox="0 0 ${w} ${h}"><line x1="${pad}" y1="${h / 2}" x2="${w - pad}" y2="${h / 2}" stroke="currentColor" stroke-width="1.5" opacity="0.25"/><circle cx="${w / 2}" cy="${h / 2}" r="2.5" fill="currentColor" opacity="0.5"/></svg>`;
   }
+
   const min = Math.min(...points), max = Math.max(...points);
   const range = max - min || 1;
-  const w = 60, h = 24, pad = 3;
   const n = points.length;
   const step = (w - pad * 2) / (n - 1);
-  const xAt = i => pad + i * step;
-  const yAt = p => h - pad - ((p - min) / range) * (h - pad * 2);
+  const coords = points.map((p, i) => [
+    pad + i * step,
+    h - pad - ((p - min) / range) * (h - pad * 2),
+  ]);
 
-  let d = `M ${xAt(0).toFixed(1)} ${yAt(points[0]).toFixed(1)}`;
-  for (let i = 1; i < n; i++) {
-    d += ` L ${xAt(i).toFixed(1)} ${yAt(points[i - 1]).toFixed(1)} L ${xAt(i).toFixed(1)} ${yAt(points[i]).toFixed(1)}`;
+  let d = `M ${coords[0][0].toFixed(1)} ${coords[0][1].toFixed(1)}`;
+  for (let i = 1; i < coords.length; i++) {
+    const [x0, y0] = coords[i - 1];
+    const [x1, y1] = coords[i];
+    const midX = (x0 + x1) / 2;
+    d += ` C ${midX.toFixed(1)} ${y0.toFixed(1)}, ${midX.toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`;
   }
+
   const trendUp = points[n - 1] > points[0];
   const trendDown = points[n - 1] < points[0];
-  const color = trendUp ? "var(--bad)" : trendDown ? "var(--good)" : "currentColor";
-  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}"><path d="${d}" fill="none" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const color = trendUp ? "var(--bad)" : trendDown ? "var(--good)" : "var(--text-faint)";
+  const [endX, endY] = coords[n - 1];
+  const areaPath = `${d} L ${coords[n - 1][0].toFixed(1)} ${h - pad} L ${coords[0][0].toFixed(1)} ${h - pad} Z`;
+
+  return `
+    <svg class="sparkline" viewBox="0 0 ${w} ${h}">
+      <path d="${areaPath}" fill="${color}" opacity="0.12" stroke="none"/>
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="2.75" fill="${color}" stroke="var(--card)" stroke-width="1.5"/>
+    </svg>
+  `;
 }
 
 // ---------- Cell renderers ----------
@@ -274,30 +307,46 @@ function changeCellHtml(fromPrice, toPrice, currency) {
   `;
 }
 
-function lastChangeCellHtml(stats) {
+// Last Change, split into three columns per row (% / the actual price
+// movement / how long ago) instead of one crowded cell.
+function lastChangePctCellHtml(stats) {
+  if (!stats.hasHistory) return `<span class="cell-unknown">Unknown</span>`;
+  if (!stats.isLastEventNumeric) return `<span class="cell-unknown">—</span>`;
+  const pct = stats.lastChangePct;
+  const sign = pct >= 0 ? "+" : "";
+  const cls = pct > 0 ? "up" : pct < 0 ? "down" : "flat";
+  return `<span class="change-pct ${cls}">${sign}${pct.toFixed(1)}%</span>`;
+}
+
+function lastChangeMovementCellHtml(stats) {
   if (!stats.hasHistory) return `<span class="cell-unknown">Unknown</span>`;
   if (stats.isLastEventNumeric) {
-    const html = changeCellHtml(stats.lastEvent.oldPrice, stats.lastEvent.newPrice, stats.currency);
-    return `${html}<span class="change-date">${monthsAgoLabel(stats.lastEvent.date)}</span>`;
+    return `<span class="change-ref">${formatMoney(stats.lastEvent.oldPrice, stats.currency)} &rarr; ${formatMoney(stats.lastEvent.newPrice, stats.currency)}</span>`;
   }
-  return `<span class="cell-note">${escapeHtml(stats.lastEvent.note || stats.lastEvent.planLabel)}</span><span class="change-date">${monthsAgoLabel(stats.lastEvent.date)}</span>`;
+  return `<span class="cell-note">${escapeHtml(stats.lastEvent.note || stats.lastEvent.planLabel)}</span>`;
 }
 
-function priceForMode(tierOrEntry) {
-  if (priceMode === "monthly") return { amount: tierOrEntry.price, estimated: false };
-  if (tierOrEntry.annualPrice != null) return { amount: tierOrEntry.annualPrice, estimated: false };
-  return { amount: tierOrEntry.price * 12, estimated: true };
+function lastChangeDateCellHtml(stats) {
+  if (!stats.hasHistory) return `<span class="cell-unknown">Unknown</span>`;
+  return `<span class="change-date-standalone">${monthsAgoLabel(stats.lastEvent.date)}</span>`;
 }
 
+// Price column: every tracked plan, each showing its monthly price and
+// (when known) a real annual price inline together — no separate toggle
+// to click, both units are just always visible.
 function priceCellHtml(company) {
   const tiers = allTierPrices(company);
   if (tiers.length === 0) return `<span class="cell-unknown">No confirmed pricing</span>`;
   return `<div class="tier-list">` + tiers.map(t => {
-    const { amount, estimated } = priceForMode(t);
+    const hasRealAnnual = t.annualPrice != null;
+    const annualAmount = hasRealAnnual ? t.annualPrice : t.price * 12;
     return `
       <div class="tier-row">
         <span class="tier-label">${escapeHtml(t.label)}</span>
-        <span class="tier-price">${formatMoney(amount, t.currency)}${estimated ? `<span class="est-tag" title="No confirmed annual plan — this is monthly × 12">est.</span>` : ""}</span>
+        <span class="tier-prices">
+          <span class="tier-price">${formatMoney(t.price, t.currency)}<span class="tier-unit">/mo</span></span>
+          <span class="tier-annual">${formatMoney(annualAmount, t.currency)}<span class="tier-unit">/yr</span>${!hasRealAnnual ? `<span class="est-tag" title="No confirmed annual plan — this is monthly × 12">est.</span>` : ""}</span>
+        </span>
       </div>
     `;
   }).join("") + `</div>`;
@@ -365,6 +414,17 @@ function categoryAvgCellHtml(company, pct) {
     <div class="change-cell">
       <span class="change-pct ${cls}">${sign}${pct.toFixed(0)}%</span>
       <span class="change-ref">vs ${escapeHtml(company.category)} avg</span>
+    </div>
+  `;
+}
+
+function subscribersCellHtml(company) {
+  if (!company.subscribers) return `<span class="cell-unknown">Not disclosed</span>`;
+  const s = company.subscribers;
+  return `
+    <div class="change-cell">
+      <span class="subscriber-count">${escapeHtml(s.count)}</span>
+      <span class="change-ref">${escapeHtml(s.asOf)}</span>
     </div>
   `;
 }
@@ -460,6 +520,8 @@ function renderTable() {
   }
   empty.hidden = true;
 
+  const COLSPAN = 12;
+
   entries.forEach((entry, idx) => {
     const { company, stats, catAvgPct } = entry;
 
@@ -469,7 +531,10 @@ function renderTable() {
       <td class="col-rank">${idx + 1}</td>
       <td class="col-name">
         <div class="row-id">
-          <div class="sub-avatar">${initials(company.name)}</div>
+          <div class="logo-slot">
+            <div class="sub-avatar">${initials(company.name)}</div>
+            <img class="company-logo" src="${escapeAttr(logoUrl(company.domain))}" alt="" loading="lazy" onerror="this.remove()">
+          </div>
           <div>
             <div class="row-name">${escapeHtml(company.name)}</div>
             <div class="row-category">${escapeHtml(company.category)}</div>
@@ -477,10 +542,13 @@ function renderTable() {
         </div>
       </td>
       <td class="col-price">${priceCellHtml(company)}</td>
-      <td class="col-change">${lastChangeCellHtml(stats)}</td>
+      <td class="col-change-sm">${lastChangePctCellHtml(stats)}</td>
+      <td class="col-change">${lastChangeMovementCellHtml(stats)}</td>
+      <td class="col-change-sm">${lastChangeDateCellHtml(stats)}</td>
       <td class="col-change">${sinceTrackedCellHtml(stats)}</td>
       <td class="col-change">${hikeFrequencyCellHtml(company)}</td>
       <td class="col-change">${categoryAvgCellHtml(company, catAvgPct)}</td>
+      <td class="col-change">${subscribersCellHtml(company)}</td>
       <td class="col-forecast">${forecastCellHtml(company)}</td>
       <td class="col-trend">${sparklineSvg(stats.sparklinePoints)}</td>
     `;
@@ -489,7 +557,7 @@ function renderTable() {
     detailRow.className = "detail-tr";
     detailRow.hidden = expandedId !== company.id;
     const td = document.createElement("td");
-    td.colSpan = 9;
+    td.colSpan = COLSPAN;
     td.innerHTML = renderDetailContent(company);
     detailRow.appendChild(td);
 
@@ -587,16 +655,6 @@ document.querySelectorAll("th.sortable").forEach(th => {
       sortColumn = col;
       sortDir = col === "name" ? "asc" : "desc";
     }
-    renderTable();
-  });
-});
-
-document.querySelectorAll(".mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    priceMode = btn.dataset.mode;
-    document.getElementById("priceHeader").textContent = priceMode === "monthly" ? "Price /mo" : "Price /yr";
     renderTable();
   });
 });

@@ -102,28 +102,6 @@ body {
   cursor: pointer;
 }
 
-.price-mode-toggle {
-  display: flex;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 3px;
-  gap: 2px;
-}
-
-.mode-btn {
-  border: none;
-  background: transparent;
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 5px 11px;
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.mode-btn.active { background: var(--accent); color: #fff; }
-
 .icon-toggle {
   width: 34px;
   height: 34px;
@@ -219,7 +197,7 @@ body {
 
 .board-table {
   width: 100%;
-  min-width: 980px;
+  min-width: 1440px;
   border-collapse: collapse;
   font-size: 0.88rem;
 }
@@ -275,6 +253,13 @@ body {
   min-width: 0;
 }
 
+.logo-slot {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
 .sub-avatar {
   width: 32px;
   height: 32px;
@@ -289,22 +274,40 @@ body {
   flex-shrink: 0;
 }
 
+/* Sits on top of .sub-avatar; if the favicon 404s, onerror removes this
+   <img> entirely and the colored-initial avatar underneath shows through
+   with no JS state to manage. */
+.company-logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  background: #fff;
+  padding: 5px;
+  object-fit: contain;
+}
+
 .row-name { font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
 .row-category { font-size: 0.74rem; color: var(--text-faint); }
 
-.col-price { font-weight: 600; white-space: nowrap; min-width: 150px; }
+.col-price { font-weight: 600; white-space: nowrap; min-width: 210px; }
 
-.tier-list { display: flex; flex-direction: column; gap: 3px; }
+.tier-list { display: flex; flex-direction: column; gap: 6px; }
 
 .tier-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
 }
 
 .tier-label { font-size: 0.72rem; font-weight: 500; color: var(--text-faint); white-space: nowrap; }
-.tier-price { font-size: 0.88rem; font-weight: 600; white-space: nowrap; }
+
+.tier-prices { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.tier-price { font-size: 0.88rem; font-weight: 600; }
+.tier-annual { font-size: 0.78rem; font-weight: 500; color: var(--text-dim); }
+.tier-unit { font-size: 0.7rem; font-weight: 400; color: var(--text-faint); margin-left: 1px; }
 
 .est-tag {
   font-size: 0.62rem;
@@ -318,7 +321,8 @@ body {
   cursor: help;
 }
 
-.col-change { min-width: 150px; }
+.col-change { min-width: 140px; }
+.col-change-sm { min-width: 90px; }
 
 .change-cell {
   display: flex;
@@ -335,6 +339,9 @@ body {
 
 .change-ref { font-size: 0.74rem; color: var(--text-faint); white-space: nowrap; }
 .change-date { display: block; font-size: 0.7rem; color: var(--text-faint); margin-top: 2px; }
+.change-date-standalone { font-size: 0.82rem; color: var(--text-dim); white-space: nowrap; }
+
+.subscriber-count { font-weight: 700; font-size: 0.88rem; color: var(--text); }
 
 .cell-unknown { color: var(--text-faint); font-size: 0.82rem; font-style: italic; }
 .cell-note { color: var(--text-dim); font-size: 0.8rem; }
@@ -365,8 +372,8 @@ body {
 
 .forecast-date { font-weight: 600; font-size: 0.82rem; }
 
-.col-trend { width: 70px; }
-.sparkline { display: block; width: 60px; height: 24px; color: var(--text-dim); }
+.col-trend { width: 84px; }
+.sparkline { display: block; width: 72px; height: 30px; color: var(--text-dim); }
 
 /* ---------- Row detail (expanded) ---------- */
 

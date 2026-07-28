@@ -15,10 +15,6 @@
     <span class="brand-tag">Subscription Price Board</span>
   </div>
   <div class="topbar-controls">
-    <div class="price-mode-toggle" id="priceModeToggle" role="group" aria-label="Monthly or annual pricing">
-      <button class="mode-btn active" data-mode="monthly">/mo</button>
-      <button class="mode-btn" data-mode="annual">/yr</button>
-    </div>
     <select id="currencySelect" class="currency-select" aria-label="Display currency">
       <option value="USD">USD $</option>
       <option value="EUR">EUR €</option>
@@ -38,7 +34,8 @@
   <p class="board-caveat">
     A hand-researched, point-in-time snapshot — not a live feed. Ask me to refresh it whenever you want the latest.
     Consumer-price coloring: <span class="legend-up">red = price went up</span>, <span class="legend-down">green = price went down</span>
-    (the opposite of a stock chart, on purpose). Display currencies use static approximate conversion rates, not live FX. See <code>CLAUDE.md</code> for details.
+    (the opposite of a stock chart, on purpose). Display currencies use static approximate conversion rates, not live FX.
+    Logos load from each company's own domain via a public favicon service — the one part of this page that isn't fully offline. See <code>CLAUDE.md</code> for details.
   </p>
 
   <div class="board-controls">
@@ -53,11 +50,14 @@
         <tr>
           <th class="col-rank">#</th>
           <th class="col-name sortable" data-sort="name">Company</th>
-          <th class="col-price sortable" data-sort="price" id="priceHeader">Price /mo</th>
-          <th class="col-change sortable" data-sort="last">Last Change</th>
+          <th class="col-price sortable" data-sort="price">Price</th>
+          <th class="col-change-sm sortable" data-sort="last">Change %</th>
+          <th class="col-change">Price Movement</th>
+          <th class="col-change-sm">Changed</th>
           <th class="col-change sortable" data-sort="since">Since Tracked</th>
           <th class="col-change sortable" data-sort="freq">Hike Frequency</th>
           <th class="col-change sortable" data-sort="catavg">vs Category Avg</th>
+          <th class="col-change">Subscribers</th>
           <th class="col-forecast">Forecast</th>
           <th class="col-trend">Trend</th>
         </tr>
