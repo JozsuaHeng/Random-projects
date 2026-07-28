@@ -85,8 +85,11 @@ const SUBSCRIPTION_CATALOG = [
     id: "hbo-max", name: "HBO Max", category: "Streaming", domain: "max.com",
     subscribers: { count: "128M", asOf: "2026", note: "Warner Bros. Discovery targeting 150M by end of 2026.", source: "https://www.thewrap.com/industry-news/business/netflix-disney-warner-bros-discovery-paramount-peacock-subscribers-revenue-profit-may-2026-update/" },
     priceHistory: [
-      { date: "2025-11-20", planLabel: "Basic with ads", oldPrice: 9.99, newPrice: 10.99, currency: "USD", note: "Existing subscribers notified 30 days ahead of renewal.", source: "https://www.aol.com/entertainment/hbo-max-raises-prices-across-130933505.html" },
-      { date: "2025-11-20", planLabel: "Standard", oldPrice: 16.99, newPrice: 18.49, currency: "USD", note: "", source: "https://www.aol.com/entertainment/hbo-max-raises-prices-across-130933505.html" },
+      { date: "2020-05-27", planLabel: "Standard", oldPrice: null, newPrice: 14.99, currency: "USD", note: "HBO Max launch price (ad-free — the only tier at launch). Exact May 2020 date approximate.", source: "https://variety.com/2023/digital/news/hbo-max-announces-price-increase-1235487428/" },
+      { date: "2021-06-01", planLabel: "Basic with ads", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Ad-supported tier launched. Exact June 2021 date approximate.", source: "https://variety.com/2023/digital/news/hbo-max-announces-price-increase-1235487428/" },
+      { date: "2023-01-12", planLabel: "Standard", oldPrice: 14.99, newPrice: 15.99, currency: "USD", note: "First price increase since 2020 launch.", source: "https://techcrunch.com/2023/01/12/hbo-maxs-ad-free-monthly-subscription-price-is-increasing-by-1/" },
+      { date: "2025-11-20", planLabel: "Basic with ads", oldPrice: 9.99, newPrice: 10.99, currency: "USD", note: "Existing subscribers notified 30 days ahead of renewal. Increases between 2023 and 2025 not individually confirmed.", source: "https://www.aol.com/entertainment/hbo-max-raises-prices-across-130933505.html" },
+      { date: "2025-11-20", planLabel: "Standard", oldPrice: 16.99, newPrice: 18.49, currency: "USD", note: "Increases between 2023 ($15.99) and this point not individually confirmed.", source: "https://www.aol.com/entertainment/hbo-max-raises-prices-across-130933505.html" },
       { date: "2025-11-20", planLabel: "Premium", oldPrice: 20.99, newPrice: 22.99, currency: "USD", note: "", source: "https://www.aol.com/entertainment/hbo-max-raises-prices-across-130933505.html" }
     ]
   },
@@ -94,7 +97,13 @@ const SUBSCRIPTION_CATALOG = [
     id: "peacock", name: "Peacock", category: "Streaming", domain: "peacocktv.com",
     subscribers: { count: "46M", asOf: "2026", note: "Added 2M subscribers in the most recent reported quarter.", source: "https://evoca.tv/peacock-statistics/" },
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Premium Plus (no ads)", oldPrice: null, newPrice: 16.99, annualPrice: 169.99, currency: "USD", note: "Current reference price; Peacock said it would hold pricing steady into 2026. New \"Select\" tier also introduced at $7.99/mo ($79.99/yr).", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" }
+      { date: "2020-07-15", planLabel: "Premium (with ads)", oldPrice: null, newPrice: 4.99, currency: "USD", note: "Peacock launch price.", source: "https://deadline.com/2023/07/peacock-raising-prices-first-time-since-2020-launch-nbcuniversal-streaming-1235440147/" },
+      { date: "2020-07-15", planLabel: "Premium Plus (no ads)", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Peacock launch price.", source: "https://deadline.com/2023/07/peacock-raising-prices-first-time-since-2020-launch-nbcuniversal-streaming-1235440147/" },
+      { date: "2023-08-17", planLabel: "Premium (with ads)", oldPrice: 4.99, newPrice: 5.99, currency: "USD", note: "First price increase since 2020 launch.", source: "https://deadline.com/2023/07/peacock-raising-prices-first-time-since-2020-launch-nbcuniversal-streaming-1235440147/" },
+      { date: "2023-08-17", planLabel: "Premium Plus (no ads)", oldPrice: 9.99, newPrice: 11.99, currency: "USD", note: "", source: "https://deadline.com/2023/07/peacock-raising-prices-first-time-since-2020-launch-nbcuniversal-streaming-1235440147/" },
+      { date: "2026-01-01", planLabel: "Premium (with ads)", oldPrice: null, newPrice: 10.99, annualPrice: 109.99, currency: "USD", note: "Current reference price; increases between 2023 and 2026 not individually confirmed.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" },
+      { date: "2026-01-01", planLabel: "Premium Plus (no ads)", oldPrice: null, newPrice: 16.99, annualPrice: 169.99, currency: "USD", note: "Current reference price; Peacock said it would hold pricing steady into 2026.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" },
+      { date: "2026-01-01", planLabel: "Select", oldPrice: null, newPrice: 7.99, annualPrice: 79.99, currency: "USD", note: "Newest, cheapest tier — no prior price to compare.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" }
     ]
   },
   {
@@ -105,7 +114,13 @@ const SUBSCRIPTION_CATALOG = [
       { date: "2026-01-15", planLabel: "Essential (with ads)", oldPrice: 7.99, newPrice: 8.99, annualPrice: 89.99, currency: "USD", note: "", source: "https://www.tomsguide.com/entertainment/streaming/paramount-plus-announces-upcoming-price-hike-heres-how-much-your-subscription-will-cost" }
     ]
   },
-  { id: "amazon-prime-video", name: "Amazon Prime Video", category: "Streaming", domain: "amazon.com", priceHistory: [] },
+  {
+    id: "amazon-prime-video", name: "Amazon Prime Video", category: "Streaming", domain: "amazon.com",
+    priceHistory: [
+      { date: "2024-01-29", planLabel: "Ad-free upgrade", oldPrice: null, newPrice: 2.99, currency: "USD", note: "Ads became default for all Prime Video; this add-on removes them. Exact January 2024 date approximate.", source: "https://www.aboutamazon.com/news/entertainment/prime-video-ultra-ad-free-streaming-subscription" },
+      { date: "2026-04-10", planLabel: "Ad-free upgrade", oldPrice: 2.99, newPrice: 4.99, annualPrice: 45.99, currency: "USD", note: "Rebranded \"Prime Video Ultra\"; also dropped 4K from the tier while adding multi-device/download perks.", source: "https://variety.com/2026/streaming/news/amazon-prime-video-ultra-no-ads-price-increase-1236687124/" }
+    ]
+  },
   {
     id: "amazon-prime", name: "Amazon Prime", category: "Membership", domain: "amazon.com",
     subscribers: { count: "200M+", asOf: "2026", note: "Global Prime members (not broken out by Prime Video usage specifically).", source: "https://www.sellcell.com/blog/how-many-subscribers-do-netflix-disney-amazon-prime-video-and-other-streaming-services-have/" },
@@ -198,13 +213,15 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "canva-pro", name: "Canva Pro", category: "Software", domain: "canva.com",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Pro (individual)", oldPrice: 12.99, newPrice: 15, currency: "USD", note: "Exact date approximate.", source: "https://costbench.com/software/design/canva/" }
+      { date: "2026-01-01", planLabel: "Pro (individual)", oldPrice: 12.99, newPrice: 15, currency: "USD", note: "Exact date approximate.", source: "https://costbench.com/software/design/canva/" },
+      { date: "2026-01-01", planLabel: "Business (per user)", oldPrice: null, newPrice: 20, annualPrice: 200, currency: "USD", note: "Formerly called \"Teams\". Enterprise tier is custom-quoted (50+ users).", source: "https://costbench.com/software/design/canva/" }
     ]
   },
   {
     id: "grammarly", name: "Grammarly", category: "Software", domain: "grammarly.com",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Pro (billed annually)", oldPrice: null, newPrice: 12, annualPrice: 144, currency: "USD", note: "Current reference price, billed annually; $30/mo if billed month-to-month. No confirmed prior change found.", source: "https://www.demandsage.com/how-much-is-grammarly-premium/" }
+      { date: "2026-01-01", planLabel: "Pro (billed annually)", oldPrice: null, newPrice: 12, annualPrice: 144, currency: "USD", note: "Current reference price, billed annually; $30/mo if billed month-to-month. No confirmed prior change found.", source: "https://www.demandsage.com/how-much-is-grammarly-premium/" },
+      { date: "2026-01-01", planLabel: "Business (billed annually)", oldPrice: null, newPrice: 33, currency: "USD", note: "Per member, billed annually. Enterprise tier is custom-quoted.", source: "https://www.eesel.ai/blog/grammarly-pricing" }
     ]
   },
   {
@@ -258,7 +275,8 @@ const SUBSCRIPTION_CATALOG = [
     subscribers: { count: "47M", asOf: "Mar 31, 2026", note: "Premium tier alone: 23.7M.", source: "https://coopboardgames.com/statistics/playstation-plus-subscribers/" },
     priceHistory: [
       { date: "2026-05-20", planLabel: "Premium", oldPrice: 14.99, newPrice: 17.99, currency: "USD", note: "", source: "https://tech-insider.org/ps-plus-price-increase-2026/" },
-      { date: "2026-05-01", planLabel: "Essential", oldPrice: null, newPrice: 10.99, currency: "USD", note: "", source: "https://tech-insider.org/ps-plus-price-increase-2026/" }
+      { date: "2026-05-01", planLabel: "Essential", oldPrice: null, newPrice: 10.99, currency: "USD", note: "", source: "https://tech-insider.org/ps-plus-price-increase-2026/" },
+      { date: "2026-05-01", planLabel: "Extra", oldPrice: 14.99, newPrice: 16.99, annualPrice: 134.99, currency: "USD", note: "Annual price unchanged since September 2023.", source: "https://tech-insider.org/playstation-plus-tiers-2026/" }
     ]
   },
   {

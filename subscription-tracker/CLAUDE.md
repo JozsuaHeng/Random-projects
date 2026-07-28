@@ -2,18 +2,23 @@
 
 ## What this is
 
-**Pulse** — a subscription price board, styled a bit like a stock/crypto
+**SubScreener** — a subscription price board, styled a bit like a stock/crypto
 screener (think CoinMarketCap), for subscription companies instead of
 coins. Full-width, sortable table of ~38 well-known subscription
 companies (streaming, music, software, gaming, fitness, etc), each row
 showing:
 
 - **Price** — every tracked plan/tier for that company (e.g. Netflix
-  shows Standard-with-ads, Standard, and Premium as three lines), not
-  just one number. Each tier shows its monthly price and its annual price
-  together, inline — a real published annual price when one is known,
-  otherwise a clearly-tagged "est." (monthly × 12). No toggle to click;
-  both units are just always visible.
+  shows Standard-with-ads, Standard, and Premium as three lines, Peacock
+  shows Select / Premium / Premium Plus), not just one "headline" number
+  — ad-supported and ad-free tiers are both included wherever a streaming
+  service has both. Each tier shows its monthly price and its annual
+  price together, inline — a real published annual price when one is
+  known, otherwise a clearly-tagged "est." (monthly × 12). No toggle to
+  click; both units are just always visible. Prices are USD only — real
+  prices vary by country, and getting that right for every plan here was
+  deliberately cut from this MVP rather than shipping a misleadingly-
+  precise currency conversion.
 - **Change % / Price Movement / Changed** — the most recent sourced price
   change (for the row's "headline" plan — see below), split into three
   columns instead of one crowded cell: the percentage, the actual dollar
@@ -57,6 +62,10 @@ public favicon service (`logoUrl()` in `app.js`) — not a hosted image
 asset. If it fails to load, it's removed and the colored-initial avatar
 underneath shows through automatically.
 
+The **#** and **Company** columns are frozen (`position: sticky`) so
+they stay in view while you scroll horizontally through the rest of the
+(wide) table — you never lose track of which row you're looking at.
+
 Click any row to expand its full sourced price-change history for every
 tracked plan (not just the row's "headline" one), plus a summary line
 (tracked-since date, cumulative % change, and how many price-change
@@ -78,9 +87,9 @@ Plain HTML/CSS/vanilla JS, no build step, matching the rest of this
   snapshot, not a live feed** — nothing in this app scrapes the internet
   or calls any API for price data. The one live network call is the logo
   fetch (see below) — display only, never data.
-- `storage.js` — tiny `localStorage` wrapper for exactly two UI
-  preferences: theme (light/dark) and display currency. That's the only
-  thing this app ever persists.
+- `storage.js` — tiny `localStorage` wrapper for exactly one UI
+  preference: theme (light/dark). That's the only thing this app ever
+  persists.
 - `app.js` — all logic:
   - `allTierPrices()` lists every tracked plan's current price for the
     Price column. `representativeHistory()` separately picks one
@@ -105,8 +114,8 @@ Plain HTML/CSS/vanilla JS, no build step, matching the rest of this
     the `<img>` is the entire fallback mechanism — no JS state to track.
   - Sortable column headers (click to sort by Price / Change % / Since
     Tracked / Hike Frequency / vs Category Avg / Company name), category
-    filter chips, search, a currency toggle (static approximate FX rates
-    in `FX_RATES_PER_USD` — not live), and a light/dark theme toggle.
+    filter chips, search, and a light/dark theme toggle. No currency
+    conversion — see the Price bullet above for why.
 - `style.css` — full-width table layout; dark theme is the base `:root`,
   light theme overrides live under `:root[data-theme="light"]`.
 

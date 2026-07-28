@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pulse — Subscription Price Board</title>
+<title>SubScreener — Subscription Price Board</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,17 +11,10 @@
 <header class="topbar">
   <div class="brand">
     <span class="brand-dot"></span>
-    <span class="brand-name">Pulse</span>
+    <span class="brand-name">SubScreener</span>
     <span class="brand-tag">Subscription Price Board</span>
   </div>
   <div class="topbar-controls">
-    <select id="currencySelect" class="currency-select" aria-label="Display currency">
-      <option value="USD">USD $</option>
-      <option value="EUR">EUR €</option>
-      <option value="GBP">GBP £</option>
-      <option value="IDR">IDR Rp</option>
-      <option value="AUD">AUD $</option>
-    </select>
     <button class="icon-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
       <span class="theme-icon-dark">🌙</span>
       <span class="theme-icon-light">☀️</span>
@@ -34,7 +27,7 @@
   <p class="board-caveat">
     A hand-researched, point-in-time snapshot — not a live feed. Ask me to refresh it whenever you want the latest.
     Consumer-price coloring: <span class="legend-up">red = price went up</span>, <span class="legend-down">green = price went down</span>
-    (the opposite of a stock chart, on purpose). Display currencies use static approximate conversion rates, not live FX.
+    (the opposite of a stock chart, on purpose). Prices are shown in USD only — real prices vary by country, and getting that right for every plan here is out of scope for now.
     Logos load from each company's own domain via a public favicon service — the one part of this page that isn't fully offline. See <code>CLAUDE.md</code> for details.
   </p>
 

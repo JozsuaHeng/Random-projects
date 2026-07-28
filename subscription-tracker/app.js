@@ -1,11 +1,6 @@
-// Pulse — Subscription Price Board
+// SubScreener — Subscription Price Board
 // Fully static/client-side. See CLAUDE.md for what this does and does not do.
 
-// Static, approximate FX rates (per 1 USD) — NOT live, just for display
-// convenience. All catalog prices are sourced in USD.
-const FX_RATES_PER_USD = { USD: 1, EUR: 0.92, GBP: 0.79, IDR: 15800, AUD: 1.52 };
-
-let displayCurrency = "USD";
 let activeCategories = new Set();
 let searchQuery = "";
 let sortColumn = "last";
@@ -40,24 +35,22 @@ function monthsAgoLabel(dateStr) {
   return y === 1 ? "1 year ago" : `${y} years ago`;
 }
 
-// ---------- Currency / money ----------
-
-function convertPrice(amount, fromCurrency, toCurrency) {
-  if (amount == null) return null;
-  return (amount / FX_RATES_PER_USD[fromCurrency]) * FX_RATES_PER_USD[toCurrency];
-}
+// ---------- Money ----------
+// Every catalog price is sourced in USD, and prices genuinely differ by
+// country/region (not just an FX conversion) — getting real regional
+// pricing right was deliberately out of scope for this MVP, so this app
+// shows USD only rather than a misleadingly-precise conversion.
 
 function formatMoney(amount, sourceCurrency) {
   if (amount == null) return "—";
-  const converted = convertPrice(amount, sourceCurrency || "USD", displayCurrency);
   try {
-    return new Intl.NumberFormat(undefined, {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: displayCurrency,
-      maximumFractionDigits: displayCurrency === "IDR" ? 0 : 2,
-    }).format(converted);
+      currency: sourceCurrency || "USD",
+      maximumFractionDigits: 2,
+    }).format(amount);
   } catch {
-    return `${displayCurrency} ${converted.toFixed(2)}`;
+    return `${sourceCurrency || "USD"} ${amount.toFixed(2)}`;
   }
 }
 
@@ -388,9 +381,8 @@ function categoryAverages() {
   for (const c of SUBSCRIPTION_CATALOG) {
     const stats = companyStats(c);
     if (stats.currentPrice == null) continue;
-    const usd = convertPrice(stats.currentPrice, stats.currency, "USD");
     const s = (sums[c.category] ||= { total: 0, count: 0 });
-    s.total += usd;
+    s.total += stats.currentPrice;
     s.count += 1;
   }
   const avgs = {};
@@ -402,8 +394,7 @@ function categoryAvgPct(company, stats, avgs) {
   if (stats.currentPrice == null) return null;
   const avg = avgs[company.category];
   if (!avg) return null;
-  const usd = convertPrice(stats.currentPrice, stats.currency, "USD");
-  return ((usd - avg) / avg) * 100;
+  return ((stats.currentPrice - avg) / avg) * 100;
 }
 
 function categoryAvgCellHtml(company, pct) {
@@ -468,7 +459,7 @@ function sortValue(entry) {
   const { company, stats, freq, catAvgPct } = entry;
   switch (sortColumn) {
     case "name": return company.name.toLowerCase();
-    case "price": return convertPrice(stats.currentPrice, stats.currency, displayCurrency);
+    case "price": return stats.currentPrice;
     case "last": return stats.lastChangePct;
     case "since": return stats.sinceTrackedPct;
     case "freq": return freq.intervalMonths;
@@ -659,12 +650,6 @@ document.querySelectorAll("th.sortable").forEach(th => {
   });
 });
 
-document.getElementById("currencySelect").addEventListener("change", (e) => {
-  displayCurrency = e.target.value;
-  saveCurrency(displayCurrency);
-  renderTable();
-});
-
 document.getElementById("themeToggle").addEventListener("click", () => {
   const current = document.documentElement.dataset.theme;
   const next = current === "light" ? "dark" : "light";
@@ -678,11 +663,6 @@ document.getElementById("themeToggle").addEventListener("click", () => {
   const stored = loadTheme();
   const theme = stored || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   document.documentElement.dataset.theme = theme;
-})();
-
-(function initCurrency() {
-  displayCurrency = loadCurrency();
-  document.getElementById("currencySelect").value = displayCurrency;
 })();
 
 renderCategoryChips();

@@ -91,17 +91,6 @@ body {
   gap: 10px;
 }
 
-.currency-select {
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 7px 12px;
-  color: var(--text-dim);
-  font-size: 0.84rem;
-  font-family: inherit;
-  cursor: pointer;
-}
-
 .icon-toggle {
   width: 34px;
   height: 34px;
@@ -239,10 +228,27 @@ body {
 .company-row.expanded { background: var(--accent-dim); }
 .company-row:last-of-type td { border-bottom: none; }
 
+/* Frozen pane: # and Company stay put while the rest of the (very wide)
+   table scrolls underneath them, so you never lose track of which row
+   you're looking at. */
+.col-rank, .col-name {
+  position: sticky;
+  z-index: 2;
+  background: var(--card);
+}
+.col-rank { left: 0; width: 56px; }
+.col-name { left: 56px; box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.3); }
+
+thead .col-rank, thead .col-name { z-index: 4; background: var(--bg-raised); }
+
+.company-row:hover td.col-rank, .company-row:hover td.col-name,
+.company-row.expanded td.col-rank, .company-row.expanded td.col-name {
+  background: var(--accent-dim);
+}
+
 .col-rank {
   color: var(--text-faint);
   font-size: 0.8rem;
-  width: 32px;
   text-align: center;
 }
 
