@@ -15,6 +15,7 @@
     <span class="brand-tag">Subscription Price Board</span>
   </div>
   <div class="topbar-controls">
+    <span class="data-asof" id="dataAsOf" title="The most recent price-change date in the dataset"></span>
     <button class="icon-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
       <span class="theme-icon-dark">🌙</span>
       <span class="theme-icon-light">☀️</span>
@@ -30,6 +31,8 @@
     (the opposite of a stock chart, on purpose). Prices are shown in USD only — real prices vary by country, and getting that right for every plan here is out of scope for now.
     Logos load from each company's own domain via a public favicon service — the one part of this page that isn't fully offline. See <code>CLAUDE.md</code> for details.
   </p>
+
+  <div class="highlights-row" id="highlightsRow"></div>
 
   <div class="board-controls">
     <input type="text" id="companySearch" class="search-input" placeholder="Search companies…" autocomplete="off">
@@ -58,6 +61,9 @@
       <tbody id="companyTableBody"></tbody>
     </table>
   </div>
+
+  <div class="card-list" id="companyCardList"></div>
+
   <p class="empty-note" id="boardEmpty" hidden>No companies match your filters.</p>
 
 </main>

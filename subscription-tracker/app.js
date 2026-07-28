@@ -35,6 +35,19 @@ function monthsAgoLabel(dateStr) {
   return y === 1 ? "1 year ago" : `${y} years ago`;
 }
 
+// The most recent date anything in the catalog was touched — drives the
+// "Data as of" badge, so it's always accurate to whatever's actually in
+// data.js rather than a separately-maintained timestamp that can drift.
+function latestDataDate() {
+  let latest = null;
+  for (const c of SUBSCRIPTION_CATALOG) {
+    for (const h of c.priceHistory) {
+      if (!latest || h.date > latest) latest = h.date;
+    }
+  }
+  return latest;
+}
+
 // ---------- Money ----------
 // Every catalog price is sourced in USD, and prices genuinely differ by
 // country/region (not just an FX conversion) — getting real regional
@@ -78,6 +91,17 @@ function initials(name) {
 // the colored-initial avatar underneath shows through untouched.
 function logoUrl(domain) {
   return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+}
+
+// Shared between the table row and the mobile card — same markup, same
+// fallback behavior, one place to change it.
+function logoBlockHtml(company, small) {
+  return `
+    <div class="logo-slot${small ? " logo-slot-sm" : ""}">
+      <div class="sub-avatar">${initials(company.name)}</div>
+      <img class="company-logo" src="${escapeAttr(logoUrl(company.domain))}" alt="" loading="lazy" onerror="this.remove()">
+    </div>
+  `;
 }
 
 // ---------- Company price-history analysis ----------
@@ -286,6 +310,8 @@ function sparklineSvg(points) {
 }
 
 // ---------- Cell renderers ----------
+// These return plain HTML fragments (no <td> wrapper), so they're reused
+// as-is in both the desktop table cells and the mobile cards below.
 
 function changeCellHtml(fromPrice, toPrice, currency) {
   const pct = pctChange(fromPrice, toPrice);
@@ -453,6 +479,85 @@ function renderCategoryChips() {
   });
 }
 
+// ---------- Highlights strip ----------
+// A few "headlines" computed from the whole catalog, regardless of the
+// current filter/search — a quick answer to "what's the news" without
+// having to sort the table yourself.
+
+function computeHighlights() {
+  const all = SUBSCRIPTION_CATALOG.map(c => ({ company: c, stats: companyStats(c), freq: hikeCadenceInfo(c) }));
+
+  const hikes = all.filter(e => e.stats.isLastEventNumeric && e.stats.lastChangePct > 0)
+    .sort((a, b) => b.stats.lastChangePct - a.stats.lastChangePct);
+  const drops = all.filter(e => e.stats.isLastEventNumeric && e.stats.lastChangePct < 0)
+    .sort((a, b) => a.stats.lastChangePct - b.stats.lastChangePct);
+  const frequent = all.filter(e => e.freq.count >= 2 && e.freq.intervalMonths != null)
+    .sort((a, b) => a.freq.intervalMonths - b.freq.intervalMonths);
+
+  return { biggestHike: hikes[0] || null, biggestDrop: drops[0] || null, mostFrequent: frequent[0] || null };
+}
+
+function highlightCardHtml(label, company, valueText, trendClass, subtext) {
+  return `
+    <div class="highlight-card" data-name="${escapeAttr(company.name)}" data-id="${escapeAttr(company.id)}">
+      <span class="highlight-label">${escapeHtml(label)}</span>
+      <div class="highlight-main">
+        ${logoBlockHtml(company, true)}
+        <div>
+          <div class="highlight-company">${escapeHtml(company.name)}</div>
+          <span class="highlight-value ${trendClass}">${escapeHtml(valueText)}</span>
+        </div>
+      </div>
+      <span class="highlight-sub">${escapeHtml(subtext)}</span>
+    </div>
+  `;
+}
+
+function renderHighlights() {
+  const wrap = document.getElementById("highlightsRow");
+  const { biggestHike, biggestDrop, mostFrequent } = computeHighlights();
+  const cards = [];
+
+  if (biggestHike) {
+    cards.push(highlightCardHtml(
+      "Biggest recent hike", biggestHike.company,
+      `+${biggestHike.stats.lastChangePct.toFixed(1)}%`, "up",
+      `${biggestHike.stats.lastEvent.planLabel} · ${monthsAgoLabel(biggestHike.stats.lastEvent.date)}`
+    ));
+  }
+  if (biggestDrop) {
+    cards.push(highlightCardHtml(
+      "Rare price drop", biggestDrop.company,
+      `${biggestDrop.stats.lastChangePct.toFixed(1)}%`, "down",
+      `${biggestDrop.stats.lastEvent.planLabel} · ${monthsAgoLabel(biggestDrop.stats.lastEvent.date)}`
+    ));
+  }
+  if (mostFrequent) {
+    cards.push(highlightCardHtml(
+      "Hikes most often", mostFrequent.company,
+      `~every ${mostFrequent.freq.intervalMonths.toFixed(0)}mo`, "flat",
+      `${mostFrequent.freq.count} price changes tracked`
+    ));
+  }
+
+  if (cards.length === 0) {
+    wrap.hidden = true;
+    return;
+  }
+  wrap.hidden = false;
+  wrap.innerHTML = cards.join("");
+
+  wrap.querySelectorAll(".highlight-card").forEach(el => {
+    el.addEventListener("click", () => {
+      const name = el.dataset.name;
+      document.getElementById("companySearch").value = name;
+      searchQuery = name.toLowerCase();
+      expandedId = el.dataset.id;
+      renderTable();
+    });
+  });
+}
+
 // ---------- Sorting ----------
 
 function sortValue(entry) {
@@ -486,12 +591,105 @@ function updateSortHeaderIndicators() {
   });
 }
 
-// ---------- Table rendering ----------
+// ---------- Table + card rendering ----------
+// Both representations are built from the same computed entry every
+// render and swapped by a CSS breakpoint (see style.css) — simplest way
+// to keep them in sync, and cheap enough at this catalog size.
+
+function toggleExpanded(id) {
+  expandedId = expandedId === id ? null : id;
+  renderTable();
+}
+
+function buildTableRow(entry, idx) {
+  const { company, stats, catAvgPct } = entry;
+
+  const mainRow = document.createElement("tr");
+  mainRow.className = "company-row" + (expandedId === company.id ? " expanded" : "");
+  mainRow.innerHTML = `
+    <td class="col-rank">${idx + 1}</td>
+    <td class="col-name">
+      <div class="row-id">
+        ${logoBlockHtml(company)}
+        <div>
+          <div class="row-name">${escapeHtml(company.name)}</div>
+          <div class="row-category">${escapeHtml(company.category)}</div>
+        </div>
+      </div>
+    </td>
+    <td class="col-price">${priceCellHtml(company)}</td>
+    <td class="col-change-sm">${lastChangePctCellHtml(stats)}</td>
+    <td class="col-change">${lastChangeMovementCellHtml(stats)}</td>
+    <td class="col-change-sm">${lastChangeDateCellHtml(stats)}</td>
+    <td class="col-change">${sinceTrackedCellHtml(stats)}</td>
+    <td class="col-change">${hikeFrequencyCellHtml(company)}</td>
+    <td class="col-change">${categoryAvgCellHtml(company, catAvgPct)}</td>
+    <td class="col-change">${subscribersCellHtml(company)}</td>
+    <td class="col-forecast">${forecastCellHtml(company)}</td>
+    <td class="col-trend">${sparklineSvg(stats.sparklinePoints)}</td>
+  `;
+  mainRow.addEventListener("click", () => toggleExpanded(company.id));
+
+  const detailRow = document.createElement("tr");
+  detailRow.className = "detail-tr";
+  detailRow.hidden = expandedId !== company.id;
+  const td = document.createElement("td");
+  td.colSpan = 12;
+  td.innerHTML = renderDetailContent(company);
+  detailRow.appendChild(td);
+
+  return { row: mainRow, detailRow };
+}
+
+function buildCard(entry) {
+  const { company, stats, catAvgPct } = entry;
+
+  const card = document.createElement("div");
+  card.className = "company-card" + (expandedId === company.id ? " expanded" : "");
+  card.innerHTML = `
+    <div class="card-main">
+      <div class="row-id">
+        ${logoBlockHtml(company)}
+        <div>
+          <div class="row-name">${escapeHtml(company.name)}</div>
+          <div class="row-category">${escapeHtml(company.category)}</div>
+        </div>
+      </div>
+      <div class="card-trend">${sparklineSvg(stats.sparklinePoints)}</div>
+    </div>
+    <div class="card-prices">${priceCellHtml(company)}</div>
+    <div class="card-section">
+      <span class="card-section-title">Last Change</span>
+      <div class="card-lastchange-row">
+        ${lastChangePctCellHtml(stats)}
+        ${lastChangeMovementCellHtml(stats)}
+        ${lastChangeDateCellHtml(stats)}
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card-field"><span class="card-field-label">Since Tracked</span>${sinceTrackedCellHtml(stats)}</div>
+      <div class="card-field"><span class="card-field-label">Hike Frequency</span>${hikeFrequencyCellHtml(company)}</div>
+      <div class="card-field"><span class="card-field-label">vs Category Avg</span>${categoryAvgCellHtml(company, catAvgPct)}</div>
+      <div class="card-field"><span class="card-field-label">Subscribers</span>${subscribersCellHtml(company)}</div>
+      <div class="card-field card-field-wide"><span class="card-field-label">Forecast</span>${forecastCellHtml(company)}</div>
+    </div>
+  `;
+  card.addEventListener("click", () => toggleExpanded(company.id));
+
+  const cardDetail = document.createElement("div");
+  cardDetail.className = "card-detail-wrap";
+  cardDetail.hidden = expandedId !== company.id;
+  cardDetail.innerHTML = renderDetailContent(company);
+
+  return { card, cardDetail };
+}
 
 function renderTable() {
   const tbody = document.getElementById("companyTableBody");
+  const cardList = document.getElementById("companyCardList");
   const empty = document.getElementById("boardEmpty");
   tbody.innerHTML = "";
+  cardList.innerHTML = "";
 
   const companies = SUBSCRIPTION_CATALOG
     .filter(c => activeCategories.size === 0 || activeCategories.has(c.category))
@@ -511,54 +709,14 @@ function renderTable() {
   }
   empty.hidden = true;
 
-  const COLSPAN = 12;
-
   entries.forEach((entry, idx) => {
-    const { company, stats, catAvgPct } = entry;
-
-    const mainRow = document.createElement("tr");
-    mainRow.className = "company-row" + (expandedId === company.id ? " expanded" : "");
-    mainRow.innerHTML = `
-      <td class="col-rank">${idx + 1}</td>
-      <td class="col-name">
-        <div class="row-id">
-          <div class="logo-slot">
-            <div class="sub-avatar">${initials(company.name)}</div>
-            <img class="company-logo" src="${escapeAttr(logoUrl(company.domain))}" alt="" loading="lazy" onerror="this.remove()">
-          </div>
-          <div>
-            <div class="row-name">${escapeHtml(company.name)}</div>
-            <div class="row-category">${escapeHtml(company.category)}</div>
-          </div>
-        </div>
-      </td>
-      <td class="col-price">${priceCellHtml(company)}</td>
-      <td class="col-change-sm">${lastChangePctCellHtml(stats)}</td>
-      <td class="col-change">${lastChangeMovementCellHtml(stats)}</td>
-      <td class="col-change-sm">${lastChangeDateCellHtml(stats)}</td>
-      <td class="col-change">${sinceTrackedCellHtml(stats)}</td>
-      <td class="col-change">${hikeFrequencyCellHtml(company)}</td>
-      <td class="col-change">${categoryAvgCellHtml(company, catAvgPct)}</td>
-      <td class="col-change">${subscribersCellHtml(company)}</td>
-      <td class="col-forecast">${forecastCellHtml(company)}</td>
-      <td class="col-trend">${sparklineSvg(stats.sparklinePoints)}</td>
-    `;
-
-    const detailRow = document.createElement("tr");
-    detailRow.className = "detail-tr";
-    detailRow.hidden = expandedId !== company.id;
-    const td = document.createElement("td");
-    td.colSpan = COLSPAN;
-    td.innerHTML = renderDetailContent(company);
-    detailRow.appendChild(td);
-
-    mainRow.addEventListener("click", () => {
-      expandedId = expandedId === company.id ? null : company.id;
-      renderTable();
-    });
-
-    tbody.appendChild(mainRow);
+    const { row, detailRow } = buildTableRow(entry, idx);
+    tbody.appendChild(row);
     tbody.appendChild(detailRow);
+
+    const { card, cardDetail } = buildCard(entry);
+    cardList.appendChild(card);
+    cardList.appendChild(cardDetail);
   });
 }
 
@@ -665,5 +823,12 @@ document.getElementById("themeToggle").addEventListener("click", () => {
   document.documentElement.dataset.theme = theme;
 })();
 
+(function initDataAsOf() {
+  const latest = latestDataDate();
+  const el = document.getElementById("dataAsOf");
+  if (latest) el.textContent = `Data as of ${formatDateNice(parseLocalDate(latest))}`;
+})();
+
 renderCategoryChips();
+renderHighlights();
 renderTable();

@@ -88,7 +88,13 @@ body {
 .topbar-controls {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+}
+
+.data-asof {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
 .icon-toggle {
@@ -174,6 +180,53 @@ body {
 
 .chip:hover { color: var(--text); }
 .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ---------- Highlights ---------- */
+
+.highlights-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.highlight-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.highlight-card:hover { border-color: var(--accent); }
+
+.highlight-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--text-faint);
+}
+
+.highlight-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-slot-sm { width: 28px; height: 28px; }
+
+.highlight-company { font-weight: 600; font-size: 0.88rem; }
+
+.highlight-value { font-weight: 700; font-size: 1rem; display: block; }
+.highlight-value.up { color: var(--bad); }
+.highlight-value.down { color: var(--good); }
+.highlight-value.flat { color: var(--accent); }
+
+.highlight-sub { font-size: 0.76rem; color: var(--text-faint); }
 
 /* ---------- Table ---------- */
 
@@ -472,6 +525,94 @@ thead .col-rank, thead .col-name { z-index: 4; background: var(--bg-raised); }
 }
 .detail-source:hover { text-decoration: underline; }
 
+/* ---------- Mobile cards ----------
+   Below CARD_BREAKPOINT (see the media query at the bottom), the wide
+   table is replaced by this stacked-card layout — same data, same cell
+   renderers, just a different container so nothing needs a 1440px-wide
+   horizontal scroll on a phone. Hidden by default; the media query flips
+   which of .table-scroll / .card-list is visible. */
+
+.card-list { display: none; }
+
+.company-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.company-card.expanded {
+  border-color: var(--accent);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+}
+
+.card-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.card-trend { flex-shrink: 0; }
+
+.card-prices {
+  padding: 10px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 10px;
+}
+
+.card-section { margin-bottom: 10px; }
+
+.card-section-title {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--text-faint);
+  margin-bottom: 4px;
+}
+
+.card-lastchange-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+.card-field-wide { grid-column: 1 / -1; }
+
+.card-field-label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+
+.card-detail-wrap {
+  background: var(--bg-raised);
+  border: 1px solid var(--accent);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-bottom: 8px;
+  padding: 4px 16px 16px;
+}
+.card-detail-wrap .row-detail { padding: 12px 0 0; background: transparent; }
+
 /* ---------- Empty state ---------- */
 
 .empty-note {
@@ -482,9 +623,19 @@ thead .col-rank, thead .col-name { z-index: 4; background: var(--bg-raised); }
 
 /* ---------- Responsive ---------- */
 
+/* The table needs real width (1440px+) to not feel cramped, so below
+   this point it's swapped for the stacked-card layout instead of forcing
+   a horizontal scroll on a phone or narrow tablet. */
+@media (max-width: 1000px) {
+  .table-scroll { display: none; }
+  .card-list { display: block; }
+}
+
 @media (max-width: 720px) {
   .topbar { padding: 14px 16px; }
   .brand-tag { display: none; }
+  .data-asof { display: none; }
   .app { padding: 20px 14px 70px; }
   .search-input { max-width: none; }
+  .card-grid { grid-template-columns: 1fr; }
 }

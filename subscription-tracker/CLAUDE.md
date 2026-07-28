@@ -66,7 +66,22 @@ The **#** and **Company** columns are frozen (`position: sticky`) so
 they stay in view while you scroll horizontally through the rest of the
 (wide) table — you never lose track of which row you're looking at.
 
-Click any row to expand its full sourced price-change history for every
+Above the table, a **highlights strip** surfaces a few "headlines" from
+the whole catalog regardless of the current filter/search — the biggest
+recent hike, a rare price drop (if one exists), and whichever company
+hikes prices most often. Clicking one filters the board down to that
+company. The topbar also shows a **"Data as of"** badge, computed from
+the newest date anywhere in `data.js` — it updates itself whenever the
+dataset does, nothing to keep in sync by hand.
+
+Below ~1000px wide, the table is replaced by a **stacked-card layout**
+(same data, same cell-rendering functions, just a different container) —
+a 1440px-wide table doesn't work on a phone, and horizontal-scrolling a
+table like that on a small screen is unpleasant. Both layouts are built
+from the same computed data every render and a CSS breakpoint decides
+which one is visible; see `buildTableRow()` / `buildCard()` in `app.js`.
+
+Click any row (or card) to expand its full sourced price-change history for every
 tracked plan (not just the row's "headline" one), plus a summary line
 (tracked-since date, cumulative % change, and how many price-change
 events have been recorded across all of that company's plans).
@@ -112,6 +127,12 @@ Plain HTML/CSS/vanilla JS, no build step, matching the rest of this
     app (display only; see "Why there's no live scraping" below for why
     that's a deliberate, narrow exception). `onerror="this.remove()"` on
     the `<img>` is the entire fallback mechanism — no JS state to track.
+  - `computeHighlights()` / `renderHighlights()` drive the highlights
+    strip; `latestDataDate()` drives the "Data as of" badge.
+  - `buildTableRow()` and `buildCard()` both consume the same per-company
+    entry (and the same cell-renderer functions above) to build the
+    desktop `<tr>` and the mobile card — kept in sync by construction
+    rather than by two independently-maintained templates.
   - Sortable column headers (click to sort by Price / Change % / Since
     Tracked / Hike Frequency / vs Category Avg / Company name), category
     filter chips, search, and a light/dark theme toggle. No currency
@@ -153,6 +174,6 @@ too (for its logo). No other file needs to change. If a plan's official
 name is ambiguous, verify it rather than guessing — e.g. Disney+'s ad
 tier is officially "Disney+ Basic", not just "with ads".
 
-Currently 50 companies are planned but only ~38 are in `data.js` — the
-remaining ~12 (plus filling any newly-noticed gaps) are a deliberately
+Currently 75 companies are planned but only ~38 are in `data.js` — the
+remaining ~37 (plus filling any newly-noticed gaps) are a deliberately
 separate follow-up pass, not forgotten.
