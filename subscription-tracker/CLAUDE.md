@@ -4,7 +4,7 @@
 
 **SubScreener** — a subscription price board, styled a bit like a stock/crypto
 screener (think CoinMarketCap), for subscription companies instead of
-coins. Full-width, sortable table of ~56 well-known subscription
+coins. Full-width, sortable table of ~72 well-known subscription
 companies (streaming, music, software, gaming, fitness, etc), each row
 showing:
 
@@ -174,8 +174,10 @@ too (for its logo). No other file needs to change. If a plan's official
 name is ambiguous, verify it rather than guessing — e.g. Disney+'s ad
 tier is officially "Disney+ Basic", not just "with ads".
 
-Currently 75 companies are planned; ~56 are in `data.js` as of this pass
-(a first batch of ~18 new companies — AI tools, live TV, and a handful of
-Education/Fitness/Productivity/Security additions — landed alongside
-deeper tier/history coverage). The remaining ~19 are a deliberately
-separate follow-up pass, not forgotten.
+72 of a ~75-company target are in `data.js`. The last few weren't added
+on purpose: research ran out of confidently-sourced candidates rather
+than being cut off arbitrarily — padding the count with unverified
+numbers would violate the "never invent numbers" rule above. Two new
+categories arrived in this pass too: **AI Tools** (ChatGPT Plus,
+Perplexity Pro, Claude Pro — all converged on $20/mo) and **Finance**
+(Robinhood Gold, YNAB).

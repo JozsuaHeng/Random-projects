@@ -208,9 +208,34 @@ const SUBSCRIPTION_CATALOG = [
     }
   },
   {
+    id: "siriusxm", name: "SiriusXM", category: "Music", domain: "siriusxm.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Music & Entertainment", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://subger.com/en/service/siriusxm" },
+      { date: "2026-01-01", planLabel: "Platinum VIP", oldPrice: null, newPrice: 24.99, currency: "USD", note: "", source: "https://subger.com/en/service/siriusxm" }
+    ]
+  },
+  {
     id: "audible", name: "Audible", category: "News & Reading", domain: "audible.com",
     priceHistory: [
       { date: "2026-01-01", planLabel: "Standard (1 credit/mo)", oldPrice: null, newPrice: 8.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.amazon.com/hz/audible/mlp/mdp/discovery/paid" }
+    ]
+  },
+  {
+    id: "wsj", name: "The Wall Street Journal", category: "News & Reading", domain: "wsj.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Digital", oldPrice: null, newPrice: 48.74, currency: "USD", note: "WSJ bills every 4 weeks ($44.99/cycle regular rate, 13 cycles/yr) — figures here are a derived monthly-equivalent. Intro rate is $2/week for the first year. WSJ+ Premier is $54.99/4wks regular.", source: "https://prettysweet.com/wsj-subscription-cost/" }
+    ]
+  },
+  {
+    id: "washington-post", name: "The Washington Post", category: "News & Reading", domain: "washingtonpost.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Digital", oldPrice: null, newPrice: 10, annualPrice: 120, currency: "USD", note: "Regular annual rate; frequent promotional rates run much lower ($40/yr and similar have been seen). No confirmed prior change found.", source: "https://www.ipsinternational.org/the-cost-of-a-digital-subscription-to-the-washington-post-what-you-need-to-know/" }
+    ]
+  },
+  {
+    id: "everand", name: "Everand (Scribd)", category: "News & Reading", domain: "everand.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Standard", oldPrice: null, newPrice: 11.99, currency: "USD", note: "1 unlock/mo. Plus ($16.99/mo, 3 unlocks) and Deluxe ($28.99/mo, 5 unlocks) tiers also exist. No confirmed prior change found.", source: "https://support.scribd.com/hc/en-us/articles/40678839226644-Everand-plans-Standard-Plus-and-Deluxe" }
     ]
   },
   {
@@ -298,6 +323,12 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "zoom", name: "Zoom", category: "Productivity", domain: "zoom.us",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Pro (per user)", oldPrice: null, newPrice: 16.99, annualPrice: 149.9, currency: "USD", note: "Monthly rate shown; annual works out to ~$12.49/mo. Some sources cite slightly different figures ($13-14/mo annual). No confirmed prior change found.", source: "https://pumble.com/zoom-pricing" }
+    ]
+  },
+  {
     id: "1password", name: "1Password", category: "Security", domain: "1password.com",
     priceHistory: [
       { date: "2026-03-27", planLabel: "Individual", oldPrice: 3.99, newPrice: 4.99, currency: "USD", note: "Up to a 33% increase; pricing had been largely unchanged for years.", source: "https://alternativeto.net/news/2026/2/1password-to-raise-subscription-prices-for-individual-and-family-plans-by-up-to-33-" },
@@ -320,6 +351,24 @@ const SUBSCRIPTION_CATALOG = [
     id: "expressvpn", name: "ExpressVPN", category: "Security", domain: "expressvpn.com",
     priceHistory: [
       { date: "2026-01-01", planLabel: "Basic (2-year plan)", oldPrice: null, newPrice: 2.49, currency: "USD", note: "Current reference price; rate applies to the 2-year term. No confirmed prior change found.", source: "https://cybernews.com/best-vpn/expressvpn-review/expressvpn-cost/" }
+    ]
+  },
+  {
+    id: "surfshark", name: "Surfshark", category: "Security", domain: "surfshark.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "VPN (1-month)", oldPrice: null, newPrice: 15.45, currency: "USD", note: "No-commitment monthly rate; 2-year plan is $2.49/mo, 1-year is $2.99/mo. No confirmed prior change found.", source: "https://surfshark.com/blog/cheapest-monthly-vpn" }
+    ]
+  },
+  {
+    id: "protonvpn", name: "Proton VPN", category: "Security", domain: "protonvpn.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "VPN (1-month)", oldPrice: null, newPrice: 4.99, currency: "USD", note: "No-commitment monthly rate; 2-year plan is $2.99/mo. No confirmed prior change found.", source: "https://thebestvpn.com/surfshark-vs-protonvpn/" }
+    ]
+  },
+  {
+    id: "lastpass", name: "LastPass", category: "Security", domain: "lastpass.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium", oldPrice: null, newPrice: 3, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.lastpass.com/pricing" }
     ]
   },
   {
@@ -362,6 +411,20 @@ const SUBSCRIPTION_CATALOG = [
     priceHistory: [
       { date: "2026-01-01", planLabel: "Individual", oldPrice: null, newPrice: 1.67, annualPrice: 19.99, currency: "USD", note: "Nintendo doesn't sell a standard monthly plan — priced annually only. Monthly-equivalent shown for comparison with other rows.", source: "https://www.nintendo.com/us/online/" },
       { date: "2026-01-01", planLabel: "Family (up to 8 accounts)", oldPrice: null, newPrice: 2.92, annualPrice: 34.99, currency: "USD", note: "Annual only, no monthly plan. Expansion Pack tiers also exist at $49.99/yr (individual) and $79.99/yr (family).", source: "https://www.nintendo.com/us/online/" }
+    ]
+  },
+  {
+    id: "ea-play", name: "EA Play", category: "Gaming", domain: "ea.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "EA Play", oldPrice: null, newPrice: 5.99, annualPrice: 39.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.ea.com/ea-play" },
+      { date: "2026-01-01", planLabel: "EA Play Pro", oldPrice: null, newPrice: 16.99, annualPrice: 119.99, currency: "USD", note: "Day-one access to new EA titles.", source: "https://www.ea.com/ea-play" }
+    ]
+  },
+  {
+    id: "ubisoft-plus", name: "Ubisoft+", category: "Gaming", domain: "ubisoft.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Classics", oldPrice: null, newPrice: 7.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://clickoff.io/reviews/ubisoft-plus/" },
+      { date: "2026-01-01", planLabel: "Premium", oldPrice: null, newPrice: 17.99, currency: "USD", note: "Day-one access to new releases; PC only.", source: "https://clickoff.io/reviews/ubisoft-plus/" }
     ]
   },
   {
@@ -410,6 +473,12 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "myfitnesspal", name: "MyFitnessPal", category: "Fitness", domain: "myfitnesspal.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium", oldPrice: null, newPrice: 19.99, annualPrice: 79.99, currency: "USD", note: "Premium+ tier also exists at $24.99/mo ($99.99/yr), adding meal planning. No confirmed prior change found.", source: "https://www.fitbudd.com/post/myfitnesspal-app-cost" }
+    ]
+  },
+  {
     id: "duolingo-super", name: "Duolingo Super", category: "Education", domain: "duolingo.com",
     subscribers: { count: "12.5M", asOf: "Q1 2026", note: "Paid subscribers.", source: "https://www.classcentral.com/report/duolingo-q1-2026" },
     priceHistory: [
@@ -444,6 +513,12 @@ const SUBSCRIPTION_CATALOG = [
     ]
   },
   {
+    id: "babbel", name: "Babbel", category: "Education", domain: "babbel.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Monthly", oldPrice: null, newPrice: 18, annualPrice: 215, currency: "USD", note: "MSRP; frequently discounted to $8-15/mo effective in practice. No confirmed prior change found.", source: "https://testprepinsight.com/resources/how-much-does-babbel-cost/" }
+    ]
+  },
+  {
     id: "the-new-york-times", name: "The New York Times", category: "News & Reading", domain: "nytimes.com",
     subscribers: { count: "12.78M", asOf: "End of Q4 2025", note: "Digital-only subscribers.", source: "https://www.sec.gov/Archives/edgar/data/71691/000007169126000008/pressrelease12312025.htm" },
     priceHistory: [
@@ -463,6 +538,30 @@ const SUBSCRIPTION_CATALOG = [
     priceHistory: [
       { date: "2026-05-01", planLabel: "Club", oldPrice: null, newPrice: 60, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" },
       { date: "2026-05-01", planLabel: "Plus", oldPrice: null, newPrice: 120, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" }
+    ]
+  },
+  {
+    id: "doordash-dashpass", name: "DoorDash DashPass", category: "Membership", domain: "doordash.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "DashPass", oldPrice: null, newPrice: 9.99, annualPrice: 96, currency: "USD", note: "Annual works out to $8/mo effective; students pay $4.99/mo. No confirmed prior change found.", source: "https://www.dealnews.com/features/doordash/cost/" }
+    ]
+  },
+  {
+    id: "uber-one", name: "Uber One", category: "Membership", domain: "uber.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Uber One", oldPrice: null, newPrice: 9.99, annualPrice: 99.99, currency: "USD", note: "Students pay $4.99/mo. Same headline price as DoorDash DashPass. No confirmed prior change found.", source: "https://wealthvieu.com/personal-finance/cost-of-living/doordash-dashpass-vs-uber-one/" }
+    ]
+  },
+  {
+    id: "robinhood-gold", name: "Robinhood Gold", category: "Finance", domain: "robinhood.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Gold", oldPrice: null, newPrice: 5, annualPrice: 50, currency: "USD", note: "Annual plan works out to ~$4.17/mo ($50/yr) vs $60/yr if paid monthly. No confirmed prior change found.", source: "https://robinhood.com/us/en/gold/" }
+    ]
+  },
+  {
+    id: "ynab", name: "YNAB (You Need A Budget)", category: "Finance", domain: "ynab.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "YNAB", oldPrice: null, newPrice: 14.99, annualPrice: 109, currency: "USD", note: "Annual works out to ~$9.08/mo. No confirmed prior change found.", source: "https://getfinny.app/blog/ynab-pricing-2026" }
     ]
   }
 ];
