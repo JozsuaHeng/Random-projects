@@ -41,9 +41,23 @@ body {
   background: radial-gradient(ellipse at center, transparent 42%, rgba(10,7,3,0.6) 100%);
 }
 
-/* ---------- shared pylon-trapezoid shape ---------- */
-.panel, .ui-btn, #btn-library, .die, .slot, .eq-slot, .toast, #help-box {
-  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+/* ---------- shared pylon-taper shape ----------
+   A fixed-pixel chamfer at the top corners only, with vertical sides
+   below it — reads as a tapered pylon gate without the taper depending
+   on element height. A percentage-based taper (the previous approach)
+   scales with the box's own height, so on a tall box like a sidebar
+   panel the "top" zone where it bites into real content stretches
+   for 50-100+ px instead of staying a small cosmetic bevel — that's
+   what was clipping the panel titles and stat rows. Fixed pixels fix
+   it regardless of how tall the box is. */
+.panel, #help-box {
+  clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%, 0 18px);
+}
+.ui-btn, #btn-library, .toast {
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%, 0 8px);
+}
+.die, .slot, .eq-slot {
+  clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%, 0 5px);
 }
 
 /* ---------- title bar: a lintel over a gate ---------- */
@@ -129,7 +143,7 @@ body {
 #map-content .panel-title { background: rgba(18,12,6,0.8); }
 .map-room {
   border: 1px solid #4a3418;
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+  clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%, 0 5px);
   background: rgba(18,12,6,0.6);
   color: #4a3418;
   font-size: 7px;
@@ -152,7 +166,7 @@ body {
 #portrait {
   background: #150e06;
   border-color: var(--panel-edge);
-  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%, 0 6px);
 }
 .stat-label.o2 { color: #c9a876; }
 .stat-label.sn { color: var(--amber); }
@@ -166,7 +180,7 @@ body {
 #paperdoll {
   background: radial-gradient(ellipse at 50% 20%, rgba(232,196,104,0.10), #150e06 70%);
   border: 1px solid var(--panel-edge);
-  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%, 0 10px);
 }
 .eq-slot, .slot {
   border-color: #4a3418;
