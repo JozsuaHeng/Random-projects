@@ -29,7 +29,7 @@ stories so far:
   an epigrapher's expedition finally breaches a tomb that no robber or
   scholar ever managed to in three thousand years, then stops
   transmitting. Egyptian mythology (a bound entity, not a body-horror
-  curse). 47 pages, Act One, Act Two pending.
+  curse). 100 pages, Acts One & Two, 6 endings.
 
 Other genres (Amazonian, post-apocalyptic) are listed on the shelf as
 "Coming Soon" placeholders.
