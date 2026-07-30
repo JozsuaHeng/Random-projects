@@ -54,6 +54,11 @@ const ITEMS = {
   canopicjar: { name: "Canopic Jar",   desc: "Sealed, heavier than it should be, and — according to your scanner — not empty." },
   heartweight: { name: "The Heart and the Feather", desc: "A balance scale in miniature, gold and stone, worn from use that predates any museum." },
   ankh:       { name: "The Unbroken Ankh", desc: "Cast in solid gold. It is warm to the touch, which it should not be." },
+  trueseal:   { name: "The True Seal",  desc: "Not a stamp, not a stone — a completed working, waiting for a hand willing to finish it properly." },
+  duatwater:  { name: "Water of the Duat", desc: "Cold in a way that has nothing to do with temperature. USE: +4 health.", use: { health: 4 } },
+  predecessorscroll: { name: "Predecessor's Scroll", desc: "A full accounting of every guardian who held this watch before her, in her own careful hand." },
+  isfetshard: { name: "Shard of Isfet", desc: "A fragment of the absence itself, somehow contained in something small enough to carry. It should not be possible. You are carrying it anyway." },
+  accordtoken: { name: "Token of Accord", desc: "Neither seal nor weapon — an opening position, offered in good faith, for a negotiation three thousand years overdue." },
 };
 
 const ROOMS = {
@@ -69,6 +74,16 @@ const ROOMS = {
   shrine:       { name: "Hidden Shrine",   col: 1, row: 2, icon: "✦" },
   starchamber:  { name: "Star Chamber",    col: 2, row: 2, icon: "☆" },
   sanctum:      { name: "The Unbroken Seal", col: 3, row: 2, icon: "◉" },
+  // Act Two — beyond the circle
+  duatgate:     { name: "The Duat Gate",   col: 0, row: 3, icon: "◐" },
+  hallofscales: { name: "Hall of Scales",  col: 1, row: 3, icon: "⚖" },
+  crypts:       { name: "Guardians' Crypts", col: 2, row: 3, icon: "☠" },
+  riverbelow:   { name: "The River Below", col: 3, row: 3, icon: "≈" },
+  duatlibrary:  { name: "The Duat Library", col: 0, row: 4, icon: "❦" },
+  isfetrim:     { name: "The Rim of Isfet", col: 1, row: 4, icon: "◈" },
+  steles:       { name: "Whispering Steles", col: 2, row: 4, icon: "❖" },
+  finalweighing: { name: "The Final Weighing", col: 3, row: 4, icon: "☥" },
+  reflectingbasin: { name: "Reflecting Basin", col: 0, row: 5, icon: "◎" },
 };
 
 const PAGES = {
@@ -517,14 +532,486 @@ Hemet-Nebtawy watches you ask the question you're visibly working up to.
 
   110: {
     room: "sanctum",
-    type: "act-end",
     effects: [["flag", "act2"]],
     text: `Whatever you decide here, you understand — with the specific clarity of someone who has just watched a demonstrably true impossibility calmly explain its own operating rules to her — that this is not a decision you finish today. Twelve days changed your team. Twelve minutes has already started changing you.
 
 Hemet-Nebtawy waits, patient as ever, patient as the inscription always insisted she would be, for you to decide how the rest of this visit is going to go.
 
-— END OF ACT ONE —
-TO BE CONTINUED`,
+— END OF ACT ONE —`,
+    choices: [{ label: "Ask what lies beyond the circle", to: 111 }],
+  },
+
+  // ============ ACT TWO — BEYOND THE CIRCLE ============
+
+  111: {
+    room: "sanctum",
+    effects: [["stat", "sanity", -1]],
+    text: `"There is a gate," Hemet-Nebtawy says, "behind where I sit. I do not use it often. Most who come this far are satisfied with a conversation. You strike me as someone who reads footnotes."
+
+Behind the circle, a passage you would have sworn was solid stone a moment ago stands open, sloping down into architecture your team's own reports never mapped — older than the tomb above it, older, you suspect, than the dynasty that built the tomb around it as an afterthought.`,
+    choices: [{ label: "Go through the gate", to: 112 }],
+  },
+
+  112: {
+    room: "duatgate",
+    text: `Beyond the gate, the tomb's polite museum-quality preservation gives way to something rawer — a genuine threshold architecture, built to contain rather than to commemorate. Passages lead to a Hall of Scales, the crypts of guardians before her, a river that shouldn't exist this far underground, and a library holding considerably more than one dynasty's worth of history.
+
+A narrower gap leads toward something the air itself seems reluctant to approach.`,
+    choices: [
+      { label: "Hall of Scales", to: 114 },
+      { label: "Guardians' Crypts", to: 120 },
+      { label: "The River Below", to: 130 },
+      { label: "The Duat Library", to: 140 },
+      { label: "Whispering Steles", to: 195 },
+      { label: "Reflecting Basin", to: 200 },
+      { label: "The Rim of Isfet", to: 150 },
+      { label: "Wait and watch this place breathe", to: 190 },
+      { label: "Rest a moment", to: 113 },
+      { label: "Take stock of everything you now know", to: 160 },
+      { label: "You're ready. Go to the Final Weighing", needFlag: "readyForWeighing", to: 170 },
+    ],
+  },
+
+  113: {
+    room: "duatgate",
+    effects: [["stat", "sanity", 1], ["stat", "health", 1]],
+    text: `You sit against stone that has never once seen a tourist and let your pulse settle. Whatever this place is, it doesn't seem to mind a moment's stillness — if anything, stillness seems to be the one thing it fully understands.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- Hall of Scales ----
+
+  114: {
+    room: "hallofscales",
+    text: `The Hall of Scales holds row upon row of identical balances, each one mid-weighing, each one — impossibly, when you check more than a few — precisely level. This is not a hall of judgments rendered. It is a hall of judgments perpetually, patiently, still in progress.`,
+    choices: [
+      { label: "Submit to your own weighing", luck: { pass: 116, fail: 117 } },
+      { label: "Study the hall's records instead", to: 118 },
+      { label: "Examine the mechanism itself", to: 119 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  116: {
+    room: "hallofscales",
+    effects: [["add", "accordtoken"], ["flag", "knowWeighed"], ["stat", "sanity", -1]],
+    text: `Your own scale settles level, and stays level, and a small TOKEN OF ACCORD detaches itself from the mechanism into your open hand — not a reward exactly, more a receipt, proof that whatever weighed you found the balance genuine rather than performed.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  117: {
+    room: "hallofscales",
+    effects: [["stat", "sanity", -2]],
+    text: `Your scale tips, hard, and rights itself only slowly, reluctantly, the mechanism apparently willing to keep trying rather than record a verdict it clearly finds as uncomfortable as you do. You step back before it finishes deciding.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  118: {
+    room: "hallofscales",
+    effects: [["flag", "knowScalesHistory"], ["stat", "sanity", -1]],
+    text: `The hall's records are a genealogy of tests, not people — every guardian who ever held this watch, weighed here first, before the sarcophagus above ever accepted them. Hemet-Nebtawy's own entry is the longest in the hall, and the only one still, actively, open.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  119: {
+    room: "hallofscales",
+    effects: [["stat", "sanity", -1]],
+    text: `The mechanism beneath the nearest scale is neither clockwork nor anything your field's conservation labs could meaningfully x-ray — it simply weighs, correctly, the way gravity simply pulls, without moving parts you can identify as parts at all. You give up trying to sketch it for publication. Some things resist being reduced to a diagram.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- Guardians' Crypts ----
+
+  120: {
+    room: "crypts",
+    text: `The crypts hold every guardian who came before Hemet-Nebtawy — dozens, their names carved plainly, unlike hers. Whatever demanded her own erasure was apparently a newer, harsher term than her predecessors negotiated.`,
+    choices: [
+      { label: "Search for a written account", to: 122 },
+      { label: "Explore the deeper rows", luck: { pass: 124, fail: 125 } },
+      { label: "Check the crypt reserved but never used", to: 126 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  122: {
+    room: "crypts",
+    effects: [["add", "predecessorscroll"], ["stat", "sanity", -1]],
+    text: `Tucked into the newest crypt — new being a relative term measured in centuries rather than millennia — a PREDECESSOR'S SCROLL, written in Hemet-Nebtawy's own hand, a careful accounting of everyone who held this watch before her and exactly how each of their terms ended.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  124: {
+    room: "crypts",
+    effects: [["flag", "knowPredecessors"], ["stat", "sanity", -1]],
+    text: `The deeper rows go back further than any dynasty your own field has ever catalogued — the guardianship, you realize, considerably predates the specific dynasty currently credited with inventing it. Someone simply attached their own name to a job that already existed.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  125: {
+    room: "crypts",
+    effects: [["stat", "health", -2]],
+    text: `A collapsed row gives way underfoot, and you catch yourself hard against older stone, more startled than hurt. The crypts, you decide, have earned the benefit of the doubt about structural integrity for approximately three thousand more years.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  126: {
+    room: "crypts",
+    effects: [["stat", "sanity", -1], ["flag", "knowCryptEnd"]],
+    text: `One crypt, near the very back, is conspicuously, deliberately empty — carved, labeled, prepared, and never occupied. You do not need the accompanying inscription translated to understand whose name it was reserved for, or why it has stayed empty for exactly as long as Hemet-Nebtawy has stayed on watch.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- The River Below ----
+
+  130: {
+    room: "riverbelow",
+    text: `The River Below shouldn't exist — no water table, no geological reason for a moving current this far under solid rock — and yet it runs, dark and cold and entirely convinced of its own necessity, the way only a mythologically load-bearing river can afford to be.`,
+    choices: [
+      { label: "Drink from the river", to: 132 },
+      { label: "Try to cross to the far bank", luck: { pass: 134, fail: 135 } },
+      { label: "Just watch the current for a while", to: 136 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  132: {
+    room: "riverbelow",
+    effects: [["add", "duatwater"]],
+    text: `You fill a container with WATER OF THE DUAT, cold in a way that has nothing to do with temperature. It tastes, absurdly, like nothing at all — not stale, not mineral, not anything your palate has a category for.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  134: {
+    room: "riverbelow",
+    effects: [["flag", "knowFarBank"], ["stat", "sanity", -1]],
+    text: `You pick your way across on stones that seem to surface specifically to be stepped on, and the far bank holds only silence and a view back at the passage you came from, from an angle no one was apparently ever meant to have. You've seen enough. You cross back.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  135: {
+    room: "riverbelow",
+    effects: [["stat", "health", -2], ["stat", "sanity", -1]],
+    text: `A stone shifts under your weight at the worst possible moment, and the current — far stronger than a windless underground river has any business being — takes you a good ten meters before you claw your way back to the bank you started on, soaked, shaken, and considerably more respectful of the water's opinion of visitors.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  136: {
+    room: "riverbelow",
+    effects: [["stat", "sanity", -1], ["flag", "knowRiverPurpose"]],
+    text: `Watching the current long enough, you notice it doesn't flow toward or away from anything you'd call a source — it circulates, endlessly, past the same handful of landmarks, the way a held breath circulates through a body that has stopped needing to actually breathe.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- The Duat Library ----
+
+  140: {
+    room: "duatlibrary",
+    text: `The Duat Library dwarfs the Scribes' Archive above by an order of magnitude — not one dynasty's records, but a great many, catalogued by a hand, or many hands, working to a standard your field has no name for yet.`,
+    choices: [
+      { label: "Search the deep shelves", luck: { pass: 142, fail: 143 } },
+      { label: "Read Isfet's own record", to: 144 },
+      { label: "Search for anything about your own expedition", to: 146 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  142: {
+    room: "duatlibrary",
+    effects: [["add", "trueseal"], ["flag", "knowTrueSeal"], ["stat", "sanity", -1]],
+    text: `Deep in the stacks, in a case built for exactly one object, you find THE TRUE SEAL — not a stamp or a stone, but a completed working, a binding finished properly rather than held open indefinitely by one exhausted guardian's continuous effort. Someone built the actual solution. It was simply never used.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  143: {
+    room: "duatlibrary",
+    effects: [["stat", "sanity", -1]],
+    text: `The deep shelves resist your search with a specific, almost personal stubbornness, texts sliding just out of reach or reshelving themselves when you're not quite looking. You get the distinct impression the library is still deciding whether you've earned this particular section yet.`,
+    choices: [{ label: "Back to the Duat Library", to: 140 }],
+  },
+
+  144: {
+    room: "duatlibrary",
+    effects: [["flag", "knowIsfetRecord"], ["stat", "sanity", -2]],
+    text: `Isfet's own record, if "record" is even the right word for an entry about an absence, describes something that predates every named god in every catalogued pantheon — not a rival power, but the specific shape of what's left when nothing has been made yet. Every guardian's task, across every dynasty, has been the same: keep something from ending before its ending was actually due.`,
+    choices: [
+      { label: "Search for what happened to the very first guardian", to: 145 },
+      { label: "Back to the Duat Library", to: 140 },
+    ],
+  },
+
+  145: {
+    room: "duatlibrary",
+    effects: [["flag", "knowFirstGuardian"], ["stat", "sanity", -1]],
+    text: `The first guardian's fate is recorded plainly, almost gently: eventually relieved, freely, by someone who simply asked to help and meant it, exactly as the sarcophagus inscription upstairs still insists is the only acceptable method. It has happened before. It can happen again. That is, apparently, the entire, patient point of the arrangement.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  146: {
+    room: "duatlibrary",
+    effects: [["flag", "knowOwnFate"], ["stat", "sanity", -1]],
+    text: `Unsettlingly, there's already a folder started on your own expedition — thin, recent, still being added to, in handwriting that shifts between your missing colleagues' and one you don't recognize at all. The library, it seems, started cataloguing you before you ever found it.`,
+    choices: [{ label: "Back to the Duat Library", to: 140 }],
+  },
+
+  // ---- Whispering Steles ----
+
+  195: {
+    room: "steles",
+    text: `A gallery of standing steles, each inscribed not with royal decree but with something closer to a diary entry — centuries of guardians, one stone apiece, recording what the watch actually felt like from the inside, in their own unguarded words.`,
+    choices: [
+      { label: "Read the nearest stele closely", luck: { pass: 196, fail: 197 } },
+      { label: "Search for Hemet-Nebtawy's own stele", to: 198 },
+      { label: "Search for other footnotes among the stones", to: 199 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  196: {
+    room: "steles",
+    effects: [["stat", "sanity", 1], ["flag", "knowSteleComfort"]],
+    text: `The stele you settle on turns out to be unexpectedly comforting — a guardian centuries dead, describing the watch not as suffering but as purpose, plainly and without self-pity. It helps, more than you expected, to read that this was survivable, even meaningful, for someone else first.`,
+    choices: [{ label: "Back to the Whispering Steles", to: 195 }],
+  },
+
+  197: {
+    room: "steles",
+    effects: [["stat", "sanity", -1]],
+    text: `The stele you settle on is considerably less comforting — a guardian whose entry ends mid-sentence, the final lines carved in a noticeably less steady hand than the ones before it. Not every account here has a peaceful ending. You knew that already. You didn't need it quite this specific.`,
+    choices: [{ label: "Back to the Whispering Steles", to: 195 }],
+  },
+
+  198: {
+    room: "steles",
+    effects: [["stat", "sanity", -1], ["flag", "knowHerStele"]],
+    text: `Hemet-Nebtawy's own stele stands apart from the others, its entry updated repeatedly over the centuries in the same hand, each addition shorter and more tired than the last, the most recent one dated to considerably before your team ever arrived: "Still holding. Still hoping someone reads the footnotes."`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  199: {
+    room: "steles",
+    effects: [["stat", "sanity", -1]],
+    text: `Further back among the stones, footnotes to footnotes: smaller inscriptions, clearly added by visitors rather than guardians, spanning what must be centuries of quiet, unofficial pilgrimage. People have found their way this deep before. Most of them, it seems, simply left a mark and went home.`,
+    choices: [{ label: "Back to the Whispering Steles", to: 195 }],
+  },
+
+  // ---- Reflecting Basin ----
+
+  200: {
+    room: "reflectingbasin",
+    text: `A shallow basin of still water, undisturbed by any current, angled to catch light from a source you can't identify anywhere in the chamber. Its surface, when you finally look, doesn't quite show your own reflection.`,
+    choices: [{ label: "Look into the basin", luck: { pass: 202, fail: 203 } }],
+  },
+
+  202: {
+    room: "reflectingbasin",
+    effects: [["flag", "knowBasin"], ["stat", "sanity", 1]],
+    text: `The surface settles, eventually, into something that is your own reflection after all — just delayed, by a beat or two, like the basin needed a moment to decide you were worth showing accurately. It's oddly reassuring, being recognized correctly by something this old.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  203: {
+    room: "reflectingbasin",
+    effects: [["stat", "sanity", -1]],
+    text: `The reflection that finally resolves isn't quite yours — close, but wearing an expression you don't remember making, at an angle you don't remember standing at. You step back from the basin and don't look into it again.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- The Rim of Isfet ----
+
+  150: {
+    room: "isfetrim",
+    text: `The Rim is the closest this entire complex comes to admitting what it's actually for — a chamber where the wall itself simply stops being wall, replaced by an absence your eyes refuse to focus on, patient and enormous and, disturbingly, aware of your attention the instant you offer it.`,
+    choices: [
+      { label: "Reach toward the rim", luck: { pass: 152, fail: 153 } },
+      { label: "Study it from a careful distance", to: 154 },
+      { label: "Back to the Duat Gate", to: 112 },
+    ],
+  },
+
+  152: {
+    room: "isfetrim",
+    effects: [["add", "isfetshard"], ["flag", "knowRim"], ["stat", "sanity", -2]],
+    text: `Your fingers close on something that shouldn't be graspable at all, and a SHARD OF ISFET comes away into your palm — small, impossible, and undeniably, uncomfortably real. The rim doesn't object. If anything, it seems almost amused, the way something ancient might be amused by a child confidently picking up something much too heavy for them.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  153: {
+    room: "isfetrim",
+    effects: [["stat", "sanity", -2], ["stat", "health", -2]],
+    text: `Your hand meets something that is emphatically not there to be touched, and the recoil costs you — not violence exactly, more a correction, firm and entirely impersonal, the way you'd flinch back a child's hand from a stove without particularly meaning them harm.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  154: {
+    room: "isfetrim",
+    effects: [["stat", "sanity", -1], ["flag", "knowRimCareful"]],
+    text: `Studied rather than touched, the rim resolves — slightly, unwillingly — into something almost like a face, or the memory of the shape a face might make. You do not think it is hostile. You are increasingly unsure "hostile" is a concept that applies to it at all, any more than it applies to weather, or to gravity, or to the specific patient shape of an ending whose time simply hasn't come yet.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- Ambient: the gate's breathing ----
+
+  190: {
+    room: "duatgate",
+    text: `You stop moving and let the space around you do whatever it does when no one's actively asking anything of it. There's a rhythm here too, slower even than the Choir-adjacent pulse other expeditions have reported from other kinds of thresholds — this one closer to a very long, very patient exhale.`,
+    choices: [{ label: "Try to match it", luck: { pass: 192, fail: 193 } }],
+  },
+
+  192: {
+    room: "duatgate",
+    effects: [["flag", "knowGateRhythm"], ["stat", "sanity", 1]],
+    text: `You match it, more or less, and for a handful of seconds you understand — bodily, not intellectually — why someone might volunteer for three thousand years of exactly this. There is something almost restful about a task with no ambiguity left in it at all.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  193: {
+    room: "duatgate",
+    effects: [["stat", "sanity", -1]],
+    text: `You can't quite find the rhythm, and the attempt leaves you slightly disoriented, aware of your own heartbeat in a way that feels, briefly, like an intrusion into a much larger and much older room.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ---- Readiness gate ----
+
+  160: {
+    room: "duatgate",
+    effects: [["flag", "readyForWeighing"]],
+    text: `You've seen enough of what lies beneath the tomb to stop feeling like a trespasser in someone else's three-thousand-year job and start feeling like someone qualified, at minimum, to have an informed opinion about it.
+
+Whatever you decide at the Final Weighing, you'll decide it having actually read the footnotes.`,
+    choices: [{ label: "Back to the Duat Gate", to: 112 }],
+  },
+
+  // ============ THE FINAL WEIGHING (climax) ============
+
+  170: {
+    room: "finalweighing",
+    text: `Beyond the gap the air was reluctant to approach, the passage opens on a chamber that makes the Hall of Scales look like a rehearsal space — one final balance, vast, ancient, and — for the first time since you arrived — not quite level.
+
+Hemet-Nebtawy stands beside it, and beside her, patient and enormous and entirely without malice, the shape the Rim only ever let you glimpse sideways.
+
+"You came prepared," she says. "That is rarer than you'd think. Now. Tell me what you've decided, epigrapher."`,
+    choices: [
+      { label: "Take up the watch, permanently, as you already offered", needFlag: "tookWatch", to: 172 },
+      { label: "Reveal her true name and full story to the world", needFlag: "proposedTelling", needItem: "predecessorscroll", to: 174 },
+      { label: "Complete the True Seal", needItem: "trueseal", to: 176 },
+      { label: "Propose a formal Accord with Isfet itself", needItem: "accordtoken", to: 178 },
+      { label: "Shatter the cycle with the Shard of Isfet", needItem: "isfetshard", to: 180 },
+      { label: "Walk away. Leave everything exactly as it was", to: 182 },
+    ],
+  },
+
+  172: {
+    room: "finalweighing",
+    effects: [["stat", "sanity", -2]],
+    text: `You step onto the balance and the weight transfers the way it did in the sanctum, except final this time, complete, no longer a promise but an actual exchange. Hemet-Nebtawy steps off her own three-thousand-year post with the specific, careful relief of someone who has genuinely, finally, been believed.
+
+"Read the footnotes," she says, one last time, "for whoever comes after you. There will be a whoever. There always is."`,
+    choices: [{ label: "One year later...", to: 173 }],
+  },
+
+  173: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — THE NEW GUARDIAN
+
+You do not return topside in any sense your former colleagues would recognize as retirement. You are, technically, still on the expedition's payroll, filed as "extended fieldwork, indefinite," which is either the most honest or the least honest line item in the Directorate's history, depending on the week.
+
+The scale stays level. You've stopped needing to think about how.`,
+  },
+
+  174: {
+    room: "finalweighing",
+    effects: [["stat", "sanity", -1]],
+    text: `You lay out the full case, methodically, the way you'd defend any contested attribution to a skeptical review board — her name, her scroll, her three thousand years of unglamorous, uncredited labor, spoken plainly into a chamber built to hold silence rather than testimony.
+
+Hemet-Nebtawy listens to her own biography read back to her by a stranger, and something in her bearing that has been braced for three millennia finally, visibly, uncoils.`,
+    choices: [{ label: "One year later...", to: 175 }],
+  },
+
+  175: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — THE NAME RESTORED
+
+The paper takes eleven months to clear peer review and considerably longer to reach anyone outside the field, but it clears, and her name — her actual name, not "She Who Is Not Named" — enters the historical record for the first time in three thousand years, attributed, cited, real.
+
+She is still, as far as you know, exactly where you left her. Being remembered correctly, it turns out, was never quite the same thing as being relieved. But she asked for it anyway, and meant it, and that has to count for something.`,
+  },
+
+  176: {
+    room: "finalweighing",
+    effects: [["stat", "sanity", -1]],
+    text: `You complete the True Seal exactly as the library's careful instructions describe — not a shortcut, not a trick, simply the finished version of the working Hemet-Nebtawy has spent three thousand years holding open by continuous, unfinished effort. The balance settles, genuinely, permanently level, without needing anyone standing on it at all.
+
+She watches her own reflection in stone that no longer requires her personal attention, and looks, for the first time, like someone allowed to simply be dead.`,
+    choices: [{ label: "One year later...", to: 177 }],
+  },
+
+  177: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — A CLEAN CLOSE
+
+The tomb is resealed, catalogued, and — per an agreement you personally insisted on with the Directorate — left substantially unexcavated, its true chambers a footnote rather than a museum wing. Some doors, you've decided, are better documented than opened.
+
+You still dream about the scale sometimes. In every dream, it's level. You've stopped minding.`,
+  },
+
+  178: {
+    room: "finalweighing",
+    effects: [["stat", "sanity", -1]],
+    text: `You set the Token of Accord on the balance instead of yourself, and address the shape beside Hemet-Nebtawy directly, the way you'd open any negotiation you actually intended to honor: terms, not demands. Time, not victory. A watch that ends by mutual agreement rather than by one side's exhaustion.
+
+The shape considers this for a silence that feels considerably longer than it probably was. Then, somehow, it agrees.`,
+    choices: [{ label: "One year later...", to: 179 }],
+  },
+
+  179: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — THE ACCORD
+
+Nobody in your field will ever be able to publish what actually happened in that chamber, but the practical result is measurable enough: Hemet-Nebtawy rotates duty now, a formal arrangement, sharing the watch with volunteers found through channels you were only partially briefed on.
+
+You are, occasionally, one of them. It is, against every reasonable expectation, some of the most peaceful work you've ever done.`,
+  },
+
+  180: {
+    room: "finalweighing",
+    effects: [["stat", "sanity", -2]],
+    text: `You set the shard against the balance's fulcrum and press, and the entire chamber responds at once — not violence, but a vast, structural reordering, three thousand years of careful containment architecture reconsidering its own necessity in real time. Hemet-Nebtawy doesn't stop you. She looks, if anything, like someone watching a gamble she stopped believing was possible.
+
+The scale doesn't break. It simply, finally, finishes tipping — all the way, deliberately, to a resolution nobody in this chamber's very long history ever actually tried.`,
+    choices: [{ label: "One year later...", to: 181 }],
+  },
+
+  181: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — THE BROKEN CYCLE
+
+What you did in that chamber doesn't match any category your field has a name for, and you've given up trying to write the paper. The tomb reads, on every instrument since, as simply, finally, empty — no guardian, no absence pressed up against a rim, no watch left to keep.
+
+Whether that's a victory or simply a different, quieter kind of unfinished business, you genuinely don't know yet. You suspect you'll know in about three thousand years.`,
+  },
+
+  182: {
+    room: "finalweighing",
+    text: `You decide, in the end, not to decide — not out of cowardice, you tell yourself, but out of the same caution the sarcophagus inscription demanded of everyone who came before you. Some offers shouldn't be accepted in the heat of the one conversation you've ever had about them.
+
+Hemet-Nebtawy doesn't argue. "Wise," she says again, the same word from the sanctum, meant, you think, exactly as sincerely the second time.`,
+    choices: [{ label: "One year later...", to: 183 }],
+  },
+
+  183: {
+    room: "finalweighing",
+    type: "act-end",
+    text: `EPILOGUE — LEFT AS FOUND
+
+The expedition is quietly wound down, the tomb resealed under a classification your Directorate contact won't fully explain, your team reassigned to postings considerably less interesting than this one. You write the version of the report that's true and useless in equal measure.
+
+You think about going back sometimes. You haven't yet. You suspect, when you finally do, she'll still be exactly where you left her, patient as ever, waiting for someone else who reads the footnotes.`,
   },
 
   // ============ DEATHS ============
