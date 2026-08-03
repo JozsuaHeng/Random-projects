@@ -520,8 +520,10 @@ html, body {
   left: 50%;
   width: 460px;
   max-width: 90vw;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transform: translate(-50%, -50%) scale(0.92);
   opacity: 0;
   pointer-events: none;
@@ -533,6 +535,14 @@ html, body {
   text-align: center;
   z-index: 9;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* Title/blurb/heading and the button never scroll away — only the
+   (potentially long) 13-row cargo list scrolls internally, and it
+   shrinks to fit whatever space is left instead of claiming a fixed
+   height. This keeps "Launch Again" reachable on any viewport height. */
+.debrief-card > *:not(.cargo-report) {
+  flex: none;
 }
 
 .debrief-card.show {
@@ -564,6 +574,8 @@ html, body {
   padding: 0;
   margin: 0 0 22px;
   text-align: left;
+  flex: 1 1 auto;
+  min-height: 50px;
   max-height: 220px;
   overflow-y: auto;
   border-top: 1px dashed var(--line);
