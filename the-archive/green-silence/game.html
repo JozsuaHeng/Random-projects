@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREEN SILENCE — An Interactive Gamebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Spectral:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+<header id="titlebar">
+  <a href="../home.html" id="btn-library" class="ui-btn">← ARCHIVE</a>
+  <div id="game-title">GREEN SILENCE</div>
+  <div id="page-indicator">— PAGE <span id="page-num">1</span> —</div>
+  <div id="titlebar-buttons">
+    <button id="btn-help" class="ui-btn">FIELD NOTES</button>
+    <button id="btn-newgame" class="ui-btn">NEW EXPEDITION</button>
+  </div>
+</header>
+
+<main id="layout">
+
+  <!-- LEFT: the storybook page -->
+  <section id="book">
+    <div id="book-page">
+      <div id="book-pagenum">· 1 ·</div>
+      <div id="book-text"></div>
+      <div id="book-effects"></div>
+      <div id="book-choices"></div>
+      <div id="book-dice" class="hidden">
+        <div class="dice-label">TEST YOUR LUCK</div>
+        <div class="dice-row">
+          <span class="die" id="die1">?</span>
+          <span class="die" id="die2">?</span>
+        </div>
+        <div id="dice-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT column -->
+  <aside id="sidebar">
+
+    <!-- TOP RIGHT: map -->
+    <section id="map-panel" class="panel">
+      <canvas id="starfield"></canvas>
+      <div id="map-content">
+        <div class="panel-title">A CHARTING OF THE UNMAPPED REACH</div>
+        <div id="ship-map"></div>
+        <div id="location-line">LOCATION: <span id="location-name">BASE CAMP</span></div>
+      </div>
+    </section>
+
+    <!-- BOTTOM RIGHT: character / stats / backpack -->
+    <section id="char-panel" class="panel">
+      <div id="char-header">
+        <canvas id="portrait" width="64" height="64"></canvas>
+        <div id="char-id">
+          <div id="char-name">DR. M. FERREIRA-OKONJO</div>
+          <div id="char-role">ETHNOBOTANIST, RIVER SYSTEMS</div>
+        </div>
+      </div>
+
+      <div id="stats">
+        <div class="stat-row">
+          <span class="stat-label hp">HEALTH</span>
+          <span class="stat-blocks" id="stat-health"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label o2">STAMINA</span>
+          <span class="stat-blocks" id="stat-oxygen"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label sn">SANITY</span>
+          <span class="stat-blocks" id="stat-sanity"></span>
+        </div>
+      </div>
+
+      <div id="equip-row">
+        <canvas id="paperdoll" width="72" height="120"></canvas>
+        <div id="equip-slots">
+          <div class="eq-slot" data-slot="head" title="Head"><span class="eq-label">HAT</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="body" title="Body"><span class="eq-label">CLOAK</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="hands" title="Hands"><span class="eq-label">GLOVES</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="feet" title="Feet"><span class="eq-label">BOOTS</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="back" title="Back"><span class="eq-label">PACK</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+          <div class="eq-slot" data-slot="held" title="Held"><span class="eq-label">TOOL</span><canvas class="eq-canvas" width="28" height="28"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel-title small">FIELD PACK</div>
+      <div id="backpack"></div>
+      <div id="item-info">Select a find to inspect, use, or wear it.</div>
+    </section>
+
+  </aside>
+</main>
+
+<!-- How-to-play overlay -->
+<div id="help-overlay" class="hidden">
+  <div id="help-box">
+    <div class="panel-title">FIELD NOTES</div>
+    <p>This is a gamebook — read the entry on the left, then choose how
+    you proceed. Each choice turns to a new page in the record.</p>
+    <p><b>FIELD PACK:</b> what you find, you carry. Some paths only open to
+    those bearing the right find or tool. Select an item twice to consume
+    it (USE) or wear it.</p>
+    <p><b>HEALTH, STAMINA, SANITY:</b> let any fall to nothing and your
+    expedition ends there. The forest does not wait for stragglers.</p>
+    <p><b>TEST YOUR LUCK:</b> some moments are decided by the fall of two
+    dice. Seven or under favors you. A river stone on your person widens
+    that favor to eight.</p>
+    <p>Your record is kept between visits. NEW EXPEDITION erases it.</p>
+    <button id="btn-help-close" class="ui-btn">CLOSE</button>
+  </div>
+</div>
+
+<div id="crt-overlay"></div>
+
+<script src="../sprites.js"></script>
+<script src="story.js"></script>
+<script src="../engine.js"></script>
+</body>
+</html>

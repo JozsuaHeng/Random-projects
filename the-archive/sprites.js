@@ -21,6 +21,7 @@ const PALETTE = {
   x: "#a86bdc", // xeno violet
   n: "#4fe8d0", // bioluminescent cyan
   e: "#d4a15c", // sandstone tan
+  j: "#1a5c3a", // deep jungle green
 };
 
 const SPRITES = {
@@ -1163,6 +1164,302 @@ const SPRITES = {
     "............",
     "............",
   ],
+
+  // --- Green Silence items ---
+  machete: [
+    ".........kk.",
+    "........kssk",
+    ".......kssk.",
+    "......kssk..",
+    ".....kssk...",
+    "....kssk....",
+    "...kmmk.....",
+    "..kmmk......",
+    "..kmk.......",
+    "............",
+    "............",
+    "............",
+  ],
+  fieldlamp: [
+    "............",
+    "....kkkk....",
+    "...kyyyyk...",
+    "..kyywwyyk..",
+    "..kyywwyyk..",
+    "...kyyyyk...",
+    "....kddk....",
+    "...kddddk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  resintorch: [
+    "......ook...",
+    ".....oyyko..",
+    "....koyyok..",
+    ".....kook...",
+    "......kk....",
+    "......mm....",
+    "......mm....",
+    "......mm....",
+    ".....kmmk...",
+    "............",
+    "............",
+    "............",
+  ],
+  dressingkit: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kwwwwwwwwk.",
+    ".kwwwggwwwk.",
+    ".kwwwggwwwk.",
+    ".kwggggggwk.",
+    ".kwggggggwk.",
+    ".kwwwggwwwk.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+  ],
+  quininetonic: [
+    "............",
+    "....kkkk....",
+    "....kssk....",
+    "...kkkkkk...",
+    "...kvvvvk...",
+    "...kvvvvk...",
+    "...kvvvvk...",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  driedrations: [
+    "............",
+    "...kkkkkk...",
+    "..kmmmmmmk..",
+    "..kmyyyymk..",
+    "..kmyyyymk..",
+    "..kmmmmmmk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  calmingleaf: [
+    "............",
+    "......kk....",
+    ".....kggk...",
+    "....kggggk..",
+    "...kggjggk..",
+    "....kggggk..",
+    ".....kggk...",
+    "......kk.....",
+    ".......k......",
+    "............",
+    "............",
+    "............",
+  ],
+  riverstone: [
+    "............",
+    "....kkkk....",
+    "...ktttttk..",
+    "..ktttttttk.",
+    "..ktttbtttk.",
+    "..ktttttttk.",
+    "...ktttttk..",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  junglehat: [
+    "...kkkkkkk..",
+    "..kmmmmmmmk.",
+    ".kmmmmmmmmmk",
+    "..kkkkkkkkk.",
+    "....kmmmk...",
+    "...kmmmmmk..",
+    "...kmmmmmk..",
+    "....kmmmk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  oilcloak: [
+    "....kkkk....",
+    "...kjjjjk...",
+    "..kjjjjjjk..",
+    ".kjjjjjjjjk.",
+    ".kjjjjjjjjk.",
+    ".kjjjjjjjjk.",
+    "..kjjjjjjk..",
+    "...kj..jk...",
+    "...kj..jk...",
+    "............",
+    "............",
+    "............",
+  ],
+  trackergloves: [
+    "............",
+    "...k....k...",
+    "..kmk..kmk..",
+    "..kmk..kmk..",
+    ".kmmmk.kmmmk",
+    ".kmmmkkmmmk.",
+    ".kmmmmmmmmk.",
+    "..kmmmmmmk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  muddedboots: [
+    "............",
+    "...kk..kk...",
+    "..kmk..kmk..",
+    "..kmk..kmk..",
+    "..kmk..kmk..",
+    ".kdddkkdddk.",
+    ".kdddkkdddk.",
+    "kddddkkddddk",
+    "kddddkkddddk",
+    "............",
+    "............",
+    "............",
+  ],
+  waterpack: [
+    "....kkkk....",
+    "...ktttttk..",
+    "...ktjjjtk..",
+    "...ktjjjtk..",
+    "...ktjjjtk..",
+    "...ktttttk..",
+    "....kkkk....",
+    "....k..k....",
+    "....k..k....",
+    "............",
+    "............",
+    "............",
+  ],
+  brokencompass: [
+    "............",
+    "....kkkk....",
+    "...ksssssk..",
+    "..kswwwwwsk.",
+    "..ksw.k.wsk.",
+    "..ksw..kwsk.",
+    "..kswwwwwsk.",
+    "...ksssssk..",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+  ],
+  expeditionjournal: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kmmmmmmmmk.",
+    ".kmwwwwwwmk.",
+    ".kmwtytywmk.",
+    ".kmwwwwwwmk.",
+    ".kmwtytywmk.",
+    ".kmmmmmmmmk.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+  ],
+  memoryseed: [
+    "............",
+    ".....kk.....",
+    "....kvvk....",
+    "...kvvvvk...",
+    "...kvjvjvk..",
+    "...kvvvvk...",
+    "....kvvk....",
+    ".....kk.....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  rootkey: [
+    "............",
+    "....kk......",
+    "...kmmk.....",
+    "..kmjmk.....",
+    ".kmjjmk.....",
+    "..kmjmkk....",
+    "...kmk.kk...",
+    "....k.kmk...",
+    "......kmk...",
+    "............",
+    "............",
+    "............",
+  ],
+  silverleaf: [
+    "......kk.....",
+    ".....kssk....",
+    "....kssssk...",
+    "...ksssjssk..",
+    "..kssssjssk..",
+    "...ksssjssk..",
+    "....kssssk...",
+    ".....kssk....",
+    "......kk.....",
+    "............",
+    "............",
+    "............",
+  ],
+  surveystake: [
+    "......kk....",
+    ".....kyok...",
+    "....koyok...",
+    ".....kok.....",
+    ".....kok.....",
+    ".....kok.....",
+    ".....kok.....",
+    "....kddk....",
+    "...kddddk...",
+    "............",
+    "............",
+    "............",
+  ],
+  heartwoodsap: [
+    "............",
+    "....kkkk....",
+    "...kmmmmk...",
+    "..kmoooomk..",
+    "..kmoooomk..",
+    "..kmoooomk..",
+    "...kmmmmk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  kinshiptoken: [
+    "............",
+    "....kkkk....",
+    "...kvgvgk...",
+    "..kvgvgvgk..",
+    ".kvgvgvgvgk.",
+    "..kvgvgvgk..",
+    "...kvgvgk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
 };
 
 function drawSprite(canvas, sprite, scale) {
@@ -1489,6 +1786,77 @@ function startDuneDrift(canvas) {
       const a = 0.3 + 0.5 * Math.sin(t / 700 + gr.tw);
       ctx.fillStyle = `rgba(212,161,92,${a})`;
       ctx.fillRect(Math.round(gr.x), Math.round(gr.y), gr.s, gr.s);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Canopy Drift (top-right panel backdrop: dense jungle canopy,
+// dappled sunlight shafts, drifting fireflies/pollen) ---
+function startCanopyDrift(canvas) {
+  const ctx = canvas.getContext("2d");
+  let motes = [];
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    motes = [];
+    const n = Math.floor((canvas.width * canvas.height) / 1500);
+    for (let i = 0; i < n; i++) {
+      motes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() < 0.8 ? 1 : 2,
+        vy: -(0.03 + Math.random() * 0.07),
+        vx: (Math.random() - 0.5) * 0.04,
+        tw: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const canopyBlobs = [[0.08, 0.15, 0.22], [0.3, 0.1, 0.18], [0.55, 0.18, 0.24], [0.78, 0.08, 0.2], [0.95, 0.2, 0.18]];
+
+  function frame(t) {
+    const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    bg.addColorStop(0, "#0a1a10"); bg.addColorStop(1, "#050d08");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // canopy silhouette along the top
+    ctx.fillStyle = "#0e2416";
+    for (const [bx, by, br] of canopyBlobs) {
+      ctx.beginPath();
+      ctx.arc(canvas.width * bx, canvas.height * by, canvas.width * br, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // dappled light shafts, slowly swaying
+    for (let i = 0; i < 3; i++) {
+      const sway = Math.sin(t / 2600 + i * 2) * canvas.width * 0.06;
+      const sx = canvas.width * (0.2 + i * 0.32) + sway;
+      const g = ctx.createLinearGradient(sx, 0, sx + canvas.width * 0.12, canvas.height);
+      g.addColorStop(0, "rgba(232,196,104,0.10)");
+      g.addColorStop(1, "rgba(232,196,104,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(sx, 0);
+      ctx.lineTo(sx + canvas.width * 0.12, 0);
+      ctx.lineTo(sx + canvas.width * 0.22, canvas.height);
+      ctx.lineTo(sx - canvas.width * 0.02, canvas.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    for (const m of motes) {
+      m.y += m.vy; m.x += m.vx;
+      if (m.y < 0) { m.y = canvas.height; m.x = Math.random() * canvas.width; }
+      const a = 0.35 + 0.55 * Math.sin(t / 650 + m.tw);
+      ctx.fillStyle = `rgba(140,224,100,${0.25 + 0.55 * a})`;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     requestAnimationFrame(frame);

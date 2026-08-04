@@ -1,0 +1,222 @@
+/* GREEN SILENCE — jungle expedition theme override.
+   Loaded after the shared ../style.css. A fifth distinct box language:
+   Dead Signal is sharp tech rectangles, The Last Warden is chamfered
+   carved plate, First Contact is organic bio-pods, Tomb is monumental
+   pylon trapezoids — this game is asymmetric leaf-shapes, built with
+   border-radius (not clip-path). Tomb's clip-path trapezoid scaled its
+   taper with the box's own height, which silently ate into panel
+   titles and stat rows on tall boxes. border-radius with pixel values
+   only ever rounds a small, fixed area per corner — it cannot eat into
+   content no matter how tall the box is, so that whole bug class is
+   structurally impossible here. */
+
+:root {
+  --bg: #060e08;
+  --panel: #0e2014;
+  --panel-edge: #3a6a42;
+  --ink: #dce8d8;
+  --dim: #6a8a70;
+  --phosphor: #8ce064;
+  --amber: #e8c468;
+  --alert: #d4573a;
+  --paper: #e8e0c4;
+  --paper-ink: #22301c;
+  --font-pixel: "Yeseva One", serif;
+  --font-body: "Spectral", serif;
+}
+
+body {
+  background: radial-gradient(ellipse at 30% 0%, rgba(140,224,100,0.10), transparent 55%), var(--bg);
+}
+
+#game-title, .panel-title, .ui-btn, #btn-library, #char-name, #char-role,
+.stat-label, .eq-label, #book-pagenum, .choice .turnto, .dice-label,
+#page-indicator, #location-line {
+  letter-spacing: 0.6px;
+}
+
+/* ---------- scanlines -> forest haze ---------- */
+#crt-overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(140,224,100,0.05), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(232,196,104,0.04), transparent 60%);
+  mix-blend-mode: screen;
+}
+#crt-overlay::after {
+  background: radial-gradient(ellipse at center, transparent 42%, rgba(5,10,6,0.6) 100%);
+}
+
+/* ---------- title bar: a canopy gap ---------- */
+#titlebar {
+  background: linear-gradient(180deg, #122a18, #0a170e);
+  border: none;
+  border-bottom: 3px solid var(--panel-edge);
+  border-radius: 0 0 30px 8px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+#game-title {
+  font-weight: 400;
+  color: var(--phosphor);
+  text-shadow: 0 0 10px rgba(140,224,100,0.5);
+}
+#game-title::before { content: "❧ "; color: var(--amber); }
+#game-title::after { content: " ❧"; color: var(--amber); }
+.ui-btn, #btn-library {
+  font-size: 10px;
+  padding: 9px 16px;
+  background: linear-gradient(180deg, #163420, #0c1c12);
+  border: 1px solid var(--panel-edge);
+  border-radius: 18px 6px 18px 6px;
+}
+.ui-btn:hover, #btn-library:hover {
+  border-color: var(--phosphor);
+  color: var(--phosphor);
+  box-shadow: 0 0 10px rgba(140,224,100,0.3);
+}
+
+/* ---------- panels: leaf-shaped, asymmetric ---------- */
+.panel {
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(140,224,100,0.08), transparent 55%),
+    radial-gradient(ellipse at 90% 100%, rgba(232,196,104,0.06), transparent 55%),
+    linear-gradient(160deg, #122a18, #0a1a10);
+  border: 1px solid var(--panel-edge);
+  border-radius: 26px 8px 26px 8px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+}
+.panel-title {
+  font-size: 10px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid var(--panel-edge);
+  border-radius: 26px 8px 0 0;
+  color: var(--dim);
+}
+.panel-title.small { border-top: 1px solid var(--panel-edge); border-radius: 0; }
+
+/* ---------- the storybook page: a pressed field journal ---------- */
+#book {
+  background: linear-gradient(160deg, #0e1c10, #081208);
+  border: 2px solid #234a2a;
+  border-radius: 20px;
+}
+#book-page {
+  background:
+    radial-gradient(ellipse at 12% 12%, rgba(140,224,100,0.12), transparent 45%),
+    radial-gradient(ellipse at 88% 88%, rgba(232,196,104,0.10), transparent 50%),
+    var(--paper);
+  border-radius: 16px;
+  box-shadow: inset 0 0 60px rgba(60, 90, 30, 0.20), 0 0 0 1px #a8b088;
+}
+#book-text::first-letter {
+  font-family: "Yeseva One", serif;
+  font-size: 1.5em;
+  color: #3a6a2c;
+}
+#book-pagenum { color: #5a7a44; }
+#book-choices { border-top: 2px dashed #98a878; }
+.choice .arrow { color: #3a6a2c; }
+.choice .turnto { color: #5a7a44; }
+.effect-tag { border-color: #6a8a54; color: #405c2e; background: rgba(90,122,68,0.12); }
+.effect-tag.gain { border-color: #2c6a48; color: #1c4c34; background: rgba(44,106,72,0.12); }
+.effect-tag.loss { border-color: var(--alert); color: #a2402c; background: rgba(212,87,58,0.12); }
+.endcap { color: #3a6a2c; }
+
+/* dice: smooth river stones */
+.die {
+  background: #e8e0c4;
+  color: #22301c;
+  border: 2px solid #22301c;
+  border-radius: 14px 4px 14px 4px;
+  box-shadow: 3px 3px 0 #22301c;
+}
+.dice-label { color: #405c2e; }
+#dice-result.pass { color: #1c4c34; }
+#dice-result.fail { color: #a2402c; }
+
+/* ---------- map: canopy drift, not a HUD grid ---------- */
+#map-content .panel-title { background: rgba(10,20,12,0.8); }
+.map-room {
+  border: 1px solid #2c4a30;
+  border-radius: 10px 3px 10px 3px;
+  background: rgba(14,26,16,0.6);
+  color: #3a5a3e;
+  font-size: 7px;
+}
+.map-room.visited { color: var(--dim); border-color: #4a7050; background: rgba(28,48,32,0.7); }
+.map-room.current {
+  color: var(--phosphor);
+  border-color: var(--phosphor);
+  background: rgba(140,224,100,0.14);
+  text-shadow: 0 0 6px rgba(140,224,100,0.7);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(140,224,100, 0.0); }
+  50% { box-shadow: 0 0 10px rgba(140,224,100, 0.5); }
+}
+#location-line { background: rgba(10,20,12,0.8); }
+#location-name { color: var(--phosphor); }
+
+/* ---------- character panel: canvas, leather, leaf ---------- */
+#portrait {
+  background: #0c1a0e;
+  border-color: var(--panel-edge);
+  border-radius: 20px 6px 20px 6px;
+}
+.stat-label.o2 { color: #c9a876; }
+.stat-label.sn { color: var(--amber); }
+.stat-block {
+  border-color: #2c4a30;
+  background: #0c1a0e;
+  border-radius: 4px;
+}
+.stat-block.o2.on { background: #c9a876; box-shadow: 0 0 4px rgba(201,168,118,0.6); }
+.stat-block.sn.on { background: var(--amber); box-shadow: 0 0 4px rgba(232,196,104,0.6); }
+
+#equip-row {
+  background: radial-gradient(ellipse at 50% 30%, rgba(140,224,100,0.06), transparent 65%);
+  padding: 14px 10px;
+}
+#paperdoll {
+  background: radial-gradient(ellipse at 50% 20%, rgba(140,224,100,0.10), #0c1a0e 70%);
+  border: 1px solid var(--panel-edge);
+  border-radius: 30px 10px 30px 10px;
+}
+.eq-label { font-size: 6.5px; }
+.eq-slot {
+  border-color: #2c4a30;
+  background: radial-gradient(circle at 35% 25%, #163420, #0c1a0e 70%);
+  border-radius: 16px 5px 16px 5px;
+}
+.eq-slot.filled { border-color: var(--phosphor); box-shadow: 0 0 6px rgba(140,224,100,0.35); }
+
+#backpack {
+  background: radial-gradient(ellipse at 20% 0%, rgba(232,196,104,0.06), transparent 55%);
+}
+.slot {
+  border-color: #2c4a30;
+  background: radial-gradient(circle at 35% 25%, #163420, #0c1a0e 70%);
+  border-radius: 16px 5px 16px 5px;
+}
+.slot.filled:hover { border-color: var(--amber); }
+.slot.selected { border-color: var(--phosphor); box-shadow: 0 0 8px rgba(140,224,100,0.4); }
+.slot .usable-dot { color: var(--phosphor); }
+
+#item-info b { color: var(--phosphor); }
+
+.toast {
+  font-size: 9px;
+  background: linear-gradient(180deg, #163420, #0c1c12);
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+  border-radius: 14px 4px 14px 4px;
+}
+
+/* ---------- help overlay ---------- */
+#help-box {
+  background: linear-gradient(160deg, #122a18, #0a1a10);
+  border: 1px solid var(--phosphor);
+  border-radius: 26px 8px 26px 8px;
+}
+#help-box .panel-title { font-size: 12px; border-radius: 26px 8px 0 0; }
+#help-box p { font-size: 19px; }
+#help-box b { color: var(--phosphor); }

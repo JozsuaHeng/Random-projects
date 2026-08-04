@@ -10,7 +10,7 @@ build step, no dependencies.
 `home.html` is the library entry point — a shelf of story cards. Each
 cover is a painted pixel scene (procedural canvas art, not an icon or
 photo) with the title as a poster-style caption, and for playable
-stories a live `META.backdrop` preview layered in. Four playable
+stories a live `META.backdrop` preview layered in. Five playable
 stories so far:
 - **DEAD SIGNAL** (`game.html`, repo root) — you wake from cryosleep aboard
   the derelict salvage ship ISV Vesper. Sci-fi mystery/horror. 93 pages,
@@ -30,9 +30,16 @@ stories so far:
   scholar ever managed to in three thousand years, then stops
   transmitting. Egyptian mythology (a bound entity, not a body-horror
   curse). 100 pages, Acts One & Two, 6 endings.
+- **GREEN SILENCE** (`green-silence/game.html`) — an ethnobotanist follows
+  a vanished expedition to a river with no traceable source and a hidden
+  city, protected by a vast, ancient root-and-fungal network with real
+  ecological stakes (an outside mining consortium threatens its border).
+  100 pages, Acts One & Two, 6 endings. Uses `border-radius` for its
+  leaf-shaped panels rather than `clip-path`, deliberately — see the
+  clip-path caution in Tomb's note below.
 
-Other genres (Amazonian, post-apocalyptic) are listed on the shelf as
-"Coming Soon" placeholders.
+Other genres (post-apocalyptic) are listed on the shelf as "Coming
+Soon" placeholders.
 
 ## Architecture: shared engine, per-story folders
 
@@ -110,7 +117,25 @@ but referenced by the shared `engine.js`:
    default; `"embers"` gives a torchlit-dungeon look) — add a new
    `start<Name>(canvas)` function to the shared `sprites.js` for other
    settings and wire it into the `if (META.backdrop === ...)` chain in
-   `engine.js`'s `boot()`.
+   `engine.js`'s `boot()` — **and add the wire-up before testing**, not
+   after; Tomb's `xenoscan`-style backdrop shipped once with this step
+   skipped and silently fell back to the default starfield in the actual
+   game (the home page preview used a separate script, so it looked
+   right there and only there).
+
+   **Corner-shape caution:** if a story's box language uses angled
+   corners (a chamfer, a taper, a pylon trapezoid), use `border-radius`
+   with pixel values, not `clip-path: polygon(...)` with percentage
+   points. A percentage-based polygon's taper scales with the *box's own
+   height* — on a short button that's an invisible rounding, but on a
+   tall multi-section panel (the map or character sidebar) the "corner"
+   zone stretches for 50-100+ px and silently clips real content: this
+   is exactly what happened to Tomb's panel titles and stat rows the
+   first time. `border-radius` with fixed pixel values only ever rounds
+   a small, bounded area per corner regardless of element height, so the
+   whole bug class is structurally impossible with it — see Green
+   Silence's `theme.css` for the safe pattern, or Tomb's `theme.css` for
+   the fixed (now all-pixel) version of the original mistake.
 5. Run `node validate.js <story-name>` from the repo root.
 
 ## Checking your work
