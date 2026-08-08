@@ -1,0 +1,251 @@
+:root {
+  --bg: #0a0a0f;
+  --card: #12121a;
+  --border: #23232f;
+  --text: #e8e8ec;
+  --muted: #8a8a96;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 920px;
+}
+
+.head {
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.head h1 {
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(0, 0, 0, 0.6);
+}
+
+/* --- art banner (the illustrated part) --- */
+
+.art {
+  position: relative;
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.art-title {
+  position: relative;
+  z-index: 2;
+  font-size: 19px;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.deco {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 1;
+}
+
+.chip {
+  position: absolute;
+  z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 5px;
+  padding: 3px 7px;
+}
+
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(11, 18, 48, 0) 0%, #0b1230 100%);
+  z-index: 1;
+}
+
+/* --- theme: broetry generator --- */
+
+.tile[data-theme="broetry"] .art {
+  background: linear-gradient(160deg, #f7edda 0%, #ecd9ab 100%);
+  border-bottom: 3px solid #e0c689;
+}
+.tile[data-theme="broetry"] .art-title {
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  color: #b5391f;
+}
+.tile[data-theme="broetry"] .tag,
+.tile[data-theme="broetry"] .go { color: #d98a1f; }
+.tile[data-theme="broetry"]:hover { border-color: #d98a1f; }
+
+/* --- theme: thought leadership mad-libs --- */
+
+.tile[data-theme="madlibs"] .art {
+  background: linear-gradient(135deg, #8a6bff 0%, #ff5c8a 65%, #ffa24d 100%);
+}
+.tile[data-theme="madlibs"] .art-title {
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+}
+.tile[data-theme="madlibs"] .tag,
+.tile[data-theme="madlibs"] .go { color: #b18aff; }
+.tile[data-theme="madlibs"]:hover { border-color: #8a6bff; }
+
+/* --- theme: the archive --- */
+
+.tile[data-theme="archive"] .art {
+  background: radial-gradient(ellipse at 75% 15%, #12321f 0%, #05070d 55%);
+  border-bottom: 3px solid #1d3a24;
+}
+.tile[data-theme="archive"] .art-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #cdeecd;
+}
+.tile[data-theme="archive"] .tag,
+.tile[data-theme="archive"] .go { color: #7de07d; }
+.tile[data-theme="archive"]:hover { border-color: #7de07d; }
+
+/* --- theme: launchpad-13 --- */
+
+.tile[data-theme="launchpad"] .art {
+  background: linear-gradient(180deg, #0b1230 0%, #3a5a8c 60%, #e8935a 100%);
+}
+.tile[data-theme="launchpad"] .art-title {
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.22);
+}
+.tile[data-theme="launchpad"] .tag,
+.tile[data-theme="launchpad"] .go { color: #4da6ff; }
+.tile[data-theme="launchpad"]:hover { border-color: #4da6ff; }
+
+.tile:hover .rocket {
+  transform: translateY(-4px);
+}
+.rocket {
+  transition: transform 0.25s ease;
+}
+
+/* --- meta (text area below the art) --- */
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+}
+
+.tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.meta p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.go {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.tile:hover .go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.foot {
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .head h1 {
+    font-size: 34px;
+  }
+}
