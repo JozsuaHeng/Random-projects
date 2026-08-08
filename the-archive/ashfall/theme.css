@@ -1,0 +1,224 @@
+/* ASHFALL — post-apocalyptic scavenger theme override.
+   Loaded after the shared ../style.css. A sixth distinct box language:
+   sharp tech rectangles (Dead Signal), chamfered plate (Last Warden),
+   organic bio-pods (First Contact), monumental trapezoids (Tomb),
+   leaf-shapes (Green Silence) — this game is jagged, irregular,
+   torn-sheet-metal corners, like salvaged plating rather than anything
+   built new.
+
+   Corner cuts use clip-path with FIXED PIXEL points only, asymmetric
+   per corner for an irregular "torn" look — never percentage points.
+   A percentage-based polygon's taper scales with the box's own height,
+   which is what silently clipped Tomb's panel titles and stat rows the
+   first time that theme shipped. Fixed pixels stay small and bounded
+   per corner no matter how tall the box is, so that bug class is
+   structurally impossible here. See the CLAUDE.md note on this. */
+
+:root {
+  --bg: #0c0b09;
+  --panel: #17140f;
+  --panel-edge: #6a5238;
+  --ink: #d4cfc4;
+  --dim: #7a7468;
+  --phosphor: #5fc8b8;
+  --amber: #e2823c;
+  --alert: #c4402a;
+  --paper: #d8d0bc;
+  --paper-ink: #201c14;
+  --font-pixel: "Bebas Neue", sans-serif;
+  --font-body: "Special Elite", monospace;
+}
+
+body {
+  background: radial-gradient(ellipse at 70% 10%, rgba(226,130,60,0.08), transparent 55%), var(--bg);
+}
+
+#game-title, .panel-title, .ui-btn, #btn-library, #char-name, #char-role,
+.stat-label, .eq-label, #book-pagenum, .choice .turnto, .dice-label,
+#page-indicator, #location-line {
+  letter-spacing: 1.4px;
+}
+
+/* ---------- scanlines -> settling ash haze ---------- */
+#crt-overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(160,158,150,0.05), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(226,130,60,0.04), transparent 60%);
+  mix-blend-mode: screen;
+}
+#crt-overlay::after {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(8,7,6,0.65) 100%);
+}
+
+/* ---------- title bar: a torn warning plate ---------- */
+#titlebar {
+  background: linear-gradient(180deg, #201a12, #120e0a);
+  border: none;
+  border-bottom: 3px solid var(--panel-edge);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 16px) 100%, 20px 100%, 0 calc(100% - 10px));
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+#game-title {
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--amber);
+  text-shadow: 0 0 10px rgba(226,130,60,0.5);
+}
+#game-title::before { content: "▲ "; color: var(--dim); }
+#game-title::after { content: " ▲"; color: var(--dim); }
+.ui-btn, #btn-library {
+  font-size: 12px;
+  padding: 8px 15px;
+  background: linear-gradient(180deg, #241d14, #14100a);
+  border: 1px solid var(--panel-edge);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 6px) 100%, 0 100%, 0 5px);
+}
+.ui-btn:hover, #btn-library:hover {
+  border-color: var(--phosphor);
+  color: var(--phosphor);
+  box-shadow: 0 0 10px rgba(95,200,184,0.3);
+}
+
+/* ---------- panels: salvaged, jagged plate ---------- */
+.panel {
+  background:
+    repeating-linear-gradient(100deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 9px),
+    linear-gradient(160deg, #1c170f, #100d09);
+  border: 1px solid var(--panel-edge);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 20px) 100%, 0 100%);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+}
+.panel-title {
+  font-size: 13px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 2px solid var(--panel-edge);
+  color: var(--dim);
+}
+.panel-title.small { border-top: 2px solid var(--panel-edge); }
+
+/* ---------- the storybook page: a salvaged field notebook ---------- */
+#book {
+  background: linear-gradient(160deg, #16130d, #0d0a07);
+  border: 2px solid #362b1c;
+}
+#book-page {
+  background:
+    radial-gradient(ellipse at 12% 10%, rgba(160,158,150,0.14), transparent 45%),
+    radial-gradient(ellipse at 88% 90%, rgba(226,130,60,0.08), transparent 50%),
+    var(--paper);
+  box-shadow: inset 0 0 60px rgba(80, 70, 50, 0.22), 0 0 0 1px #a89c80;
+  clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+#book-text::first-letter {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.6em;
+  color: var(--alert);
+}
+#book-pagenum { font-family: "Bebas Neue", sans-serif; color: #6a624e; }
+#book-choices { border-top: 2px dashed #a89c80; }
+.choice { font-family: "Special Elite", monospace; }
+.choice .arrow { color: var(--alert); }
+.choice .turnto { font-family: "Bebas Neue", sans-serif; color: #6a624e; }
+.effect-tag { border-color: #6a624e; color: #4a4436; background: rgba(106,98,78,0.12); }
+.effect-tag.gain { border-color: #3a6a5c; color: #244c40; background: rgba(58,106,92,0.12); }
+.effect-tag.loss { border-color: var(--alert); color: #8c2c1c; background: rgba(196,64,42,0.12); }
+.endcap { font-family: "Bebas Neue", sans-serif; color: var(--alert); }
+
+/* dice: scavenged bolts */
+.die {
+  font-family: "Bebas Neue", sans-serif;
+  background: #d8d0bc;
+  color: #201c14;
+  border: 2px solid #201c14;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+  box-shadow: 3px 3px 0 #201c14;
+}
+.dice-label { font-family: "Bebas Neue", sans-serif; color: #4a4436; }
+#dice-result.pass { color: #244c40; }
+#dice-result.fail { color: #8c2c1c; }
+
+/* ---------- map: ash-drift routes, not a HUD grid ---------- */
+#map-content .panel-title { background: rgba(14,12,9,0.8); }
+.map-room {
+  border: 1px solid #4a3e28;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 6px) 100%, 0 100%);
+  background: rgba(16,14,10,0.6);
+  color: #4a4230;
+  font-family: "Special Elite", monospace;
+  font-size: 7px;
+}
+.map-room.visited { color: var(--dim); border-color: #6a5c3e; background: rgba(32,28,18,0.7); }
+.map-room.current {
+  color: var(--phosphor);
+  border-color: var(--phosphor);
+  background: rgba(95,200,184,0.14);
+  text-shadow: 0 0 6px rgba(95,200,184,0.7);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(95,200,184, 0.0); }
+  50% { box-shadow: 0 0 10px rgba(95,200,184, 0.5); }
+}
+#location-line { background: rgba(14,12,9,0.8); }
+#location-name { color: var(--phosphor); }
+
+/* ---------- character panel: salvage, canvas, filter cloth ---------- */
+#portrait {
+  background: #100d09;
+  border-color: var(--panel-edge);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 10px) 100%, 0 100%);
+}
+.stat-label.o2 { color: #8ac8b8; }
+.stat-label.sn { color: var(--phosphor); }
+.stat-block {
+  border-color: #4a3e28;
+  background: #100d09;
+}
+.stat-block.o2.on { background: #8ac8b8; box-shadow: 0 0 4px rgba(138,200,184,0.6); }
+.stat-block.sn.on { background: var(--phosphor); box-shadow: 0 0 4px rgba(95,200,184,0.6); }
+
+#equip-row {
+  background: radial-gradient(ellipse at 50% 30%, rgba(226,130,60,0.05), transparent 65%);
+  padding: 14px 10px;
+}
+#paperdoll {
+  background: radial-gradient(ellipse at 50% 20%, rgba(160,158,150,0.10), #100d09 70%);
+  border: 1px solid var(--panel-edge);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 18px) 100%, 0 100%);
+}
+.eq-slot {
+  border-color: #4a3e28;
+  background: radial-gradient(circle at 35% 25%, #241d14, #100d09 70%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 6px) 100%, 0 100%);
+}
+.eq-slot.filled { border-color: var(--phosphor); box-shadow: 0 0 6px rgba(95,200,184,0.35); }
+
+.slot {
+  border-color: #4a3e28;
+  background: radial-gradient(circle at 35% 25%, #241d14, #100d09 70%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 6px) 100%, 0 100%);
+}
+.slot.filled:hover { border-color: var(--amber); }
+.slot.selected { border-color: var(--phosphor); box-shadow: 0 0 8px rgba(95,200,184,0.4); }
+.slot .usable-dot { color: var(--phosphor); }
+
+#item-info { font-family: "Special Elite", monospace; }
+#item-info b { color: var(--phosphor); }
+
+.toast {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 12px;
+  background: linear-gradient(180deg, #241d14, #14100a);
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+
+/* ---------- help overlay ---------- */
+#help-box {
+  background: linear-gradient(160deg, #1c170f, #100d09);
+  border: 1px solid var(--phosphor);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 24px) 100%, 0 100%);
+}
+#help-box .panel-title { font-size: 15px; }
+#help-box p { font-family: "Special Elite", monospace; font-size: 18px; }
+#help-box b { color: var(--phosphor); }

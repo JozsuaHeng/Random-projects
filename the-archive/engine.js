@@ -431,6 +431,7 @@ function boot() {
   else if (META.backdrop === "xenoscan") startXenoscan(backdropCanvas);
   else if (META.backdrop === "dunedrift") startDuneDrift(backdropCanvas);
   else if (META.backdrop === "canopydrift") startCanopyDrift(backdropCanvas);
+  else if (META.backdrop === "ashfalldrift") startAshfallDrift(backdropCanvas);
   else startStarfield(backdropCanvas);
 
   document.getElementById("char-name").textContent = META.player.name.toUpperCase();

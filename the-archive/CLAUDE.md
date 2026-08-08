@@ -10,8 +10,8 @@ build step, no dependencies.
 `home.html` is the library entry point — a shelf of story cards. Each
 cover is a painted pixel scene (procedural canvas art, not an icon or
 photo) with the title as a poster-style caption, and for playable
-stories a live `META.backdrop` preview layered in. Five playable
-stories so far:
+stories a live `META.backdrop` preview layered in. All six of the
+original shelf's stories are playable now:
 - **DEAD SIGNAL** (`game.html`, repo root) — you wake from cryosleep aboard
   the derelict salvage ship ISV Vesper. Sci-fi mystery/horror. 93 pages,
   Acts One & Two, 6 endings.
@@ -36,10 +36,20 @@ stories so far:
   ecological stakes (an outside mining consortium threatens its border).
   100 pages, Acts One & Two, 6 endings. Uses `border-radius` for its
   leaf-shaped panels rather than `clip-path`, deliberately — see the
-  clip-path caution in Tomb's note below.
+  clip-path caution below.
+- **ASHFALL** (`ashfall/game.html`) — a salvage courier follows a
+  missing supply convoy into the Deep Ash, three years into a quiet,
+  slow-motion apocalypse (no war, no zombies — a persistent ashfall and
+  a world that grew calmer and calmer until people started walking into
+  the drift and not coming back). 97 pages, Acts One & Two, 6 endings.
+  Its jagged "torn sheet metal" panel corners use `clip-path` safely —
+  fixed pixel points only, asymmetric per corner — see the caution
+  below for why that distinction matters.
 
-Other genres (post-apocalyptic) are listed on the shelf as "Coming
-Soon" placeholders.
+No placeholder cards left on the shelf — all six original genres are
+playable. The next new story should get its own new placeholder first
+(see "Adding a new story" below) rather than assuming there's always
+one waiting to be filled in.
 
 ## Architecture: shared engine, per-story folders
 
@@ -124,18 +134,22 @@ but referenced by the shared `engine.js`:
    right there and only there).
 
    **Corner-shape caution:** if a story's box language uses angled
-   corners (a chamfer, a taper, a pylon trapezoid), use `border-radius`
-   with pixel values, not `clip-path: polygon(...)` with percentage
-   points. A percentage-based polygon's taper scales with the *box's own
-   height* — on a short button that's an invisible rounding, but on a
-   tall multi-section panel (the map or character sidebar) the "corner"
-   zone stretches for 50-100+ px and silently clips real content: this
-   is exactly what happened to Tomb's panel titles and stat rows the
-   first time. `border-radius` with fixed pixel values only ever rounds
-   a small, bounded area per corner regardless of element height, so the
-   whole bug class is structurally impossible with it — see Green
-   Silence's `theme.css` for the safe pattern, or Tomb's `theme.css` for
-   the fixed (now all-pixel) version of the original mistake.
+   corners (a chamfer, a taper, a pylon trapezoid, a jagged/torn edge),
+   the rule is about *units*, not about choosing `border-radius` over
+   `clip-path` — either is fine as long as every point is a fixed pixel
+   value, never a percentage. A percentage-based `clip-path: polygon(...)`
+   taper scales with the *box's own height* — on a short button that's
+   an invisible rounding, but on a tall multi-section panel (the map or
+   character sidebar) the "corner" zone stretches for 50-100+ px and
+   silently clips real content: this is exactly what happened to Tomb's
+   panel titles and stat rows the first time. Fixed pixels (in either
+   property) only ever affect a small, bounded area per corner
+   regardless of element height, so the whole bug class is structurally
+   impossible. See Green Silence's `theme.css` for the `border-radius`
+   version of the safe pattern, Tomb's for the fixed (now all-pixel)
+   version of the original mistake, and Ashfall's for `clip-path` used
+   safely — asymmetric per-corner pixel points for a jagged "torn
+   metal" look, still with zero risk of the height-scaling bug.
 5. Run `node validate.js <story-name>` from the repo root.
 
 ## Checking your work

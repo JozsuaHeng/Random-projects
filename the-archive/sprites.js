@@ -22,6 +22,7 @@ const PALETTE = {
   n: "#4fe8d0", // bioluminescent cyan
   e: "#d4a15c", // sandstone tan
   j: "#1a5c3a", // deep jungle green
+  c: "#8a8a82", // ash grey
 };
 
 const SPRITES = {
@@ -1460,6 +1461,260 @@ const SPRITES = {
     "............",
     "............",
   ],
+
+  // --- Ashfall items ---
+  pryrod: [
+    "..........kk",
+    ".........kdk",
+    "........kdk.",
+    ".......kdk..",
+    "......kdk...",
+    ".....kdk....",
+    "....kdk.....",
+    "...kddk.....",
+    "..kdk.......",
+    "............",
+    "............",
+    "............",
+  ],
+  handlamp: [
+    "............",
+    "..kkk.......",
+    ".kyyyk......",
+    ".kyyykkkkkk.",
+    ".kyyydccccd.",
+    ".kyyydccccd.",
+    ".kyyykkkkkk.",
+    ".kyyyk......",
+    "..kkk.......",
+    "............",
+    "............",
+    "............",
+  ],
+  shivblade: [
+    ".......kk...",
+    "......kssk..",
+    ".....kssk...",
+    "....kssk....",
+    "...kssk.....",
+    "..kkkk......",
+    ".kmmk.......",
+    ".kmmk.......",
+    "..kk........",
+    "............",
+    "............",
+    "............",
+  ],
+  medsupply: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kccccccccm.",
+    ".kccrrccccm.",
+    ".kccrrccccm.",
+    ".kcrrrrccccm",
+    ".kccrrccccm.",
+    ".kccccccccm.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+  ],
+  stimpack: [
+    "............",
+    "..k.........",
+    "..kk........",
+    "..kkkkkkkk..",
+    "..kooooootk.",
+    "..kooooottk.",
+    "..kooooootk.",
+    "..kkkkkkkk..",
+    "..kk........",
+    "............",
+    "............",
+    "............",
+  ],
+  waterration: [
+    "............",
+    "....kkk.....",
+    "...ksssk....",
+    "..kbbbbbk...",
+    ".kbbbbbbbk..",
+    ".kbbbbbbbk..",
+    ".kbbbbbbbk..",
+    "..kbbbbbk...",
+    "...kkkkk....",
+    "............",
+    "............",
+    "............",
+  ],
+  painkillers: [
+    "............",
+    "...kkkkkk...",
+    "..kwwwwwwk..",
+    "..kwtttwwk..",
+    "..kwtttwwk..",
+    "..kwwwwwwk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  luckycoin: [
+    "............",
+    "....kkkk....",
+    "...kyyyyk...",
+    "..kyywyyyk..",
+    "..kyywyyyk..",
+    "..kyywyyyk..",
+    "...kyyyyk...",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  ashmask: [
+    "...kkkkkkk..",
+    "..kddddddddk",
+    ".kdssssssssdk",
+    ".kdsttttssdk.",
+    ".kdsttttssdk.",
+    ".kdssssssssdk",
+    "..kdddkdddk.",
+    "...kkk.kkk..",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  duncoat: [
+    "....kkkk....",
+    "...kccccck..",
+    "..kccccccck.",
+    ".kccrccrcck.",
+    ".kccccccccck",
+    ".kccccccccck",
+    "..kccccccck.",
+    "...kc..cck..",
+    "...kc..cck..",
+    "............",
+    "............",
+    "............",
+  ],
+  scavgloves: [
+    "............",
+    "...k....k...",
+    "..kdk..kdk..",
+    "..kdk..kdk..",
+    ".kdddk.kdddk",
+    ".kdddkkdddk.",
+    ".kddddddddk.",
+    "..kddddddk..",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+  ],
+  treadboots: [
+    "............",
+    "...kk..kk...",
+    "..kdk..kdk..",
+    "..kdk..kdk..",
+    "..kdk..kdk..",
+    ".kdddkkdddk.",
+    ".kdddkkdddk.",
+    "kddddkkddddk",
+    "kddddkkddddk",
+    "............",
+    "............",
+    "............",
+  ],
+  filterpack: [
+    "....kkkk....",
+    "...kccccck..",
+    "...kctttck..",
+    "...kctttck..",
+    "...kctttck..",
+    "...kccccck..",
+    "....kkkk....",
+    "....k..k....",
+    "....k..k....",
+    "............",
+    "............",
+    "............",
+  ],
+  convoymanifest: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kccccccccm.",
+    ".kcwwwwwwcm.",
+    ".kcwdwdwwcm.",
+    ".kcwwwwwwcm.",
+    ".kcwdwdwwcm.",
+    ".kccccccccm.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+  ],
+  hushsample: [
+    "............",
+    "....kkkk....",
+    "....kssk....",
+    "...kkkkkk...",
+    "...kcccck...",
+    "...kcccck...",
+    "...kcccck...",
+    "...kkkkkk...",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  greyheart: [
+    "............",
+    ".....kk.....",
+    "....kccck...",
+    "...kccccck..",
+    "..kccctcccm.",
+    "...kccccck..",
+    "....kccck...",
+    ".....kk.....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
+  settlementledger: [
+    "............",
+    ".kkkkkkkkkk.",
+    ".kmmmmmmmmk.",
+    ".kmwwwwwwmk.",
+    ".kmwdydywmk.",
+    ".kmwwwwwwmk.",
+    ".kmwdydywmk.",
+    ".kmmmmmmmmk.",
+    ".kkkkkkkkkk.",
+    "............",
+    "............",
+    "............",
+  ],
+  warmstone: [
+    "............",
+    "....kkkk....",
+    "...koooook..",
+    "..koyyyyook.",
+    "..koyyyyook.",
+    "..koyyyyook.",
+    "...koooook..",
+    "....kkkk....",
+    "............",
+    "............",
+    "............",
+    "............",
+  ],
 };
 
 function drawSprite(canvas, sprite, scale) {
@@ -1857,6 +2112,65 @@ function startCanopyDrift(canvas) {
       ctx.beginPath();
       ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2);
       ctx.fill();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- Ashfall (top-right panel backdrop: a ruined skyline under endless
+// grey ash, one distant ember glow that never quite goes out) ---
+function startAshfallDrift(canvas) {
+  const ctx = canvas.getContext("2d");
+  let flakes = [];
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    flakes = [];
+    const n = Math.floor((canvas.width * canvas.height) / 900);
+    for (let i = 0; i < n; i++) {
+      flakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() < 0.75 ? 1 : 2,
+        vy: 0.06 + Math.random() * 0.1,
+        vx: (Math.random() - 0.5) * 0.03,
+        tw: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const skyline = [[0, 0.6, 0.1], [0.09, 0.48, 0.09], [0.2, 0.65, 0.13], [0.35, 0.52, 0.08],
+                   [0.45, 0.68, 0.15], [0.62, 0.55, 0.1], [0.74, 0.62, 0.12], [0.88, 0.5, 0.09]];
+
+  function frame(t) {
+    const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    sky.addColorStop(0, "#151412"); sky.addColorStop(1, "#0a0908");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // one distant ember, low and slow
+    const emberX = canvas.width * 0.72, emberY = canvas.height * 0.6;
+    const glow = 0.4 + 0.2 * Math.sin(t / 1400);
+    const g = ctx.createRadialGradient(emberX, emberY, 0, emberX, emberY, canvas.width * 0.22);
+    g.addColorStop(0, `rgba(226,130,60,${0.30 * glow})`);
+    g.addColorStop(1, "rgba(226,130,60,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // ruined skyline silhouette
+    ctx.fillStyle = "#141210";
+    for (const [bx, by, bw] of skyline) {
+      ctx.fillRect(canvas.width * bx, canvas.height * by, canvas.width * bw, canvas.height);
+    }
+
+    for (const fl of flakes) {
+      fl.y += fl.vy; fl.x += fl.vx;
+      if (fl.y > canvas.height) { fl.y = 0; fl.x = Math.random() * canvas.width; }
+      const a = 0.3 + 0.4 * Math.sin(t / 800 + fl.tw);
+      ctx.fillStyle = `rgba(160,158,150,${0.3 + 0.4 * a})`;
+      ctx.fillRect(Math.round(fl.x), Math.round(fl.y), fl.s, fl.s);
     }
 
     requestAnimationFrame(frame);
