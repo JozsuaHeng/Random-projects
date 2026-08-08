@@ -1,4 +1,4 @@
-- **[The Quagmire](https://jozsuaheng.github.io/Random-projects/)** — A neal.fun-style hub page linking out to everything below.
+- **[The Quagmire](https://jozsuaheng.github.io/Random-projects/)** — A hub page linking out to everything below.
 - **[Broetry Generator](https://jozsuaheng.github.io/Random-projects/broetry-generator/)** — Slider-controlled generator for cringe LinkedIn "broetry" posts (insufferability, emoji density, humble-brag intensity, and more).
 - **[Thought Leadership Mad-Libs Engine](https://jozsuaheng.github.io/Random-projects/thought-leadership-madlibs/)** — A literal mad-libs engine that guarantees zero information content, one buzzword-filled blank at a time.
 - **[The Archive](https://jozsuaheng.github.io/Random-projects/the-archive/home.html)** — A "choose your own adventure" gamebook library, each story its own theme on a shared engine: *Dead Signal* (derelict ship, sci-fi), *The Last Warden* (cursed keep, medieval), *First Contact Protocol* (lunar listening array, first contact), *Tomb of the Unbroken Seal* (Egyptian mythology). Four stories so far. More coming soon.
