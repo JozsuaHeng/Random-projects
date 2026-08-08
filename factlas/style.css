@@ -1,0 +1,495 @@
+:root {
+  --bg: #0a0d13;
+  --land: #182130;
+  --land-stroke: #232f42;
+  --explored: #6a5636;
+  --explored-glow: rgba(232, 182, 76, 0.16);
+  --active: #e8b64c;
+  --active-glow: rgba(232, 182, 76, 0.55);
+  --ink: #eef1f6;
+  --muted: #8892a2;
+  --panel: rgba(14, 18, 26, 0.78);
+  --panel-border: rgba(232, 182, 76, 0.18);
+  --btn-ink: #221704;
+  --shadow: rgba(0, 0, 0, 0.45);
+}
+
+/* Light theme: applied automatically when the OS prefers light (unless the
+   toggle has explicitly forced dark), or explicitly via [data-theme="light"]
+   set by the toggle button in app.js (and remembered in localStorage). */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f3ead8;
+    --land: #ddcda3;
+    --land-stroke: #b7a172;
+    --explored: #c39a4e;
+    --explored-glow: rgba(178, 111, 18, 0.14);
+    --active: #b3711a;
+    --active-glow: rgba(179, 113, 26, 0.45);
+    --ink: #2a2013;
+    --muted: #7a6b4e;
+    --panel: rgba(250, 244, 231, 0.86);
+    --panel-border: rgba(179, 113, 26, 0.25);
+    --btn-ink: #fff7e8;
+    --shadow: rgba(87, 65, 23, 0.25);
+  }
+}
+
+:root[data-theme="light"] {
+  --bg: #f3ead8;
+  --land: #ddcda3;
+  --land-stroke: #b7a172;
+  --explored: #c39a4e;
+  --explored-glow: rgba(178, 111, 18, 0.14);
+  --active: #b3711a;
+  --active-glow: rgba(179, 113, 26, 0.45);
+  --ink: #2a2013;
+  --muted: #7a6b4e;
+  --panel: rgba(250, 244, 231, 0.86);
+  --panel-border: rgba(179, 113, 26, 0.25);
+  --btn-ink: #fff7e8;
+  --shadow: rgba(87, 65, 23, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  position: relative;
+  transition: background 400ms ease, color 400ms ease;
+}
+
+/* --- Map backdrop --- */
+
+.map-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 3vw;
+  transition: padding 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* When the fact panel is open, the map's own box shrinks to make room for
+   the dock rather than the panel ever sitting on top of the map. */
+body.panel-open .map-wrap {
+  padding-right: calc(min(400px, 36vw) + 4vw);
+}
+
+#world-map {
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+}
+
+#world-map path,
+#world-map g {
+  fill: var(--land);
+  stroke: var(--land-stroke);
+  stroke-width: 0.6;
+  transition: fill 900ms ease, stroke 400ms ease;
+}
+
+#world-map .explored {
+  fill: var(--explored);
+}
+
+#world-map .active {
+  fill: var(--active);
+  filter: drop-shadow(0 0 6px var(--active-glow));
+  animation: pulse-country 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse-country {
+  0%, 100% { filter: drop-shadow(0 0 4px var(--active-glow)); }
+  50% { filter: drop-shadow(0 0 12px var(--active-glow)); }
+}
+
+/* --- City pins --- */
+
+.pin-halo,
+.pin-dot {
+  fill: var(--land-stroke);
+  opacity: 0;
+  transition: fill 900ms ease, opacity 400ms ease;
+}
+
+.pin.explored .pin-dot {
+  fill: var(--explored);
+  opacity: 0.9;
+}
+
+.pin.active .pin-halo {
+  fill: var(--active);
+  opacity: 0.22;
+  animation: pulse-pin 2.2s ease-in-out infinite;
+}
+
+.pin.active .pin-dot {
+  fill: var(--active);
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--active-glow));
+}
+
+@keyframes pulse-pin {
+  0%, 100% { r: 4.2; opacity: 0.22; }
+  50% { r: 6.5; opacity: 0.08; }
+}
+
+.map-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, var(--bg) 100%);
+}
+
+/* --- Intro line --- */
+
+.intro {
+  position: absolute;
+  left: 50%;
+  bottom: 17vh;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.intro.hidden {
+  opacity: 0;
+}
+
+/* --- Fact panel: a right-side dock, not an overlay on the map --- */
+
+.fact-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(400px, 36vw);
+  overflow-y: auto;
+  background: var(--panel);
+  border-left: 1px solid var(--panel-border);
+  border-radius: 0;
+  padding: 3.4rem 1.8rem 2rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(100%);
+  transition: opacity 480ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1), background 400ms ease, border-color 400ms ease;
+  box-shadow: -30px 0 60px var(--shadow);
+}
+
+.fact-panel.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.fact-image {
+  position: relative;
+  width: calc(100% + 3.6rem);
+  margin: -3.4rem -1.8rem 1rem;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 400ms ease, height 400ms ease;
+}
+
+.fact-image.visible {
+  height: 180px;
+  opacity: 1;
+}
+
+.fact-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.fact-image-credit {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.5rem;
+  font-size: 0.62rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.fact-image.visible .fact-image-credit {
+  opacity: 0.85;
+  pointer-events: auto;
+}
+
+.fact-image.visible .fact-image-credit:hover {
+  opacity: 1;
+}
+
+.fact-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.fact-category {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--active);
+  font-weight: 600;
+}
+
+.fact-place {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.fact-place::before {
+  content: '· ';
+}
+
+.fact-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 0.7rem;
+  color: var(--ink);
+}
+
+.fact-body {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+.fact-body p {
+  margin: 0 0 0.85rem;
+}
+
+.fact-body p:last-child {
+  margin-bottom: 0;
+}
+
+.wiki-term {
+  color: var(--active);
+  text-decoration: none;
+  font-weight: 600;
+  background-image: linear-gradient(transparent 65%, var(--active-glow) 65%);
+  border-bottom: 1px dotted var(--active);
+  transition: border-bottom-style 150ms ease;
+}
+
+.wiki-term:hover {
+  border-bottom-style: solid;
+}
+
+.fact-wiki {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: var(--active);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid transparent;
+  transition: border-color 150ms ease;
+}
+
+.fact-wiki:hover {
+  border-bottom-color: var(--active);
+}
+
+/* --- Reveal button --- */
+
+.reveal-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 7vh;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #f2c869, var(--active));
+  color: var(--btn-ink);
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 2.2rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(232, 182, 76, 0.28);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 400ms ease, color 400ms ease;
+}
+
+.reveal-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 12px 36px rgba(232, 182, 76, 0.4);
+}
+
+.reveal-btn:active {
+  transform: translateX(-50%) translateY(0);
+}
+
+.reveal-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* --- Counter --- */
+
+.counter {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2vh;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+  opacity: 0;
+  transition: opacity 500ms ease;
+  white-space: nowrap;
+}
+
+.counter.visible {
+  opacity: 1;
+}
+
+/* --- Brand mark --- */
+
+.brand {
+  position: absolute;
+  top: 3vh;
+  left: 3vw;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  opacity: 0.92;
+}
+
+.attribution {
+  position: absolute;
+  bottom: 1.2vh;
+  left: 1.4vw;
+  font-size: 0.62rem;
+  color: var(--muted);
+  opacity: 0.4;
+}
+
+.attribution a {
+  color: inherit;
+}
+
+/* --- Theme toggle --- */
+
+.theme-toggle {
+  position: absolute;
+  top: 3vh;
+  right: 3vw;
+  z-index: 2;
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  transition: border-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.theme-toggle:hover {
+  color: var(--active);
+  border-color: var(--active);
+  transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+:root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="dark"]) .theme-toggle .icon-moon { display: none; }
+}
+
+@media (max-width: 780px) {
+  body.panel-open .map-wrap {
+    padding-right: 3vw;
+    padding-bottom: 52vh;
+  }
+  .fact-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    max-height: 58vh;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--panel-border);
+    border-radius: 18px 18px 0 0;
+    padding: 1.4rem 1.4rem 1.6rem;
+    transform: translateY(100%);
+    box-shadow: 0 -20px 50px var(--shadow);
+  }
+  .fact-image {
+    width: calc(100% + 2.8rem);
+    margin: -1.4rem -1.4rem 1rem;
+  }
+  .fact-panel.visible {
+    transform: translateY(0);
+  }
+  .fact-title {
+    font-size: 1.2rem;
+  }
+  .intro {
+    bottom: 15vh;
+    font-size: 0.78rem;
+  }
+  .reveal-btn {
+    bottom: 6vh;
+    padding: 0.85rem 1.8rem;
+  }
+  .counter {
+    bottom: 2.4vh;
+  }
+  .theme-toggle {
+    top: 2.2vh;
+    right: 4vw;
+  }
+}

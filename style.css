@@ -193,6 +193,22 @@ body {
 .tile[data-theme="launchpad"] .go { color: #4da6ff; }
 .tile[data-theme="launchpad"]:hover { border-color: #4da6ff; }
 
+/* --- theme: factlas --- */
+
+.tile[data-theme="factlas"] .art {
+  background: radial-gradient(ellipse at 50% 30%, #1c2436 0%, #0a0d13 70%);
+  border-bottom: 3px solid #e8b64c;
+}
+.tile[data-theme="factlas"] .art-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  color: #f2c869;
+  letter-spacing: 0.02em;
+}
+.tile[data-theme="factlas"] .tag,
+.tile[data-theme="factlas"] .go { color: #e8b64c; }
+.tile[data-theme="factlas"]:hover { border-color: #e8b64c; }
+
 .tile:hover .rocket {
   transform: translateY(-4px);
 }
