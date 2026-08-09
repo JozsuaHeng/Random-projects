@@ -1583,5 +1583,925 @@ const FACTS = [
     ],
     wiki: 'https://en.wikipedia.org/wiki/Guinness_World_Records',
     wikiTerm: 'Guinness World Records'
+  },
+  {
+    id: 'kopi-luwak-coffee',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Kopi_luwak_090910-0075_lamb.JPG', width: 500, height: 442, credit: 'Wibowo Djatmiko (Wie146)', creditUrl: 'https://en.wikipedia.org/wiki/File:Kopi_luwak_090910-0075_lamb.JPG' },
+    category: 'Food',
+    title: 'Coffee Made by Passing Through an Animal',
+    place: 'Indonesia',
+    countries: ["id"],
+    paragraphs: [
+      "Kopi luwak, among the most expensive coffees in the world, is made from coffee cherries that have been eaten, partially digested, and excreted by the Asian palm civet, a small nocturnal mammal native to Indonesia. Traditionally, farmers collected the beans from wild civet droppings; producers claim enzymes in the animal's digestive tract break down proteins in the beans in a way that changes, and supposedly smooths, the coffee's flavor.",
+      "Demand has since pushed much of the industry toward caged civets force-fed cherries rather than wild collection, which multiple animal welfare investigations have documented as involving cramped, stressful conditions — a shift that's drawn substantial criticism and led some retailers to drop the product entirely. Genuine wild-sourced kopi luwak remains hard to verify at the point of sale, since there's no reliable way to tell caged from wild origin just by tasting the coffee."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Kopi_luwak',
+    wikiTerm: 'Kopi luwak'
+  },
+  {
+    id: 'casu-marzu-cheese',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Casu_Marzu_cheese.jpg/500px-Casu_Marzu_cheese.jpg', width: 480, height: 360, credit: 'Shardan', creditUrl: 'https://en.wikipedia.org/wiki/File:Casu_Marzu_cheese.jpg' },
+    category: 'Food',
+    title: 'A Cheese That Is Technically Illegal, and Alive',
+    place: 'Sardinia, Italy',
+    countries: ["it"],
+    paragraphs: [
+      "Casu marzu is a traditional Sardinian sheep's-milk cheese deliberately left exposed to cheese flies, whose larvae burrow through it, breaking down its fats and giving it an extremely soft, almost liquid texture; it's typically eaten with the live larvae still inside, which can leap several centimetres if disturbed.",
+      "Because it violates EU food hygiene regulations, its sale has technically been illegal for years, though small-scale trading and home production have continued regardless, treated locally as a folk tradition rather than a food-safety violation. Sardinian producers have periodically pushed for a protected traditional-food exemption, similar to ones granted to other unpasteurized regional foods elsewhere in Europe, so far without full success."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Casu_martzu',
+    wikiTerm: 'Casu marzu'
+  },
+  {
+    id: 'piraha-language-brazil',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Amazon17_%285641020319%29.jpg/500px-Amazon17_%285641020319%29.jpg', width: 480, height: 319, credit: 'CIAT', creditUrl: 'https://en.wikipedia.org/wiki/File:Amazon17_%285641020319%29.jpg' },
+    category: 'Language',
+    title: 'A Language With No Words for Numbers',
+    place: 'Amazon, Brazil',
+    countries: ["br"],
+    paragraphs: [
+      "The Pirahã, an Indigenous people living along a tributary of the Amazon in Brazil, speak a language that linguist Daniel Everett, who lived among them for years, controversially argued has no words for exact numbers, no color terms, and no grammatical recursion — the ability to embed phrases inside other phrases indefinitely, which many linguists consider a universal feature of human language.",
+      "Everett's claims, especially about recursion, directly challenged influential theories from linguist Noam Chomsky's school of thought, sparking a genuine and still-unresolved academic dispute, since very few outside researchers have been able to independently study the small, relatively isolated Pirahã community to verify the details. Whatever the final linguistic verdict, the Pirahã are broadly agreed to show little cultural interest in counting, historical narrative about the distant past, or numbers as a concept at all."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Pirah%C3%A3_language',
+    wikiTerm: 'Pirahã'
+  },
+  {
+    id: 'ubykh-language-extinct',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Northwest_Caucasian_languages_map.png/500px-Northwest_Caucasian_languages_map.png', width: 480, height: 286, credit: 'Gaga.vaa', creditUrl: 'https://en.wikipedia.org/wiki/File:Northwest_Caucasian_languages_map.png' },
+    category: 'Language',
+    title: 'A Language With 81 Consonants and One Last Speaker',
+    place: 'Turkey (Ubykh diaspora)',
+    countries: ["tr"],
+    paragraphs: [
+      "Ubykh, a language once spoken in the northwestern Caucasus, is generally credited with the largest confirmed consonant inventory of any documented language — around 81 distinct consonants, compared to just two vowel sounds — reflecting a broader pattern among Northwest Caucasian languages of extremely consonant-heavy sound systems.",
+      "Its speakers were forced from their Caucasus homeland into the Ottoman Empire during the mass expulsions of Circassian peoples in the 1860s, scattering the language across villages in what's now Turkey. The last fully fluent native speaker, Tevfik Esenç, worked closely with linguists to document the language extensively before his death in 1992, after which Ubykh was declared extinct — one of the most thoroughly recorded language deaths in linguistic history, precisely because researchers saw it coming."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Ubykh_language',
+    wikiTerm: 'Ubykh'
+  },
+  {
+    id: 'richat-structure-mauritania',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Richat_Structure_ISS030-E-12516.jpg/500px-Richat_Structure_ISS030-E-12516.jpg', width: 480, height: 319, credit: 'NASA', creditUrl: 'https://en.wikipedia.org/wiki/File:Richat_Structure_ISS030-E-12516.jpg' },
+    category: 'Geology',
+    title: "The 'Eye of the Sahara'",
+    place: 'Adrar Plateau, Mauritania',
+    countries: ["mr"],
+    cities: [{ name: "Richat Structure", lat: 21.1268, lon: -11.399 }],
+    paragraphs: [
+      "The Richat Structure, a near-perfect set of concentric rings roughly 40km across in the Mauritanian desert, is so vast and geometric that it's become a landmark astronauts use to orient themselves from orbit, earning it the nickname the \"Eye of the Sahara.\" Its striking symmetry initially led some geologists to suspect it was formed by a meteorite impact.",
+      "Closer study has instead shown it to be a deeply eroded geological dome — layers of rock that bulged upward without ever erupting, then were sliced through by millions of years of wind and water erosion, exposing the different rock layers as concentric rings once buried underground. It remains one of the most-photographed geological formations on Earth specifically because of how legible its structure looks from directly above."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Richat_Structure',
+    wikiTerm: 'Richat Structure'
+  },
+  {
+    id: 'fly-geyser-nevada',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Fly_geyser.jpg/500px-Fly_geyser.jpg', width: 480, height: 362, credit: 'Jeremy C. Munns', creditUrl: 'https://en.wikipedia.org/wiki/File:Fly_geyser.jpg' },
+    category: 'Geology',
+    title: 'A Geyser That Only Exists Because of a Drilling Mistake',
+    place: 'Washoe County, Nevada',
+    countries: ["us"],
+    cities: [{ name: "Fly Geyser", lat: 40.8622, lon: -119.3313 }],
+    paragraphs: [
+      "Fly Geyser, a small but strikingly colorful mound in the Nevada desert, isn't a natural geyser at all — it formed after a 1964 geothermal energy test well was drilled and then left improperly capped, allowing hot mineral-rich water to escape continuously and slowly build up layers of travertine rock around the opening.",
+      "Thermophilic algae thriving in the constantly wet mineral deposits give the mound its vivid green and red coloring, and it continues to grow taller each year as more dissolved minerals precipitate out of the escaping water. It sits on private land and was inaccessible to the public for decades until a nonprofit land trust began offering limited guided tours."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Fly_Geyser',
+    wikiTerm: 'Fly Geyser'
+  },
+  {
+    id: 'christiania-copenhagen',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Freetown_Christiania_-_main_entrance.jpg/500px-Freetown_Christiania_-_main_entrance.jpg', width: 480, height: 360, credit: 'Franklin Heijnen', creditUrl: 'https://en.wikipedia.org/wiki/File:Freetown_Christiania_-_main_entrance.jpg' },
+    category: 'Micronations',
+    title: 'A Self-Declared Free Town Inside a Capital City',
+    place: 'Copenhagen, Denmark',
+    countries: ["dk"],
+    cities: [{ name: "Freetown Christiania", lat: 55.6736, lon: 12.5992 }],
+    paragraphs: [
+      "Freetown Christiania is a roughly 34-hectare neighbourhood in Copenhagen that a group of squatters declared a self-governing commune in 1971, taking over a disused military barracks and establishing its own informal rules, collective decision-making assemblies, and for decades an openly tolerated (though never formally legal) open-air cannabis market known as Pusher Street.",
+      "Danish authorities have alternated between crackdowns and semi-official tolerance ever since, and residents eventually negotiated a formal legal arrangement in 2011 that let the community collectively purchase parts of the land from the state, folding some of Christiania into ordinary Danish property law while it kept much of its self-governing character. It remains one of Denmark's most visited tourist attractions despite, or partly because of, its unresolved legal status."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Freetown_Christiania',
+    wikiTerm: 'Freetown Christiania'
+  },
+  {
+    id: 'molossia-micronation',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Molossia_-_Government_House.jpg/500px-Molossia_-_Government_House.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Molossia_-_Government_House.jpg' },
+    category: 'Micronations',
+    title: "A Backyard Nation \"At War\" With a Country That No Longer Exists",
+    place: 'Nevada, USA',
+    countries: ["us"],
+    paragraphs: [
+      "The Republic of Molossia is a self-declared micronation covering about one hectare of a family property in Nevada, run since 1977 by a man who styles himself its president, complete with its own currency, stamps, a tongue-in-cheek space program, and a national bank that mostly just exchanges souvenir Molossian currency for US dollars.",
+      "As a running joke rooted in an old bureaucratic technicality, Molossia has long claimed to still be technically at war with East Germany, a country that stopped existing in 1990, on the grounds that no peace treaty was ever signed between the two; the \"conflict\" has never involved anything beyond the joke itself. The project is openly satirical, but it draws real visitors on scheduled open days and has outlasted plenty of other novelty micronations founded around the same era."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Republic_of_Molossia',
+    wikiTerm: 'Republic of Molossia'
+  },
+  {
+    id: 'mexico-city-sinking',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Sobrevuelos_CDMX_HJ2A4913_%2825514321687%29_%28cropped%29.jpg/500px-Sobrevuelos_CDMX_HJ2A4913_%2825514321687%29_%28cropped%29.jpg', width: 480, height: 252, credit: 'Gobierno CDMX', creditUrl: 'https://en.wikipedia.org/wiki/File:Sobrevuelos_CDMX_HJ2A4913_%2825514321687%29_%28cropped%29.jpg' },
+    category: 'Urban Extremes',
+    title: 'A Capital City Built on a Drained Lake, Still Sinking',
+    place: 'Mexico City, Mexico',
+    countries: ["mx"],
+    paragraphs: [
+      "Mexico City was built where the Aztec capital of Tenochtitlan once stood, on an island in the middle of Lake Texcoco; Spanish colonizers drained most of the lake over the following centuries, and the city has been slowly sinking into the soft, water-logged clay left behind ever since, a process accelerated hugely by modern groundwater pumping for the city's roughly 22 million residents.",
+      "Some parts of the city are sinking by as much as 30-50cm a year, among the fastest urban subsidence rates recorded anywhere in the world, visibly tilting older buildings, cracking streets, and straining underground pipes not designed to flex that much. Because the ground is sinking unevenly — faster where clay is thicker, slower over old lakebed sediment or bedrock — the uneven settling itself is now a significant engineering and infrastructure problem layered on top of the sinking."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Mexico_City',
+    wikiTerm: 'Lake Texcoco'
+  },
+  {
+    id: 'cairo-garbage-city',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/A_Group_of_Boys_at_Moqattam_Village_Dec_2009.JPG/500px-A_Group_of_Boys_at_Moqattam_Village_Dec_2009.JPG', width: 480, height: 360, credit: 'Ayoung ShinAyoung0131', creditUrl: 'https://en.wikipedia.org/wiki/File:A_Group_of_Boys_at_Moqattam_Village_Dec_2009.JPG' },
+    category: 'Urban Extremes',
+    title: "Cairo's Neighbourhood That Recycles by Hand",
+    place: 'Manshiyat Naser, Cairo',
+    countries: ["eg"],
+    cities: [{ name: "Manshiyat Naser", lat: 30.0298, lon: 31.2925 }],
+    paragraphs: [
+      "Manshiyat Naser, a densely packed neighbourhood on the edge of Cairo nicknamed \"Garbage City,\" is home to the Zabbaleen, an Egyptian Christian community that has collected and sorted much of Cairo's household waste by hand for generations, without a formal municipal contract for much of that history.",
+      "Working largely without industrial machinery, Zabbaleen households and small workshops reportedly recycle somewhere around 80% of the waste they collect, a far higher recovery rate than most fully mechanized municipal recycling systems in wealthier cities achieve. The neighbourhood is also home to the Cave Church, a massive amphitheatre-style church carved into the surrounding limestone cliffs, one of the largest churches in the Middle East, built to serve the community that grew up around the waste-sorting trade."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Zabbaleen',
+    wikiTerm: 'Zabbaleen'
+  },
+  {
+    id: 'neutral-moresnet',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Flag_of_Moresnet.svg/500px-Flag_of_Moresnet.svg.png', width: 480, height: 324, credit: 'ThrashedParanoid', creditUrl: 'https://en.wikipedia.org/wiki/File:Flag_of_Moresnet.svg' },
+    category: 'Border Oddities',
+    title: 'The Tiny Neutral Zone Born From a Zinc Mine Dispute',
+    place: 'Moresnet (now Belgium)',
+    countries: ["be"],
+    paragraphs: [
+      "Neutral Moresnet was a roughly 3.5 square kilometre territory that existed from 1816 to 1920, jointly administered as neutral ground by the Netherlands (later Belgium) and Prussia after the two powers couldn't agree who owned a valuable zinc mine straddling their proposed shared border, and simply declared the whole area neutral rather than resolve the dispute.",
+      "The tiny territory developed its own quirky institutions over the following century, including brief 19th-century proposals to make Esperanto its official language and rename it \"Amikejo\" (Esperanto for \"place of friendship\"), and by some accounts issued its own small coinage. It was formally dissolved and absorbed into Belgium after WWI, once the underlying zinc deposit the whole dispute had originally been about was largely exhausted."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Neutral_Moresnet',
+    wikiTerm: 'Neutral Moresnet'
+  },
+  {
+    id: 'korean-dmz-wildlife',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/070401_Panmunjeom3.jpg/500px-070401_Panmunjeom3.jpg', width: 480, height: 319, credit: 'Driedprawns at en.wikipedia', creditUrl: 'https://en.wikipedia.org/wiki/File:070401_Panmunjeom3.jpg' },
+    category: 'Border Oddities',
+    title: 'A War Zone That Became an Accidental Wildlife Refuge',
+    place: 'Korean Demilitarized Zone',
+    countries: ["kp", "kr"],
+    cities: [{ name: "Korean DMZ", lat: 38.0, lon: 127.0 }],
+    paragraphs: [
+      "The Korean Demilitarized Zone, a roughly 250km-long, 4km-wide buffer strip separating North and South Korea since the 1953 armistice, is one of the most heavily fortified and mined borders on Earth — and, almost entirely by accident, one of the most ecologically intact stretches of land in East Asia, since it's been essentially free of farming, development, or hunting for over 70 years.",
+      "Researchers have documented healthy populations of species that have become rare or locally extinct elsewhere on the peninsula, including Asiatic black bears and various endangered crane species that winter in its wetlands. Conservationists have periodically proposed formally protecting the zone as a peace park should the two Koreas ever reunify, worried that development could quickly undo seven decades of unintentional rewilding."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Korean_Demilitarized_Zone',
+    wikiTerm: 'Korean Demilitarized Zone'
+  },
+  {
+    id: 'pullman-chicago',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Pullman_Chicago_Clock_Tower.jpg/500px-Pullman_Chicago_Clock_Tower.jpg', width: 480, height: 569, credit: 'Boven', creditUrl: 'https://en.wikipedia.org/wiki/File:Pullman_Chicago_Clock_Tower.jpg' },
+    category: 'Company Towns',
+    title: 'The Company Town That Sparked a National Strike',
+    place: 'Chicago, Illinois',
+    countries: ["us"],
+    cities: [{ name: "Pullman Historic District", lat: 41.6989, lon: -87.6067 }],
+    paragraphs: [
+      "George Pullman, whose company built luxury railroad sleeping cars, constructed an entire planned town south of Chicago in the 1880s to house his workers, complete with company-owned housing, shops, and a church, all designed to project an image of a clean, orderly model community — and all rented back to workers at prices Pullman set himself.",
+      "When Pullman cut wages sharply during the 1893 economic depression without correspondingly cutting the rents and prices workers still owed the company for housing and goods, it triggered the Pullman Strike of 1894, which spread nationally and was ultimately broken by federal troops after significant violence. The backlash from the strike was severe enough that Illinois's state supreme court later forced the Pullman Company to sell off the town's non-industrial property, ruling that a private company running an entire municipality was against public policy."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Pullman,_Chicago',
+    wikiTerm: 'Pullman Strike'
+  },
+  {
+    id: 'jamshedpur-india',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Green_City_Jamshedpur.jpg/500px-Green_City_Jamshedpur.jpg', width: 480, height: 241, credit: 'Shahbaz26', creditUrl: 'https://en.wikipedia.org/wiki/File:Green_City_Jamshedpur.jpg' },
+    category: 'Company Towns',
+    title: "India's First Major Steel Town",
+    place: 'Jamshedpur, India',
+    countries: ["in"],
+    cities: [{ name: "Jamshedpur", lat: 22.8046, lon: 86.2029 }],
+    paragraphs: [
+      "Jamshedpur, founded in 1908 by industrialist Jamsetji Tata to house workers for India's first large-scale steel plant, was built as a fully planned company town from the outset, with the Tata Group historically funding and running not just housing but much of the city's roads, schools, hospitals, and utilities directly, well beyond what's typical even for other company towns.",
+      "Unlike many company towns elsewhere that declined once their founding industry automated or moved on, Jamshedpur's steel plant has remained continuously operational for over a century, and Tata-run civic services have continued alongside a growing local municipal government. It's often cited in urban planning literature as an unusually long-lived example of a corporate-built city that avoided the sharp decline typical of single-industry towns."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Jamshedpur',
+    wikiTerm: 'Jamshedpur'
+  },
+  {
+    id: 'mount-kailash-tibet',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Kailash_north.JPG/500px-Kailash_north.JPG', width: 480, height: 320, credit: 'Ondřej Žváček', creditUrl: 'https://en.wikipedia.org/wiki/File:Kailash_north.JPG' },
+    category: 'Religious Sites',
+    title: 'A Mountain Considered Too Sacred to Climb',
+    place: 'Tibet, China',
+    countries: ["cn"],
+    cities: [{ name: "Mount Kailash", lat: 31.0672, lon: 81.3119 }],
+    paragraphs: [
+      "Mount Kailash, a 6,638-metre peak in a remote part of Tibet, is considered sacred by four separate religions — Hinduism, Buddhism, Jainism, and the Tibetan Bon tradition — each with different beliefs about which deity or cosmic structure the mountain represents, making it one of the very few mountains venerated across multiple, otherwise unrelated religious traditions at once.",
+      "Despite being technically climbable and of only moderate technical difficulty by Himalayan standards, no confirmed ascent to its summit has ever been permitted or completed, since climbing it is considered a serious act of sacrilege by all four traditions; even the Chinese government has generally declined to authorize summit expeditions out of respect for that religious significance. Instead, pilgrims from all four faiths walk a roughly 52km circuit around its base, known as the kora, which some undertake as a full prostration covering the entire distance."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Mount_Kailash',
+    wikiTerm: 'Mount Kailash'
+  },
+  {
+    id: 'lalibela-rock-churches',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Lalibela%2C_san_giorgio%2C_esterno_24.jpg/500px-Lalibela%2C_san_giorgio%2C_esterno_24.jpg', width: 480, height: 416, credit: 'Sailko', creditUrl: 'https://en.wikipedia.org/wiki/File:Lalibela%2C_san_giorgio%2C_esterno_24.jpg' },
+    category: 'Religious Sites',
+    title: 'Eleven Churches Carved Downward Into Solid Rock',
+    place: 'Lalibela, Ethiopia',
+    countries: ["et"],
+    cities: [{ name: "Lalibela", lat: 12.0316, lon: 39.0473 }],
+    paragraphs: [
+      "The eleven medieval churches of Lalibela, Ethiopia, weren't built up from the ground in the usual way — they were carved directly downward out of solid volcanic rock, starting from the surface and excavating around and beneath each structure until a complete freestanding church, roof, windows, interior pillars and all, remained standing in its own pit, connected to the others by a network of tunnels and trenches.",
+      "Traditionally dated to the reign of King Gebre Mesqel Lalibela in the 12th-13th century and, according to local tradition, intended as a \"New Jerusalem\" for Ethiopian Christians unable to make the journey to the real one, the complex remains an active pilgrimage site and working place of worship today, not a preserved ruin — priests still hold regular services inside churches that have been in continuous use for roughly 800 years."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Rock-Hewn_Churches,_Lalibela',
+    wikiTerm: 'Lalibela'
+  },
+  {
+    id: 'cu-chi-tunnels-vietnam',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/C%E1%BB%A7_Chi_tunnels_entrance.JPG/500px-C%E1%BB%A7_Chi_tunnels_entrance.JPG', width: 480, height: 320, credit: 'Lars Curfs (Grashoofd)', creditUrl: 'https://en.wikipedia.org/wiki/File:C%E1%BB%A7_Chi_tunnels_entrance.JPG' },
+    category: 'Underground Wonders',
+    title: 'A 250km Tunnel Network Built by Hand',
+    place: 'Củ Chi, Vietnam',
+    countries: ["vn"],
+    cities: [{ name: "Củ Chi tunnels", lat: 11.1425, lon: 106.4525 }],
+    paragraphs: [
+      "The Củ Chi tunnels, northwest of what's now Ho Chi Minh City, formed part of a vast underground network — ultimately stretching well over 200km — dug largely by hand by Viet Cong forces and local villagers, first against French colonial rule and then during the Vietnam War, allowing fighters to move, hide, and resupply largely undetected beneath areas under heavy American aerial bombardment.",
+      "At their most developed, the tunnels included multiple levels housing kitchens with cleverly diffused smoke vents, hospitals, weapons workshops, and living quarters, all connected by passages deliberately built small and low to slow down larger American soldiers pursuing underground. Sections have since been preserved, and in some cases widened, as a war memorial site open to visitors, including a few original narrow crawl passages left unmodified to give visitors a sense of the tunnels' original scale."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/C%E1%BB%A7_Chi_tunnels',
+    wikiTerm: 'Củ Chi tunnels'
+  },
+  {
+    id: 'derinkuyu-underground-city',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Derinkuyu_Underground_City_9910_Nevit.jpg/500px-Derinkuyu_Underground_City_9910_Nevit.jpg', width: 480, height: 360, credit: 'Nevit Dilmen', creditUrl: 'https://en.wikipedia.org/wiki/File:Derinkuyu_Underground_City_9910_Nevit.jpg' },
+    category: 'Underground Wonders',
+    title: 'An Underground City for 20,000 People, Found by Accident',
+    place: 'Cappadocia, Turkey',
+    countries: ["tr"],
+    cities: [{ name: "Derinkuyu", lat: 38.3737, lon: 34.735 }],
+    paragraphs: [
+      "Derinkuyu, in Turkey's Cappadocia region, is an ancient multi-level underground city carved into soft volcanic rock, extending roughly 85 metres deep across at least 18 levels, with ventilation shafts, wells, stables, wine and oil presses, chapels, and enormous circular stone doors that could be rolled shut from the inside to block off passages, only operable from within.",
+      "It was rediscovered entirely by accident in 1963, when a local resident knocked down a wall during home renovations and found a hidden passage behind it, leading eventually to the full complex. Historians believe the city, likely expanded gradually over centuries starting perhaps as early as the Phrygian era, served as a refuge where thousands of people could shelter with their livestock for extended periods during invasions and raids, sealed off entirely from the surface."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Derinkuyu_underground_city',
+    wikiTerm: 'Derinkuyu'
+  },
+  {
+    id: 'palais-ideal-facteur-cheval',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Ferdinand_Cheval.jpg', width: 318, height: 490, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Ferdinand_Cheval.jpg' },
+    category: 'Eccentric Architecture',
+    title: 'A Postman Spent 33 Years Building a Palace Alone',
+    place: 'Hauterives, France',
+    countries: ["fr"],
+    cities: [{ name: "Palais Idéal", lat: 45.2589, lon: 5.0286 }],
+    paragraphs: [
+      "Ferdinand Cheval, a French rural postman, spent 33 years — nights and days off, entirely by himself — building an elaborate fantastical palace out of stones he collected on his daily mail route, after reportedly tripping over an unusually shaped rock in 1879 and becoming fixated on the idea of building something extraordinary from what he could find.",
+      "The finished Palais Idéal (\"Ideal Palace\") blends architectural references Cheval had only ever seen in postcards and magazines — Hindu temples, medieval castles, mosques — into one continuous, densely carved structure covered in his own inscriptions about the project's meaning. Initially dismissed by contemporaries as the eccentric obsession of an untrained laborer, it's since been recognised as an important work of naive/outsider art and a protected French historical monument, visited by figures including Pablo Picasso decades after Cheval's death."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Ferdinand_Cheval',
+    wikiTerm: 'Palais Idéal'
+  },
+  {
+    id: 'crooked-house-sopot',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Krzywy_Domek_w_Sopocie.jpg/500px-Krzywy_Domek_w_Sopocie.jpg', width: 480, height: 351, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Krzywy_Domek_w_Sopocie.jpg' },
+    category: 'Eccentric Architecture',
+    title: 'A Shopping Building Designed to Look Melted',
+    place: 'Sopot, Poland',
+    countries: ["pl"],
+    cities: [{ name: "Krzywy Domek", lat: 54.4418, lon: 18.5658 }],
+    paragraphs: [
+      "The Krzywy Domek (\"Crooked House\"), a shopping and entertainment building in the Polish seaside resort town of Sopot, was deliberately designed in 2004 with every wall, window, and roofline warped and distorted, as if the entire structure were slowly melting or being viewed through a fairground mirror.",
+      "Its architects took direct inspiration from the whimsical, fluid illustrations of Polish children's book artists Jan Marcin Szancer and Swedish illustrator Per Dahlberg, aiming to translate storybook-style drawn distortion directly into a real, structurally sound building — no small engineering feat, since every warped wall still had to support real weight. It's become one of the most photographed buildings in Poland, despite housing fairly ordinary shops and restaurants inside."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Krzywy_Domek',
+    wikiTerm: 'Krzywy Domek'
+  },
+  {
+    id: 'baghdad-battery',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Ironie_pile_Bagdad.jpg', width: 466, height: 374, credit: 'Ironie', creditUrl: 'https://en.wikipedia.org/wiki/File:Ironie_pile_Bagdad.jpg' },
+    category: 'Archaeological Mysteries',
+    title: 'Ancient Jars That Might, or Might Not, Be Batteries',
+    place: 'Khujut Rabu, Iraq',
+    countries: ["iq"],
+    paragraphs: [
+      "The so-called Baghdad Battery is a set of small clay jars, each containing a copper cylinder and an iron rod, discovered near Baghdad and generally dated to the Parthian or Sassanid era (roughly 250 BCE-650 CE). When German archaeologist Wilhelm König first described them in 1938, he proposed they might have functioned as simple galvanic cells, capable of producing a weak electric current if filled with an acidic liquid like vinegar.",
+      "Later experimenters built working replicas that did generate a small voltage, keeping the \"ancient battery\" idea alive in popular culture for decades. Most mainstream archaeologists remain skeptical of the electrical use, however, pointing out there's no evidence of any matching ancient technology the current could have powered, and favoring a far more mundane explanation: that the jars were most likely used to store sacred scrolls, the acidic residue from decayed papyrus simply mimicking a battery's chemistry by coincidence."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Baghdad_Battery',
+    wikiTerm: 'Baghdad Battery'
+  },
+  {
+    id: 'longyou-caves-china',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Longyou_Xiaonanhai_Shishi_2016.12.11_16-10-51.jpg/500px-Longyou_Xiaonanhai_Shishi_2016.12.11_16-10-51.jpg', width: 480, height: 320, credit: 'Zhangzhugang', creditUrl: 'https://en.wikipedia.org/wiki/File:Longyou_Xiaonanhai_Shishi_2016.12.11_16-10-51.jpg' },
+    category: 'Archaeological Mysteries',
+    title: 'Massive Ancient Caverns With No Historical Record',
+    place: 'Longyou, China',
+    countries: ["cn"],
+    cities: [{ name: "Longyou Caves", lat: 29.0281, lon: 119.1064 }],
+    paragraphs: [
+      "In 1992, villagers in Longyou County pumped water out of what they'd always assumed was a natural, bottomless pond, and discovered instead a network of enormous man-made caverns beneath it, some with ceilings over 30 metres high, their walls and columns covered in precise, uniform chisel marks left by an enormous and clearly well-organized excavation effort.",
+      "Radiometric and stylistic dating suggests the caves were carved at least 2,000 years ago, requiring what engineers estimate would have been an extraordinary amount of coordinated labor — yet no historical text, inscription, or local legend from the region makes any clear reference to their construction, purpose, or the workforce involved. Proposed explanations range from ancient stone quarrying to a possible imperial military or ceremonial project, but without any supporting written record, the caves' original purpose remains genuinely unresolved."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Longyou_Caves',
+    wikiTerm: 'Longyou County'
+  },
+  {
+    id: 'christmas-island-crabs',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Christmas_Island_%285774532171%29.jpg/500px-Christmas_Island_%285774532171%29.jpg', width: 480, height: 320, credit: 'DIAC images', creditUrl: 'https://en.wikipedia.org/wiki/File:Christmas_Island_%285774532171%29.jpg' },
+    category: 'Wildlife Oddities',
+    title: 'Tens of Millions of Crabs Migrate at Once',
+    place: 'Christmas Island, Australia',
+    countries: ["au"],
+    paragraphs: [
+      "Every year, at the start of the wet season, an estimated 40-50 million red crabs on Australia's Christmas Island leave their forest burrows all at once and march to the coast to breed, a migration so massive that roads across the island are temporarily closed and specially built crab bridges and underpasses divert the crabs safely around traffic.",
+      "The migration is precisely timed to the lunar cycle — crabs need to release their eggs into the sea during the receding tide of a specific pre-dawn high tide near a new moon — and the resulting mass hatching briefly turns the surrounding ocean visibly reddish with baby crab larvae. Christmas Island's crab population has also faced a serious modern threat from invasive yellow crazy ants, which can kill adult crabs and have wiped out sections of the population in badly infested areas."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Christmas_Island_red_crab',
+    wikiTerm: 'Christmas Island'
+  },
+  {
+    id: 'komodo-dragon-venom',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/202306_Varanus_komodoensis.jpg/500px-202306_Varanus_komodoensis.jpg', width: 480, height: 343, credit: 'James Jolokia (james1203)', creditUrl: 'https://en.wikipedia.org/wiki/File:202306_Varanus_komodoensis.jpg' },
+    category: 'Wildlife Oddities',
+    title: "The World's Largest Lizard Turned Out to Be Venomous",
+    place: 'Komodo, Indonesia',
+    countries: ["id"],
+    paragraphs: [
+      "Komodo dragons, native to a handful of Indonesian islands, are the largest living lizards on Earth, growing up to about 3 metres long, and for decades scientists believed their notoriously dangerous bite worked mainly by delivering dangerous bacteria into a wound, weakening prey over subsequent days of infection.",
+      "A 2009 study using MRI scans and tissue analysis instead found the lizards have genuine venom glands producing compounds that prevent blood clotting and cause rapid blood pressure drops, meaning their bite is directly toxic on its own, not just infectious — a finding that significantly revised decades of accepted textbook knowledge about how the animal actually kills. Wild Komodo dragons are found on only five Indonesian islands and remain a vulnerable species, with total wild population estimates generally in the low thousands."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Komodo_dragon',
+    wikiTerm: 'Komodo dragon'
+  },
+  {
+    id: 'bhutan-tobacco-ban',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Flag_of_Bhutan.svg/500px-Flag_of_Bhutan.svg.png', width: 480, height: 320, credit: 'See File history below for details.', creditUrl: 'https://en.wikipedia.org/wiki/File:Flag_of_Bhutan.svg' },
+    category: 'Local Law',
+    title: 'A Country That Banned Selling Tobacco Entirely',
+    place: 'Bhutan',
+    countries: ["bt"],
+    paragraphs: [
+      "In 2004, Bhutan became the first country in the world to ban the sale of tobacco products nationwide, prohibiting growing, harvesting, producing, and selling tobacco anywhere within its borders — a step considerably further than the smoking bans in public places many other countries have adopted.",
+      "The law didn't outlaw personal consumption outright, but for years required anyone bringing tobacco into the country for personal use to pay steep import duties and keep proof of purchase to show they hadn't bought it locally. Enforcement proved difficult in practice, with a persistent black market and cross-border smuggling from India, and Bhutan eventually eased parts of the law during the COVID-19 pandemic, when it briefly banned tobacco sales even more strictly to reduce virus transmission from shared smoking, before gradually loosening restrictions again afterward."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Bhutan',
+    wikiTerm: 'ban the sale of tobacco'
+  },
+  {
+    id: 'denmark-baby-names',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/2018_-_Christiansborg_from_the_Marble_Bridge.jpg/500px-2018_-_Christiansborg_from_the_Marble_Bridge.jpg', width: 480, height: 317, credit: 'Moahim', creditUrl: 'https://en.wikipedia.org/wiki/File:2018_-_Christiansborg_from_the_Marble_Bridge.jpg' },
+    category: 'Local Law',
+    title: 'A Government List of Approved Baby Names',
+    place: 'Denmark',
+    countries: ["dk"],
+    paragraphs: [
+      "Denmark maintains an official government list of several thousand pre-approved first names that parents can freely choose from when registering a newborn; picking a name already on the list requires no extra steps, but choosing anything not already approved means submitting it for review by Denmark's Ministry of Ecclesiastical Affairs.",
+      "Names can be rejected for various reasons, including if officials judge them likely to burden the child, if they don't clearly indicate a gender, or if they use letters not found in the Danish alphabet; the law traces back to a 19th-century push to standardise naming partly to curb parents inventing surnames from unrelated family names. Several other Nordic countries maintain broadly similar approved-name systems, though Denmark's is often cited as one of the stricter and better-documented versions."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Naming_law',
+    wikiTerm: 'Ministry of Ecclesiastical Affairs'
+  },
+  {
+    id: 'eurovision-song-contest',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Eurovision_Song_Contest_2025.svg/500px-Eurovision_Song_Contest_2025.svg.png', width: 480, height: 160, credit: 'European Broadcasting Union', creditUrl: 'https://en.wikipedia.org/wiki/File:Eurovision_Song_Contest_2025.svg' },
+    category: 'Pop Culture',
+    title: 'A Song Contest Bigger Than the World Cup',
+    place: 'Stockholm, Sweden',
+    countries: ["se"],
+    paragraphs: [
+      "The Eurovision Song Contest, first held in 1956 to help unify a war-divided Europe through a shared television broadcast, has grown into one of the most-watched non-sporting events on Earth, regularly drawing an estimated global audience of over 150 million people across dozens of participating countries, several of which aren't geographically part of Europe at all (Australia has competed since 2015).",
+      "Sweden, which launched ABBA to global fame after their 1974 Eurovision win with \"Waterloo,\" has hosted the contest more times than almost any other country and is often cited as running one of its most polished national selection processes, Melodifestivalen, which itself draws huge domestic television audiences of its own. Beyond the music, Eurovision has a long-running reputation as a showcase for elaborate staging and deliberately over-the-top performances, alongside a devoted global fan culture that treats the annual voting results as genuinely high-stakes."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest',
+    wikiTerm: 'Eurovision Song Contest'
+  },
+  {
+    id: 'bollywood-mumbai',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Mumbai_Bandra-Worli_Sea_Link.jpg/500px-Mumbai_Bandra-Worli_Sea_Link.jpg', width: 480, height: 360, credit: 'Rutiknatekar', creditUrl: 'https://en.wikipedia.org/wiki/File:Mumbai_Bandra-Worli_Sea_Link.jpg' },
+    category: 'Pop Culture',
+    title: 'An Industry That Outproduces Hollywood',
+    place: 'Mumbai, India',
+    countries: ["in"],
+    paragraphs: [
+      "Hindi-language cinema, centred in Mumbai and commonly nicknamed Bollywood, produces more feature films per year than the United States film industry, and Indian cinema as a whole (including its many other regional-language industries) sells more movie tickets annually than any other country on Earth.",
+      "Bollywood films have historically leaned on a distinctive formula blending drama, elaborate musical numbers, and dance sequences within a single film, a style that grew partly out of India's deep tradition of folk theatre and classical dance rather than being modeled on Western musicals. The industry has increasingly found large audiences well beyond India itself, particularly across the Middle East, Africa, and among the global Indian diaspora, making it one of the most-watched film traditions in the world despite receiving comparatively little mainstream attention in North America and Europe."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Hindi_cinema',
+    wikiTerm: 'Bollywood'
+  },
+  {
+    id: 'tardigrades-water-bears',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/SEM_image_of_Milnesium_tardigradum_in_active_state_-_journal.pone.0045682.g001-2_%28white_background%29.png/500px-SEM_image_of_Milnesium_tardigradum_in_active_state_-_journal.pone.0045682.g001-2_%28white_background%29.png', width: 480, height: 419, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:SEM_image_of_Milnesium_tardigradum_in_active_state_-_journal.pone.0045682.g001-2_%28white_background%29.png' },
+    category: 'Biology',
+    title: 'The Animal That Can Survive the Vacuum of Space',
+    place: 'First described in Germany',
+    countries: ["de"],
+    paragraphs: [
+      "Tardigrades, microscopic eight-legged animals often called \"water bears,\" were first described by German pastor and naturalist Johann August Ephraim Goeze in 1773. Under stress, they can enter a dried-out dormant state called cryptobiosis, shrinking into a nearly lifeless ball and shutting down their metabolism almost entirely for years at a time, then reviving within hours once rehydrated.",
+      "In that dormant state, tardigrades have survived conditions that would instantly kill nearly every other known animal, including temperatures near absolute zero, extreme pressure, high doses of radiation, and, in a 2007 European Space Agency experiment, the unprotected vacuum and radiation of open space for over a week, with a portion of the exposed specimens successfully reviving back on Earth. Despite the space-survival headlines, tardigrades live ordinary lives in damp moss, lichen, and sediment nearly everywhere on the planet, and spend almost none of their actual lifespan in that extreme dormant state."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Tardigrade',
+    wikiTerm: 'tardigrades'
+  },
+  {
+    id: 'immortal-jellyfish',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Turritopsis_dohrnii.jpg', width: 300, height: 192, credit: 'Bachware', creditUrl: 'https://en.wikipedia.org/wiki/File:Turritopsis_dohrnii.jpg' },
+    category: 'Biology',
+    title: 'A Jellyfish That Can Reverse Its Own Aging',
+    place: 'Mediterranean Sea, Italy',
+    countries: ["it"],
+    paragraphs: [
+      "Turritopsis dohrnii, a tiny jellyfish first studied in detail in the Mediterranean near Italy, has a genuinely unusual ability among animals: when injured, starving, or otherwise stressed, an adult can revert its cells back into an earlier juvenile polyp stage, effectively restarting its life cycle from a kind of biological beginning rather than dying.",
+      "This process, called transdifferentiation, lets individual cells change into entirely different cell types, something extremely rare outside of a few specific tissue-repair contexts in most other animals. In theory, a Turritopsis dohrnii that keeps successfully reverting could do so indefinitely, which is why it's often nicknamed the \"immortal jellyfish\" — though in practice, most individuals in the wild are eaten by predators or die from disease long before that theoretical immortality would ever really matter."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Turritopsis_dohrnii',
+    wikiTerm: 'immortal jellyfish'
+  },
+  {
+    id: 'ryugyong-hotel-north-korea',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Pr%C3%A1zdn%C3%A9_slnice_a_rozestav%C4%9Bn%C3%BD_hotel_Ryugyong_-_panoramio.jpg/500px-Pr%C3%A1zdn%C3%A9_slnice_a_rozestav%C4%9Bn%C3%BD_hotel_Ryugyong_-_panoramio.jpg', width: 480, height: 640, credit: 'Martin Cígler', creditUrl: 'https://en.wikipedia.org/wiki/File:Pr%C3%A1zdn%C3%A9_slnice_a_rozestav%C4%9Bn%C3%BD_hotel_Ryugyong_-_panoramio.jpg' },
+    category: 'Architecture',
+    title: "The World's Tallest Unopened Building",
+    place: 'Pyongyang, North Korea',
+    countries: ["kp"],
+    cities: [{ name: "Ryugyong Hotel", lat: 39.03, lon: 125.7325 }],
+    paragraphs: [
+      "The Ryugyong Hotel, a 105-storey pyramid-shaped skyscraper in Pyongyang, began construction in 1987 with plans to be one of the tallest hotels in the world, but funding collapsed after the Soviet Union — North Korea's main economic backer — dissolved in 1991, leaving the concrete shell standing empty and unfinished for the next 16 years, earning it nicknames like the \"Hotel of Doom\" in international media.",
+      "Construction resumed in 2008 with Egyptian investment, and by 2011 the exterior had finally been completed with reflective glass panelling and, later, an elaborate LED light display, but the interior has still never been finished to the point of accepting guests. It remains, decades after breaking ground, one of the most prominent examples anywhere of a genuinely enormous building that has never opened for its intended purpose."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Ryugyong_Hotel',
+    wikiTerm: 'Ryugyong Hotel'
+  },
+  {
+    id: 'habitat-67-montreal',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Habitat_67_2019_dllu_01.jpg/500px-Habitat_67_2019_dllu_01.jpg', width: 480, height: 394, credit: 'Dllu', creditUrl: 'https://en.wikipedia.org/wiki/File:Habitat_67_2019_dllu_01.jpg' },
+    category: 'Architecture',
+    title: 'An Apartment Building Made From Stacked Concrete Boxes',
+    place: 'Montreal, Canada',
+    countries: ["ca"],
+    cities: [{ name: "Habitat 67", lat: 45.5041, lon: -73.5423 }],
+    paragraphs: [
+      "Habitat 67, built for Montreal's Expo 67 world's fair, stacks 354 identical prefabricated concrete boxes into 146 irregularly arranged apartments, each unit given its own private garden terrace formed by the roof of the box below it — an attempt by its architect, Moshe Safdie, then only in his twenties and working from his master's thesis, to bring suburban-style privacy and outdoor space to affordable high-density urban housing.",
+      "The building was hugely influential architecturally and became an instantly recognizable symbol of Montreal, but its modular construction method never achieved the mass-produced affordability Safdie originally envisioned, and Habitat 67 apartments are now among the most expensive real estate in the city rather than the affordable housing model it was designed to prove out. It remains fully inhabited today, over 55 years after it was built essentially as a temporary fair exhibit."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Habitat_67',
+    wikiTerm: 'Habitat 67'
+  },
+  {
+    id: 'stockholm-syndrome-origin',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Former_Kreditbanken_Norrmalmstorg_Stockholm_Sweden.jpg/500px-Former_Kreditbanken_Norrmalmstorg_Stockholm_Sweden.jpg', width: 480, height: 357, credit: 'Tage Olsin', creditUrl: 'https://en.wikipedia.org/wiki/File:Former_Kreditbanken_Norrmalmstorg_Stockholm_Sweden.jpg' },
+    category: 'Psychology',
+    title: 'The Bank Robbery That Named a Psychological Phenomenon',
+    place: 'Stockholm, Sweden',
+    countries: ["se"],
+    paragraphs: [
+      "In August 1973, a failed bank robbery in Stockholm turned into a six-day hostage standoff, during which the four hostages reportedly grew sympathetic toward, and even protective of, their captors — resisting rescue efforts, defending the robbers publicly afterward, and in one case staying in contact with a captor for years. Criminologist Nils Bejerot, consulting for police during the standoff, coined the term \"Stockholm syndrome\" to describe the pattern.",
+      "The term spread quickly into popular use, later applied retroactively to other high-profile cases like the kidnapping of Patty Hearst, but it's never been formally recognised as a diagnosable psychiatric condition in medical classification systems, and some psychologists have since questioned how common or predictable the bonding response actually is across hostage situations generally, given how much the original account relies on a single, fairly unusual case."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Stockholm_syndrome',
+    wikiTerm: 'Stockholm syndrome'
+  },
+  {
+    id: 'dunning-kruger-effect',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Dunning%E2%80%93Kruger_Effect2.svg/500px-Dunning%E2%80%93Kruger_Effect2.svg.png', width: 480, height: 399, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Dunning%E2%80%93Kruger_Effect2.svg' },
+    category: 'Psychology',
+    title: 'Why the Least Skilled Can Feel the Most Confident',
+    place: 'Cornell University, USA',
+    countries: ["us"],
+    paragraphs: [
+      "In a 1999 study at Cornell University, psychologists David Dunning and Justin Kruger found that people who scored lowest on tests of grammar, logic, and humor also tended to most overestimate their own performance and ability relative to others — not because they were arrogant, the researchers argued, but because the same lack of skill that caused poor performance also made it harder for them to recognise good performance, in themselves or anyone else.",
+      "The finding, now widely known as the Dunning-Kruger effect, has become one of the most frequently cited (and frequently oversimplified) concepts in popular psychology, often misrepresented as claiming stupid people are always more confident than experts in general. The original research was narrower: it described a specific gap between self-assessment and actual performance on particular skill-based tasks, and subsequent research has debated how much of the statistical pattern is explained by simple mathematical artifacts of the test design rather than a genuine psychological bias."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect',
+    wikiTerm: 'Dunning-Kruger effect'
+  },
+  {
+    id: 'bretton-woods-system',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Price_of_gold.webp/500px-Price_of_gold.webp.png', width: 480, height: 245, credit: 'Wikideas1', creditUrl: 'https://en.wikipedia.org/wiki/File:Price_of_gold.webp' },
+    category: 'Economics',
+    title: 'The Meeting That Set the Rules for Global Money',
+    place: 'Bretton Woods, New Hampshire, USA',
+    countries: ["us"],
+    paragraphs: [
+      "In July 1944, representatives from 44 Allied nations met at a resort in Bretton Woods, New Hampshire, to design a new international monetary system for the post-WWII world, ultimately agreeing to peg major currencies to the US dollar, which was itself pegged to gold at a fixed rate of $35 an ounce, with the newly created International Monetary Fund and World Bank overseeing the arrangement.",
+      "The system gave the world unusual monetary stability for roughly 25 years, but it depended entirely on the US holding enough gold to honestly back every dollar in circulation abroad, a promise that became harder to keep as US spending (including on the Vietnam War) grew. In August 1971, President Nixon unilaterally suspended the dollar's convertibility into gold, an event later nicknamed the \"Nixon Shock,\" effectively ending the Bretton Woods system and ushering in the floating, gold-free currency exchange system most of the world still uses today."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Bretton_Woods_system',
+    wikiTerm: 'Bretton Woods'
+  },
+  {
+    id: 'argentina-debt-defaults',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Prat_gay_en_Washington.jpg/500px-Prat_gay_en_Washington.jpg', width: 480, height: 299, credit: 'Presidencia de la Nación', creditUrl: 'https://en.wikipedia.org/wiki/File:Prat_gay_en_Washington.jpg' },
+    category: 'Economics',
+    title: 'A Country That Has Defaulted on Debt Nine Times',
+    place: 'Argentina',
+    countries: ["ar"],
+    paragraphs: [
+      "Argentina has defaulted on its sovereign debt at least nine separate times since gaining independence in the 19th century, more than almost any other country, including a 2001 default on roughly $100 billion that was, at the time, the largest sovereign default in history, triggered by a currency crisis after Argentina's peso-to-dollar peg collapsed.",
+      "A subsequent decades-long legal battle with a group of investors who'd bought Argentina's defaulted bonds at steep discounts, nicknamed \"vulture funds\" by Argentine officials, dragged through US courts and blocked Argentina from fully accessing international debt markets again until a settlement was finally reached in 2016. Argentina defaulted again in 2020, underscoring just how recurring the pattern has been across the country's economic history rather than being isolated to any single crisis."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Argentine_debt_restructuring',
+    wikiTerm: 'vulture funds'
+  },
+  {
+    id: 'denisova-cave-siberia',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/%D0%98%D0%B7%D0%B2%D0%B5%D1%81%D1%82%D0%BD%D0%B0%D1%8F_%D0%BD%D0%B0_%D0%B2%D0%B5%D1%81%D1%8C_%D0%9C%D0%B8%D1%80_%D0%94%D0%B5%D0%BD%D0%B8%D1%81%D0%BE%D0%B2%D0%B0_%D0%BF%D0%B5%D1%89%D0%B5%D1%80%D0%B0._01.jpg/500px-%D0%98%D0%B7%D0%B2%D0%B5%D1%81%D1%82%D0%BD%D0%B0%D1%8F_%D0%BD%D0%B0_%D0%B2%D0%B5%D1%81%D1%8C_%D0%9C%D0%B8%D1%80_%D0%94%D0%B5%D0%BD%D0%B8%D1%81%D0%BE%D0%B2%D0%B0_%D0%BF%D0%B5%D1%89%D0%B5%D1%80%D0%B0._01.jpg', width: 480, height: 360, credit: 'Демин Алексей Барнаул', creditUrl: 'https://en.wikipedia.org/wiki/File:%D0%98%D0%B7%D0%B2%D0%B5%D1%81%D1%82%D0%BD%D0%B0%D1%8F_%D0%BD%D0%B0_%D0%B2%D0%B5%D1%81%D1%8C_%D0%9C%D0%B8%D1%80_%D0%94%D0%B5%D0%BD%D0%B8%D1%81%D0%BE%D0%B2%D0%B0_%D0%BF%D0%B5%D1%89%D0%B5%D1%80%D0%B0._01.jpg' },
+    category: 'Anthropology',
+    title: 'A New Kind of Ancient Human, Identified From One Finger Bone',
+    place: 'Altai Mountains, Russia',
+    countries: ["ru"],
+    cities: [{ name: "Denisova Cave", lat: 51.3975, lon: 84.6764 }],
+    paragraphs: [
+      "In 2010, geneticists analysing a small finger bone fragment and a tooth found in Denisova Cave in Siberia's Altai Mountains discovered DNA that didn't match either modern humans or known Neanderthals, revealing an entirely distinct group of ancient humans, now called Denisovans, previously completely unknown to science and identified purely from genetic evidence rather than a substantial fossil skeleton.",
+      "Later research found that Denisovan DNA persists today in modern populations across parts of Asia and Oceania — Melanesians and some Indigenous Australians carry a notably higher proportion than almost anyone else, in some cases several percent of their genome, evidence of interbreeding between Denisovans and modern humans tens of thousands of years ago. Remarkably, the cave has also yielded direct physical evidence of a first-generation Neanderthal-Denisovan hybrid individual, confirming the two distinct ancient human groups interbred with each other as well, not just with modern humans."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Denisova_Cave',
+    wikiTerm: 'Denisovans'
+  },
+  {
+    id: 'trepanation-ancient-peru',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hieronymus_Bosch_053_detail.jpg/500px-Hieronymus_Bosch_053_detail.jpg', width: 480, height: 455, credit: 'Hieronymus Bosch', creditUrl: 'https://en.wikipedia.org/wiki/File:Hieronymus_Bosch_053_detail.jpg' },
+    category: 'Anthropology',
+    title: 'Ancient Skull Surgery With a Surprisingly High Survival Rate',
+    place: 'Ancient Peru',
+    countries: ["pe"],
+    paragraphs: [
+      "Trepanation, the practice of drilling or scraping a hole into the skull, was performed independently by cultures across the ancient world, but nowhere more extensively than in pre-Columbian Peru, where archaeologists have recovered thousands of trepanned skulls, some populations showing rates of the procedure far higher than almost anywhere else studied.",
+      "Bone regrowth around many of the holes shows clear evidence of healing, meaning a substantial share of patients survived the operation, sometimes by a considerable margin — one study of Peruvian skulls found survival rates improving over centuries, plausibly climbing well above 80% in some later periods, rivalling or exceeding survival rates for cranial surgery in 19th-century Europe performed without any understanding of germ theory. Reasons for the surgery likely varied, from treating head injuries and skull fractures to, in some cases, apparent ritual or spiritual purposes."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Trepanning',
+    wikiTerm: 'Trepanation'
+  },
+  {
+    id: 'arecibo-observatory-collapse',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Arecibo_radio_telescope_SJU_06_2019_6144.jpg/500px-Arecibo_radio_telescope_SJU_06_2019_6144.jpg', width: 480, height: 720, credit: 'Mariordo (Mario Roberto Durán Ortiz)', creditUrl: 'https://en.wikipedia.org/wiki/File:Arecibo_radio_telescope_SJU_06_2019_6144.jpg' },
+    category: 'Astronomy',
+    title: 'A Legendary Telescope That Collapsed Without Warning',
+    place: 'Arecibo, Puerto Rico',
+    countries: ["us"],
+    cities: [{ name: "Arecibo Observatory", lat: 18.3441, lon: -66.7528 }],
+    paragraphs: [
+      "The Arecibo Observatory in Puerto Rico, its 305-metre dish built into a natural sinkhole in 1963, was for over 50 years the largest single-aperture radio telescope on Earth, used to send the famous 1974 Arecibo message toward a distant star cluster, discover the first known exoplanets, and track potentially hazardous near-Earth asteroids, while also appearing as a filming location in movies including GoldenEye and Contact.",
+      "Years of funding cuts had already left some of its support cables in poor condition when one snapped in August 2020, followed by a second in November; engineers determined the remaining structure was too unstable to safely repair, and before planned controlled demolition could even begin, the 900-tonne receiver platform crashed down into the dish on its own in December 2020. Puerto Rico's scientific community has since pushed for a replacement facility, though nothing built so far has matched Arecibo's original scale."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Arecibo_Observatory',
+    wikiTerm: 'Arecibo Observatory'
+  },
+  {
+    id: 'nebra-sky-disc-germany',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Nebra_disc_1.jpg/500px-Nebra_disc_1.jpg', width: 480, height: 389, credit: 'Frank Vincentz', creditUrl: 'https://en.wikipedia.org/wiki/File:Nebra_disc_1.jpg' },
+    category: 'Astronomy',
+    title: 'One of the Oldest Known Maps of the Sky',
+    place: 'Saxony-Anhalt, Germany',
+    countries: ["de"],
+    paragraphs: [
+      "The Nebra sky disc, a bronze disc about 30cm across inlaid with gold symbols representing the sun, a crescent moon, and stars including a cluster generally identified as the Pleiades, was buried around 1600 BCE near what's now Nebra, Germany, and unearthed by looters with metal detectors in 1999 before eventually being recovered by authorities and authenticated.",
+      "It's widely considered one of the oldest surviving concrete depictions of astronomical phenomena anywhere in the world, and researchers have proposed that later-added gold arcs along its edges may have functioned as a practical tool for reconciling the lunar and solar calendars, marking the range of sunset positions across the year. UNESCO added it to the Memory of the World Register in 2013, and it's often described as one of the most important individual archaeological finds of the 20th century."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Nebra_sky_disc',
+    wikiTerm: 'Nebra sky disc'
+  },
+  {
+    id: 'first-computer-bug-moth',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Codebeispiel_-_Syntax_error.png/500px-Codebeispiel_-_Syntax_error.png', width: 480, height: 381, credit: 'Rherschke', creditUrl: 'https://en.wikipedia.org/wiki/File:Codebeispiel_-_Syntax_error.png' },
+    category: 'Technology',
+    title: "Why We Call Software Problems \"Bugs\"",
+    place: 'Harvard University, USA',
+    countries: ["us"],
+    paragraphs: [
+      "In September 1947, operators working on the Harvard Mark II computer found a moth trapped in one of its electromechanical relays, causing a malfunction; they taped the actual moth into the machine's logbook with the note \"first actual case of bug being found,\" a physical artifact that still survives in a US naval museum collection today.",
+      "The word \"bug\" for a technical fault already existed in engineering slang before this incident, reportedly used by Thomas Edison decades earlier, so the moth didn't coin the term — but the Harvard logbook entry is the most famous and literal illustration of it, and popularized the specific phrase \"debugging\" for the process of finding and removing the problem. Computing pioneer Grace Hopper, who worked on the Mark II team, is often credited with popularizing the anecdote in later years, even though she wasn't the one who wrote the original logbook entry."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Software_bug',
+    wikiTerm: 'debugging'
+  },
+  {
+    id: 'estonia-digital-government',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Wifi_accesspoint_in_tartu_estonia.jpg/500px-Wifi_accesspoint_in_tartu_estonia.jpg', width: 480, height: 360, credit: 'A. Fiedler', creditUrl: 'https://en.wikipedia.org/wiki/File:Wifi_accesspoint_in_tartu_estonia.jpg' },
+    category: 'Technology',
+    title: 'A Country Where Almost Everything Government Is Online',
+    place: 'Estonia',
+    countries: ["ee"],
+    paragraphs: [
+      "Estonia runs one of the most digitized governments in the world — an estimated 99% of public services are available online, citizens can vote in national elections over the internet, and the country built a legal digital identity system so thorough that a marriage, divorce, or property sale are among the very few remaining transactions Estonians are still required to handle in person.",
+      "The push began in earnest after a devastating 2007 wave of cyberattacks against Estonian institutions, which pushed the country to invest heavily in resilient digital infrastructure rather than retreat from it. It also introduced \"e-Residency\" in 2014, letting non-citizens anywhere in the world register and remotely manage an Estonian company entirely online, a program that has since attracted tens of thousands of digital entrepreneurs with no physical connection to the country at all."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/E-Estonia',
+    wikiTerm: 'e-Residency'
+  },
+  {
+    id: 'finger-wrestling-bavaria',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Georg_Schildknecht_Fingerhakeln.jpg/500px-Georg_Schildknecht_Fingerhakeln.jpg', width: 480, height: 318, credit: 'Georg Schildknecht', creditUrl: 'https://en.wikipedia.org/wiki/File:Georg_Schildknecht_Fingerhakeln.jpg' },
+    category: 'Sports',
+    title: 'A Sport Judged by Yanking a Finger',
+    place: 'Bavaria, Germany',
+    countries: ["de"],
+    paragraphs: [
+      "Fingerhakeln, a traditional Bavarian sport with roots reportedly going back centuries as a way to settle disputes without a full brawl, pits two competitors against each other with a leather strap looped around their middle fingers; each pulls as hard as possible, trying to drag their opponent across a table, and matches are frequently over in just a few seconds.",
+      "Regional championships still draw serious, dedicated competitors across Bavaria and neighbouring Austrian and South Tyrolean regions today, with competitors training their finger and forearm strength specifically for the sport, sometimes for years. Injuries, including dislocated fingers, are common enough that a doctor is typically present at organized competitions, and a match can be halted immediately if the strap or finger appears at real risk of serious injury."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Finger_pulling',
+    wikiTerm: 'Fingerhakeln'
+  },
+  {
+    id: 'sepak-takraw-southeast-asia',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Incheon_AsianGames_Sepaktakraw_09_%2815291705581%29.jpg/500px-Incheon_AsianGames_Sepaktakraw_09_%2815291705581%29.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Incheon_AsianGames_Sepaktakraw_09_%2815291705581%29.jpg' },
+    category: 'Sports',
+    title: 'Volleyball Played Entirely Without Hands',
+    place: 'Thailand',
+    countries: ["th"],
+    paragraphs: [
+      "Sepak takraw, popular across Thailand and much of Southeast Asia, plays out like volleyball with the net height and court roughly comparable, but with a crucial difference: players are prohibited from using their hands or arms at all, striking a lightweight woven rattan (or now often synthetic) ball using only their feet, knees, chest, and head.",
+      "At competitive levels, this restriction produces spectacularly acrobatic play, with players regularly executing full mid-air bicycle-kick-style spikes to send the ball across the net with real force, all while staying within a relatively small court. The sport's exact origins are debated among Thailand, Malaysia, and other Southeast Asian nations that each have their own longstanding regional versions, but a standardized set of rules was formalized in the 1940s to allow international competition."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Sepak_takraw',
+    wikiTerm: 'Sepak takraw'
+  },
+  {
+    id: 'bosnia-rotating-presidency',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Sarajevo_City_Panorama.JPG/500px-Sarajevo_City_Panorama.JPG', width: 480, height: 287, credit: 'Julian Nyča', creditUrl: 'https://en.wikipedia.org/wiki/File:Sarajevo_City_Panorama.JPG' },
+    category: 'Political Oddities',
+    title: 'A Country Run by Three Presidents at Once',
+    place: 'Bosnia and Herzegovina',
+    countries: ["ba"],
+    paragraphs: [
+      "Bosnia and Herzegovina, formed after the brutal 1992-1995 war that followed Yugoslavia's breakup, is governed by a tripartite presidency: three separate presidents, one each representing the country's Bosniak, Croat, and Serb populations, elected simultaneously and sharing power as a joint head of state, with the chairmanship rotating between the three every eight months.",
+      "The unusual system was written directly into the 1995 Dayton Peace Agreement that ended the war, designed specifically to guarantee each of the three main ethnic groups a permanent, undeniable share of power at the highest level of government, at the cost of an extremely complex and often gridlocked decision-making process, since major decisions can require consensus across all three. The European Court of Human Rights has separately ruled parts of the system discriminatory against citizens who don't identify with any of the three constituent groups, since they're constitutionally barred from the presidency entirely, a tension the country has still not fully resolved."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Presidency_of_Bosnia_and_Herzegovina',
+    wikiTerm: 'tripartite presidency'
+  },
+  {
+    id: 'liberland-unclaimed-land',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Location_of_Liberland_within_Europe.svg/500px-Location_of_Liberland_within_Europe.svg.png', width: 480, height: 367, credit: 'Elevatorrailfan', creditUrl: 'https://en.wikipedia.org/wiki/File:Location_of_Liberland_within_Europe.svg' },
+    category: 'Political Oddities',
+    title: 'A Self-Declared Country on Land Nobody Wanted',
+    place: 'Danube riverbank, Croatia-Serbia border',
+    countries: ["rs"],
+    cities: [{ name: "Liberland", lat: 45.7683, lon: 18.8756 }],
+    paragraphs: [
+      "Liberland is a roughly 7 square kilometre patch of forested land along the Danube River that, due to an old and unresolved border dispute between Croatia and Serbia, ended up unclaimed by either country — similar in principle to Africa's Bir Tawil, but in the middle of Europe. In 2015, a Czech politician declared it an independent libertarian micronation, styling himself its president.",
+      "Unlike most novelty micronations, Liberland has attracted a genuinely large number of registered \"citizens\" online (claiming hundreds of thousands of applicants, though far fewer verified residents) and has periodically attempted physical settlement, generally blocked by Croatian police patrolling the area, who treat unauthorized entry as trespassing regardless of the land's disputed status. No United Nations member state recognises Liberland's claimed sovereignty."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Liberland',
+    wikiTerm: 'Liberland'
+  },
+  {
+    id: 'berlin-wall-fall',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/West_and_East_Germans_at_the_Brandenburg_Gate_in_1989.jpg/500px-West_and_East_Germans_at_the_Brandenburg_Gate_in_1989.jpg', width: 480, height: 362, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:West_and_East_Germans_at_the_Brandenburg_Gate_in_1989.jpg' },
+    category: 'Political History',
+    title: 'The Wall That Fell Because of a Miscommunication',
+    place: 'Berlin, Germany',
+    countries: ["de"],
+    paragraphs: [
+      "The Berlin Wall, which had divided East and West Berlin since 1961, came down on the night of 9 November 1989 largely because of a bureaucratic mix-up: an East German government spokesman, announcing new, still-restricted travel rules at a press conference, was asked when they'd take effect and, not having been properly briefed, answered \"immediately, without delay.\"",
+      "As the confused announcement spread on live television, thousands of East Berliners gathered at checkpoints demanding to cross that same night; overwhelmed and without clear orders to use force, border guards eventually simply opened the gates rather than risk a violent confrontation. What was intended as a modestly loosened travel policy turned, almost by accident, into the wall's effective overnight collapse, setting in motion German reunification less than a year later."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Fall_of_the_Berlin_Wall',
+    wikiTerm: 'Berlin Wall'
+  },
+  {
+    id: 'haitian-revolution',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Incendie_de_la_Plaine_du_Cap._Massacre_des_Blancs_par_les_esclaves_noirs_r%C3%A9volt%C3%A9s._France_militaire._Martinet_et_Masson.jpg/500px-Incendie_de_la_Plaine_du_Cap._Massacre_des_Blancs_par_les_esclaves_noirs_r%C3%A9volt%C3%A9s._France_militaire._Martinet_et_Masson.jpg', width: 480, height: 325, credit: 'Aaron Martinet / Alphonse-Charles Masson', creditUrl: 'https://en.wikipedia.org/wiki/File:Incendie_de_la_Plaine_du_Cap._Massacre_des_Blancs_par_les_esclaves_noirs_r%C3%A9volt%C3%A9s._France_militaire._Martinet_et_Masson.jpg' },
+    category: 'Political History',
+    title: 'The Only Successful Slave Revolution to Found a Nation',
+    place: 'Haiti',
+    countries: ["ht"],
+    paragraphs: [
+      "The Haitian Revolution, fought from 1791 to 1804 by enslaved and formerly enslaved people against French colonial rule on the island of Saint-Domingue, remains the only slave uprising in history to succeed in both abolishing slavery and establishing an independent, self-governed nation, Haiti, in its place — a result no other slave revolt in the Americas ever achieved.",
+      "Led at various stages by figures including Toussaint Louverture and Jean-Jacques Dessalines, Haitian forces defeated not just French troops but, at different points, Spanish and British forces as well, in what became one of the bloodiest conflicts of the era. France refused to recognise Haiti's independence for decades, and in 1825 forced Haiti to agree to pay a massive indemnity to former French slaveholders as compensation for their \"lost property,\" a debt Haiti spent well over a century paying off, widely cited by historians as a major, lasting drag on the young nation's economic development."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Haitian_Revolution',
+    wikiTerm: 'Haitian Revolution'
+  },
+  {
+    id: 'war-of-the-worlds-broadcast-panic',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Orson_Welles_War_of_the_Worlds_1938.jpg/500px-Orson_Welles_War_of_the_Worlds_1938.jpg', width: 480, height: 365, credit: 'Acme News Photos', creditUrl: 'https://en.wikipedia.org/wiki/File:Orson_Welles_War_of_the_Worlds_1938.jpg' },
+    category: 'Mass Hysteria',
+    title: 'A Radio Drama Mistaken for a Real Alien Invasion',
+    place: 'New York, USA',
+    countries: ["us"],
+    paragraphs: [
+      "On Halloween eve 1938, Orson Welles and the Mercury Theatre broadcast a radio adaptation of H.G. Wells's The War of the Worlds formatted to sound like a series of live news bulletins interrupting regular programming, describing a Martian invasion unfolding in real time across New Jersey and New York.",
+      "Newspapers the following day reported widespread panic, with dramatic stories of listeners fleeing their homes or flooding switchboards in terror — accounts that later research has suggested were considerably exaggerated by print media eager to discredit radio as an irresponsible, sensationalist rival medium. Real confusion and alarm among some listeners who missed the opening disclaimer does appear to have genuinely occurred, just on a smaller and more localized scale than the legendary nationwide panic the story is usually remembered for today."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/The_War_of_the_Worlds_(1938_radio_drama)',
+    wikiTerm: 'Mercury Theatre'
+  },
+  {
+    id: 'tanganyika-laughter-epidemic',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Mater_Misericordiae_Church_-_Bukoba.JPG/500px-Mater_Misericordiae_Church_-_Bukoba.JPG', width: 480, height: 360, credit: 'Macabe5387', creditUrl: 'https://en.wikipedia.org/wiki/File:Mater_Misericordiae_Church_-_Bukoba.JPG' },
+    category: 'Mass Hysteria',
+    title: 'A Laughing Epidemic That Shut Down Schools',
+    place: 'Tanganyika (now Tanzania)',
+    countries: ["tz"],
+    paragraphs: [
+      "In January 1962, uncontrollable laughing broke out among a group of schoolgirls at a mission-run boarding school in what was then Tanganyika, spreading among students over the following weeks until the school was forced to close; some students reportedly laughed for periods ranging from a few hours to, in extreme cases, weeks at a stretch, sometimes alongside crying, fainting, or rashes.",
+      "As affected students returned home, the episode spread to other schools and nearby villages over the following months, ultimately affecting well over a thousand people and forcing several more school closures before subsiding roughly a year later. It's now generally classified by researchers as a documented case of mass psychogenic illness, likely triggered by the genuine stress and social tension of boarding school life under strict colonial-era discipline, then amplified through close social contact rather than any infectious biological cause."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Tanganyika_laughter_epidemic',
+    wikiTerm: 'mass psychogenic illness'
+  },
+  {
+    id: 'christmas-truce-1914',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/42/Illustrated_London_News_-_Christmas_Truce_1914.jpg/500px-Illustrated_London_News_-_Christmas_Truce_1914.jpg', width: 480, height: 288, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Illustrated_London_News_-_Christmas_Truce_1914.jpg' },
+    category: 'Military Oddities',
+    title: 'The Night Enemy Soldiers Played Football Together',
+    place: 'Western Front, Belgium',
+    countries: ["be"],
+    paragraphs: [
+      "On Christmas Eve and Christmas Day 1914, only months into WWI, soldiers along multiple stretches of the Western Front in Belgium and France spontaneously and informally ceased fire, without any official orders to do so — singing carols across no-man's-land, exchanging small gifts and souvenirs, and in a number of well-documented instances, playing informal games of football between opposing trenches.",
+      "Military commanders on both sides were alarmed by the truce and moved quickly to prevent anything similar from happening again, rotating units and issuing explicit orders against fraternization with the enemy in following years. No truce on anywhere near the same informal, widespread scale occurred again for the rest of the war, and the 1914 Christmas truce has since become one of the most enduring symbols of shared humanity briefly overriding official conflict."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Christmas_truce',
+    wikiTerm: 'Christmas truce'
+  },
+  {
+    id: 'ghost-army-wwii',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Ghostarmypatch.jpg', width: 200, height: 233, credit: 'US Dept of Defense - Dept of the Army', creditUrl: 'https://en.wikipedia.org/wiki/File:Ghostarmypatch.jpg' },
+    category: 'Military Oddities',
+    title: 'The Army Unit That Fought With Inflatable Tanks',
+    place: 'France',
+    countries: ["fr"],
+    paragraphs: [
+      "The US Army's 23rd Headquarters Special Troops, later nicknamed the \"Ghost Army,\" was a roughly 1,100-strong WWII unit built almost entirely from artists, sound engineers, and radio operators, tasked with deceiving German forces about the location and size of Allied troops using inflatable rubber tanks, fake convoy noise played from powerful speakers, and staged fraudulent radio traffic.",
+      "Operating across Europe including in France following the D-Day landings, the unit staged more than 20 deception operations, at times convincingly simulating entire divisions with only a fraction of the actual manpower, helping draw German attention and firepower away from real Allied positions and operations. Its work remained classified for over 40 years after the war, and its members received little public recognition until documents were declassified in the 1990s and beyond, culminating in a 2022 US Congressional Gold Medal awarded to the unit."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Ghost_Army',
+    wikiTerm: 'Ghost Army'
+  },
+  {
+    id: 'mississippi-company-bubble',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/John_Law-Casimir_Balthazar_mg_8450.jpg/500px-John_Law-Casimir_Balthazar_mg_8450.jpg', width: 480, height: 617, credit: 'Rama', creditUrl: 'https://en.wikipedia.org/wiki/File:John_Law-Casimir_Balthazar_mg_8450.jpg' },
+    category: 'Financial History',
+    title: 'The Bubble That Sent French Paper Money Worthless',
+    place: 'France',
+    countries: ["fr"],
+    paragraphs: [
+      "In 1716, Scottish financier John Law convinced the French government to let him establish a bank issuing paper currency backed by the state, followed by the Mississippi Company, granted a monopoly over trade with France's vast Louisiana territory in North America; speculative demand for company shares, fueled partly by wildly exaggerated claims about Louisiana's wealth, drove share prices up by many multiples within about a year.",
+      "When the bubble inevitably burst in 1720, both the company's shares and Law's paper currency collapsed almost simultaneously, since Law had tied the two together, wiping out enormous amounts of wealth across French society and souring French trust in paper money and central banking for generations afterward. Some historians have argued the resulting distrust of financial innovation in France, compared to Britain's roughly contemporaneous but differently resolved South Sea Bubble, had lasting economic consequences stretching all the way to the financial pressures behind the French Revolution decades later."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Mississippi_Company',
+    wikiTerm: 'Mississippi Company'
+  },
+  {
+    id: 'weimar-hyperinflation-germany',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Bundesarchiv_Bild_183-R1215-506%2C_Berlin%2C_Reichsbank%2C_Geldauflieferungsstelle.jpg/500px-Bundesarchiv_Bild_183-R1215-506%2C_Berlin%2C_Reichsbank%2C_Geldauflieferungsstelle.jpg', width: 480, height: 304, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Bundesarchiv_Bild_183-R1215-506%2C_Berlin%2C_Reichsbank%2C_Geldauflieferungsstelle.jpg' },
+    category: 'Financial History',
+    title: 'When Cash Was Cheaper Than the Paper It Was Printed On',
+    place: 'Weimar Republic, Germany',
+    countries: ["de"],
+    paragraphs: [
+      "Germany's Weimar Republic experienced one of history's most extreme cases of hyperinflation in 1923, driven largely by the government printing money to cover war reparations and a general strike, with prices roughly doubling every few days at the worst point; workers reportedly needed wheelbarrows to carry enough banknotes to buy basic groceries, and some people found it cheaper to burn stacks of cash for warmth than to buy firewood with it.",
+      "The German mark's exchange rate against the US dollar collapsed from roughly 4.2 marks per dollar before WWI to over 4 trillion marks per dollar by late 1923. The crisis was ultimately resolved by introducing an entirely new currency, the Rentenmark, backed not by gold but by a mortgage on German industrial and agricultural land, which succeeded in restoring public confidence almost overnight — but the trauma of the hyperinflation left a lasting mark on German economic policy and public psychology for decades afterward."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Hyperinflation_in_the_Weimar_Republic',
+    wikiTerm: 'Rentenmark'
+  },
+  {
+    id: 'bhopal-gas-tragedy',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Union_Carbide_pesticide_factory%2C_Bhopal%2C_India%2C_1985.jpg/500px-Union_Carbide_pesticide_factory%2C_Bhopal%2C_India%2C_1985.jpg', width: 480, height: 294, credit: 'Bhopal Medical Appeal, Martin Stott', creditUrl: 'https://en.wikipedia.org/wiki/File:Union_Carbide_pesticide_factory%2C_Bhopal%2C_India%2C_1985.jpg' },
+    category: 'Industrial Disasters',
+    title: "The World's Deadliest Industrial Accident",
+    place: 'Bhopal, India',
+    countries: ["in"],
+    cities: [{ name: "Bhopal", lat: 23.2599, lon: 77.4126 }],
+    paragraphs: [
+      "On the night of 2-3 December 1984, a Union Carbide pesticide plant in Bhopal, India, leaked around 30 tonnes of highly toxic methyl isocyanate gas into the surrounding densely populated neighbourhoods after safety systems failed, in what's generally considered the worst industrial disaster in history; official death tolls range from around 3,800 to, by some independent estimates, over 15,000 people over subsequent years, with several hundred thousand more injured or exposed.",
+      "The disaster prompted major changes to industrial safety regulation and chemical accident preparedness worldwide, but survivors and advocacy groups have argued for decades that compensation, site cleanup, and accountability were all seriously inadequate: Union Carbide's then-chairman was charged with culpable homicide in India but never appeared in an Indian court, and significant chemical contamination around the former plant site reportedly persisted for decades afterward, continuing to affect local groundwater and residents' health."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Bhopal_disaster',
+    wikiTerm: 'Union Carbide'
+  },
+  {
+    id: 'seveso-dioxin-disaster',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/SEVESO-1976.jpg/500px-SEVESO-1976.jpg', width: 480, height: 384, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:SEVESO-1976.jpg' },
+    category: 'Industrial Disasters',
+    title: 'The Accident That Rewrote European Chemical Safety Law',
+    place: 'Seveso, Italy',
+    countries: ["it"],
+    cities: [{ name: "Seveso", lat: 45.6511, lon: 9.1522 }],
+    paragraphs: [
+      "In July 1976, a malfunction at a chemical plant near Seveso, Italy, released a cloud of dioxin, one of the most toxic industrial chemical compounds known, over the surrounding countryside; thousands of animals died within days, and a substantial number of local residents developed chloracne, a severe and disfiguring skin condition, along with longer-term health concerns still being studied decades later.",
+      "The scale of the contamination, and the plant operator's initial delay in publicly disclosing the exact chemicals released, pushed the European Economic Community to pass sweeping new industrial safety legislation in 1982, still known today as the \"Seveso Directive,\" which established mandatory hazard reporting, emergency planning, and land-use restrictions around facilities handling dangerous chemicals across what's now the EU — regulation whose basic structure remains largely in place across Europe today."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Seveso_disaster',
+    wikiTerm: 'Seveso Directive'
+  },
+  {
+    id: 'jain-sallekhana-fasting',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Nishidhi_stone_with_14th_century_Old_Kannada_inscription_from_Tavanandi_forest.JPG/500px-Nishidhi_stone_with_14th_century_Old_Kannada_inscription_from_Tavanandi_forest.JPG', width: 480, height: 720, credit: 'Dineshkannambadi', creditUrl: 'https://en.wikipedia.org/wiki/File:Nishidhi_stone_with_14th_century_Old_Kannada_inscription_from_Tavanandi_forest.JPG' },
+    category: 'Ascetic Practices',
+    title: 'A Religious Fast Undertaken Until Death',
+    place: 'India',
+    countries: ["in"],
+    paragraphs: [
+      "Sallekhana is a vow observed within Jainism, typically by elderly practitioners or those with a terminal illness, involving a gradual, voluntary reduction of food and water intake over an extended period, undertaken with the stated goal of facing death consciously, peacefully, and without fear or attachment, rather than as an act of despair.",
+      "It remains legally and religiously practiced in India today, generally under close observation from family, spiritual advisors, and sometimes physicians, but it's also been legally contested: a 2015 Rajasthan High Court ruling briefly classified it as equivalent to suicide and attempted to ban it, before India's Supreme Court stayed that ruling shortly afterward pending further review, reflecting an unresolved tension between religious freedom protections and India's laws around assisted death."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Sallekhana',
+    wikiTerm: 'Sallekhana'
+  },
+  {
+    id: 'stylites-pillar-saints',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Simeon_Stylites_the_Elder_and_Simeon_Stylites_the_Younger%2C_1699.jpg/500px-Simeon_Stylites_the_Elder_and_Simeon_Stylites_the_Younger%2C_1699.jpg', width: 480, height: 660, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Simeon_Stylites_the_Elder_and_Simeon_Stylites_the_Younger%2C_1699.jpg' },
+    category: 'Ascetic Practices',
+    title: 'Christian Ascetics Who Lived Atop Pillars for Decades',
+    place: 'Syria',
+    countries: ["sy"],
+    paragraphs: [
+      "Simeon Stylites, a 5th-century Christian ascetic in what's now Syria, reportedly grew frustrated with crowds constantly seeking him out for blessings and advice, and climbed atop a stone pillar to live in relative isolation while remaining physically present for visitors below — he's said to have spent roughly the last 37 years of his life living on progressively taller pillars, eventually reaching around 15-18 metres high.",
+      "His example directly inspired a wider ascetic tradition of \"stylites\" (from the Greek word for pillar) across the early Christian world, with a number of other monks over the following centuries similarly living atop columns for extended periods, sometimes decades, exposed to the elements and dependent on followers below to send up food and water. The remains of Simeon's original pillar and the surrounding church complex built to commemorate him still stand today as an archaeological site in northern Syria."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Stylite',
+    wikiTerm: 'Stylites'
+  },
+  {
+    id: 'dust-bowl-usa',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Farmer_walking_in_dust_storm_Cimarron_County_Oklahoma2.jpg/500px-Farmer_walking_in_dust_storm_Cimarron_County_Oklahoma2.jpg', width: 480, height: 469, credit: 'Arthur Rothstein', creditUrl: 'https://en.wikipedia.org/wiki/File:Farmer_walking_in_dust_storm_Cimarron_County_Oklahoma2.jpg' },
+    category: 'Environmental Disasters',
+    title: 'When Farming Practices Turned the Plains to Dust',
+    place: 'Great Plains, USA',
+    countries: ["us"],
+    paragraphs: [
+      "Through the 1930s, a combination of severe drought and decades of farming practices that had stripped the US Great Plains of its native deep-rooted grasses left millions of acres of topsoil dangerously exposed; when high winds hit the loosened, dried-out soil, the result was massive dust storms, some tall enough to be seen from cities hundreds of kilometres away, and dark enough to turn daytime skies black.",
+      "The disaster, known as the Dust Bowl, forced roughly 2.5 million people to leave the region over the decade, one of the largest internal migrations in American history, driving many farming families west toward California in search of work, an exodus later immortalized in John Steinbeck's novel The Grapes of Wrath. It also directly reshaped US agricultural policy, prompting the creation of federal soil conservation programs still in operation today, aimed specifically at preventing a repeat of the erosion that caused it."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Dust_Bowl',
+    wikiTerm: 'Dust Bowl'
+  },
+  {
+    id: 'minamata-disease-japan',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Minamata_City_Hall_20110514.JPG/500px-Minamata_City_Hall_20110514.JPG', width: 480, height: 360, credit: 'Waka77', creditUrl: 'https://en.wikipedia.org/wiki/File:Minamata_City_Hall_20110514.JPG' },
+    category: 'Environmental Disasters',
+    title: 'A Poisoning That Took Decades to Officially Acknowledge',
+    place: 'Minamata, Japan',
+    countries: ["jp"],
+    cities: [{ name: "Minamata", lat: 32.2072, lon: 130.4033 }],
+    paragraphs: [
+      "Starting in the 1950s, a chemical company in the Japanese city of Minamata discharged industrial wastewater containing methylmercury directly into the surrounding bay for years; the mercury accumulated up the food chain in local fish and shellfish, a dietary staple for the fishing community, causing severe neurological damage in thousands of residents who ate them, including debilitating tremors, loss of coordination, and birth defects in children exposed before birth.",
+      "The company and local government were slow to acknowledge the cause, continuing to discharge wastewater for over a decade after the illness was first identified, in a delay that significantly worsened the eventual scale of harm; a Japanese court didn't formally rule the company liable until 1973. \"Minamata disease\" is now the standard medical term for methylmercury poisoning globally, and the disaster remains one of the most frequently cited case studies in environmental health and industrial regulation worldwide."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Minamata_disease',
+    wikiTerm: 'Minamata disease'
+  },
+  {
+    id: 'wife-carrying-championship-finland',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/WCwiki1.jpg/500px-WCwiki1.jpg', width: 480, height: 286, credit: 'Msvctv', creditUrl: 'https://en.wikipedia.org/wiki/File:WCwiki1.jpg' },
+    category: 'Cultural Oddities',
+    title: "A Sport Where the Prize Is Your Partner's Weight in Beer",
+    place: 'Sonkajärvi, Finland',
+    countries: ["fi"],
+    cities: [{ name: "Sonkajärvi", lat: 63.6667, lon: 27.5167 }],
+    paragraphs: [
+      "The Wife-Carrying World Championships, held annually in the small Finnish town of Sonkajärvi since 1992, has competitors race through an obstacle course — including a water hazard — while carrying a partner using any of several permitted holds, most competitively an upside-down piggyback style nicknamed the \"Estonian carry,\" which lets the carrier use both hands freely.",
+      "Despite the name, the \"wife\" doesn't need to be a spouse, or even a woman, and doesn't need to share the carrier's nationality; the tradition is loosely traced back to 19th-century Finnish folklore about men raiding neighbouring villages to carry off wives, now reenacted purely as good-natured sport. The winning team traditionally receives the wife's own body weight in beer, along with a small cash prize, and the event now draws international competitors from well beyond Finland each year."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Wife-carrying',
+    wikiTerm: 'Wife-Carrying World Championships'
+  },
+  {
+    id: 'el-colacho-baby-jumping-spain',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/El_colacho_saltando.jpg/500px-El_colacho_saltando.jpg', width: 480, height: 640, credit: 'Celestebombin', creditUrl: 'https://en.wikipedia.org/wiki/File:El_colacho_saltando.jpg' },
+    category: 'Cultural Oddities',
+    title: 'A Festival Where Men Leap Over Babies',
+    place: 'Castrillo de Murcia, Spain',
+    countries: ["es"],
+    cities: [{ name: "Castrillo de Murcia", lat: 42.35, lon: -3.9333 }],
+    paragraphs: [
+      "El Colacho, an annual festival held since 1620 in the small Spanish village of Castrillo de Murcia, involves men dressed as devils, in bright yellow and red costumes, running and leaping over rows of babies born within the previous year, who are laid out on mattresses in the street specifically for the event.",
+      "The tradition, tied to the Catholic feast of Corpus Christi, is locally understood as a way of symbolically cleansing the infants of original sin and warding off illness and evil spirits, with the devil figures' leap representing evil being chased away from the children. The Catholic Church has never officially endorsed the practice, and it draws scrutiny and safety criticism from child welfare advocates regularly, but the village has continued the ritual essentially unbroken for over 400 years."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Baby_jumping',
+    wikiTerm: 'El Colacho'
+  },
+  {
+    id: 'maginot-line-france',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Maginot_line_1.jpg/500px-Maginot_line_1.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Maginot_line_1.jpg' },
+    category: 'War Remnants',
+    title: 'A Fortress Line That Got Simply Driven Around',
+    place: 'France',
+    countries: ["fr"],
+    paragraphs: [
+      "The Maginot Line, a massive, heavily fortified defensive line France built along its border with Germany through the 1930s, included underground bunkers, artillery emplacements, troop quarters, and even internal railways, designed to prevent a repeat of the devastating trench warfare France had suffered in WWI.",
+      "When Germany invaded in 1940, its forces largely avoided a direct assault on the line's strongest fortifications entirely, instead advancing through the Ardennes forest and into Belgium and the Netherlands, terrain French planners had judged too difficult for a major armored advance, then swinging around the Maginot Line's northern end. The line itself performed reasonably well in the more limited direct engagements it did face, but the broader French defensive strategy built around it failed within about six weeks, and \"Maginot Line\" has since become a common shorthand in English for any elaborate defense that fails because it was outflanked rather than overwhelmed head-on."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Maginot_Line',
+    wikiTerm: 'Maginot Line'
+  },
+  {
+    id: 'unexploded-ordnance-laos',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Laos_1973-02_CIA.png/500px-Laos_1973-02_CIA.png', width: 480, height: 559, credit: 'CIA', creditUrl: 'https://en.wikipedia.org/wiki/File:Laos_1973-02_CIA.png' },
+    category: 'War Remnants',
+    title: 'The Most Heavily Bombed Country, Per Capita, in History',
+    place: 'Laos',
+    countries: ["la"],
+    paragraphs: [
+      "Between 1964 and 1973, the United States dropped more than two million tonnes of ordnance on Laos during a largely covert bombing campaign tied to the Vietnam War, making it, per capita, the most heavily bombed country in history — reportedly averaging a planeload of bombs roughly every eight minutes for nine straight years.",
+      "An estimated 30% of the cluster submunitions dropped failed to detonate on impact, leaving tens of millions of unexploded bombs scattered across the Laotian countryside; they've killed or injured an estimated 20,000 people since the war ended, with farmers and children especially at risk while working fields or playing in areas never fully cleared. Large-scale international clearance efforts have continued for decades and are expected to take many more to meaningfully finish, given the sheer scale of the contamination."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Laotian_Civil_War',
+    wikiTerm: 'unexploded bombs'
   }
 ];
