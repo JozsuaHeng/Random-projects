@@ -122,6 +122,22 @@ body {
   padding: 3px 7px;
 }
 
+.blank-line {
+  position: absolute;
+  z-index: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 1px;
+}
+
+.exhaust {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  filter: blur(1px);
+}
+
 .horizon {
   position: absolute;
   left: 0;
@@ -146,6 +162,11 @@ body {
 .tile[data-theme="broetry"] .tag,
 .tile[data-theme="broetry"] .go { color: #d98a1f; }
 .tile[data-theme="broetry"]:hover { border-color: #d98a1f; }
+.tile[data-theme="broetry"] .broetry-chip {
+  color: #8a4a1f;
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(138, 74, 31, 0.35);
+}
 
 /* --- theme: thought leadership mad-libs --- */
 

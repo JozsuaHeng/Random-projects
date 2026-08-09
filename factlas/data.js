@@ -389,7 +389,7 @@ const FACTS = [
     id: 'ring-of-fire',
     image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Pacific_Ring_of_Fire.svg/500px-Pacific_Ring_of_Fire.svg.png', width: 480, height: 290, credit: 'Gringer', creditUrl: 'https://en.wikipedia.org/wiki/File:Pacific_Ring_of_Fire.svg' },
     category: 'Geography',
-    title: "Where 90% of Earthquakes Happen",
+    title: 'Where 90% of Earthquakes Happen',
     place: 'Pacific Rim',
     countries: ['jp', 'ph', 'id', 'cl', 'us', 'nz', 'ru'],
     paragraphs: [
@@ -767,5 +767,821 @@ const FACTS = [
     ],
     wiki: 'https://en.wikipedia.org/wiki/Sports_in_Bhutan',
     wikiTerm: 'archery'
+  },
+  {
+    id: 'kolmanskop-ghost-town',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Kolmanskop_Ghost_Town.jpg/500px-Kolmanskop_Ghost_Town.jpg', width: 480, height: 270, credit: 'SkyPixels', creditUrl: 'https://en.wikipedia.org/wiki/File:Kolmanskop_Ghost_Town.jpg' },
+    category: 'Ghost Towns',
+    title: 'A Diamond Town Being Swallowed by the Desert',
+    place: 'Kolmanskop, Namibia',
+    countries: ["na"],
+    cities: [{ name: "Kolmanskop", lat: -26.7167, lon: 15.2333 }],
+    paragraphs: [
+      "Kolmanskop was a booming diamond-mining town in the Namibian desert in the early 20th century, complete with a hospital, ballroom, theatre, and the first X-ray station in the southern hemisphere, all built to serve a population drawn in by a diamond rush that began in 1908. Diamonds were reportedly once so plentiful that workers could pick them off the sand by moonlight.",
+      "Richer deposits found further south drew people away through the 1930s, and the town was fully abandoned by 1956. With nobody left to keep the desert out, sand has since poured through doors and windows, burying entire rooms halfway up their walls; the empty buildings, still mostly intact, have made Kolmanskop one of the most photographed ghost towns in the world."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Kolmanskop',
+    wikiTerm: 'Kolmanskop'
+  },
+  {
+    id: 'sealand-micronation',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Sealand.jpg/500px-Sealand.jpg', width: 480, height: 320, credit: 'Ryan Lackey', creditUrl: 'https://en.wikipedia.org/wiki/File:Sealand.jpg' },
+    category: 'Micronations',
+    title: 'A Country Built on a WWII Sea Fort',
+    place: 'North Sea, off England',
+    countries: ["gb"],
+    cities: [{ name: "Principality of Sealand", lat: 51.8944, lon: 1.4817 }],
+    paragraphs: [
+      "The Principality of Sealand occupies a single abandoned anti-aircraft platform in the North Sea, built by Britain during WWII and abandoned afterward, about 10km off the English coast. A British family took it over in 1967, declared it an independent nation, and has run it as a self-styled sovereign micronation ever since, complete with its own flag, currency, passports, and a line of hereditary succession.",
+      "No country formally recognises Sealand's sovereignty, and its legal status has never been fully tested, but it's survived a fire, a 1978 armed takeover by rival claimants (repelled and later negotiated back), and decades of tourists and journalists treating it as a genuine, if tiny, curiosity of international law — its entire land area is smaller than a football pitch."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Principality_of_Sealand',
+    wikiTerm: 'Principality of Sealand'
+  },
+  {
+    id: 'kowloon-walled-city',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Kowloon_Walled_City_-_1989_Aerial.jpg/500px-Kowloon_Walled_City_-_1989_Aerial.jpg', width: 480, height: 362, credit: 'Ian Lambot', creditUrl: 'https://en.wikipedia.org/wiki/File:Kowloon_Walled_City_-_1989_Aerial.jpg' },
+    category: 'Urban Extremes',
+    title: 'The Densest Place That Ever Existed',
+    place: 'Kowloon, Hong Kong',
+    countries: ["cn"],
+    cities: [{ name: "Kowloon Walled City", lat: 22.3312, lon: 114.1904 }],
+    paragraphs: [
+      "Kowloon Walled City began as a small Chinese military outpost that, through a quirk of a 19th-century treaty, ended up governed by neither Hong Kong's British colonial administration nor mainland China. Left in a legal no-man's-land for decades, it grew almost entirely unregulated into a single sprawling structure of interconnected high-rises just 2.6 hectares in size.",
+      "By the time it was demolished in 1993-94, an estimated 33,000 people lived inside it, making it, by most estimates, the most densely populated place that has ever existed — over a million people per square kilometre if scaled up. Sunlight barely reached its lower alleyways, power and water lines were a tangled improvised web, and it ran largely on its own internal economy of small workshops, clinics, and businesses, policed more by its own residents' associations than by any government."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Kowloon_Walled_City',
+    wikiTerm: 'Kowloon Walled City'
+  },
+  {
+    id: 'hashima-battleship-island',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Battle-Ship_Island_Nagasaki_Japan.jpg/500px-Battle-Ship_Island_Nagasaki_Japan.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Battle-Ship_Island_Nagasaki_Japan.jpg' },
+    category: 'Ghost Towns',
+    title: "Japan's Abandoned 'Battleship Island'",
+    place: 'Hashima, Japan',
+    countries: ["jp"],
+    cities: [{ name: "Hashima Island", lat: 32.6275, lon: 129.7386 }],
+    paragraphs: [
+      "Hashima Island, nicknamed Gunkanjima (\"Battleship Island\") for its silhouette, was a densely packed undersea coal-mining community off Nagasaki, reaching a peak population density among the highest ever recorded — more than 80,000 people per square kilometre at its 1959 peak, packed into a cluster of concrete apartment blocks on a speck of land barely 6 hectares in size.",
+      "When the coal mine closed in 1974 as Japan shifted to petroleum, the entire population left within months, and the island has sat empty and decaying ever since. It reopened to limited tourism in 2009 and later appeared as a filming location for a James Bond film, its crumbling apartment blocks now a UNESCO World Heritage Site alongside other Meiji-era industrial sites."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Hashima_Island',
+    wikiTerm: 'Hashima Island'
+  },
+  {
+    id: 'bir-tawil-unclaimed',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Topographic_Map_of_Bir_Tawil.png/500px-Topographic_Map_of_Bir_Tawil.png', width: 480, height: 217, credit: 'Maps-For-Free.com', creditUrl: 'https://en.wikipedia.org/wiki/File:Topographic_Map_of_Bir_Tawil.png' },
+    category: 'Political Oddities',
+    title: 'A Piece of Land No Country Wants',
+    place: 'Bir Tawil, Egypt-Sudan border',
+    countries: ["eg", "sd"],
+    cities: [{ name: "Bir Tawil", lat: 21.8767, lon: 33.7361 }],
+    paragraphs: [
+      "Bir Tawil, a roughly 2,000 square kilometre stretch of desert between Egypt and Sudan, is one of the very few pieces of land on Earth claimed by no country at all. The situation is a side effect of two conflicting colonial-era border lines: Egypt insists on the older 1899 boundary, which puts Bir Tawil in Sudan, while Sudan insists on a 1902 administrative line that puts it in Egypt.",
+      "Because each country's claim to the more valuable, resource-rich Hala'ib Triangle nearby depends on the border it prefers, both governments effectively have to disown Bir Tawil to keep their claim to Hala'ib consistent — leaving this smaller patch of desert unclaimed by design rather than oversight. It's occasionally 'claimed' by individuals hoping to found their own micronation there, none recognised by any government."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Bir_Tawil',
+    wikiTerm: 'Bir Tawil'
+  },
+  {
+    id: 'baarle-enclaves',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/P1070673Gemeentehuis.JPG/500px-P1070673Gemeentehuis.JPG', width: 480, height: 360, credit: 'G.Lanting', creditUrl: 'https://en.wikipedia.org/wiki/File:P1070673Gemeentehuis.JPG' },
+    category: 'Border Oddities',
+    title: 'A Border That Runs Through Living Rooms',
+    place: 'Baarle, Netherlands-Belgium',
+    countries: ["nl", "be"],
+    cities: [{ name: "Baarle-Nassau / Baarle-Hertog", lat: 51.4415, lon: 4.9298 }],
+    paragraphs: [
+      "The twin towns of Baarle-Nassau (Netherlands) and Baarle-Hertog (Belgium) share one of the most tangled borders on Earth: two dozen small Belgian enclaves sit scattered inside Dutch territory, several of which contain smaller Dutch enclaves inside them, the result of a patchwork of medieval treaties and land swaps between local lords centuries before either modern country existed.",
+      "The border is marked out in white crosses and studs set directly into the streets and pavements, and in a number of buildings it runs straight through the middle, meaning a shop or house can have a different nationality on each side of a single room — historically exploited for things like differing shop hours or tax rules between the two countries, and which house's front door counted as the 'official' address."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Baarle-Nassau',
+    wikiTerm: 'Baarle-Nassau'
+  },
+  {
+    id: 'whittier-one-building-town',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Whittier%2C_Alaska_aerial_view_2026.jpg/500px-Whittier%2C_Alaska_aerial_view_2026.jpg', width: 480, height: 320, credit: 'Quintin Soloviev', creditUrl: 'https://en.wikipedia.org/wiki/File:Whittier%2C_Alaska_aerial_view_2026.jpg' },
+    category: 'Company Towns',
+    title: 'A Town That Lives Inside One Building',
+    place: 'Whittier, Alaska',
+    countries: ["us"],
+    cities: [{ name: "Whittier", lat: 60.7728, lon: -148.6864 }],
+    paragraphs: [
+      "Nearly the entire population of Whittier, Alaska — around 260 people — lives inside a single 14-story former military building called Begich Towers. The town was built by the US Army during WWII specifically because near-constant cloud cover made it hard to spot from the air, and the building was designed to be self-sufficient against Alaska's brutal winters.",
+      "Begich Towers today houses not just apartments but the town's police station, church, and general store, all reachable without going outside; the local school is one of the only buildings that requires a short walk through the elements, connected to the tower by a tunnel in winter. The town is also only reachable by a single-lane tunnel shared with a railway, which closes overnight."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Whittier,_Alaska',
+    wikiTerm: 'Whittier, Alaska'
+  },
+  {
+    id: 'defenestrations-of-prague',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Prager_Fenstersturz_Wahrhafftige_Zeitung_aus_Prag.JPG/500px-Prager_Fenstersturz_Wahrhafftige_Zeitung_aus_Prag.JPG', width: 480, height: 327, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Prager_Fenstersturz_Wahrhafftige_Zeitung_aus_Prag.JPG' },
+    category: 'Political History',
+    title: 'A City With a Habit of Throwing People Out Windows',
+    place: 'Prague, Czech Republic',
+    countries: ["cz"],
+    cities: [{ name: "Prague Castle", lat: 50.0909, lon: 14.4004 }],
+    paragraphs: [
+      "Prague has had at least three politically significant \"defenestrations\" — the act of throwing someone out of a window as a form of protest or coup — spaced across roughly 500 years of its history. The first, in 1419, saw a crowd of Hussite protesters throw several town councillors from a town hall window, helping trigger decades of religious war.",
+      "The most consequential came in 1618, when Protestant nobles threw two Catholic regents (and a secretary) out of a Prague Castle window to protest Habsburg religious policy; all three reportedly survived the roughly 20-metre fall, which Catholic accounts attributed to divine intervention and Protestant accounts blamed on a conveniently placed dung heap. That incident helped spark the Thirty Years' War, one of the most destructive conflicts in European history."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Defenestrations_of_Prague',
+    wikiTerm: 'defenestrations'
+  },
+  {
+    id: 'dancing-plague-1518',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Dancingplague2_%28alt%29.jpg/500px-Dancingplague2_%28alt%29.jpg', width: 480, height: 353, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Dancingplague2_%28alt%29.jpg' },
+    category: 'Mass Hysteria',
+    title: 'The City That Danced Itself to Exhaustion',
+    place: 'Strasbourg (then part of the Holy Roman Empire)',
+    countries: ["fr"],
+    cities: [{ name: "Strasbourg", lat: 48.5734, lon: 7.7521 }],
+    paragraphs: [
+      "In July 1518, a woman in the city of Strasbourg reportedly began dancing in the street without music and didn't stop for days; within a month, contemporary accounts describe as many as 400 people caught up in the same compulsive dancing, some of whom collapsed from exhaustion, and some possibly dying from heart attacks or strokes brought on by it.",
+      "City authorities, believing more dancing was the cure, initially made things worse by hiring musicians and clearing a hall to encourage it. The most widely accepted modern explanation is a form of mass psychogenic illness — stress-induced collective behaviour — plausibly amplified by a famine-stricken, superstitious population, though the episode, now generally known as the dancing plague of 1518, remains one of the strangest well-documented events in European history."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Dancing_plague_of_1518',
+    wikiTerm: 'dancing plague of 1518'
+  },
+  {
+    id: 'great-emu-war',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Deceased_emu_during_Emu_War.jpg/500px-Deceased_emu_during_Emu_War.jpg', width: 480, height: 577, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Deceased_emu_during_Emu_War.jpg' },
+    category: 'Military Oddities',
+    title: 'The War Australia Lost to Emus',
+    place: 'Western Australia',
+    countries: ["au"],
+    paragraphs: [
+      "In 1932, the Australian military was deployed against an unusual enemy: emus. Around 20,000 of the large flightless birds had migrated into Western Australian farmland after breeding season, trampling crops and fences, and soldiers were sent out with machine guns to cull them at farmers' request.",
+      "The operation, later nicknamed the Great Emu War, went badly — emus proved surprisingly hard to hit in open terrain, scattering into small groups instead of forming an easy target, and the guns frequently jammed. After roughly a month and only a few hundred confirmed kills for thousands of rounds fired, the military withdrew; farmers were left to manage the birds themselves, and the emus have since been only half-jokingly described as having won."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Emu_War',
+    wikiTerm: 'Great Emu War'
+  },
+  {
+    id: 'tulip-mania-netherlands',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Jan_Brueghel_the_Younger%2C_Satire_on_Tulip_Mania%2C_c._1640.jpg/500px-Jan_Brueghel_the_Younger%2C_Satire_on_Tulip_Mania%2C_c._1640.jpg', width: 480, height: 307, credit: 'Jan Brueghel the Younger', creditUrl: 'https://en.wikipedia.org/wiki/File:Jan_Brueghel_the_Younger%2C_Satire_on_Tulip_Mania%2C_c._1640.jpg' },
+    category: 'Financial History',
+    title: 'When a Flower Bulb Cost More Than a House',
+    place: 'Netherlands',
+    countries: ["nl"],
+    paragraphs: [
+      "During the Dutch Golden Age in the 1630s, tulip bulbs — a still-novel import from the Ottoman Empire — became the subject of intense speculative trading, with prices for rare varieties climbing to many times an average worker's annual income. Contracts for bulbs still in the ground changed hands repeatedly before ever being dug up, an early form of futures trading.",
+      "Prices collapsed abruptly in February 1637, wiping out paper fortunes almost overnight, in what's often cited as one of the first recorded speculative bubbles in economic history. Modern economic historians debate how widespread the damage really was outside a fairly narrow circle of wealthy traders, but tulip mania has remained a go-to shorthand for irrational market speculation ever since."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Tulip_mania',
+    wikiTerm: 'tulip mania'
+  },
+  {
+    id: 'boston-molasses-flood',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/BostonMolassesDisaster.jpg/500px-BostonMolassesDisaster.jpg', width: 480, height: 382, credit: 'BPL', creditUrl: 'https://en.wikipedia.org/wiki/File:BostonMolassesDisaster.jpg' },
+    category: 'Industrial Disasters',
+    title: 'The Flood Made of Molasses',
+    place: 'Boston, Massachusetts',
+    countries: ["us"],
+    cities: [{ name: "Boston", lat: 42.3601, lon: -71.0589 }],
+    paragraphs: [
+      "In January 1919, a huge steel tank holding over 8.7 million litres of molasses ruptured in Boston's North End, sending a wave of molasses estimated at up to 8 metres high through the streets at an estimated 55km/h. It killed 21 people and injured about 150, some of whom drowned or suffocated in the thick, sticky liquid.",
+      "A lengthy lawsuit afterward — one of the first major class-action suits in Massachusetts — found the company had cut corners on the tank's construction and failed to adequately test it. The disaster helped push forward some of the earliest engineering licensing requirements in the US, and residents reportedly claimed for decades afterward that the neighbourhood still smelled faintly of molasses on hot summer days."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Great_Molasses_Flood',
+    wikiTerm: 'molasses'
+  },
+  {
+    id: 'dyatlov-pass-incident',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B4%D1%8F%D1%82%D0%BB%D0%BE%D0%B2%D1%86%D0%B0%D0%BC_%D0%BD%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%BB%D0%B0%D0%B4%D0%B1%D0%B8%D1%89%D0%B5.jpg/500px-%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B4%D1%8F%D1%82%D0%BB%D0%BE%D0%B2%D1%86%D0%B0%D0%BC_%D0%BD%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%BB%D0%B0%D0%B4%D0%B1%D0%B8%D1%89%D0%B5.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B4%D1%8F%D1%82%D0%BB%D0%BE%D0%B2%D1%86%D0%B0%D0%BC_%D0%BD%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%BB%D0%B0%D0%B4%D0%B1%D0%B8%D1%89%D0%B5.jpg' },
+    category: 'Unsolved Mysteries',
+    title: 'Nine Hikers, an Abandoned Tent, and No Clear Answer',
+    place: 'Ural Mountains, Russia',
+    countries: ["ru"],
+    cities: [{ name: "Dyatlov Pass", lat: 61.7558, lon: 59.4517 }],
+    paragraphs: [
+      "In February 1959, nine experienced Soviet hikers died during an expedition in the Ural Mountains under circumstances that remain genuinely disputed today. Their tent was found cut open from the inside, and the group had fled into sub-zero temperatures partially dressed, some without shoes, scattering across the slope in the dark rather than staying together.",
+      "Investigators at the time closed the case citing a vague \"compelling natural force,\" and later theories have ranged from a small avalanche and a rare wind phenomenon, to far less credible military-testing or paranormal explanations. A 2019-2021 Russian government re-investigation and a physics-based avalanche study both leaned toward a slab avalanche as the most likely trigger, though not every detail of the case has been fully explained to everyone's satisfaction."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Dyatlov_Pass_incident',
+    wikiTerm: 'compelling natural force'
+  },
+  {
+    id: 'tunguska-event',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Tunguska_Ereignis-1.jpg/500px-Tunguska_Ereignis-1.jpg', width: 480, height: 326, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Tunguska_Ereignis-1.jpg' },
+    category: 'Unsolved Mysteries',
+    title: 'The Explosion With No Crater',
+    place: 'Siberia, Russia',
+    countries: ["ru"],
+    cities: [{ name: "Tunguska", lat: 60.8858, lon: 101.9167 }],
+    paragraphs: [
+      "In June 1908, an enormous explosion flattened an estimated 80 million trees across roughly 2,150 square kilometres of remote Siberian forest, with a blast believed to be hundreds of times more powerful than the Hiroshima bomb. It was so remote that the first scientific expedition didn't reach the site until nearly 20 years later.",
+      "The leading explanation is that a stony asteroid or comet fragment, roughly 50-60 metres across, exploded in an airburst several kilometres above the ground before ever reaching the surface — which is why, unusually for an impact event of this scale, no crater has ever been found. It remains the largest impact event in recorded history to affect a populated area, and is still used as a reference case in modern planetary-defence research on how to detect similar objects in advance."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Tunguska_event',
+    wikiTerm: 'Siberian forest'
+  },
+  {
+    id: 'karni-mata-rat-temple',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/20191212_%C5%9Awi%C4%85tynia_Karni_Maty_w_De%C5%9Bnok_1031_8078_DxO.jpg/500px-20191212_%C5%9Awi%C4%85tynia_Karni_Maty_w_De%C5%9Bnok_1031_8078_DxO.jpg', width: 480, height: 319, credit: 'Jakub Hałun', creditUrl: 'https://en.wikipedia.org/wiki/File:20191212_%C5%9Awi%C4%85tynia_Karni_Maty_w_De%C5%9Bnok_1031_8078_DxO.jpg' },
+    category: 'Religious Sites',
+    title: 'The Temple Where Rats Are Sacred',
+    place: 'Deshnoke, India',
+    countries: ["in"],
+    cities: [{ name: "Karni Mata Temple", lat: 27.7936, lon: 73.34 }],
+    paragraphs: [
+      "The Karni Mata Temple in Deshnoke, Rajasthan, is home to an estimated 25,000 black rats, which devotees consider sacred and actively protect and feed — according to temple legend, they're the reincarnated descendants of the 14th-century mystic Karni Mata's storytellers and warriors.",
+      "Visitors are expected to walk among the rats barefoot, and food or drink nibbled on by the rats is considered a blessing, sometimes eaten by devotees rather than discarded. A small number of white rats are also present in the temple and considered especially auspicious to spot, believed to be manifestations of Karni Mata herself and her sons."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Karni_Mata_Temple',
+    wikiTerm: 'Karni Mata Temple'
+  },
+  {
+    id: 'sokushinbutsu-self-mummification',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Ramses_I_Mummy.jpg/500px-Ramses_I_Mummy.jpg', width: 480, height: 360, credit: 'Alyssa Bivins', creditUrl: 'https://en.wikipedia.org/wiki/File:Ramses_I_Mummy.jpg' },
+    category: 'Ascetic Practices',
+    title: 'Monks Who Mummified Themselves Alive',
+    place: 'Yamagata, Japan',
+    countries: ["jp"],
+    paragraphs: [
+      "Between roughly the 11th and 19th centuries, a small number of Buddhist monks in Japan's Yamagata region, mainly practitioners of Shugendō, attempted an extraordinarily severe practice called sokushinbutsu: a years-long process of extreme dieting, meant to strip the body of fat and moisture while still alive, followed by ritual entombment in a small underground chamber with a breathing tube and a bell to signal they were still living.",
+      "When the bell stopped ringing, the tomb was sealed; if the body was later found naturally preserved rather than decomposed, it was venerated as a successful sokushinbutsu and displayed in a temple. Very few of the attempts are believed to have succeeded — most monks who tried simply died and decomposed like anyone else — and the Japanese government formally banned the practice, and assisting in it, in the 19th century."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Sokushinbutsu',
+    wikiTerm: 'sokushinbutsu'
+  },
+  {
+    id: 'sedlec-ossuary-bone-church',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Kostnice_Sedlec.JPG/500px-Kostnice_Sedlec.JPG', width: 480, height: 640, credit: 'Pudelek (Marcin Szala)', creditUrl: 'https://en.wikipedia.org/wiki/File:Kostnice_Sedlec.JPG' },
+    category: 'Religious Sites',
+    title: 'A Chapel Decorated With Tens of Thousands of Bones',
+    place: 'Kutná Hora, Czech Republic',
+    countries: ["cz"],
+    cities: [{ name: "Sedlec Ossuary", lat: 49.9539, lon: 15.2814 }],
+    paragraphs: [
+      "The Sedlec Ossuary, a small Roman Catholic chapel near Kutná Hora, is decorated almost entirely with human bones — an estimated 40,000 to 70,000 skeletons' worth, arranged into chandeliers, garlands, a coat of arms, and a large bone-built centerpiece. Most of the remains date to a 14th-century plague and 15th-century wars, when the site's cemetery, already popular for being sprinkled with soil from Jerusalem, filled up dramatically.",
+      "The current artistic arrangement dates mostly to 1870, when a local woodcarver named František Rint was hired to organise the enormous existing pile of bones that had accumulated in the chapel's crypt for centuries; he reportedly signed his work in bones on one wall. It remains an active, consecrated chapel and a popular tourist site today."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Sedlec_Ossuary',
+    wikiTerm: 'Sedlec Ossuary'
+  },
+  {
+    id: 'hutt-river-secession',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/LocationPHR.svg/500px-LocationPHR.svg.png', width: 480, height: 312, credit: 'Seb az86556', creditUrl: 'https://en.wikipedia.org/wiki/File:LocationPHR.svg' },
+    category: 'Micronations',
+    title: 'The Farm That Seceded From Australia for 50 Years',
+    place: 'Western Australia',
+    countries: ["au"],
+    paragraphs: [
+      "In 1970, a Western Australian wheat farmer named Leonard Casley declared his roughly 75-square-kilometre property an independent nation, the Principality of Hutt River, after a dispute with the government over wheat production quotas that he argued had been imposed unlawfully. He crowned himself Prince Leonard and issued his own currency, stamps, and passports.",
+      "Australia never recognised Hutt River's independence, but also largely left it alone for five decades, during which it became a minor tourist attraction. It was formally dissolved in 2020 by Casley's son and successor, partly due to a large unpaid tax bill the Australian government said the self-declared 'nation' still owed, ending one of the longest-running micronation experiments in the world."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Principality_of_Hutt_River',
+    wikiTerm: 'Principality of Hutt River'
+  },
+  {
+    id: 'fordlandia-failed-city',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Fordlandia.JPG/500px-Fordlandia.JPG', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Fordlandia.JPG' },
+    category: 'Company Towns',
+    title: "Henry Ford's Failed City in the Amazon",
+    place: 'Pará, Brazil',
+    countries: ["br"],
+    cities: [{ name: "Fordlândia", lat: -3.7975, lon: -55.4886 }],
+    paragraphs: [
+      "In 1928, Henry Ford leased a huge tract of Brazilian Amazon rainforest to grow rubber for Ford tires, building an entire American-style company town there called Fordlândia — complete with white picket fences, a golf course, and suburban-style housing — despite nobody involved in the planning having any tropical agriculture or rubber-growing expertise.",
+      "The rubber trees, planted too close together in unfamiliar soil, were quickly devastated by South American leaf blight and insect pests that plantation-style monoculture made worse rather than better; workers also resented imposed American customs like mandatory square dancing and a ban on alcohol. The project never produced significant rubber and was abandoned by Ford's company in 1945, having lost the equivalent of well over $200 million in today's money."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Fordl%C3%A2ndia',
+    wikiTerm: 'Fordlândia'
+  },
+  {
+    id: 'wow-signal',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wow_signal.jpg/500px-Wow_signal.jpg', width: 480, height: 271, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Wow_signal.jpg' },
+    category: 'Unsolved Mysteries',
+    title: "A 72-Second Radio Signal Nobody's Explained",
+    place: 'Ohio, USA',
+    countries: ["us"],
+    cities: [{ name: "Big Ear Radio Observatory", lat: 40.2489, lon: -83.0378 }],
+    paragraphs: [
+      "In August 1977, an Ohio State University radio telescope called Big Ear detected an unusually strong, narrowband radio signal from the direction of the constellation Sagittarius, matching closely the exact frequency scientists had proposed as a likely one for interstellar communication. Astronomer Jerry Ehman, reviewing the printout days later, circled the data and wrote \"Wow!\" in the margin, giving the signal its name.",
+      "The signal was never detected again despite repeated follow-up searches over the following decades, and its exact source has never been conclusively identified — proposed explanations range from a passing comet's hydrogen cloud, a theory later largely discredited, to signal reflection off space debris, to it simply being what it looked like at the time: an unexplained strong signal. It remains one of the most-cited candidate signals in the search for extraterrestrial intelligence, precisely because no one has ever definitively ruled it in or out."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Wow!_signal',
+    wikiTerm: 'Wow!'
+  },
+  {
+    id: 'bouvet-island-remote',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Bouvet_Island_on_the_globe_%28Antarctica_centered%29.svg/500px-Bouvet_Island_on_the_globe_%28Antarctica_centered%29.svg.png', width: 480, height: 480, credit: 'TUBS', creditUrl: 'https://en.wikipedia.org/wiki/File:Bouvet_Island_on_the_globe_%28Antarctica_centered%29.svg' },
+    category: 'Remote Places',
+    title: 'The Most Remote Island on Earth',
+    place: 'Bouvet Island, Norway',
+    countries: ["no"],
+    cities: [{ name: "Bouvet Island", lat: -54.4208, lon: 3.3464 }],
+    paragraphs: [
+      "Bouvet Island, a Norwegian dependency in the South Atlantic, is generally considered the most remote island on Earth — the nearest land, Antarctica's Queen Maud Land, is about 1,700km away, and the nearest permanently inhabited place is roughly twice that distance. Over 90% of the island is covered by a glacier, and its coastline is mostly sheer ice cliffs.",
+      "It has no permanent human population and only a small automated weather station; the few research expeditions that land there have to do so by helicopter, since there's no safe natural harbour. A lifeboat found abandoned on the island in 1964 remains an unsolved minor mystery — no wreck or bodies were ever found to explain where it, or its occupants, came from."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Bouvet_Island',
+    wikiTerm: 'Bouvet Island'
+  },
+  {
+    id: 'boiling-river-amazon',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Amazon17_%285641020319%29.jpg/500px-Amazon17_%285641020319%29.jpg', width: 480, height: 319, credit: 'CIAT', creditUrl: 'https://en.wikipedia.org/wiki/File:Amazon17_%285641020319%29.jpg' },
+    category: 'Natural Phenomena',
+    title: 'A River That Can Cook What Falls Into It',
+    place: 'Peruvian Amazon',
+    countries: ["pe"],
+    cities: [{ name: "Shanay-timpishka", lat: -9.0575, lon: -75.9739 }],
+    paragraphs: [
+      "Deep in the Peruvian Amazon, a river known locally as Shanay-timpishka (\"boiled with the heat of the sun\") reaches temperatures averaging around 86°C across several kilometres of its length — hot enough to seriously scald or kill animals that fall in, despite there being no volcano anywhere nearby to obviously explain the heat.",
+      "Geologist Andrés Ruzo, who studied the river after hearing about it as a childhood legend, traced its heat to geothermally heated water rising along a fault line rather than magma directly — a genuinely rare setup for a river this large to be heated this way without a nearby volcano. Local indigenous communities have long treated the river as sacred and dangerous, both a healing site and a place demanding real caution."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Shanay-timpishka',
+    wikiTerm: 'Shanay-timpishka'
+  },
+  {
+    id: 'georgia-guidestones',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Georgia_Guidestones%2C_Elbert_County%2C_GA%2C_US_%2805%29.jpg/500px-Georgia_Guidestones%2C_Elbert_County%2C_GA%2C_US_%2805%29.jpg', width: 480, height: 642, credit: 'Bubba73', creditUrl: 'https://en.wikipedia.org/wiki/File:Georgia_Guidestones%2C_Elbert_County%2C_GA%2C_US_%2805%29.jpg' },
+    category: 'Unsolved Mysteries',
+    title: 'A Monument With an Anonymous Message and a Mysterious End',
+    place: 'Elbert County, Georgia, USA',
+    countries: ["us"],
+    cities: [{ name: "Georgia Guidestones (site)", lat: 34.2286, lon: -82.8964 }],
+    paragraphs: [
+      "In 1980, a granite monument known as the Georgia Guidestones was erected in rural Georgia, commissioned by a man using the pseudonym \"R. C. Christian,\" whose real identity was never publicly confirmed. The structure's four large slabs were inscribed with a set of ten guidelines for humanity, translated into eight languages, touching on population control, environmental balance, and world governance.",
+      "It quickly attracted conspiracy theories from multiple directions, some framing it as a sinister globalist manifesto. In July 2022, an explosion severely damaged the monument in what authorities determined was a deliberate bombing; the remains were dismantled shortly after for safety reasons, and no suspect has ever been publicly identified or charged, leaving both its original purpose and its destruction unresolved."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Georgia_Guidestones',
+    wikiTerm: 'Georgia Guidestones'
+  },
+  {
+    id: 'wieliczka-salt-mine',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/%CE%91%CE%BB%CE%B1%CF%84%CF%89%CF%81%CF%85%CF%87%CE%B5%CE%AF%CE%B1_%CE%92%CE%B9%CE%B5%CE%BB%CE%AF%CF%84%CF%83%CE%BA%CE%B1_5021.jpg/500px-%CE%91%CE%BB%CE%B1%CF%84%CF%89%CF%81%CF%85%CF%87%CE%B5%CE%AF%CE%B1_%CE%92%CE%B9%CE%B5%CE%BB%CE%AF%CF%84%CF%83%CE%BA%CE%B1_5021.jpg', width: 480, height: 320, credit: 'C messier', creditUrl: 'https://en.wikipedia.org/wiki/File:%CE%91%CE%BB%CE%B1%CF%84%CF%89%CF%81%CF%85%CF%87%CE%B5%CE%AF%CE%B1_%CE%92%CE%B9%CE%B5%CE%BB%CE%AF%CF%84%CF%83%CE%BA%CE%B1_5021.jpg' },
+    category: 'Underground Wonders',
+    title: 'A Cathedral Carved Entirely From Salt',
+    place: 'Wieliczka, Poland',
+    countries: ["pl"],
+    cities: [{ name: "Wieliczka Salt Mine", lat: 49.9856, lon: 20.0538 }],
+    paragraphs: [
+      "The Wieliczka Salt Mine near Kraków operated continuously from the 13th century until 2007, and over that time miners carved out an extraordinary underground world alongside their regular work — chapels, statues, and even entire chandeliers, all sculpted directly from rock salt by hand.",
+      "Its centerpiece, the Chapel of St. Kinga, sits over 100 metres underground and includes salt-carved altarpieces, wall reliefs depicting biblical scenes, and chandeliers made from dissolved and recrystallised salt so clear it resembles glass. The mine is one of the world's oldest continuously operating tourist attractions, having welcomed visitors since at least the 15th century, and today the air in parts of it is considered so pure that a section operates as a respiratory health sanatorium."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Wieliczka_Salt_Mine',
+    wikiTerm: 'Wieliczka Salt Mine'
+  },
+  {
+    id: 'winchester-mystery-house',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Winchester_Mystery_House_2023-07-17_02.jpg/500px-Winchester_Mystery_House_2023-07-17_02.jpg', width: 480, height: 270, credit: 'The wub', creditUrl: 'https://en.wikipedia.org/wiki/File:Winchester_Mystery_House_2023-07-17_02.jpg' },
+    category: 'Eccentric Architecture',
+    title: 'A House Built Continuously for 38 Years',
+    place: 'San Jose, California',
+    countries: ["us"],
+    cities: [{ name: "Winchester Mystery House", lat: 37.3183, lon: -121.9511 }],
+    paragraphs: [
+      "After inheriting a vast fortune from the Winchester repeating rifle company, Sarah Winchester bought a modest farmhouse in San Jose in 1886 and, according to popular legend, kept construction crews building on it around the clock for the next 38 years, allegedly on the advice of a medium who told her stopping construction would let vengeful spirits, of people killed by Winchester rifles, catch up with her.",
+      "Whatever the real motivation, the result is a genuinely bewildering mansion: staircases that lead into ceilings, doors that open onto blank walls or steep drops, and a floor plan so tangled that even Sarah Winchester reportedly needed a servant's help to find certain rooms. Construction stopped only when she died in 1922; the house is now a museum, and historians increasingly attribute its odd design less to ghosts than to Sarah Winchester's own idiosyncratic, ever-changing architectural experimentation."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Winchester_Mystery_House',
+    wikiTerm: 'Sarah Winchester'
+  },
+  {
+    id: 'krubera-cave-deepest',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/View_on_Arabika_from_Rosa_Khutor.jpg/500px-View_on_Arabika_from_Rosa_Khutor.jpg', width: 480, height: 287, credit: 'Sergei Kazantsev', creditUrl: 'https://en.wikipedia.org/wiki/File:View_on_Arabika_from_Rosa_Khutor.jpg' },
+    category: 'Speleology',
+    title: "One of Earth's Deepest Known Caves",
+    place: 'Abkhazia, Georgia',
+    countries: ["ge"],
+    cities: [{ name: "Krubera Cave", lat: 43.4058, lon: 40.3467 }],
+    paragraphs: [
+      "Krubera Cave, in the Arabika Massif of the Western Caucasus, plunges to a surveyed depth of roughly 2,197 metres, making it one of the two known deepest caves on Earth. Reaching its lowest known point requires a multi-day expedition through flooded, freezing passages and requires specialized cave-diving skills at several points where the route is submerged.",
+      "It wasn't explored below about 340 metres until Ukrainian speleologists began systematic expeditions in the late 1990s, progressively pushing the known depth further down over more than a decade of return trips. Scientists have also found previously unknown species of blind, cave-adapted invertebrates at some of its deepest, most isolated points, adapted to complete darkness and near-freezing water."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Krubera_Cave',
+    wikiTerm: 'Krubera Cave'
+  },
+  {
+    id: 'lake-hillier-pink',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Lake_Hillier_2_Middle_Island_Recherche_Archipelago_NR_IV-2011.JPG/500px-Lake_Hillier_2_Middle_Island_Recherche_Archipelago_NR_IV-2011.JPG', width: 480, height: 360, credit: 'Aussie Oc', creditUrl: 'https://en.wikipedia.org/wiki/File:Lake_Hillier_2_Middle_Island_Recherche_Archipelago_NR_IV-2011.JPG' },
+    category: 'Natural Phenomena',
+    title: 'A Lake That Is Permanently, Genuinely Pink',
+    place: 'Middle Island, Australia',
+    countries: ["au"],
+    cities: [{ name: "Lake Hillier", lat: -34.0966, lon: 123.2036 }],
+    paragraphs: [
+      "Lake Hillier, on a small island off the coast of Western Australia, is a solid, vivid bubblegum pink year-round — not a trick of lighting or a seasonal bloom, but its permanent, genuine colour. If you scoop the water into a glass, it stays pink.",
+      "The exact cause isn't settled with total certainty, but researchers generally attribute it to a combination of salt-loving algae that produce a red pigment and pink-tinted halophilic (salt-loving) bacteria that thrive in the lake's very high salt concentration, similar to what happens in some commercial salt evaporation ponds elsewhere in the world. The lake is protected within a nature reserve, with access mostly restricted to flying over it, which is how most of its now-famous photographs are taken."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Lake_Hillier',
+    wikiTerm: 'Lake Hillier'
+  },
+  {
+    id: 'cave-of-crystals-mexico',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Cristales_cueva_de_Naica.JPG/500px-Cristales_cueva_de_Naica.JPG', width: 480, height: 320, credit: 'Alexander Van Driessche', creditUrl: 'https://en.wikipedia.org/wiki/File:Cristales_cueva_de_Naica.JPG' },
+    category: 'Speleology',
+    title: 'A Cave Full of House-Sized Crystals',
+    place: 'Naica, Mexico',
+    countries: ["mx"],
+    cities: [{ name: "Cueva de los Cristales", lat: 27.85, lon: -105.4964 }],
+    paragraphs: [
+      "The Cave of the Crystals, discovered by miners in 2000 roughly 300 metres beneath a lead and silver mine in Naica, Mexico, contains some of the largest natural crystals ever found — translucent selenite beams up to about 12 metres long and weighing many tonnes, formed over an estimated half a million years by mineral-rich water held at an unusually steady temperature.",
+      "That same steady heat makes the cave nearly unbearable for humans: temperatures reach around 45-50°C with close to 100% humidity, conditions in which a person can only survive for perhaps 10-20 minutes without specialized cooling suits and respirators, since the body can't cool itself through sweat in air already saturated with moisture. The mine has since been allowed to flood again, resubmerging the crystals and halting most further exploration."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Cave_of_the_Crystals',
+    wikiTerm: 'Cave of the Crystals'
+  },
+  {
+    id: 'roopkund-skeleton-lake',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Roopkund_Lake.jpg/500px-Roopkund_Lake.jpg', width: 480, height: 321, credit: 'Schwiki', creditUrl: 'https://en.wikipedia.org/wiki/File:Roopkund_Lake.jpg' },
+    category: 'Archaeological Mysteries',
+    title: 'A Himalayan Lake Full of Ancient Skeletons',
+    place: 'Uttarakhand, India',
+    countries: ["in"],
+    cities: [{ name: "Roopkund", lat: 30.2557, lon: 79.7326 }],
+    paragraphs: [
+      "Roopkund, a small glacial lake high in the Indian Himalayas at around 5,000 metres elevation, holds the skeletal remains of several hundred people, first reported by a forest ranger in 1942; when the ice partly melts each year, some of the bones and even bits of preserved flesh, hair, and equipment become visible around the lake's edges.",
+      "For decades, local legend and early theories pointed to a single catastrophic event — a hailstorm, an epidemic, or a battle. A detailed 2019 genetic study complicated that picture considerably: the remains actually belong to at least three genetically distinct groups who died in episodes centuries apart, including a group with ancestry closely matching people from the eastern Mediterranean, whose presence in the Himalayas at that time remains unexplained."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Roopkund',
+    wikiTerm: 'Roopkund'
+  },
+  {
+    id: 'catacombs-of-paris',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Catacumbas%2C_Par%C3%ADs%2C_Francia%2C_2022-11-01%2C_DD_105-107_HDR.jpg/500px-Catacumbas%2C_Par%C3%ADs%2C_Francia%2C_2022-11-01%2C_DD_105-107_HDR.jpg', width: 480, height: 320, credit: 'Diego Delso', creditUrl: 'https://en.wikipedia.org/wiki/File:Catacumbas%2C_Par%C3%ADs%2C_Francia%2C_2022-11-01%2C_DD_105-107_HDR.jpg' },
+    category: 'Underground Wonders',
+    title: 'Six Million People, Stacked Underground',
+    place: 'Paris, France',
+    countries: ["fr"],
+    cities: [{ name: "Catacombs of Paris", lat: 48.8338, lon: 2.3324 }],
+    paragraphs: [
+      "By the late 18th century, some of Paris's overflowing cemeteries had become a public health crisis — mass graves collapsing into neighbouring basements was not unheard of — so the city began systematically transferring skeletal remains into abandoned limestone quarry tunnels beneath the city, a project that continued for decades.",
+      "The result, the Catacombs of Paris, now holds the remains of an estimated six million people, with many of the bones stacked into deliberate, sometimes decorative arrangements — skulls and femurs pressed into patterns along the tunnel walls — rather than left as a random pile. Only a small, roughly 1.5km fraction of the roughly 320km of tunnels beneath Paris is open to the public; exploring the rest without authorization is illegal but still draws a dedicated subculture of unofficial urban explorers known as cataphiles."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Catacombs_of_Paris',
+    wikiTerm: 'Catacombs of Paris'
+  },
+  {
+    id: 'pig-beach-bahamas',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Vorobek_Bahamas_-_swimming_pigs.jpg/500px-Vorobek_Bahamas_-_swimming_pigs.jpg', width: 480, height: 640, credit: 'cdorobek', creditUrl: 'https://en.wikipedia.org/wiki/File:Vorobek_Bahamas_-_swimming_pigs.jpg' },
+    category: 'Wildlife Oddities',
+    title: 'An Uninhabited Island Full of Swimming Pigs',
+    place: 'Exuma, Bahamas',
+    countries: ["bs"],
+    cities: [{ name: "Big Major Cay", lat: 24.1858, lon: -76.4553 }],
+    paragraphs: [
+      "Big Major Cay, an uninhabited island in the Bahamas' Exuma chain, is home to a population of feral pigs that swim out into the turquoise water to greet passing boats, an image that's made the spot, nicknamed Pig Beach, one of the most photographed animal attractions in the Caribbean.",
+      "Nobody knows for certain how the pigs got there — competing stories include sailors leaving them intentionally as a future food source, a shipwreck survivors' tale, or a failed attempt at a tourist attraction — and no version has been definitively confirmed. The pigs are now fed daily by tour operators and have become such a fixture that their wellbeing, and occasional deaths linked to tourists' food and alcohol, has become a genuine local conservation concern."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Pig_Beach',
+    wikiTerm: 'Pig Beach'
+  },
+  {
+    id: 'oak-island-money-pit',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Island_and_Wharf%2C_Oak_Island%2C_Nova_Scotia%2C_Canada%2C_August_1931.jpg/500px-Island_and_Wharf%2C_Oak_Island%2C_Nova_Scotia%2C_Canada%2C_August_1931.jpg', width: 480, height: 344, credit: 'Richard McCully', creditUrl: 'https://en.wikipedia.org/wiki/File:Island_and_Wharf%2C_Oak_Island%2C_Nova_Scotia%2C_Canada%2C_August_1931.jpg' },
+    category: 'Archaeological Mysteries',
+    title: 'A 200-Year Treasure Hunt With Nothing Found',
+    place: 'Oak Island, Canada',
+    countries: ["ca"],
+    cities: [{ name: "Oak Island", lat: 44.5027, lon: -64.3006 }],
+    paragraphs: [
+      "Oak Island, a small island off Nova Scotia, has drawn treasure hunters since 1795, when three teenagers reportedly discovered a mysterious depression in the ground — later dubbed the \"Money Pit\" — that seemed to have been deliberately dug and refilled by someone in the past.",
+      "Over more than two centuries, numerous excavation attempts have reported finding wooden platforms, layers of charcoal and clay, and pieces of what might be old tools at various depths, fueling theories ranging from pirate treasure to Knights Templar relics to Shakespeare's lost manuscripts — but no definitive treasure or conclusive proof of an artificial origin has ever been recovered, and at least six people have died during excavation attempts over the years, most from cave-ins or gas exposure in the flooded shafts."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Oak_Island',
+    wikiTerm: 'Oak Island'
+  },
+  {
+    id: 'movile-cave-isolated',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Venenivibrio.jpg', width: 478, height: 653, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Venenivibrio.jpg' },
+    category: 'Speleology',
+    title: 'A Cave Sealed Off for 5 Million Years',
+    place: 'Constanța, Romania',
+    countries: ["ro"],
+    cities: [{ name: "Movile Cave", lat: 43.8283, lon: 28.5644 }],
+    paragraphs: [
+      "Movile Cave, discovered by accident in 1986 during a survey for a power plant site in Romania, had been completely sealed off from the surface, and from sunlight, for an estimated 5.5 million years before workers broke through. Its air is low in oxygen and high in toxic gases like hydrogen sulfide and methane, unbreathable for more than short supervised visits even today.",
+      "Despite that, the cave supports an entire ecosystem — dozens of species, many found nowhere else on Earth and most blind and colourless — that survives on chemosynthesis, where microbes derive energy directly from the cave's sulfur-rich chemistry rather than from sunlight-driven plant life the way almost every other ecosystem on the planet's surface does. Access is now tightly restricted to protect it, with only a small number of scientists permitted to enter each year."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Movile_Cave',
+    wikiTerm: 'Movile Cave'
+  },
+  {
+    id: 'coober-pedy-underground',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Coober_Pedy_-_panoramio_%284%29.jpg/500px-Coober_Pedy_-_panoramio_%284%29.jpg', width: 480, height: 240, credit: 'qwesy qwesy', creditUrl: 'https://en.wikipedia.org/wiki/File:Coober_Pedy_-_panoramio_%284%29.jpg' },
+    category: 'Urban Extremes',
+    title: 'A Town That Lives Underground to Escape the Heat',
+    place: 'Coober Pedy, Australia',
+    countries: ["au"],
+    cities: [{ name: "Coober Pedy", lat: -29.0135, lon: 134.7544 }],
+    paragraphs: [
+      "Coober Pedy, an opal-mining town in the South Australian outback, sees summer temperatures regularly above 40°C, so a large share of its roughly 1,800 residents live in 'dugouts' — homes carved directly into the sandstone hillsides, which stay at a comfortable, stable temperature year-round without air conditioning.",
+      "The underground layout extends well beyond housing: the town has underground churches, a bar, a bookshop, and even an underground campsite for tourists, many built by expanding old mining shafts left over from opal digging that began after WWI. It remains one of the world's main sources of precious opal, and its otherworldly, cratered above-ground landscape has repeatedly been used as a filming location for post-apocalyptic and alien-planet movie scenes."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Coober_Pedy',
+    wikiTerm: 'Coober Pedy'
+  },
+  {
+    id: 'aral-sea-disappearance',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/AralSea1989_2014.jpg/500px-AralSea1989_2014.jpg', width: 480, height: 408, credit: 'NASA. Collage by Producercunningham.', creditUrl: 'https://en.wikipedia.org/wiki/File:AralSea1989_2014.jpg' },
+    category: 'Environmental Disasters',
+    title: 'The Sea That Turned Into a Desert',
+    place: 'Kazakhstan & Uzbekistan',
+    countries: ["kz", "uz"],
+    cities: [{ name: "Aral Sea (former shoreline)", lat: 45.0, lon: 60.0 }],
+    paragraphs: [
+      "The Aral Sea was once the fourth-largest lake in the world, until Soviet irrigation projects starting in the 1960s diverted the two major rivers that fed it to grow cotton across the surrounding desert. By the 2000s it had shrunk to roughly 10% of its original volume, splitting into several smaller, saltier remnants.",
+      "Former fishing towns that once sat on the shoreline are now stranded tens of kilometres from any water, with rusted fishing boats sitting abandoned on what is now bare desert. Kazakhstan has managed to partly restore the smaller northern portion of the sea through a dam project completed in 2005, but the larger southern section, mostly in Uzbekistan, remains largely gone, and dust storms carrying salt and residual agricultural chemicals from the exposed seabed now cause ongoing health and environmental problems across the wider region."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Aral_Sea',
+    wikiTerm: 'Aral Sea'
+  },
+  {
+    id: 'svalbard-polar-bear-law',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/W_W_Svalbard_LandSat7_21.14475E_78.71545N.png/500px-W_W_Svalbard_LandSat7_21.14475E_78.71545N.png', width: 480, height: 450, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:W_W_Svalbard_LandSat7_21.14475E_78.71545N.png' },
+    category: 'Local Law',
+    title: "A Territory Where It's Illegal to Go Outside Town Unarmed",
+    place: 'Svalbard, Norway',
+    countries: ["no"],
+    paragraphs: [
+      "On the Norwegian archipelago of Svalbard, home to roughly 3,000 polar bears, more bears than people, it's a legal requirement to carry a firearm, or travel with someone who does, whenever you leave the main settlement of Longyearbyen, specifically as protection against polar bear encounters.",
+      "Shops in Longyearbyen sell and rent rifles specifically for this purpose, and visitors are strongly encouraged to take a safety course before heading out. Despite the precaution, actual attacks are rare, and locals and conservation groups generally emphasize avoidance and deterrence over shooting, since polar bears are a protected species under Norwegian law even here — killing one in self-defence still triggers a mandatory police investigation."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Svalbard',
+    wikiTerm: 'Longyearbyen'
+  },
+  {
+    id: 'pitcairn-islands-smallest',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_the_Pitcairn_Islands.svg/500px-Flag_of_the_Pitcairn_Islands.svg.png', width: 480, height: 240, credit: 'Dbenbenn', creditUrl: 'https://en.wikipedia.org/wiki/File:Flag_of_the_Pitcairn_Islands.svg' },
+    category: 'Remote Places',
+    title: 'A Nation Descended From Mutineers',
+    place: 'Pitcairn Islands',
+    countries: ["gb"],
+    cities: [{ name: "Adamstown, Pitcairn", lat: -25.066, lon: -130.1015 }],
+    paragraphs: [
+      "The Pitcairn Islands, a British Overseas Territory in the middle of the South Pacific, have the smallest population of any national jurisdiction in the world — around 35 to 50 people, depending on the year. Most residents are descended from the crew of HMS Bounty, who mutinied against their captain in 1789 and, along with several Tahitians, settled the then-uninhabited island to hide from the Royal Navy.",
+      "Because so much of the tiny community shares mutineer ancestry, a small handful of surnames — Christian chief among them, after mutiny leader Fletcher Christian — still dominate the island. The only way in or out is by boat, with a supply ship visiting roughly every three months, and the islands remain one of the most isolated inhabited places on Earth."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Pitcairn_Islands',
+    wikiTerm: 'Pitcairn Islands'
+  },
+  {
+    id: 'tristan-da-cunha-remote',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Flag_of_Tristan_da_Cunha.svg/500px-Flag_of_Tristan_da_Cunha.svg.png', width: 480, height: 240, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Flag_of_Tristan_da_Cunha.svg' },
+    category: 'Remote Places',
+    title: 'The Most Remote Inhabited Island in the World',
+    place: 'Tristan da Cunha',
+    countries: ["gb"],
+    cities: [{ name: "Edinburgh of the Seven Seas", lat: -37.0678, lon: -12.3116 }],
+    paragraphs: [
+      "Tristan da Cunha, a British Overseas Territory in the South Atlantic, is generally considered the most remote permanently inhabited island in the world — the nearest inhabited land, South Africa, is about 2,400km away, and the nearest continent, South America, is even farther. Its roughly 250 residents all live in a single settlement fittingly called Edinburgh of the Seven Seas.",
+      "There's no airstrip; the only way to reach the island is a six-day boat journey from South Africa, and the entire population had to be evacuated to England for two years in 1961 after a volcanic eruption threatened the settlement, before nearly everyone chose to return once it was deemed safe. Just a handful of surnames account for most of the island's population today, a result of that same small founding community."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Tristan_da_Cunha',
+    wikiTerm: 'Tristan da Cunha'
+  },
+  {
+    id: 'marble-caves-patagonia',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Lago_Gral._Carrera_01.JPG/500px-Lago_Gral._Carrera_01.JPG', width: 480, height: 360, credit: 'Jorge Morales Piderit', creditUrl: 'https://en.wikipedia.org/wiki/File:Lago_Gral._Carrera_01.JPG' },
+    category: 'Natural Phenomena',
+    title: 'Caves Sculpted by a Lake, Not by Hand',
+    place: 'General Carrera Lake, Chile',
+    countries: ["cl"],
+    cities: [{ name: "Marble Caves, General Carrera Lake", lat: -46.6167, lon: -72.4833 }],
+    paragraphs: [
+      "On the shores of General Carrera Lake, straddling the Chile-Argentina border, thousands of years of wave action against solid calcium-carbonate rock have carved out a network of swirling caverns, columns, and tunnels known as the Marble Caves, their walls polished smooth in sweeping blue-and-white patterns.",
+      "The lake's striking colour, and the caves' appearance, shifts noticeably with the seasons: glacial meltwater raises the lake level and changes its mineral content through the year, making the caves look markedly different depending on when they're visited, from a pale, almost white marble in drier months to deep blue reflections when the lake is fuller. The caves are accessible only by boat or kayak, since there's no path along the cliff face itself."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/General_Carrera_Lake',
+    wikiTerm: 'General Carrera Lake'
+  },
+  {
+    id: 'longyearbyen-no-burial',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Longyearbyen-spisshus-2022.jpg/500px-Longyearbyen-spisshus-2022.jpg', width: 480, height: 327, credit: 'Bjørn Christian Tørrissen', creditUrl: 'https://en.wikipedia.org/wiki/File:Longyearbyen-spisshus-2022.jpg' },
+    category: 'Local Law',
+    title: "The Town Where You Can't Be Buried",
+    place: 'Longyearbyen, Svalbard',
+    countries: ["no"],
+    cities: [{ name: "Longyearbyen", lat: 78.2232, lon: 15.6267 }],
+    paragraphs: [
+      "Longyearbyen, the main settlement on the Norwegian Arctic archipelago of Svalbard, stopped allowing new burials in its small cemetery back in the 1950s, after it became clear that the permafrost prevented bodies from ever fully decomposing — graves from the 1918 flu pandemic were later found to still contain the virus in a viable, if dormant, state decades later.",
+      "Since then, anyone near death, or who dies suddenly, is generally flown to mainland Norway for burial rather than interred locally; it's often loosely summarized as being 'illegal to die' in Longyearbyen, though that's a simplification of the real policy, which is really about where burials can happen rather than banning death itself. The town's isolation, cold, and resident polar bears already make it an unusually practical-minded place to live."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Longyearbyen',
+    wikiTerm: 'Longyearbyen'
+  },
+  {
+    id: 'poveglia-plague-island',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Poveglia_Closeup_of_Hospital.jpg/500px-Poveglia_Closeup_of_Hospital.jpg', width: 480, height: 360, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Poveglia_Closeup_of_Hospital.jpg' },
+    category: 'Ghost Towns',
+    title: 'A Quarantine Island in the Venice Lagoon',
+    place: 'Poveglia, Italy',
+    countries: ["it"],
+    cities: [{ name: "Poveglia", lat: 45.3742, lon: 12.3306 }],
+    paragraphs: [
+      "Poveglia, a small island in the Venetian Lagoon, served for centuries as a quarantine station for ships suspected of carrying plague, and later as a dumping ground for confirmed plague victims from Venice itself; some historical estimates suggest a significant share of the island's soil is composed of human remains from that period, though precise figures are hard to verify.",
+      "In the 20th century it briefly operated as a psychiatric hospital before closing in the 1960s, after which the island was abandoned entirely. It's now off-limits to the public without special permission, and its layered history — plague quarantine, then asylum, then decades of abandonment — has made it one of the most persistently rumour-laden islands in Italy, regularly described in popular media as one of the world's 'most haunted' places, a reputation built more on that history than on anything formally documented."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Poveglia',
+    wikiTerm: 'Poveglia'
+  },
+  {
+    id: 'nagoro-scarecrow-village',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Kakashi2.jpg/500px-Kakashi2.jpg', width: 480, height: 387, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Kakashi2.jpg' },
+    category: 'Cultural Oddities',
+    title: 'A Village Where Scarecrows Outnumber People',
+    place: 'Nagoro, Japan',
+    countries: ["jp"],
+    cities: [{ name: "Nagoro", lat: 33.9167, lon: 133.8833 }],
+    paragraphs: [
+      "In the small mountain village of Nagoro, on the island of Shikoku, resident Tsukimi Ayano began making life-sized scarecrows in 2002, originally to replace a deceased neighbour, then kept going — she has since made hundreds, dressed and posed to represent former residents, sitting at bus stops, farming fields, and fishing by the river.",
+      "As Nagoro's actual human population has continued shrinking to roughly 30 people through rural depopulation and an aging demographic, the scarecrows now outnumber living residents by more than ten to one, effectively turning the village into a life-sized memorial to the community it used to be — including scarecrow versions of a former school's students and teachers, seated in a building that no longer holds real classes."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Nagoro',
+    wikiTerm: 'Nagoro'
+  },
+  {
+    id: 'crooked-forest-poland',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Crooked_Forest.jpg/500px-Crooked_Forest.jpg', width: 480, height: 630, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Crooked_Forest.jpg' },
+    category: 'Natural Phenomena',
+    title: 'A Forest of Trees Bent Into a Right Angle',
+    place: 'Gryfino, Poland',
+    countries: ["pl"],
+    cities: [{ name: "Crooked Forest", lat: 53.2167, lon: 14.5 }],
+    paragraphs: [
+      "Near the town of Gryfino in Poland, around 400 pine trees, planted in the 1930s, all grow with a near-identical sharp 90-degree bend just above the ground before curving back upright and growing straight for the rest of their height — while the pines around them, planted at the same time, grew perfectly normally.",
+      "No one recorded exactly why, and several theories compete: the most widely accepted is that farmers deliberately bent the young saplings using some kind of tool or technique, possibly to grow curved wood for furniture, boat parts, or farm equipment, a use interrupted by WWII before the trees were ever harvested. Other proposed explanations include heavy snowfall or a localised gravitational or soil anomaly, though neither has strong supporting evidence."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Crooked_Forest',
+    wikiTerm: 'Gryfino'
+  },
+  {
+    id: 'diomede-islands-time-gap',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Big_Diomede_2_2014-08-17.jpg/500px-Big_Diomede_2_2014-08-17.jpg', width: 480, height: 320, credit: 'Ansgar Walk', creditUrl: 'https://en.wikipedia.org/wiki/File:Big_Diomede_2_2014-08-17.jpg' },
+    category: 'Border Oddities',
+    title: 'Two Islands 21 Hours Apart, in Sight of Each Other',
+    place: 'Bering Strait, Russia & USA',
+    countries: ["ru", "us"],
+    cities: [{ name: "Big Diomede Island", lat: 65.7833, lon: -169.05 }],
+    paragraphs: [
+      "The Diomede Islands sit in the middle of the Bering Strait, just 3.8km apart — close enough to see clearly from one to the other on a clear day. Big Diomede belongs to Russia, and Little Diomede belongs to the United States (Alaska), and the International Date Line runs directly between them.",
+      "Because of that, despite the short physical distance, the islands can be up to 21 hours apart in local time — Big Diomede is sometimes nicknamed 'Tomorrow Island' and Little Diomede 'Yesterday Isle' as a result. In winter, the strait between them can freeze solid enough to theoretically walk across, though the border has been heavily restricted and rarely crossable in practice since the Cold War."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Big_Diomede_Island',
+    wikiTerm: 'Big Diomede'
+  },
+  {
+    id: 'snake-island-brazil',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Ilha_da_Queimada_Grande_-_Itanha%C3%A9m3.jpg/500px-Ilha_da_Queimada_Grande_-_Itanha%C3%A9m3.jpg', width: 480, height: 712, credit: 'Prefeitura Municipal de ItanhaÃ©m', creditUrl: 'https://en.wikipedia.org/wiki/File:Ilha_da_Queimada_Grande_-_Itanha%C3%A9m3.jpg' },
+    category: 'Wildlife Oddities',
+    title: 'An Island So Dangerous, Visits Are Banned',
+    place: 'Ilha da Queimada Grande, Brazil',
+    countries: ["br"],
+    cities: [{ name: "Ilha da Queimada Grande", lat: -24.4867, lon: -46.6775 }],
+    paragraphs: [
+      "Ilha da Queimada Grande, off the coast of São Paulo state, is home to an extraordinarily dense population of golden lancehead pit vipers — one of the most venomous snakes in the Americas — with estimates ranging from one snake per square metre in parts of the island to a total population in the low thousands.",
+      "The snakes evolved unusually potent venom, and fast-acting bites, likely because their main prey on the island is birds, which need to be incapacitated almost instantly or they'll simply fly away before the venom works. Because of the risk to human life, the Brazilian Navy restricts public access to the island entirely, permitting only scientific researchers and navy personnel who maintain the island's automated lighthouse."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Ilha_da_Queimada_Grande',
+    wikiTerm: 'Ilha da Queimada Grande'
+  },
+  {
+    id: 'spomenik-yugoslav-monuments',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Barutana_spomenik.jpg/500px-Barutana_spomenik.jpg', width: 480, height: 360, credit: 'Quatchenerlo', creditUrl: 'https://en.wikipedia.org/wiki/File:Barutana_spomenik.jpg' },
+    category: 'Eccentric Architecture',
+    title: 'Alien-Looking Monuments From a Country That No Longer Exists',
+    place: 'Petrova Gora, Croatia',
+    countries: ["hr"],
+    cities: [{ name: "Petrova Gora monument", lat: 45.2333, lon: 15.75 }],
+    paragraphs: [
+      "Scattered across the countries of the former Yugoslavia are hundreds of enormous abstract concrete monuments, commissioned mostly in the 1960s-80s to commemorate WWII battles and victims, built in a strikingly futuristic style that looks more like alien spacecraft or brutalist sculpture than a typical war memorial.",
+      "One of the largest, on Petrova Gora in Croatia, is a jagged, gleaming steel-clad structure that once housed a small museum inside. Many of these monuments, often called spomenik, simply the word for 'monument' in several regional languages, fell into disrepair or were vandalised after Yugoslavia broke apart in the 1990s, their original commemorative meaning complicated by the same ethnic conflicts they had originally been built to help prevent; in recent years a wave of photographers rediscovering them online has sparked renewed international interest in preserving what remains."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Petrova_Gora',
+    wikiTerm: 'Petrova Gora'
+  },
+  {
+    id: 'voynich-manuscript',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Voynich_Manuscript_%2832%29.jpg/500px-Voynich_Manuscript_%2832%29.jpg', width: 480, height: 645, credit: 'Unknown authorUnknown author', creditUrl: 'https://en.wikipedia.org/wiki/File:Voynich_Manuscript_%2832%29.jpg' },
+    category: 'Unsolved Mysteries',
+    title: 'A 600-Year-Old Book Nobody Can Read',
+    place: 'Origin uncertain (Northern Italy suspected)',
+    countries: ["it"],
+    paragraphs: [
+      "The Voynich manuscript, now held at Yale University, is a roughly 240-page illustrated book written entirely in an unknown script that has never been deciphered, despite a century of dedicated effort by professional and amateur cryptographers alike, including some of the codebreakers who cracked Germany's Enigma cipher in WWII.",
+      "Radiocarbon dating of its vellum places its creation in the early 1400s, and its illustrations — invented-looking plants, astrological diagrams, and small figures bathing in green liquid — offer few obvious clues to its meaning or purpose; some stylistic details in its imagery have led researchers to tentatively suggest a Northern Italian origin, though this remains unconfirmed. Proposed explanations range from an unrecorded natural language or code, to an elaborate historical hoax, to a genuine but now-lost constructed language, with no single theory yet accepted by the wider academic community."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Voynich_manuscript',
+    wikiTerm: 'Voynich manuscript'
+  },
+  {
+    id: 'zone-rouge-france',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Red_Zone_Map-fr.svg/500px-Red_Zone_Map-fr.svg.png', width: 480, height: 322, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Red_Zone_Map-fr.svg' },
+    category: 'War Remnants',
+    title: "The French \"Red Zone\" Still Empty a Century Later",
+    place: 'Verdun, France',
+    countries: ["fr"],
+    cities: [{ name: "Zone Rouge, Verdun", lat: 49.1667, lon: 5.4 }],
+    paragraphs: [
+      "After WWI, French authorities designated a large area around Verdun and other former front lines as \"zone rouge\" (red zone) — land judged too damaged and dangerous to be worth returning to agricultural or residential use, due to unexploded shells, collapsed trenches, and soil heavily contaminated with lead, arsenic, and other chemicals from a century of shelling.",
+      "Originally covering well over 1,000 square kilometres, the zone has shrunk considerably as some areas were gradually cleared and reclaimed, but a smaller core area remains officially off-limits or unused, over a hundred years later — specialist ordnance-clearance teams still remove hundreds of tonnes of unexploded WWI munitions from the wider region every single year, in an ongoing task nicknamed the 'iron harvest.'"
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Zone_rouge',
+    wikiTerm: 'zone rouge'
+  },
+  {
+    id: 'kaali-meteorite-crater',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Kaali-crater-saaremaa-estonia-aug-2007.jpg/500px-Kaali-crater-saaremaa-estonia-aug-2007.jpg', width: 480, height: 231, credit: 'Mannobult', creditUrl: 'https://en.wikipedia.org/wiki/File:Kaali-crater-saaremaa-estonia-aug-2007.jpg' },
+    category: 'Natural Phenomena',
+    title: 'A Crater That May Have Inspired Ancient Myths',
+    place: 'Saaremaa, Estonia',
+    countries: ["ee"],
+    cities: [{ name: "Kaali crater", lat: 58.3717, lon: 22.6689 }],
+    paragraphs: [
+      "The Kaali crater field on the Estonian island of Saaremaa was formed by a meteorite impact roughly 1600-2600 years ago (estimates vary), the main crater measuring about 110 metres across with eight smaller craters nearby — a remarkably recent, and remarkably well-preserved, impact site for an inhabited part of Europe.",
+      "Archaeologists have found evidence that the site was treated as sacred for centuries afterward, including a fortified settlement built directly around the crater's rim; some researchers have proposed that the impact, likely dramatic enough to have been witnessed for hundreds of kilometres around, may be echoed in Baltic and Finnic mythology in stories about a sun falling from the sky, though this connection remains speculative rather than proven."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Kaali_crater',
+    wikiTerm: 'Kaali crater'
+  },
+  {
+    id: 'john-cage-longest-concert',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Halberstadt_St-Burchardi-Kirche.jpg/500px-Halberstadt_St-Burchardi-Kirche.jpg', width: 480, height: 338, credit: 'Wikimedia Commons', creditUrl: 'https://en.wikipedia.org/wiki/File:Halberstadt_St-Burchardi-Kirche.jpg' },
+    category: 'Music',
+    title: 'A Concert Lasting 639 Years',
+    place: 'Halberstadt, Germany',
+    countries: ["de"],
+    cities: [{ name: "St. Burchardi church, Halberstadt", lat: 51.8925, lon: 11.0453 }],
+    paragraphs: [
+      "In a small church in Halberstadt, Germany, an organ has been playing a single John Cage composition, As Slow as Possible, since 2001 — on a performance schedule designed to last exactly 639 years, ending in the year 2640. The piece has no fixed tempo in Cage's original score, so organizers chose the timeframe partly to mark 639 years since the church's organ was first built.",
+      "Because the notes are stretched out so extremely, individual chord changes can be years apart; the most recent change, in 2024, was still only the 15th note change since the performance began. A small, dedicated audience of visitors and livestream viewers still shows up for each rare change, and the project is expected to long outlive everyone currently involved in maintaining it."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/As_Slow_as_Possible',
+    wikiTerm: 'As Slow as Possible'
+  },
+  {
+    id: 'reggae-jamaica-heritage',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Bob-Marley.jpg', width: 500, height: 744, credit: 'Eddie Mallin', creditUrl: 'https://en.wikipedia.org/wiki/File:Bob-Marley.jpg' },
+    category: 'Music',
+    title: 'A Music Genre Recognized as World Heritage',
+    place: 'Jamaica',
+    countries: ["jm"],
+    paragraphs: [
+      "Reggae emerged in Jamaica in the late 1960s, growing out of earlier local genres like ska and rocksteady, blending them with strong offbeat rhythms, prominent basslines, and lyrics often rooted in social commentary and Rastafari spirituality; Bob Marley became by far its most internationally famous ambassador, though the genre had a large and distinct Jamaican scene well before his global fame.",
+      "In 2018, UNESCO added reggae music to its Representative List of the Intangible Cultural Heritage of Humanity, citing its role in international discourse on issues of injustice, resistance, and love, and its function as an important vehicle for reflecting on daily challenges — an unusually formal honor for a genre still very much a living, evolving musical tradition rather than a historical relic."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Reggae',
+    wikiTerm: 'reggae music'
+  },
+  {
+    id: 'silbo-gomero-whistled-language',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/El_Silbo.jpg/500px-El_Silbo.jpg', width: 480, height: 673, credit: 'Akalvin', creditUrl: 'https://en.wikipedia.org/wiki/File:El_Silbo.jpg' },
+    category: 'Language',
+    title: 'A Language Whistled Across Ravines',
+    place: 'La Gomera, Canary Islands, Spain',
+    countries: ["es"],
+    cities: [{ name: "La Gomera", lat: 28.1227, lon: -17.2245 }],
+    paragraphs: [
+      "On the mountainous island of La Gomera in Spain's Canary Islands, some residents still communicate using Silbo Gomero, a whistled substitute for spoken Spanish that replaces vowels and consonants with distinct whistled tones and can be understood clearly up to several kilometres away across the island's steep ravines — far further than a shouted voice could carry.",
+      "Originally developed to communicate across the island's difficult terrain, Silbo Gomero nearly died out as telephones spread in the 20th century, but the local government made it a mandatory subject in island schools in 1999 specifically to keep it alive, and UNESCO recognised it as Intangible Cultural Heritage in 2009. It isn't a separate language exactly — it's a direct whistled encoding of Spanish itself, meaning any fluent Spanish speaker's words could theoretically be whistled, though understanding the whistled version well takes real practice."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Silbo_Gomero',
+    wikiTerm: 'Silbo Gomero'
+  },
+  {
+    id: 'kpop-trainee-system',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/BTS_during_a_White_House_press_conference_May_31%2C_2022_%28cropped%29.jpg/500px-BTS_during_a_White_House_press_conference_May_31%2C_2022_%28cropped%29.jpg', width: 480, height: 188, credit: 'The White House', creditUrl: 'https://en.wikipedia.org/wiki/File:BTS_during_a_White_House_press_conference_May_31%2C_2022_%28cropped%29.jpg' },
+    category: 'Pop Culture',
+    title: 'The Years-Long Pipeline Behind K-pop Idols',
+    place: 'South Korea',
+    countries: ["kr"],
+    paragraphs: [
+      "Most K-pop performers don't simply audition and debut — they're recruited as 'trainees,' often in their early teens, by large entertainment companies that then put them through years of intensive, company-funded training in singing, dancing, languages, and media presentation before a debut is even guaranteed, with many trainees dropped from the program without ever performing publicly.",
+      "The system, pioneered largely by companies like SM Entertainment starting in the early 1990s, has been credited with K-pop's famously tight choreography and polished group performances, but has also drawn sustained criticism over trainee contract terms, strict weight and appearance monitoring, and the sheer psychological pressure on trainees, some of whom spend the better part of a decade training with no guarantee of ever debuting at all."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Korean_idol',
+    wikiTerm: 'trainees'
+  },
+  {
+    id: 'didgeridoo-aboriginal-instrument',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Australiandidgeridoos.jpg/500px-Australiandidgeridoos.jpg', width: 480, height: 354, credit: 'Hmarin', creditUrl: 'https://en.wikipedia.org/wiki/File:Australiandidgeridoos.jpg' },
+    category: 'Music',
+    title: 'One of the Oldest Wind Instruments Still Played',
+    place: 'Arnhem Land, Australia',
+    countries: ["au"],
+    paragraphs: [
+      "The didgeridoo, a long wooden wind instrument traditionally made from eucalyptus trunks naturally hollowed out by termites, originates with Aboriginal peoples of northern Australia's Arnhem Land, with some rock art depictions suggesting it may have been played for well over a thousand years, making it one of the oldest wind instruments still in continuous use anywhere in the world.",
+      "Playing it relies on a technique called circular breathing — exhaling through the mouth while simultaneously inhaling through the nose, using the cheeks as a temporary air reservoir — which lets skilled players sustain a single continuous drone note indefinitely, sometimes for many minutes without an audible break. Traditionally, its use was restricted by gender and ceremonial context in many Aboriginal communities, a set of customs that continues to shape how, and by whom, it's respectfully played today."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Didgeridoo',
+    wikiTerm: 'didgeridoo'
+  },
+  {
+    id: 'guinness-world-records-origin',
+    image: { url: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Guinness_World_Records_logo.svg/500px-Guinness_World_Records_logo.svg.png', width: 480, height: 480, credit: 'Guinness World Records', creditUrl: 'https://en.wikipedia.org/wiki/File:Guinness_World_Records_logo.svg' },
+    category: 'Pop Culture',
+    title: 'A Record Book Born From a Pub Argument',
+    place: 'Dublin, Ireland',
+    countries: ["ie"],
+    cities: [{ name: "Dublin", lat: 53.3498, lon: -6.2603 }],
+    paragraphs: [
+      "The Guinness World Records book exists because of an argument in an Irish pub: in 1951, Guinness brewery managing director Sir Hugh Beaver got into a dispute with fellow hunters over which was Europe's fastest game bird, and reportedly couldn't find a reference book anywhere with a clear answer.",
+      "Beaver realized a book settling exactly these kinds of pub arguments could be useful publicity for the brewery, and commissioned two researchers to compile the first edition, published in 1955 as the Guinness Book of Records; it became a surprise bestseller almost immediately. It's since been published in dozens of languages and editions, tracking everything from the tallest person ever reliably measured to the largest gathering of people dressed as garden gnomes, and remains one of the best-selling copyrighted book series in history."
+    ],
+    wiki: 'https://en.wikipedia.org/wiki/Guinness_World_Records',
+    wikiTerm: 'Guinness World Records'
   }
 ];

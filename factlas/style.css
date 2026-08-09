@@ -480,6 +480,8 @@ body.panel-open .map-wrap {
   .intro {
     bottom: 15vh;
     font-size: 0.78rem;
+    white-space: normal;
+    width: 80vw;
   }
   .reveal-btn {
     bottom: 6vh;
@@ -491,5 +493,32 @@ body.panel-open .map-wrap {
   .theme-toggle {
     top: 2.2vh;
     right: 4vw;
+  }
+  /* Once the bottom sheet is open (from the first reveal onward), the
+     button and counter would otherwise sit inside its 58vh height,
+     floating on top of the fact text. Lift them clear of the sheet. */
+  body.panel-open .reveal-btn {
+    bottom: calc(58vh + 1.6rem);
+  }
+  body.panel-open .counter {
+    bottom: calc(58vh + 0.5rem);
+  }
+}
+
+/* Very short mobile viewports (landscape phones, small devices with the
+   address bar showing): a 58vh sheet plus a lifted button can otherwise
+   push the button above the visible viewport entirely. */
+@media (max-width: 780px) and (max-height: 480px) {
+  .fact-panel {
+    max-height: 46vh;
+  }
+  body.panel-open .map-wrap {
+    padding-bottom: 40vh;
+  }
+  body.panel-open .reveal-btn {
+    bottom: calc(46vh + 1.2rem);
+  }
+  body.panel-open .counter {
+    bottom: calc(46vh + 0.3rem);
   }
 }
