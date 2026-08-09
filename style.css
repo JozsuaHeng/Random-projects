@@ -81,18 +81,40 @@ body {
 .art {
   position: relative;
   height: 100px;
-  display: flex;
-  align-items: flex-end;
   padding: 12px 16px;
   overflow: hidden;
 }
 
+/* Each theme positions .art-title itself below — no shared default
+   placement, so tiles aren't all "title bottom-left" with different
+   colors. */
 .art-title {
-  position: relative;
+  position: absolute;
   z-index: 2;
   font-size: 19px;
   line-height: 1.1;
   margin: 0;
+}
+
+.avatar {
+  position: absolute;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.post-meta {
+  position: absolute;
+  z-index: 2;
+  font-size: 10px;
+  opacity: 0.75;
 }
 
 .deco {
@@ -148,6 +170,66 @@ body {
   z-index: 1;
 }
 
+/* --- structural bits reused by specific themes below, not shared defaults --- */
+
+.reaction-bar {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reaction-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reaction-count {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.redaction {
+  position: absolute;
+  z-index: 1;
+  height: 6px;
+  border-radius: 2px;
+}
+
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 10px;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dog-ear {
+  position: absolute;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.patch-ring {
+  position: absolute;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 /* --- theme: broetry generator --- */
 
 .tile[data-theme="broetry"] .art {
@@ -155,17 +237,48 @@ body {
   border-bottom: 3px solid #e0c689;
 }
 .tile[data-theme="broetry"] .art-title {
+  top: 14px;
+  left: 52px;
   font-family: "Baloo 2", sans-serif;
   font-weight: 800;
+  font-size: 15px;
+  line-height: 1.25;
   color: #b5391f;
 }
-.tile[data-theme="broetry"] .tag,
+.tile[data-theme="broetry"] .avatar {
+  top: 13px;
+  left: 16px;
+  background: #b5391f;
+  color: #fff;
+}
+.tile[data-theme="broetry"] .post-meta {
+  top: 54px;
+  left: 52px;
+  color: #8a5a2f;
+}
 .tile[data-theme="broetry"] .go { color: #d98a1f; }
-.tile[data-theme="broetry"]:hover { border-color: #d98a1f; }
+.tile[data-theme="broetry"]:hover {
+  border-color: #d98a1f;
+  transform: translateY(-3px);
+}
+.tile[data-theme="broetry"] .meta {
+  background: linear-gradient(180deg, #16130f 0%, var(--card) 40%);
+}
 .tile[data-theme="broetry"] .broetry-chip {
   color: #8a4a1f;
   background: rgba(255, 255, 255, 0.55);
   border-color: rgba(138, 74, 31, 0.35);
+}
+.tile[data-theme="broetry"] .reaction-bar {
+  bottom: 8px;
+  left: 16px;
+}
+.tile[data-theme="broetry"] .reaction-dot {
+  background: #fff;
+  color: #b5391f;
+}
+.tile[data-theme="broetry"] .reaction-count {
+  color: #8a5a2f;
 }
 
 /* --- theme: thought leadership mad-libs --- */
@@ -174,14 +287,34 @@ body {
   background: linear-gradient(135deg, #8a6bff 0%, #ff5c8a 65%, #ffa24d 100%);
 }
 .tile[data-theme="madlibs"] .art-title {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  text-align: center;
+  white-space: nowrap;
   font-family: "Baloo 2", sans-serif;
   font-weight: 800;
+  font-size: 15px;
   color: #fff;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  padding: 6px 12px;
 }
-.tile[data-theme="madlibs"] .tag,
 .tile[data-theme="madlibs"] .go { color: #b18aff; }
-.tile[data-theme="madlibs"]:hover { border-color: #8a6bff; }
+.tile[data-theme="madlibs"] {
+  border-style: dashed;
+}
+.tile[data-theme="madlibs"]:hover {
+  border-color: #8a6bff;
+  transform: translateY(-3px) rotate(-1deg);
+}
+.tile[data-theme="madlibs"] .redaction {
+  background: rgba(0, 0, 0, 0.28);
+}
+.tile[data-theme="madlibs"] .meta {
+  background: linear-gradient(180deg, #161029 0%, var(--card) 40%);
+}
 
 /* --- theme: the archive --- */
 
@@ -190,14 +323,38 @@ body {
   border-bottom: 3px solid #1d3a24;
 }
 .tile[data-theme="archive"] .art-title {
+  top: 14px;
+  right: 16px;
+  text-align: right;
   font-family: "Press Start 2P", monospace;
   font-size: 13px;
   line-height: 1.7;
   color: #cdeecd;
 }
-.tile[data-theme="archive"] .tag,
 .tile[data-theme="archive"] .go { color: #7de07d; }
-.tile[data-theme="archive"]:hover { border-color: #7de07d; }
+.tile[data-theme="archive"] {
+  border-radius: 4px;
+  border-left: 4px solid #1d3a24;
+}
+.tile[data-theme="archive"]:hover {
+  border-color: #7de07d;
+  border-left-color: #7de07d;
+  transform: translateY(-3px) scale(1.012);
+}
+.tile[data-theme="archive"] .meta {
+  background: linear-gradient(180deg, #0c1710 0%, var(--card) 40%);
+}
+.tile[data-theme="archive"] .spine {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.35));
+}
+.tile[data-theme="archive"] .dog-ear {
+  bottom: 0;
+  left: 0;
+  border-style: solid;
+  border-width: 0 0 22px 22px;
+  border-color: transparent transparent #0d1f13 transparent;
+  filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.4));
+}
 
 /* --- theme: launchpad-13 --- */
 
@@ -205,14 +362,44 @@ body {
   background: linear-gradient(180deg, #0b1230 0%, #3a5a8c 60%, #e8935a 100%);
 }
 .tile[data-theme="launchpad"] .art-title {
+  top: 10px;
+  left: 10px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   font-family: "Baloo 2", sans-serif;
   font-weight: 800;
+  font-size: 10px;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
   color: #fff;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.22);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
-.tile[data-theme="launchpad"] .tag,
+.tile[data-theme="launchpad"] .patch-ring {
+  top: 10px;
+  left: 10px;
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(74, 166, 255, 0.35), inset 0 0 0 3px rgba(11, 18, 48, 0.4);
+}
 .tile[data-theme="launchpad"] .go { color: #4da6ff; }
-.tile[data-theme="launchpad"]:hover { border-color: #4da6ff; }
+.tile[data-theme="launchpad"] {
+  border-radius: 4px;
+  border-top: 3px solid #3a5a8c;
+}
+.tile[data-theme="launchpad"]:hover {
+  border-color: #4da6ff;
+  border-top-color: #4da6ff;
+  transform: translateY(-6px);
+}
+.tile[data-theme="launchpad"] .meta {
+  background: linear-gradient(180deg, #0b1230 0%, var(--card) 40%);
+}
 
 /* --- theme: factlas --- */
 
@@ -221,14 +408,39 @@ body {
   border-bottom: 3px solid #e8b64c;
 }
 .tile[data-theme="factlas"] .art-title {
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  text-align: center;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 600;
+  font-size: 17px;
   color: #f2c869;
   letter-spacing: 0.02em;
 }
-.tile[data-theme="factlas"] .tag,
+.tile[data-theme="factlas"] .art-title::before,
+.tile[data-theme="factlas"] .art-title::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 1px;
+  background: rgba(232, 182, 76, 0.6);
+  vertical-align: middle;
+  margin: 0 8px;
+}
 .tile[data-theme="factlas"] .go { color: #e8b64c; }
-.tile[data-theme="factlas"]:hover { border-color: #e8b64c; }
+.tile[data-theme="factlas"] {
+  border-radius: 22px;
+}
+.tile[data-theme="factlas"]:hover {
+  border-color: #e8b64c;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -14px rgba(232, 182, 76, 0.35);
+}
+.tile[data-theme="factlas"] .meta {
+  background: linear-gradient(180deg, #14100a 0%, var(--card) 40%);
+}
 
 .tile:hover .rocket {
   transform: translateY(-4px);
@@ -246,12 +458,6 @@ body {
   padding: 14px 16px;
 }
 
-.tag {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
 
 .meta p {
   font-size: 14px;
