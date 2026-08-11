@@ -12,14 +12,14 @@ function mulberry32(seed) {
   };
 }
 
-function buildingWindows(rng, x, y, w, h, cellW, cellH, litColorFn) {
+function buildingWindows(rng, x, y, w, h, cellW, cellH, litColorFn, density) {
   let out = "";
   const cols = Math.max(1, Math.floor((w - 6) / cellW));
   const rows = Math.max(1, Math.floor((h - 10) / cellH));
   const padX = (w - cols * cellW) / 2;
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (rng() > 0.62) continue;
+      if (rng() > density) continue;
       const wx = x + padX + c * cellW + 1.4;
       const wy = y + 6 + r * cellH + 1.4;
       out += `<rect x="${wx.toFixed(1)}" y="${wy.toFixed(1)}" width="${(cellW - 2.4).toFixed(1)}" height="${(cellH - 2.4).toFixed(1)}" fill="${litColorFn(rng)}"/>`;
@@ -30,24 +30,24 @@ function buildingWindows(rng, x, y, w, h, cellW, cellH, litColorFn) {
 
 function litColorFar(rng) {
   const r = rng();
-  if (r < 0.75) return "rgba(232, 182, 76, 0.35)";
-  return "rgba(140, 170, 210, 0.3)";
+  if (r < 0.75) return "rgba(212, 168, 104, 0.2)";
+  return "rgba(130, 155, 190, 0.16)";
 }
 
 function litColorMid(rng) {
   const r = rng();
-  if (r < 0.78) return "rgba(255, 207, 107, 0.55)";
-  return "rgba(150, 190, 230, 0.45)";
+  if (r < 0.78) return "rgba(226, 182, 112, 0.36)";
+  return "rgba(140, 175, 205, 0.28)";
 }
 
 function litColorNear(rng) {
   const r = rng();
-  if (r < 0.8) return "rgba(255, 207, 107, 0.85)";
-  return "rgba(170, 205, 240, 0.65)";
+  if (r < 0.8) return "rgba(236, 192, 122, 0.55)";
+  return "rgba(150, 185, 220, 0.4)";
 }
 
 function buildingsLayer(rng, opts) {
-  const { count, xSpan, yBase, minH, maxH, minW, maxW, color, cellW, cellH, litFn, jitter } = opts;
+  const { count, xSpan, yBase, minH, maxH, minW, maxW, color, cellW, cellH, litFn, jitter, density } = opts;
   let x = -20;
   let out = "";
   let beacons = "";
@@ -62,11 +62,11 @@ function buildingsLayer(rng, opts) {
     if (rng() > 0.65) {
       const midX = bx + w * 0.5;
       out += `<rect x="${(midX - 1).toFixed(1)}" y="${(by - 10).toFixed(1)}" width="2" height="10" fill="${color}"/>`;
-      if (rng() > 0.5) {
-        beacons += `<circle class="beacon" cx="${midX.toFixed(1)}" cy="${(by - 11).toFixed(1)}" r="1.6" fill="#ff5c4d"/>`;
+      if (rng() > 0.6) {
+        beacons += `<circle class="beacon" cx="${midX.toFixed(1)}" cy="${(by - 11).toFixed(1)}" r="1.4" fill="#d97a68"/>`;
       }
     }
-    out += buildingWindows(rng, bx, by, w, h, cellW, cellH, litFn);
+    out += buildingWindows(rng, bx, by, w, h, cellW, cellH, litFn, density);
     x += step;
   }
   return out + beacons;
@@ -76,31 +76,31 @@ function skylineSVG(seed) {
   const rng = mulberry32(seed);
   const far = buildingsLayer(rng, {
     count: 14, xSpan: 1200, yBase: 560, minH: 90, maxH: 190, minW: 60, maxW: 110,
-    color: "#1c2438", cellW: 9, cellH: 11, litFn: litColorFar, jitter: 26,
+    color: "#1c2438", cellW: 9, cellH: 11, litFn: litColorFar, jitter: 26, density: 0.22,
   });
   const mid = buildingsLayer(rng, {
     count: 11, xSpan: 1200, yBase: 580, minH: 150, maxH: 300, minW: 70, maxW: 130,
-    color: "#141a2c", cellW: 8, cellH: 10, litFn: litColorMid, jitter: 30,
+    color: "#141a2c", cellW: 8, cellH: 10, litFn: litColorMid, jitter: 30, density: 0.28,
   });
   const near = buildingsLayer(rng, {
     count: 8, xSpan: 1200, yBase: 610, minH: 230, maxH: 420, minW: 90, maxW: 160,
-    color: "#0b0e1a", cellW: 7.5, cellH: 9.5, litFn: litColorNear, jitter: 34,
+    color: "#0b0e1a", cellW: 7.5, cellH: 9.5, litFn: litColorNear, jitter: 34, density: 0.34,
   });
 
   return `
   <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMax slice" class="skyline-svg">
     <defs>
       <radialGradient id="moon-glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#f4ecd8" stop-opacity="0.9"/>
-        <stop offset="40%" stop-color="#f4ecd8" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#f4ecd8" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#ded2b4" stop-opacity="0.7"/>
+        <stop offset="40%" stop-color="#ded2b4" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#ded2b4" stop-opacity="0"/>
       </radialGradient>
     </defs>
     <circle cx="920" cy="110" r="90" fill="url(#moon-glow)"/>
-    <circle cx="920" cy="110" r="30" fill="#f4ecd8"/>
-    <circle cx="932" cy="100" r="26" fill="#0e1522" opacity="0.55"/>
-    <rect x="600" y="60" width="420" height="16" rx="8" fill="#141a2c" opacity="0.35"/>
-    <rect x="700" y="95" width="320" height="12" rx="6" fill="#141a2c" opacity="0.25"/>
+    <circle cx="920" cy="110" r="30" fill="#ded2b4" opacity="0.88"/>
+    <circle cx="932" cy="100" r="26" fill="#0e1522" opacity="0.5"/>
+    <rect x="600" y="60" width="420" height="16" rx="8" fill="#141a2c" opacity="0.3"/>
+    <rect x="700" y="95" width="320" height="12" rx="6" fill="#141a2c" opacity="0.22"/>
     <g opacity="0.9">${far}</g>
     <g opacity="0.95">${mid}</g>
     <g>${near}</g>
