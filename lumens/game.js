@@ -1,7 +1,6 @@
 const LEVELS = [
-  { n: 2, label: "Two Lamps", initialLit: [0] },
-  { n: 3, label: "Three Lamps", initialLit: [] },
-  { n: 5, label: "Five Lamps", initialLit: [] },
+  { n: 3, label: "Three Lamps", initialLit: [0] },
+  { n: 5, label: "Five Lamps", initialLit: [0] },
   { n: 7, label: "Seven Lamps", initialLit: [] },
 ];
 
@@ -57,6 +56,7 @@ function startLevel(index) {
   clicksThisLevel = 0;
   levelNameEl.textContent = `Level ${index + 1} — ${level.label}`;
   setTaunt("Light every lamp on the sill. (There may be a catch.)");
+  giveUpBtn.textContent = "Give Up & Continue →";
   renderLampRow();
   updateLitCount();
 }
@@ -113,13 +113,14 @@ function handleLampClick(i) {
   updateLitCount();
 
   if (isFullyLit(lampState, level.n)) {
-    setTaunt("Every lamp is lit. Somehow. Go outside and buy a lottery ticket.");
+    setTaunt("Every lamp is lit. Well done.");
+    giveUpBtn.textContent = levelIndex < LEVELS.length - 1 ? "Next Level →" : "Finish →";
     return;
   }
 
   const lit = litCount(lampState);
   if (lit === level.n - 1) {
-    setTaunt(`${lit} out of ${level.n}. So very close. It will not get closer.`);
+    setTaunt(`${lit} out of ${level.n}. So close.`);
   } else {
     setTaunt(pickTaunt());
   }

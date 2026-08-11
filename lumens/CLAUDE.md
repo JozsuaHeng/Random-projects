@@ -2,16 +2,20 @@
 
 ## What this project is
 
-A whimsical, unwinnable lamp puzzle set in a dim room at twilight, full
-of rain and a detailed city skyline outside the window: a row of ornate
-lamps rests on the windowsill in front of it, and the goal — stated
-plainly on screen — is to click a combination that lights every lamp.
-Four levels in sequence (2, then 3, then 5, then 7 lamps). No combination
-on any level ever lights every lamp; the only way forward is the "Give
-Up & Continue" button (always enabled, never gated on making an attempt
-first — an earlier version required a first click before it lit up,
-which read as broken/stuck rather than intentional). Finishing level 4
-shows a tongue-in-cheek "certificate of futility."
+A whimsical lamp puzzle set in a dim room at twilight, full of rain and
+a detailed city skyline outside the window: a row of ornate lamps rests
+on the windowsill in front of it, and the goal — stated plainly on
+screen — is to click a combination that lights every lamp. Three levels
+in sequence (3, then 5, then 7 lamps). The first two are genuinely
+winnable — a real combination lights every lamp, and the "Give Up &
+Continue" button relabels to "Next Level →" once it happens. The third
+(7 lamps) is not winnable by anyone, on any combination; the same button
+(still labeled "Give Up & Continue," since here it's the only way
+forward) is what actually moves the player past it. It's always enabled,
+never gated on making an attempt first — an earlier version required a
+first click before it lit up, which read as broken/stuck rather than
+intentional. Finishing level 3 shows a tongue-in-cheek "certificate of
+partial futility."
 
 On page load, one of three lamp styles (brass banker's lamp, Tiffany
 stained-glass, bare Edison bulb) is picked at random and used for every
@@ -24,34 +28,41 @@ itself doesn't spoil the trick. The project used to be named "Lumen
 Limbo," which was dropped for the same reason: "Limbo" gives the twist
 away before anyone's clicked a single lamp.
 
-## The actual trick (why it's unwinnable)
+## The actual trick (why level 3 is unwinnable, and 1 & 2 aren't)
 
-Clicking lamp `i` toggles lamp `i` **and** its ring-neighbor `(i+1) % n`
-(`pairFor()` in `game.js`) — always an even number of lamps per click.
-That makes the parity of "how many lamps are lit" invariant: it can never
-change, no matter what's clicked or in what order (double-clicking a lamp
-just cancels out, so only the *set* of distinct lamps pressed matters).
-Each level's starting parity is deliberately set to the opposite of a
-full board's parity, so "all lit" is outside the reachable set entirely —
-not just hard, structurally impossible:
+Every level uses the exact same click rule: clicking lamp `i` toggles
+lamp `i` **and** its ring-neighbor `(i+1) % n` (`pairFor()` in
+`game.js`) — always exactly two lamps per click. Whether "all lit" is
+reachable from a level's starting state is a linear-algebra question
+over GF(2) (double-clicking a lamp cancels out, so only the *set* of
+distinct lamps pressed matters, and the reachable states form a coset of
+the span of the click vectors) — not a difficulty dial. It depends on
+both `n` and which lamp(s) start lit, and it can flip from solvable to
+impossible with a one-lamp change to the starting state. Concretely,
+each level's `initialLit` in `LEVELS` was chosen after brute-forcing
+every 2^n press combination for that exact `n`/start pair — not by
+formula, and not interchangeably:
 
-- n=2: starts with **one** lamp already lit (odd count) — a full board is
-  even (2), so it can never match.
-- n=3, 5, 7: start with **zero** lamps lit (even count) — a full board on
-  an odd-sized level is odd, so it can never match.
+- **n=3, starts with lamp 0 lit**: solvable, in as few as 1 click
+  (pressing the lamp whose pair is `{1,2}` alone completes it).
+- **n=5, starts with lamp 0 lit**: solvable, in as few as 2 clicks
+  (pressing lamps 1 and 3).
+- **n=7, starts with nothing lit**: unreachable, full stop — the best
+  reachable state is always exactly one lamp short (6 of 7), no matter
+  the combination or order. This one *is* a genuine parity trap: every
+  click toggles an even number of lamps, so the lit-count's parity never
+  changes, and it starts even (0) while a full board is odd (7) — they
+  can never meet. That specific argument is what makes level 3
+  provably, not just practically, impossible.
 
-Verified by brute force for all four sizes (every 2^n press combination)
-before writing any UI: `all_on_reachable` is `False` in every case, and
-the best reachable state is always exactly one lamp short (`n-1` lit) —
-see the taunt text keyed to that count in `game.js`.
-
-`isFullyLit()` in `game.js` is a real, honest win check — it isn't
-special-cased or short-circuited. It's just never satisfiable given the
-toggle rule above. There's no "neverWin" flag anywhere; the impossibility
-is a structural property of `pairFor()` plus each level's starting state,
-not a runtime guard. Keep it that way — if this ever needs to change
-(e.g. adding a level), pick a new starting lit-count with the opposite
-parity of `n`, or the level becomes accidentally winnable.
+`isFullyLit()` in `game.js` is a real, honest win check used identically
+on all three levels — it isn't special-cased per level or short-circuited
+for level 3. There's no "neverWin" flag; level 3's impossibility is a
+structural property of `pairFor()` plus its starting state, not a
+runtime guard. If `LEVELS` ever changes (a different `n`, a different
+`initialLit`, an added level), re-verify reachability by brute force
+before assuming a level is winnable *or* unwinnable — nothing here
+generalizes by intuition alone, as the n=3/5-vs-n=7 split shows.
 
 ## Architecture
 
