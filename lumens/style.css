@@ -100,7 +100,7 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  filter: saturate(0.75) brightness(0.88) blur(1.4px);
+  filter: saturate(0.95) brightness(0.98) blur(0.7px);
 }
 
 .depth-fade {
@@ -172,8 +172,8 @@ body {
   z-index: 1;
   pointer-events: none;
 }
-.mullion-v { top: 0; bottom: 260px; left: 50%; width: 14px; margin-left: -7px; opacity: 0.85; }
-.mullion-h { left: 0; right: 0; bottom: 260px; height: 14px; opacity: 0.85; }
+.mullion-v { top: 0; bottom: 190px; left: 50%; width: 14px; margin-left: -7px; opacity: 0.85; }
+.mullion-h { left: 0; right: 0; bottom: 190px; height: 14px; opacity: 0.85; }
 .mullion-h2 { left: 0; right: 0; top: 34%; height: 10px; opacity: 0.7; }
 
 /* --- curtains --- */
@@ -181,7 +181,7 @@ body {
 .curtain {
   position: absolute;
   top: 0;
-  bottom: 260px;
+  bottom: 190px;
   width: clamp(36px, 7vw, 96px);
   z-index: 4;
   pointer-events: none;
@@ -222,16 +222,13 @@ body {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 260px;
+  height: 190px;
   z-index: 2;
 }
 
 .desk-surface {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 108px;
+  inset: 0;
   background: repeating-linear-gradient(
     90deg,
     var(--sill) 0 18px,

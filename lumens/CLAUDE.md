@@ -96,18 +96,27 @@ as the n=3/5-vs-n=7 split shows.
 
 Plain HTML/CSS/JS, no framework, no build step.
 
-- `skyline.js` — `skylineSVG(seed)` procedurally generates a three-layer
-  night skyline (far/mid/near buildings via a seeded `mulberry32` PRNG,
-  each with its own lit-window density/color and occasional rooftop
-  antenna + blinking aviation beacon), plus a moon with a soft glow and
-  thin cloud bands. Re-rolled once per page load in `game.js` and
-  injected into `#glass`, behind the rain layers. Deliberately kept low-
-  density and low-contrast (window density maxes out around 20%, plus a
-  `blur(1.4px)` + desaturate/darken filter on `.skyline-svg` in
-  `style.css`) so it reads as a soft, out-of-focus backdrop — the lamps,
-  not the skyline, are meant to be the sharpest, brightest thing in the
-  frame. A `.depth-fade` gradient darkens the lower third of the scene
-  for the same reason: more contrast for the lamp glow to pop against.
+- `skyline.js` — `skylineSVG(seed)` procedurally generates a starfield
+  (`starfield()`, ~70 dots, skipped in a rectangle around the moon so
+  they don't overlap it), a three-layer night skyline (far/mid/near
+  buildings via a seeded `mulberry32` PRNG, each with its own lit-window
+  density/color and occasional rooftop antenna + blinking aviation
+  beacon), one signature tapering landmark tower (`landmarkTower()`, a
+  fixed-position Empire-State-ish silhouette with its own beacon, so the
+  skyline has a clear focal building instead of reading as a flat row of
+  similar boxes), a moon with a soft glow, thin cloud bands, and a warm
+  `horizon-glow` radial gradient low in the sky suggesting city light
+  pollution. Re-rolled once per page load in `game.js` and injected into
+  `#glass`, behind the rain layers. Window cells are intentionally large
+  (14-18px) and sparse rather than a fine grid — small dense windows plus
+  blur read as noisy static rather than soft painterly light blocks, which
+  is what made an earlier version of this scene look bad/busy rather than
+  moody. `.skyline-svg`'s filter (`saturate(0.95) brightness(0.98)
+  blur(0.7px)`) is deliberately light-touch for the same reason — enough
+  to soften edges, not so much it flattens the color. A `.depth-fade`
+  gradient darkens the lower third of the scene so there's still more
+  contrast for the lamp glow to pop against, without relying on
+  desaturating the skyline itself.
 - `lamps.js` — `renderLamp(styleIndex, uid)` returns one of four inline
   SVG lamp strings (brass banker's lamp with a green glass dome, rivets,
   a glass sheen highlight, and a pull chain; Tiffany lamp with a
@@ -145,10 +154,14 @@ Plain HTML/CSS/JS, no framework, no build step.
   `.depth-fade` gradient, a `.valance` + two `.curtain` panels framing
   the sides, a window mullion grid (`.mullion-v`/`.mullion-h`/
   `.mullion-h2`) spanning only the window portion of the viewport — they
-  stop at `bottom: 260px`, which is also where the raised `.sill` (desk)
-  begins, so panes don't run behind the desk. Inside `.sill`: a
-  108px-tall `.desk-surface` plank at the very bottom, four static
-  `.prop` elements (book, cup with animated steam, plant, cat) positioned
+  stop at `bottom: 190px`, which is also where the raised `.sill` (desk,
+  190px tall) begins, so panes don't run behind the desk. `.desk-surface`
+  fills `.sill` completely (`inset: 0`) — an earlier version only gave the
+  bottom 108px of the 260px-tall `.sill` an opaque wood background,
+  leaving a transparent gap above it that let the skyline show through
+  behind the desk/props, which read as a visible bug rather than a
+  design choice. Inside `.sill`: four static `.prop` elements (book, cup
+  with animated steam, plant, cat) positioned
   around `bottom: 96-108px` — deliberately *not* near the desk's front
   edge, which is covered by the fixed bottom `.dock` (game controls) — and
   `.lamp-row` at `bottom: 104px`, all sitting on the same visible band
