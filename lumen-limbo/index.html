@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumen Limbo</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="grain-overlay"></div>
+
+  <header class="head">
+    <p class="eyebrow">from The Quagmire</p>
+    <h1>Lumen Limbo</h1>
+  </header>
+
+  <main class="scene">
+    <div class="window">
+      <div class="glass">
+        <div class="bokeh b1"></div>
+        <div class="bokeh b2"></div>
+        <div class="bokeh b3"></div>
+        <div class="rain-layer far"></div>
+        <div class="rain-layer near"></div>
+        <div class="fog"></div>
+      </div>
+      <div class="mullion-v"></div>
+      <div class="mullion-h"></div>
+    </div>
+
+    <div class="sill">
+      <div class="lamp-row" id="lampRow"></div>
+    </div>
+  </main>
+
+  <div class="dock">
+    <div class="dock-left">
+      <p class="level-name" id="levelName">Level 1 — Two Lamps</p>
+      <p class="lit-count" id="litCount">0 / 2 lit</p>
+    </div>
+    <p class="taunt" id="taunt">Light every lamp on the sill. (There may be a catch.)</p>
+    <div class="dock-right">
+      <button id="resetBtn" class="btn">Reset Lamps</button>
+      <button id="giveUpBtn" class="btn btn-primary" disabled>Give Up &amp; Continue →</button>
+    </div>
+  </div>
+
+  <div class="ending-overlay" id="endingOverlay" hidden>
+    <div class="certificate">
+      <p class="cert-eyebrow">certificate of futility</p>
+      <h2>This certifies that a Visitor</h2>
+      <p class="cert-body">
+        pressed lamp switches <strong id="totalClicksStat">0</strong> times
+        across four levels of an unwinnable windowsill, and, on every single
+        attempt, lit at most one lamp fewer than required.
+      </p>
+      <p class="cert-body small">The lamps remain, to this day, almost lit.</p>
+      <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+    </div>
+  </div>
+
+  <script src="lamps.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

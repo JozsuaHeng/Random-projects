@@ -449,6 +449,36 @@ body {
   transition: transform 0.25s ease;
 }
 
+/* --- theme: lumen limbo --- */
+
+.tile[data-theme="lumen"] .art {
+  background: linear-gradient(180deg, #1d1626 0%, #120e1c 70%);
+  border-bottom: 3px solid #4a3520;
+}
+.tile[data-theme="lumen"] .art-title {
+  bottom: 14px;
+  left: 16px;
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #ffcf6b;
+  text-shadow: 0 0 14px rgba(255, 179, 71, 0.4);
+}
+.tile[data-theme="lumen"] .go { color: #ffb347; }
+.tile[data-theme="lumen"]:hover {
+  border-color: #ffb347;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(255, 179, 71, 0.3);
+}
+.tile[data-theme="lumen"] .meta {
+  background: linear-gradient(180deg, #140f0a 0%, var(--card) 40%);
+}
+.tile[data-theme="lumen"] .rain-drop {
+  position: absolute;
+  width: 1px;
+  background: rgba(210, 225, 245, 0.35);
+}
+
 /* --- meta (text area below the art) --- */
 
 .meta {
