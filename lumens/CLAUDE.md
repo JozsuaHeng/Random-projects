@@ -2,18 +2,27 @@
 
 ## What this project is
 
-A whimsical, unwinnable lamp puzzle set in a dim, rain-streaked room at
-twilight: a row of detailed lamps rests on a windowsill, and the goal —
-stated plainly on screen — is to click a combination that lights every
-lamp. Four levels in sequence (2, then 3, then 5, then 7 lamps). No
-combination on any level ever lights every lamp; the only way forward is
-the "Give Up & Continue" button, which is the actual progression
-mechanic. Finishing level 4 shows a tongue-in-cheek "certificate of
-futility."
+A whimsical, unwinnable lamp puzzle set in a dim room at twilight, full
+of rain and a detailed city skyline outside the window: a row of ornate
+lamps rests on the windowsill in front of it, and the goal — stated
+plainly on screen — is to click a combination that lights every lamp.
+Four levels in sequence (2, then 3, then 5, then 7 lamps). No combination
+on any level ever lights every lamp; the only way forward is the "Give
+Up & Continue" button (always enabled, never gated on making an attempt
+first — an earlier version required a first click before it lit up,
+which read as broken/stuck rather than intentional). Finishing level 4
+shows a tongue-in-cheek "certificate of futility."
 
 On page load, one of three lamp styles (brass banker's lamp, Tiffany
 stained-glass, bare Edison bulb) is picked at random and used for every
-lamp that session.
+lamp that session, and a fresh procedurally-generated skyline is drawn
+behind the rain.
+
+Public-facing copy (hub tile, README, in-page tagline) is deliberately
+soft — "there may be a catch" rather than "you cannot win" — so the page
+itself doesn't spoil the trick. The project used to be named "Lumen
+Limbo," which was dropped for the same reason: "Limbo" gives the twist
+away before anyone's clicked a single lamp.
 
 ## The actual trick (why it's unwinnable)
 
@@ -48,12 +57,21 @@ parity of `n`, or the level becomes accidentally winnable.
 
 Plain HTML/CSS/JS, no framework, no build step.
 
+- `skyline.js` — `skylineSVG(seed)` procedurally generates a three-layer
+  night skyline (far/mid/near buildings via a seeded `mulberry32` PRNG,
+  each with its own lit-window density/color and occasional rooftop
+  antenna + blinking aviation beacon), plus a moon with a soft glow and
+  thin cloud bands. Re-rolled once per page load in `game.js` and
+  injected into `#glass`, behind the rain layers.
 - `lamps.js` — `renderLamp(styleIndex, uid)` returns one of three inline
-  SVG lamp strings (brass banker's lamp with a green glass dome and pull
-  chain; Tiffany lamp with a stained-glass dome built from a `clipPath`
-  + radiating triangular panes so imprecise pane geometry never overflows
-  the dome silhouette; bare Edison bulb with a squiggle filament path).
-  Every gradient/clip-path id is templated with a `uid` so multiple lamp
+  SVG lamp strings (brass banker's lamp with a green glass dome, rivets,
+  a glass sheen highlight, and a pull chain; Tiffany lamp with a
+  10-pane stained-glass dome built from a `clipPath` + radiating
+  triangular panes — so imprecise pane geometry never overflows the dome
+  silhouette — plus an acorn finial and a two-tone bead fringe; bare
+  Edison bulb with a double-loop filament, a glass reflection highlight,
+  and a cloth-cord-to-wall-plug detail resting against the base). Every
+  gradient/clip-path id is templated with a `uid` so multiple lamp
   instances on the same page don't collide. Lit/unlit state is driven
   entirely by CSS classes (`.lamp-emit`, `.lamp-core`, `.is-lit` on the
   wrapper) in `style.css`, not by swapping markup.
@@ -61,12 +79,15 @@ Plain HTML/CSS/JS, no framework, no build step.
   handler (`pairFor` + XOR toggle), taunt text, and the give-up/ending
   flow. `lampStyle` is rolled once per page load and threaded into every
   `renderLamp()` call so the whole session stays visually consistent.
-- `style.css` — the twilight scene (gradient wall, a window with layered
-  CSS-only rain via animated `repeating-linear-gradient` backgrounds,
-  blurred "bokeh" lights, a condensation/fog blob), a wood-grain
-  windowsill the lamps sit on, a fixed bottom control dock, and a film
-  grain overlay (inline SVG `feTurbulence` data URI, low opacity,
-  `mix-blend-mode: overlay`) for the lo-fi look.
+- `style.css` — the full-bleed twilight scene: a `.glass` layer holding
+  the generated skyline plus layered CSS-only rain (animated
+  `repeating-linear-gradient` backgrounds), a fixed moon glow, window
+  mullions spanning the full viewport (the horizontal one pinned just
+  above the sill via `bottom: 102px`, not a percentage, so it stays put
+  regardless of viewport height), a wood-grain windowsill spanning the
+  full width, a fixed bottom control dock, and a film grain overlay
+  (inline SVG `feTurbulence` data URI, low opacity, `mix-blend-mode:
+  overlay`) for the lo-fi look.
 
 To add a lamp style: add a `*LampSVG(uid)` function in `lamps.js` (give
 its glow elements the `lamp-emit` class and, if it has a distinct light

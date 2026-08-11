@@ -18,6 +18,8 @@ const TAUNTS = [
 
 const lampStyle = Math.floor(Math.random() * LAMP_STYLE_COUNT);
 
+document.getElementById("glass").insertAdjacentHTML("afterbegin", skylineSVG(Date.now()));
+
 let levelIndex = 0;
 let lampState = [];
 let clicksThisLevel = 0;
@@ -53,7 +55,6 @@ function startLevel(index) {
     ? Array.from({ length: level.n }, (_, i) => (level.initialLit.includes(i) ? 1 : 0))
     : new Array(level.n).fill(0);
   clicksThisLevel = 0;
-  giveUpBtn.disabled = true;
   levelNameEl.textContent = `Level ${index + 1} — ${level.label}`;
   setTaunt("Light every lamp on the sill. (There may be a catch.)");
   renderLampRow();
@@ -68,7 +69,7 @@ function renderLampRow() {
     const wrapper = document.createElement("button");
     wrapper.className = "lamp";
     wrapper.setAttribute("aria-label", `Lamp ${i + 1}`);
-    wrapper.style.width = `${Math.max(46, 130 - level.n * 9)}px`;
+    wrapper.style.width = `${Math.max(70, 190 - level.n * 15)}px`;
     wrapper.innerHTML = `<div class="lamp-halo"></div>${renderLamp(lampStyle, uid)}`;
     wrapper.addEventListener("click", () => handleLampClick(i));
     lampRow.appendChild(wrapper);
@@ -110,7 +111,6 @@ function handleLampClick(i) {
   totalClicks++;
   syncLampVisuals();
   updateLitCount();
-  giveUpBtn.disabled = false;
 
   if (isFullyLit(lampState, level.n)) {
     setTaunt("Every lamp is lit. Somehow. Go outside and buy a lottery ticket.");

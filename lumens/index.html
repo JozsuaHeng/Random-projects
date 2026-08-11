@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumen Limbo</title>
+<title>Lumens</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Special+Elite&display=swap" rel="stylesheet">
@@ -14,23 +14,17 @@
   <div class="grain-overlay"></div>
 
   <header class="head">
-    <p class="eyebrow">from The Quagmire</p>
-    <h1>Lumen Limbo</h1>
+    <h1>Lumens</h1>
   </header>
 
   <main class="scene">
-    <div class="window">
-      <div class="glass">
-        <div class="bokeh b1"></div>
-        <div class="bokeh b2"></div>
-        <div class="bokeh b3"></div>
-        <div class="rain-layer far"></div>
-        <div class="rain-layer near"></div>
-        <div class="fog"></div>
-      </div>
-      <div class="mullion-v"></div>
-      <div class="mullion-h"></div>
+    <div class="glass" id="glass">
+      <div class="rain-layer far"></div>
+      <div class="rain-layer near"></div>
+      <div class="fog"></div>
     </div>
+    <div class="mullion-v"></div>
+    <div class="mullion-h"></div>
 
     <div class="sill">
       <div class="lamp-row" id="lampRow"></div>
@@ -45,7 +39,10 @@
     <p class="taunt" id="taunt">Light every lamp on the sill. (There may be a catch.)</p>
     <div class="dock-right">
       <button id="resetBtn" class="btn">Reset Lamps</button>
-      <button id="giveUpBtn" class="btn btn-primary" disabled>Give Up &amp; Continue →</button>
+      <div class="give-up-wrap">
+        <button id="giveUpBtn" class="btn btn-primary">Give Up &amp; Continue →</button>
+        <p class="give-up-hint">(this button always works)</p>
+      </div>
     </div>
   </div>
 
@@ -63,6 +60,7 @@
     </div>
   </div>
 
+  <script src="skyline.js"></script>
   <script src="lamps.js"></script>
   <script src="game.js"></script>
 </body>
