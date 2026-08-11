@@ -17,10 +17,18 @@ first click before it lit up, which read as broken/stuck rather than
 intentional. Finishing level 3 shows a tongue-in-cheek "certificate of
 partial futility."
 
-On page load, one of three lamp styles (brass banker's lamp, Tiffany
-stained-glass, bare Edison bulb) is picked at random and used for every
-lamp that session, and a fresh procedurally-generated skyline is drawn
-behind the rain.
+On page load, one of four lamp styles (brass banker's lamp, Tiffany
+stained-glass, bare Edison bulb, mid-century articulated desk lamp) is
+picked at random and used for every lamp that session, and a fresh
+procedurally-generated skyline is drawn behind the rain. The lamps sit
+on a raised desk (not the floor/bottom edge of the viewport) dressed
+with static props — an open book, a steaming cup, a small plant, a
+curled cat — so they read as "things on a desk," not just switches in a
+row; a full window-pane grid plus curtains and a valance frame the scene
+above them. The lamp *order* on screen and, for levels 1-2, *which*
+lamp(s) start lit are both re-randomized every time a level is entered
+(see below) — so neither the visual arrangement nor the winning click
+sequence is the same twice in a row.
 
 Public-facing copy (hub tile, README, in-page tagline) is deliberately
 soft — "there may be a catch" rather than "you cannot win" — so the page
@@ -30,23 +38,28 @@ away before anyone's clicked a single lamp.
 
 ## The actual trick (why level 3 is unwinnable, and 1 & 2 aren't)
 
-Every level uses the exact same click rule: clicking lamp `i` toggles
-lamp `i` **and** its ring-neighbor `(i+1) % n` (`pairFor()` in
-`game.js`) — always exactly two lamps per click. Whether "all lit" is
-reachable from a level's starting state is a linear-algebra question
-over GF(2) (double-clicking a lamp cancels out, so only the *set* of
-distinct lamps pressed matters, and the reachable states form a coset of
-the span of the click vectors) — not a difficulty dial. It depends on
-both `n` and which lamp(s) start lit, and it can flip from solvable to
-impossible with a one-lamp change to the starting state. Concretely,
-each level's `initialLit` in `LEVELS` was chosen after brute-forcing
-every 2^n press combination for that exact `n`/start pair — not by
-formula, and not interchangeably:
+Levels 1-2 use the same click rule: clicking lamp `i` toggles lamp `i`
+**and** its ring-neighbor `(i+1) % n` (`pairFor()` in `game.js`) —
+always exactly two lamps per click. Whether "all lit" is reachable from
+a level's starting state is a linear-algebra question over GF(2)
+(double-clicking a lamp cancels out, so only the *set* of distinct lamps
+pressed matters, and the reachable states form a coset of the span of
+the click vectors) — not a difficulty dial. It depends on both `n` and
+which lamp(s) start lit, and it can flip from solvable to impossible
+with a one-lamp change to the starting state. `randomOddLitSet(n)` in
+`game.js` picks a fresh starting set every time a level is (re)entered
+— but only from starting weights that are exhaustively verified safe,
+not arbitrary randomness:
 
-- **n=3, starts with lamp 0 lit**: solvable, in as few as 1 click
-  (pressing the lamp whose pair is `{1,2}` alone completes it).
-- **n=5, starts with lamp 0 lit**: solvable, in as few as 2 clicks
-  (pressing lamps 1 and 3).
+- **n=3**: every odd-weight starting set (i.e. exactly 1 lamp lit — the
+  only odd weight below 3) is winnable — all 3 possible single-lamp
+  starts confirmed by brute force. Solvable in as few as 1 click.
+- **n=5**: every odd-weight starting set below 5 (weight 1, 5 ways, or
+  weight 3, 10 ways — 15 total) is winnable — all 15 confirmed by brute
+  force, not just the weight-1 cases. Solvable in as few as 2 clicks.
+  `randomOddLitSet` picks uniformly from whichever odd weight it rolls,
+  then a random subset of that size — every output of that function is
+  therefore pre-verified, not merely likely-safe.
 - **n=7, starts with nothing lit, `chaos: true`**: unreachable, full
   stop. Level 3 doesn't use `pairFor()` — instead `randomEvenToggleSets()`
   gives each of the 7 lamps its own random toggle set (2, 4, or 6 lamps,
@@ -73,11 +86,11 @@ on all three levels — it isn't special-cased per level or short-circuited
 for level 3. There's no "neverWin" flag; level 3's impossibility is a
 structural property of `randomEvenToggleSets()` always producing
 even-sized sets plus its empty starting state, not a runtime guard. If
-`LEVELS` ever changes (a different `n`, a different `initialLit`, an
-added level, a non-chaos level's click rule), re-verify reachability by
-brute force before assuming a level is winnable *or* unwinnable —
-nothing here generalizes by intuition alone, as the n=3/5-vs-n=7 split
-shows.
+`LEVELS` ever changes (a different `n`, a different odd-weight cap in
+`randomOddLitSet`, an added level, a non-chaos level's click rule),
+re-verify reachability by brute force before assuming a level is
+winnable *or* unwinnable — nothing here generalizes by intuition alone,
+as the n=3/5-vs-n=7 split shows.
 
 ## Architecture
 
@@ -95,37 +108,53 @@ Plain HTML/CSS/JS, no framework, no build step.
   not the skyline, are meant to be the sharpest, brightest thing in the
   frame. A `.depth-fade` gradient darkens the lower third of the scene
   for the same reason: more contrast for the lamp glow to pop against.
-- `lamps.js` — `renderLamp(styleIndex, uid)` returns one of three inline
+- `lamps.js` — `renderLamp(styleIndex, uid)` returns one of four inline
   SVG lamp strings (brass banker's lamp with a green glass dome, rivets,
   a glass sheen highlight, and a pull chain; Tiffany lamp with a
   10-pane stained-glass dome built from a `clipPath` + radiating
   triangular panes — so imprecise pane geometry never overflows the dome
   silhouette — plus an acorn finial and a two-tone bead fringe; bare
   Edison bulb with a double-loop filament, a glass reflection highlight,
-  and a cloth-cord-to-wall-plug detail resting against the base). Every
-  gradient/clip-path id is templated with a `uid` so multiple lamp
-  instances on the same page don't collide. Lit/unlit state is driven
-  entirely by CSS classes (`.lamp-emit`, `.lamp-core`, `.is-lit` on the
-  wrapper) in `style.css`, not by swapping markup.
-- `game.js` — `LEVELS` (size + starting lit set per level, plus `chaos:
-  true` on level 3), `togglesFor()` (dispatches to `pairFor()` for
-  levels 1-2 or `chaosSets` for level 3), taunt text, and the give-up/
-  ending flow. `lampOrder` controls the on-screen left-to-right sequence
-  independently of lamp index (identity order except on the chaos
-  level); `renderLampRow()` iterates it and stamps each button's real
-  index in `data-index`, which `syncLampVisuals()` reads back rather than
-  assuming DOM position matches lamp index. `lampStyle` is rolled once
+  and a cloth-cord-to-wall-plug detail resting against the base; a
+  mid-century articulated desk lamp with two jointed metal arm segments,
+  a cone shade, and a translucent light-beam triangle that fades in with
+  the rest of its `lamp-emit` elements). Every gradient/clip-path id is
+  templated with a `uid` so multiple lamp instances on the same page
+  don't collide. Lit/unlit state is driven entirely by CSS classes
+  (`.lamp-emit`, `.lamp-core`, `.is-lit` on the wrapper) in `style.css`,
+  not by swapping markup.
+- `game.js` — `LEVELS` (just `n`/`label`/optional `chaos` now — no fixed
+  starting state lives here), `togglesFor()` (dispatches to `pairFor()`
+  for levels 1-2 or `chaosSets` for level 3), `randomOddLitSet()` (levels
+  1-2's starting state) and `randomEvenToggleSets()` (level 3's click
+  rule), taunt text, and the give-up/ending flow. `lampOrder` — an
+  independently shuffled sequence, re-rolled on every `startLevel()` call
+  regardless of level — controls the on-screen left-to-right order;
+  `renderLampRow()` iterates it and stamps each button's real index in
+  `data-index`, which `syncLampVisuals()` reads back rather than assuming
+  DOM position matches lamp index. Each lamp button's width is set via
+  `flex: 0 1 <ideal>px` (not a fixed pixel width computed from
+  `window.innerWidth`, which proved unreliable to test against headless
+  Chrome's `--window-size` flag) so the row shrinks correctly on narrow
+  viewports using ordinary CSS flex-shrink. `lampStyle` is rolled once
   per page load and threaded into every `renderLamp()` call so the whole
   session stays visually consistent.
 - `style.css` — the full-bleed twilight scene: a `.glass` layer holding
   the generated skyline plus layered CSS-only rain (animated
   `repeating-linear-gradient` backgrounds), a fixed moon glow, a
-  `.depth-fade` gradient, window mullions spanning the full viewport (the
-  horizontal one pinned just above the sill via `bottom: 102px`, not a
-  percentage, so it stays put regardless of viewport height), a wood-
-  grain windowsill spanning the full width, a fixed bottom control dock,
-  and a film grain overlay (inline SVG `feTurbulence` data URI, low
-  opacity, `mix-blend-mode: overlay`) for the lo-fi look. Each lamp gets
+  `.depth-fade` gradient, a `.valance` + two `.curtain` panels framing
+  the sides, a window mullion grid (`.mullion-v`/`.mullion-h`/
+  `.mullion-h2`) spanning only the window portion of the viewport — they
+  stop at `bottom: 260px`, which is also where the raised `.sill` (desk)
+  begins, so panes don't run behind the desk. Inside `.sill`: a
+  108px-tall `.desk-surface` plank at the very bottom, four static
+  `.prop` elements (book, cup with animated steam, plant, cat) positioned
+  around `bottom: 96-108px` — deliberately *not* near the desk's front
+  edge, which is covered by the fixed bottom `.dock` (game controls) — and
+  `.lamp-row` at `bottom: 104px`, all sitting on the same visible band
+  above the dock. Plus a film grain overlay (inline SVG `feTurbulence`
+  data URI, low opacity, `mix-blend-mode: overlay`) for the lo-fi look.
+  Each lamp gets
   two glow layers behind it (`.lamp-halo`, a large soft radial glow
   around the fixture; `.lamp-pool`, a flatter wash pooling onto the sill
   wood below it) — both `z-index: -1`, which only stays scoped to the

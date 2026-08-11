@@ -1,7 +1,7 @@
 const LEVELS = [
-  { n: 3, label: "Three Lamps", initialLit: [0] },
-  { n: 5, label: "Five Lamps", initialLit: [0] },
-  { n: 7, label: "Seven Lamps", initialLit: [], chaos: true },
+  { n: 3, label: "Three Lamps" },
+  { n: 5, label: "Five Lamps" },
+  { n: 7, label: "Seven Lamps", chaos: true },
 ];
 
 const TAUNTS = [
@@ -68,6 +68,16 @@ function togglesFor(level, i) {
   return pairFor(level.n, i);
 }
 
+// Every odd-sized starting set is winnable under the ring-pair toggle
+// (confirmed by brute force for every odd weight below n, both n=3 and
+// n=5 — not just the single-lamp case), so any of them is a safe pick.
+function randomOddLitSet(n) {
+  const oddWeights = [];
+  for (let w = 1; w < n; w += 2) oddWeights.push(w);
+  const weight = oddWeights[Math.floor(Math.random() * oddWeights.length)];
+  return new Set(shuffled([...Array(n).keys()]).slice(0, weight));
+}
+
 function litCount(state) {
   return state.reduce((sum, v) => sum + v, 0);
 }
@@ -79,22 +89,21 @@ function isFullyLit(state, n) {
 function startLevel(index) {
   levelIndex = index;
   const level = LEVELS[index];
-  lampState = level.initialLit.length
-    ? Array.from({ length: level.n }, (_, i) => (level.initialLit.includes(i) ? 1 : 0))
-    : new Array(level.n).fill(0);
+
+  if (level.chaos) {
+    lampState = new Array(level.n).fill(0);
+    chaosSets = randomEvenToggleSets(level.n);
+  } else {
+    const initialLit = randomOddLitSet(level.n);
+    lampState = Array.from({ length: level.n }, (_, i) => (initialLit.has(i) ? 1 : 0));
+    chaosSets = null;
+  }
+  lampOrder = shuffled([...Array(level.n).keys()]);
+
   clicksThisLevel = 0;
   levelNameEl.textContent = `Level ${index + 1} — ${level.label}`;
   setTaunt("Light every lamp on the sill. (There may be a catch.)");
   giveUpBtn.textContent = "Give Up & Continue →";
-
-  if (level.chaos) {
-    chaosSets = randomEvenToggleSets(level.n);
-    lampOrder = shuffled([...Array(level.n).keys()]);
-  } else {
-    chaosSets = null;
-    lampOrder = [...Array(level.n).keys()];
-  }
-
   renderLampRow();
   updateLitCount();
 }
@@ -108,7 +117,8 @@ function renderLampRow() {
     wrapper.className = "lamp";
     wrapper.dataset.index = i;
     wrapper.setAttribute("aria-label", `Lamp ${i + 1}`);
-    wrapper.style.width = `${Math.max(70, 190 - level.n * 15)}px`;
+    const idealWidth = Math.max(40, 190 - level.n * 15);
+    wrapper.style.flex = `0 1 ${idealWidth}px`;
     wrapper.innerHTML = `<div class="lamp-halo"></div><div class="lamp-pool"></div>${renderLamp(lampStyle, uid)}`;
     wrapper.addEventListener("click", () => handleLampClick(i));
     lampRow.appendChild(wrapper);

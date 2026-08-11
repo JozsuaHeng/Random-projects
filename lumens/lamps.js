@@ -1,8 +1,8 @@
-// Three lamp styles, each rendered as an inline SVG string. One style is
+// Four lamp styles, each rendered as an inline SVG string. One style is
 // picked at random per page load (see game.js) and used for every lamp on
 // the sill that session.
 
-const LAMP_STYLE_COUNT = 3;
+const LAMP_STYLE_COUNT = 4;
 
 function brassLampSVG(uid) {
   return `
@@ -143,7 +143,43 @@ function edisonLampSVG(uid) {
   </svg>`;
 }
 
-const LAMP_RENDERERS = [brassLampSVG, tiffanyLampSVG, edisonLampSVG];
+function architectLampSVG(uid) {
+  return `
+  <svg viewBox="0 0 100 160" class="lamp-svg" data-style="architect">
+    <defs>
+      <linearGradient id="arch-metal-${uid}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#5a5f66"/>
+        <stop offset="50%" stop-color="#2b2e33"/>
+        <stop offset="100%" stop-color="#101214"/>
+      </linearGradient>
+      <linearGradient id="arch-cone-${uid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a3d42"/>
+        <stop offset="100%" stop-color="#16181b"/>
+      </linearGradient>
+      <linearGradient id="arch-beam-${uid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffcf6b" stop-opacity="0.65"/>
+        <stop offset="100%" stop-color="#ffcf6b" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="50" cy="152" rx="6" ry="2" fill="#000" opacity="0.35"/>
+    <ellipse cx="50" cy="150" rx="25" ry="6" fill="url(#arch-metal-${uid})"/>
+    <ellipse cx="50" cy="148.5" rx="18" ry="3.6" fill="#3d4147" opacity="0.7"/>
+    <path class="lamp-emit" d="M40 92 L76 92 L92 138 L26 138 Z" fill="url(#arch-beam-${uid})" opacity="0.85"/>
+    <rect x="47" y="112" width="6" height="38" rx="2" fill="url(#arch-metal-${uid})"/>
+    <circle cx="50" cy="110" r="5.5" fill="url(#arch-metal-${uid})"/>
+    <circle cx="49" cy="108.5" r="1.2" fill="#8a8f96" opacity="0.6"/>
+    <line x1="50" y1="108" x2="27" y2="70" stroke="url(#arch-metal-${uid})" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="27" cy="70" r="5" fill="url(#arch-metal-${uid})"/>
+    <circle cx="26" cy="68.5" r="1.2" fill="#8a8f96" opacity="0.6"/>
+    <line x1="27" y1="70" x2="60" y2="42" stroke="url(#arch-metal-${uid})" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="60" cy="42" r="4.6" fill="url(#arch-metal-${uid})"/>
+    <path d="M48 45 L72 45 L80 66 L58 78 Z" fill="url(#arch-cone-${uid})" stroke="#08090a" stroke-width="0.8"/>
+    <path d="M50 47 L69 47" stroke="#5a5f66" stroke-width="1" opacity="0.6"/>
+    <ellipse class="lamp-core lamp-emit" cx="66" cy="68" rx="11" ry="6" fill="#ffcf6b"/>
+  </svg>`;
+}
+
+const LAMP_RENDERERS = [brassLampSVG, tiffanyLampSVG, edisonLampSVG, architectLampSVG];
 
 function renderLamp(styleIndex, uid) {
   return LAMP_RENDERERS[styleIndex % LAMP_RENDERERS.length](uid);
