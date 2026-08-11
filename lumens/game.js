@@ -1,7 +1,7 @@
 const LEVELS = [
   { n: 3, label: "Three Lamps", initialLit: [0] },
   { n: 5, label: "Five Lamps", initialLit: [0] },
-  { n: 7, label: "Seven Lamps", initialLit: [] },
+  { n: 7, label: "Seven Lamps", initialLit: [], chaos: true },
 ];
 
 const TAUNTS = [
@@ -21,6 +21,8 @@ document.getElementById("glass").insertAdjacentHTML("afterbegin", skylineSVG(Dat
 
 let levelIndex = 0;
 let lampState = [];
+let lampOrder = [];
+let chaosSets = null;
 let clicksThisLevel = 0;
 let totalClicks = 0;
 let lastTaunt = "";
@@ -37,6 +39,33 @@ const playAgainBtn = document.getElementById("playAgainBtn");
 
 function pairFor(n, i) {
   return [i, (i + 1) % n];
+}
+
+function shuffled(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Every entry toggles an even number of lamps (2, 4, or 6 of them), always
+// including its own index. The size varies per lamp so a click can make
+// several lamps vanish while only one or two reappear, or the reverse.
+function randomEvenToggleSets(n) {
+  const sizeOptions = [2, 4, 6].filter((s) => s <= n);
+  return Array.from({ length: n }, (_, i) => {
+    const others = shuffled([...Array(n).keys()].filter((x) => x !== i));
+    const roll = Math.random();
+    const size = roll < 0.5 ? sizeOptions[0] : roll < 0.85 ? sizeOptions[1] : sizeOptions[2];
+    return [i, ...others.slice(0, size - 1)];
+  });
+}
+
+function togglesFor(level, i) {
+  if (level.chaos) return chaosSets[i];
+  return pairFor(level.n, i);
 }
 
 function litCount(state) {
@@ -57,6 +86,15 @@ function startLevel(index) {
   levelNameEl.textContent = `Level ${index + 1} — ${level.label}`;
   setTaunt("Light every lamp on the sill. (There may be a catch.)");
   giveUpBtn.textContent = "Give Up & Continue →";
+
+  if (level.chaos) {
+    chaosSets = randomEvenToggleSets(level.n);
+    lampOrder = shuffled([...Array(level.n).keys()]);
+  } else {
+    chaosSets = null;
+    lampOrder = [...Array(level.n).keys()];
+  }
+
   renderLampRow();
   updateLitCount();
 }
@@ -64,22 +102,24 @@ function startLevel(index) {
 function renderLampRow() {
   const level = LEVELS[levelIndex];
   lampRow.innerHTML = "";
-  for (let i = 0; i < level.n; i++) {
+  lampOrder.forEach((i) => {
     const uid = `l${levelIndex}-${i}`;
     const wrapper = document.createElement("button");
     wrapper.className = "lamp";
+    wrapper.dataset.index = i;
     wrapper.setAttribute("aria-label", `Lamp ${i + 1}`);
     wrapper.style.width = `${Math.max(70, 190 - level.n * 15)}px`;
-    wrapper.innerHTML = `<div class="lamp-halo"></div>${renderLamp(lampStyle, uid)}`;
+    wrapper.innerHTML = `<div class="lamp-halo"></div><div class="lamp-pool"></div>${renderLamp(lampStyle, uid)}`;
     wrapper.addEventListener("click", () => handleLampClick(i));
     lampRow.appendChild(wrapper);
-  }
+  });
   syncLampVisuals();
 }
 
 function syncLampVisuals() {
   const buttons = lampRow.querySelectorAll(".lamp");
-  buttons.forEach((btn, i) => {
+  buttons.forEach((btn) => {
+    const i = Number(btn.dataset.index);
     btn.classList.toggle("is-lit", lampState[i] === 1);
   });
 }
@@ -104,9 +144,9 @@ function pickTaunt() {
 
 function handleLampClick(i) {
   const level = LEVELS[levelIndex];
-  const [a, b] = pairFor(level.n, i);
-  lampState[a] ^= 1;
-  lampState[b] ^= 1;
+  togglesFor(level, i).forEach((idx) => {
+    lampState[idx] ^= 1;
+  });
   clicksThisLevel++;
   totalClicks++;
   syncLampVisuals();

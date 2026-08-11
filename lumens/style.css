@@ -100,7 +100,15 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  filter: saturate(0.8) brightness(0.93) blur(0.5px);
+  filter: saturate(0.75) brightness(0.88) blur(1.4px);
+}
+
+.depth-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 45%, rgba(8, 6, 14, 0.4) 78%, rgba(8, 6, 14, 0.72) 100%);
 }
 
 .beacon {
@@ -199,6 +207,7 @@ body {
 
 .lamp {
   position: relative;
+  z-index: 0;
   background: none;
   border: none;
   padding: 0;
@@ -209,18 +218,35 @@ body {
 .lamp-halo {
   position: absolute;
   left: 50%;
-  bottom: 20%;
-  width: 220%;
-  height: 140%;
+  bottom: 15%;
+  width: 320%;
+  height: 210%;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(255, 205, 120, 0.55) 0%, transparent 65%);
-  filter: blur(10px);
+  background: radial-gradient(ellipse at center, rgba(255, 200, 110, 0.8) 0%, rgba(255, 180, 90, 0.32) 45%, transparent 70%);
+  filter: blur(16px);
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  z-index: -1;
 }
 
-.lamp.is-lit .lamp-halo {
+.lamp-pool {
+  position: absolute;
+  left: 50%;
+  bottom: -14%;
+  width: 260%;
+  height: 60%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 190, 110, 0.5) 0%, transparent 72%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.lamp.is-lit .lamp-halo,
+.lamp.is-lit .lamp-pool {
   opacity: 1;
   animation: halo-flicker 3.4s ease-in-out infinite;
 }

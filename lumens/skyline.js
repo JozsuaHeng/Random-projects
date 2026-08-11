@@ -75,16 +75,16 @@ function buildingsLayer(rng, opts) {
 function skylineSVG(seed) {
   const rng = mulberry32(seed);
   const far = buildingsLayer(rng, {
-    count: 14, xSpan: 1200, yBase: 560, minH: 90, maxH: 190, minW: 60, maxW: 110,
-    color: "#1c2438", cellW: 9, cellH: 11, litFn: litColorFar, jitter: 26, density: 0.22,
+    count: 9, xSpan: 1200, yBase: 540, minH: 80, maxH: 170, minW: 70, maxW: 130,
+    color: "#1c2438", cellW: 11, cellH: 13, litFn: litColorFar, jitter: 30, density: 0.12,
   });
   const mid = buildingsLayer(rng, {
-    count: 11, xSpan: 1200, yBase: 580, minH: 150, maxH: 300, minW: 70, maxW: 130,
-    color: "#141a2c", cellW: 8, cellH: 10, litFn: litColorMid, jitter: 30, density: 0.28,
+    count: 7, xSpan: 1200, yBase: 560, minH: 130, maxH: 260, minW: 90, maxW: 150,
+    color: "#141a2c", cellW: 10, cellH: 12, litFn: litColorMid, jitter: 34, density: 0.16,
   });
   const near = buildingsLayer(rng, {
-    count: 8, xSpan: 1200, yBase: 610, minH: 230, maxH: 420, minW: 90, maxW: 160,
-    color: "#0b0e1a", cellW: 7.5, cellH: 9.5, litFn: litColorNear, jitter: 34, density: 0.34,
+    count: 5, xSpan: 1200, yBase: 590, minH: 190, maxH: 340, minW: 110, maxW: 190,
+    color: "#0b0e1a", cellW: 9, cellH: 11, litFn: litColorNear, jitter: 40, density: 0.2,
   });
 
   return `

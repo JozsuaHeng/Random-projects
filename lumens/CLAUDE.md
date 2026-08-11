@@ -47,22 +47,37 @@ formula, and not interchangeably:
   (pressing the lamp whose pair is `{1,2}` alone completes it).
 - **n=5, starts with lamp 0 lit**: solvable, in as few as 2 clicks
   (pressing lamps 1 and 3).
-- **n=7, starts with nothing lit**: unreachable, full stop — the best
-  reachable state is always exactly one lamp short (6 of 7), no matter
-  the combination or order. This one *is* a genuine parity trap: every
-  click toggles an even number of lamps, so the lit-count's parity never
-  changes, and it starts even (0) while a full board is odd (7) — they
-  can never meet. That specific argument is what makes level 3
-  provably, not just practically, impossible.
+- **n=7, starts with nothing lit, `chaos: true`**: unreachable, full
+  stop. Level 3 doesn't use `pairFor()` — instead `randomEvenToggleSets()`
+  gives each of the 7 lamps its own random toggle set (2, 4, or 6 lamps,
+  always including itself), re-rolled every time the level is (re)entered,
+  including on "Reset Lamps." Visually this reads as chaotic — one click
+  can make several lit lamps vanish while only one or two reappear — but
+  every set's size is even by construction, which is the only property
+  that matters: toggling an even number of lamps changes the total
+  lit-count by an even amount (`(size of the set) - 2 × (how many in it
+  were already on)`, which always shares the size's parity), so the
+  lit-count's parity is invariant no matter which specific lamps end up
+  in each set. It starts even (0) and a full board is odd (7), so they
+  can never meet — this holds for *any* random assignment, not just the
+  one rolled at load time. Confirmed by brute-forcing `all_on_reachable`
+  across 500 independently-seeded random toggle-set assignments (zero
+  counterexamples) before relying on the general argument. The lamp
+  *positions* are independently shuffled too (`lampOrder`, also re-rolled
+  per level entry) so the on-screen arrangement doesn't hint at anything
+  — each lamp's `data-index` attribute is what `syncLampVisuals()` and
+  the click handler actually key off, not DOM position.
 
 `isFullyLit()` in `game.js` is a real, honest win check used identically
 on all three levels — it isn't special-cased per level or short-circuited
 for level 3. There's no "neverWin" flag; level 3's impossibility is a
-structural property of `pairFor()` plus its starting state, not a
-runtime guard. If `LEVELS` ever changes (a different `n`, a different
-`initialLit`, an added level), re-verify reachability by brute force
-before assuming a level is winnable *or* unwinnable — nothing here
-generalizes by intuition alone, as the n=3/5-vs-n=7 split shows.
+structural property of `randomEvenToggleSets()` always producing
+even-sized sets plus its empty starting state, not a runtime guard. If
+`LEVELS` ever changes (a different `n`, a different `initialLit`, an
+added level, a non-chaos level's click rule), re-verify reachability by
+brute force before assuming a level is winnable *or* unwinnable —
+nothing here generalizes by intuition alone, as the n=3/5-vs-n=7 split
+shows.
 
 ## Architecture
 
@@ -73,7 +88,13 @@ Plain HTML/CSS/JS, no framework, no build step.
   each with its own lit-window density/color and occasional rooftop
   antenna + blinking aviation beacon), plus a moon with a soft glow and
   thin cloud bands. Re-rolled once per page load in `game.js` and
-  injected into `#glass`, behind the rain layers.
+  injected into `#glass`, behind the rain layers. Deliberately kept low-
+  density and low-contrast (window density maxes out around 20%, plus a
+  `blur(1.4px)` + desaturate/darken filter on `.skyline-svg` in
+  `style.css`) so it reads as a soft, out-of-focus backdrop — the lamps,
+  not the skyline, are meant to be the sharpest, brightest thing in the
+  frame. A `.depth-fade` gradient darkens the lower third of the scene
+  for the same reason: more contrast for the lamp glow to pop against.
 - `lamps.js` — `renderLamp(styleIndex, uid)` returns one of three inline
   SVG lamp strings (brass banker's lamp with a green glass dome, rivets,
   a glass sheen highlight, and a pull chain; Tiffany lamp with a
@@ -86,19 +107,31 @@ Plain HTML/CSS/JS, no framework, no build step.
   instances on the same page don't collide. Lit/unlit state is driven
   entirely by CSS classes (`.lamp-emit`, `.lamp-core`, `.is-lit` on the
   wrapper) in `style.css`, not by swapping markup.
-- `game.js` — `LEVELS` (size + starting lit set per level), the click
-  handler (`pairFor` + XOR toggle), taunt text, and the give-up/ending
-  flow. `lampStyle` is rolled once per page load and threaded into every
-  `renderLamp()` call so the whole session stays visually consistent.
+- `game.js` — `LEVELS` (size + starting lit set per level, plus `chaos:
+  true` on level 3), `togglesFor()` (dispatches to `pairFor()` for
+  levels 1-2 or `chaosSets` for level 3), taunt text, and the give-up/
+  ending flow. `lampOrder` controls the on-screen left-to-right sequence
+  independently of lamp index (identity order except on the chaos
+  level); `renderLampRow()` iterates it and stamps each button's real
+  index in `data-index`, which `syncLampVisuals()` reads back rather than
+  assuming DOM position matches lamp index. `lampStyle` is rolled once
+  per page load and threaded into every `renderLamp()` call so the whole
+  session stays visually consistent.
 - `style.css` — the full-bleed twilight scene: a `.glass` layer holding
   the generated skyline plus layered CSS-only rain (animated
-  `repeating-linear-gradient` backgrounds), a fixed moon glow, window
-  mullions spanning the full viewport (the horizontal one pinned just
-  above the sill via `bottom: 102px`, not a percentage, so it stays put
-  regardless of viewport height), a wood-grain windowsill spanning the
-  full width, a fixed bottom control dock, and a film grain overlay
-  (inline SVG `feTurbulence` data URI, low opacity, `mix-blend-mode:
-  overlay`) for the lo-fi look.
+  `repeating-linear-gradient` backgrounds), a fixed moon glow, a
+  `.depth-fade` gradient, window mullions spanning the full viewport (the
+  horizontal one pinned just above the sill via `bottom: 102px`, not a
+  percentage, so it stays put regardless of viewport height), a wood-
+  grain windowsill spanning the full width, a fixed bottom control dock,
+  and a film grain overlay (inline SVG `feTurbulence` data URI, low
+  opacity, `mix-blend-mode: overlay`) for the lo-fi look. Each lamp gets
+  two glow layers behind it (`.lamp-halo`, a large soft radial glow
+  around the fixture; `.lamp-pool`, a flatter wash pooling onto the sill
+  wood below it) — both `z-index: -1`, which only stays scoped to the
+  lamp itself (rather than escaping behind the whole `.sill`) because
+  `.lamp` has an explicit `z-index: 0` to give it its own stacking
+  context.
 
 To add a lamp style: add a `*LampSVG(uid)` function in `lamps.js` (give
 its glow elements the `lamp-emit` class and, if it has a distinct light
