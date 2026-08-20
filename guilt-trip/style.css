@@ -728,6 +728,115 @@ section { padding: 60px 0; }
   opacity: 0.82;
 }
 
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.price-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.price-card-popular {
+  border-color: var(--maroon);
+  border-width: 2px;
+  padding-top: 26px;
+  transform: translateY(-6px);
+}
+.price-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--maroon);
+  color: var(--cream);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.price-name {
+  font-size: 1.02rem;
+  margin-bottom: 10px;
+}
+.price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.price-num {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+  color: var(--ink);
+}
+.price-period {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.price-sub {
+  font-size: 0.82rem;
+  min-height: 2.2em;
+}
+.price-features {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.price-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.price-features li svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--maroon);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.price-cta {
+  border: 1px solid var(--maroon);
+  background: transparent;
+  color: var(--maroon);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.price-cta:hover { background: var(--maroon); color: var(--cream); transform: translateY(-1px); }
+.price-cta-primary {
+  background: var(--maroon);
+  color: var(--cream);
+}
+.price-cta-primary:hover { background: var(--maroon-dark); }
+
 /* Testimonials */
 .testi-marquee {
   overflow: hidden;
@@ -867,6 +976,8 @@ section { padding: 60px 0; }
   .steps { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .legit-row { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+  .price-card-popular { transform: none; }
   .nav-links { display: none; }
   .float-chip { display: none; }
 }

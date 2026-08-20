@@ -49,14 +49,32 @@ this folder.
   chips), press section (a full section with its own heading, not a
   strip — an auto-scrolling logo carousel, see below), features grid,
   how-it-works steps (each with a small illustrative mockup above the
-  text), stats bar, testimonials (an auto-scrolling marquee, styled
-  like B2B SaaS customer quotes — name + corporate title — since the
-  mismatch between that format and how personal the "product" is does
-  a lot of the comedic work), security/trust badges (SOC 2, encryption,
-  GDPR — real vocabulary borrowed straight, not parody names, again for
-  the seriousness-as-the-joke effect), FAQ (`<details>/<summary>`, no
-  JS needed), closing CTA, minimal footer (brand mark + copyright line
+  text), stats bar, **pricing** (three tiers — see below), testimonials
+  (an auto-scrolling marquee, styled like B2B SaaS customer quotes —
+  name + corporate title — since the mismatch between that format and
+  how personal the "product" is does a lot of the comedic work),
+  security/trust badges (SOC 2, encryption, GDPR — real vocabulary
+  borrowed straight, not parody names, again for the
+  seriousness-as-the-joke effect), FAQ (`<details>/<summary>`, no JS
+  needed), closing CTA, minimal footer (brand mark + copyright line
   only).
+- **Pricing** (`#pricing` / `.pricing-grid` / `.price-card`): three
+  tiers, standard SaaS pricing-table layout (`.price-card-popular` gets
+  a thicker maroon border, a floating "Most Popular" badge, and sits
+  6px higher via `transform: translateY(-6px)` — collapses to `none` in
+  the single-column mobile layout). The jokes are load-bearing, not
+  decorative, so keep them if this section is ever edited: **Free**
+  ($0/mo) is "forever free, emotionally nothing is"; **Premium** ($19/mo)
+  is priced as "or pay what you feel you owe — most pay more," a
+  guilt-based variable-pricing gag, and its feature list calls back to
+  the "2:14 AM" delivery-time joke from the features section
+  (`#features` → "Delivered at the Right Moment") — don't let that
+  timestamp drift between the two sections if either is edited;
+  **Enterprise** is "Contact Sales — we already have your number,"
+  the classic SaaS "talk to us" tier played straight. All three CTA
+  buttons carry `data-download` like every other fake button on this
+  page, so they trigger the same toast cycle — no separate wiring
+  needed in `app.js`.
 - **Press marquee** (`.press-marquee` / `.press-track`): same
   duplicate-and-loop technique as the testimonials marquee below — the
   eight logos are followed by an `aria-hidden="true"` duplicate of the
