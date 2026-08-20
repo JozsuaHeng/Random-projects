@@ -300,7 +300,7 @@
     g.fillStyle = "#786c52";
     const subtitle = data.exceeded
       ? `You've already lived past an estimated ${data.lifespanYears}-year life. Consider raising the number above.`
-      : `You've lived ${formatNumber(data.livedUnits)} ${pluralize(data.unit, data.livedUnits)} — ${data.percent.toFixed(1)}% of an estimated ${data.lifespanYears}-year life.`;
+      : `You've lived ${formatNumber(data.livedUnits)} ${pluralize(data.unit, data.livedUnits)} so far — ${data.percent.toFixed(1)}% of an estimated ${data.lifespanYears}-year life.`;
     const subtitleLines = wrapLines(g, subtitle, 1300);
     y += 18;
     subtitleLines.forEach((line, idx) => g.fillText(line, CANVAS_W / 2, y + idx * 33));
@@ -309,13 +309,19 @@
     // A relatable equivalent, always derived from the precise remaining
     // day count regardless of which unit is currently toggled (days is
     // the finest granularity, so it stays accurate/consistent even when
-    // the headline above is showing weeks/months/years). Skipped once
-    // the estimate is exceeded — there's nothing to relate to at that
-    // point, the subtitle already carries that message instead.
+    // the headline above is showing weeks/months/years). Deliberately
+    // escalates within the sentence — weekends and full moons are the
+    // "relatable" framing, but it closes on heartbeats (70bpm average)
+    // specifically because a number that large is the classic memento
+    // mori move: it's the same remaining time, reframed until it stops
+    // being an abstraction. Skipped once the estimate is exceeded —
+    // there's nothing to relate to at that point, the subtitle already
+    // carries that message instead.
     if (!data.exceeded && data.remainingDays >= 7) {
       const weekends = Math.round(data.remainingDays / 7);
       const moons = Math.round(data.remainingDays / 29.53);
-      const funFact = `That's about ${formatNumber(weekends)} more weekends — or ${formatNumber(moons)} more full moons.`;
+      const heartbeats = Math.round(data.remainingDays * 24 * 60 * 70);
+      const funFact = `That's about ${formatNumber(weekends)} more weekends, ${formatNumber(moons)} more full moons — and roughly ${formatNumber(heartbeats)} more heartbeats.`;
       g.font = "italic 500 24px 'Fraunces', Georgia, serif";
       g.fillStyle = hexToRgba(theme.accent, 0.8);
       const funFactLines = wrapLines(g, funFact, 1300);

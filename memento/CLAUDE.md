@@ -16,7 +16,7 @@ whole card can be exported as a PNG for sharing.
 
 No backend, no accounts, no real actuarial data — the lifespan is a
 user-adjustable guess (default 80 years), and the page says so
-(footer: "An estimate, not a prediction"). This is a mood piece, not a
+(footer: "An estimate, not a promise"). This is a mood piece, not a
 health tool.
 
 ## Architecture
@@ -24,7 +24,11 @@ health tool.
 Plain HTML/CSS/JS, no framework, no build step, no dependencies — same
 as every other project in `ai-slop/`.
 
-- `index.html` — large italic "Memento" wordmark, minimal underlined
+- `index.html` — large italic "Memento" wordmark with a small
+  letterspaced "memento mori" motto underneath (`.motto` — a
+  deliberate, small nod to the concept itself, added back after the
+  original full-sentence tagline was cut for being clunky; keep this
+  one short, it's a mark not an explanation), minimal underlined
   date-of-birth + lifespan inputs, three segmented toggle groups
   (unit, mode, color theme), a `<canvas id="stage">`, and a
   text-only "Download image" action.
@@ -192,18 +196,29 @@ draw) rather than picking a fixed offset.
 
 ### The "fun fact" line is always derived from days, not the active unit
 
-The italic line under the subtitle (weekends/full-moons) reads
-`data.remainingDays` — a precise, unrounded day count that
+The italic line under the subtitle (weekends/full-moons/heartbeats)
+reads `data.remainingDays` — a precise, unrounded day count that
 `computeData()` returns *in addition to* `remainingUnits` — rather
 than converting whatever unit is currently toggled. That's
 deliberate: days is the finest granularity available, so the
-weekends/moons numbers stay accurate and (more importantly) don't
-change when you switch the Days/Weeks/Months/Years toggle, even
-though the big headline number above them does. If more equivalents
-get added here, derive them from `remainingDays` the same way, not
-from `remainingUnits`. Skipped entirely (no line, no reserved space)
-when `data.exceeded` or when there's less than a week left — "0 more
+numbers stay accurate and (more importantly) don't change when you
+switch the Days/Weeks/Months/Years toggle, even though the big
+headline number above them does. If more equivalents get added here,
+derive them from `remainingDays` the same way, not from
+`remainingUnits`. Skipped entirely (no line, no reserved space) when
+`data.exceeded` or when there's less than a week left — "0 more
 weekends" isn't a fun fact.
+
+**The sentence is written to escalate, not just inform**: it opens
+with easy, human-scale units (weekends, full moons) and closes on
+heartbeats (`remainingDays * 24 * 60 * 70`, a 70bpm average) —
+deliberately a huge, almost-abstract number. That's the point: same
+quantity of time, reframed until the scale actually lands. This was
+added specifically in response to the app feeling too pleasant/
+tasteful and not existential enough after several rounds of eye-
+strain fixes softened everything — if this line ever gets simplified
+back down to just one clause, that tension (relatable *and* enormous)
+is the thing to preserve, not just "a fun fact."
 
 ### The canvas background is a flat fill, not a gradient
 
