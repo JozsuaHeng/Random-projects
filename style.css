@@ -239,11 +239,13 @@ body {
 .tile[data-theme="broetry"] .art-title {
   top: 14px;
   left: 52px;
+  right: 16px;
   font-family: "Baloo 2", sans-serif;
   font-weight: 800;
   font-size: 15px;
   line-height: 1.25;
-  color: #b5391f;
+  color: #7a2712;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .tile[data-theme="broetry"] .avatar {
   top: 13px;
@@ -293,7 +295,8 @@ body {
   font-weight: 800;
   font-size: 15px;
   color: #fff;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35), -1px -1px 0 rgba(0, 0, 0, 0.35), 1px -1px 0 rgba(0, 0, 0, 0.35), -1px 1px 0 rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.16);
   border: 2px dashed rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   padding: 6px 12px;
