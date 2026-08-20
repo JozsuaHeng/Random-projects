@@ -22,14 +22,33 @@ collection.
 
 This folder's root `index.html` + `style.css` is "The Quagmire," a
 neal.fun-style hub page that lists every project here as an illustrated
-tile (themed art banner, name, one-line description, and a link into
-that project). It's the front door for the GitHub Pages site
+tile (themed art banner, name, and a link into that project). It's the
+front door for the GitHub Pages site
 (`jozsuaheng.github.io/Random-projects/`).
 
+- **Tiles carry no description text on purpose** — just the art banner
+  and the name. The art itself should hint at what the project is; the
+  rest is for visitors to find out by clicking in. Don't add a
+  one-liner back under the title.
+- **A tile is the art banner, full stop — there's no separate text band
+  below it.** `.art` is the tile's only content; `"Open →"` (`.go`) is
+  an absolutely-positioned overlay pinned to `.art`'s bottom-right
+  corner (small dark pill, `backdrop-filter: blur`), revealed on hover,
+  not a sibling element with its own padding. Earlier versions had a
+  `.meta` div below `.art` for the description text — once descriptions
+  were dropped, that left a padded, mostly-empty band under every tile,
+  which read as an unbalanced gap. Don't reintroduce a `.meta` (or
+  anything else) below `.art`; if a new tile needs an "Open →" hint,
+  give it a `.go` span as the last child inside `.art`, not a wrapper
+  below it.
 - **Whenever a new project subfolder is added here, add a matching tile**
   to `index.html`: a themed art banner (gradient/decorative doodles in
-  `.art`, following the pattern of the existing themes in `style.css`),
-  name, one-liner, and tag. Don't let the hub page go stale.
+  `.art`, following the pattern of the existing themes in `style.css`)
+  and name. Don't let the hub page go stale. Give each tile's art its
+  own distinct visual treatment (palette, layout, motif) rather than
+  reusing another tile's pattern with different colors — the art is the
+  only signal a visitor gets before clicking in, so it should stand
+  apart at a glance.
 - Tiles link with **absolute GitHub Pages URLs**
   (`https://jozsuaheng.github.io/Random-projects/<project>/`), not
   relative paths — clicking a tile should always land on the live
