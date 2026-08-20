@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memento — how many days do you have left?</title>
+<meta name="description" content="Enter your birth date and see your life visualized in dots — how many days, weeks, months, or years you've lived, and roughly how many remain.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <div class="panel">
+
+      <header class="top">
+        <p class="brand">Memento</p>
+      </header>
+
+      <section class="controls-bar" aria-label="Your details">
+        <div class="field">
+          <label for="dob">Date of birth</label>
+          <input type="date" id="dob">
+        </div>
+        <div class="field field-lifespan">
+          <label for="lifespanNumber">Expected lifespan</label>
+          <div class="lifespan-control">
+            <input type="range" id="lifespanRange" min="40" max="100" step="1" value="80">
+            <input type="number" id="lifespanNumber" min="1" max="120" step="1" value="80">
+            <span class="unit-label">yrs</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="toggles" aria-label="Display options">
+        <div class="toggle-group" role="group" aria-label="Time unit" id="unitToggle">
+          <button type="button" data-unit="days" class="active">Days</button>
+          <button type="button" data-unit="weeks">Weeks</button>
+          <button type="button" data-unit="months">Months</button>
+          <button type="button" data-unit="years">Years</button>
+        </div>
+        <div class="toggle-group" role="group" aria-label="Visual style" id="modeToggle">
+          <button type="button" data-mode="grid" class="active">Grid</button>
+          <button type="button" data-mode="constellation">Constellation</button>
+          <button type="button" data-mode="rings">Rings</button>
+        </div>
+        <div class="toggle-group toggle-group-theme" role="group" aria-label="Color theme" id="themeToggle">
+          <button type="button" data-theme="gold" class="active" style="--swatch:#a97a2e" aria-label="Gold"></button>
+          <button type="button" data-theme="rose" style="--swatch:#b15a68" aria-label="Rose"></button>
+          <button type="button" data-theme="jade" style="--swatch:#4f8467" aria-label="Jade"></button>
+          <button type="button" data-theme="ice" style="--swatch:#3f6f95" aria-label="Ice"></button>
+          <button type="button" data-theme="bone" style="--swatch:#6b6255" aria-label="Bone"></button>
+        </div>
+      </section>
+
+      <div class="export-row">
+        <button type="button" id="exportBtn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>
+          Download image
+        </button>
+      </div>
+
+      <footer class="foot">
+        <p>An estimate, not a prediction.</p>
+      </footer>
+
+    </div>
+
+    <section class="stage-wrap">
+      <div class="stage-frame">
+        <canvas id="stage" width="1800" height="1200"></canvas>
+      </div>
+      <p class="sample-note" id="sampleNote">Sample life shown — enter your birth date above to see yours.</p>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

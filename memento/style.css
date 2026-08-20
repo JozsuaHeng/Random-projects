@@ -1,0 +1,361 @@
+:root {
+  --bg: #ece0c2;
+  --text: #2b2621;
+  --muted: #6f6350;
+  --line: rgba(43, 38, 33, 0.17);
+  --accent: #a97a2e;
+  --accent-bright: #7a5218;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 24px 8px;
+  flex: 0 0 auto;
+}
+
+/* --- header --- */
+
+.top {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.brand {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(48px, 9.6vw, 77px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.brand::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin: 19px auto 0;
+  border-radius: 50%;
+  background: var(--accent-bright);
+}
+
+/* --- controls --- */
+
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 38px;
+  margin-bottom: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.field label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+input[type="date"] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 5px 2px 8px;
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 17px;
+  text-align: center;
+  color-scheme: light;
+  transition: border-color 0.15s ease;
+}
+
+input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.lifespan-control {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+input[type="range"] {
+  width: 156px;
+  accent-color: var(--accent);
+  height: 3px;
+  cursor: pointer;
+}
+
+input[type="number"] {
+  width: 48px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 5px 2px 8px;
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 17px;
+  text-align: center;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.unit-label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* --- toggles --- */
+
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.toggle-group {
+  display: inline-flex;
+  background: rgba(43, 38, 33, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.toggle-group button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.toggle-group button:hover {
+  color: var(--text);
+}
+
+.toggle-group button.active {
+  background: var(--accent);
+  color: #fbf7ee;
+}
+
+.toggle-group-theme {
+  padding: 6px 7px;
+  gap: 8px;
+}
+
+.toggle-group-theme button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid transparent;
+  box-shadow: none;
+}
+
+.toggle-group-theme button:hover {
+  transform: scale(1.12);
+}
+
+.toggle-group-theme button.active {
+  border-color: rgba(43, 38, 33, 0.55);
+}
+
+/* --- stage --- */
+
+.stage-wrap {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Landscape (3:2), not the old portrait/story shape — a portrait card is
+   inherently narrow next to a landscape monitor. Sized off viewport units
+   so it's predictable at a given viewport size; the desktop block below
+   additionally lets it use 100% of whatever width the sidebar left over
+   (a safe thing to size off, unlike the height-percentage trick documented
+   as reverted in CLAUDE.md). */
+.stage-frame {
+  width: min(97vw, calc(93vh * 3 / 2));
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 36px 84px -43px rgba(60, 48, 30, 0.3);
+}
+
+#stage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sample-note {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
+
+/* --- export --- */
+
+.export-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+#exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--accent-bright);
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 7px 5px;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+
+#exportBtn:hover {
+  opacity: 1;
+}
+
+/* --- footer --- */
+
+.foot {
+  text-align: center;
+  margin-top: 22px;
+}
+
+.foot p {
+  font-size: 13px;
+  color: #96876c;
+}
+
+@media (max-width: 460px) {
+  .panel {
+    padding: 26px 19px 5px;
+  }
+  .controls-bar {
+    gap: 26px;
+  }
+  .toggle-group button {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
+
+/* --- desktop / wide screens ---
+   Landscape means the card can actually grow to use the space next to
+   the sidebar instead of leaving a gap in the middle: .stage-wrap grows
+   (flex:1, inherited from the base rule above, not overridden here) to
+   fill the whole remaining row width, and .stage-frame fills up to 98%
+   of *that* — a plain width percentage inside a flex-grown container,
+   which resolves reliably (unlike the height-percentage approach
+   documented as reverted in CLAUDE.md), capped by a vh-derived max so
+   it doesn't get taller than the viewport on shorter windows. */
+@media (min-width: 860px) {
+  .page {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  /* ~1/4 of the row, so the card (the rest, via .stage-wrap's flex:1) gets
+     ~3/4 — 25vw as the basis, clamped so it doesn't get uncomfortably
+     cramped on a narrow desktop window or absurdly wide on an ultrawide. */
+  .panel {
+    flex: 0 0 clamp(312px, 25vw, 552px);
+    width: clamp(312px, 25vw, 552px);
+    align-items: flex-start;
+    justify-content: center;
+    /* Right padding here (there wasn't any before) so the brand wordmark
+       and controls have breathing room before the card starts, instead
+       of running right up to the edge of the sidebar column — that's
+       what read as "too close" together with .stage-wrap's own left
+       padding below. */
+    padding: 0 clamp(24px, 3vw, 40px) 0 clamp(48px, 6vw, 120px);
+  }
+
+  .brand {
+    font-size: clamp(62px, 6vw, 94px);
+  }
+
+  .top,
+  .sample-note {
+    text-align: left;
+  }
+
+  .brand::after {
+    margin: 19px 0 0 4px;
+  }
+
+  .controls-bar,
+  .toggles {
+    justify-content: flex-start;
+  }
+
+  .stage-wrap {
+    padding: 48px clamp(48px, 6vw, 120px) 48px 44px;
+  }
+
+  .stage-frame {
+    width: min(98%, calc(96vh * 3 / 2));
+  }
+}

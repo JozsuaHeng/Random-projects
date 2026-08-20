@@ -488,6 +488,31 @@ body {
   transform: translateY(-3px);
 }
 
+/* --- theme: memento --- */
+
+.tile[data-theme="memento"] .art {
+  background: radial-gradient(ellipse at 30% 34%, #17130e 0%, #09080a 72%);
+  border-bottom: 3px solid #3a3020;
+}
+.tile[data-theme="memento"] .art-title {
+  top: 16px;
+  left: 18px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 21px;
+  color: #e2d3ae;
+  opacity: 0.92;
+}
+.tile[data-theme="memento"] .go { color: #e8c27c; }
+.tile[data-theme="memento"] {
+  border-color: rgba(232, 194, 124, 0.25);
+}
+.tile[data-theme="memento"]:hover {
+  border-color: #e8c27c;
+  transform: translateY(-3px);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
