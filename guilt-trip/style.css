@@ -729,6 +729,49 @@ section { padding: 60px 0; }
 }
 
 /* Pricing */
+.price-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  background: var(--cream-2);
+  border-radius: 999px;
+  padding: 4px;
+  width: fit-content;
+  margin: 0 auto 32px;
+}
+.price-toggle-btn {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.price-toggle-btn.active {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.price-save {
+  font-size: 0.64rem;
+  font-weight: 700;
+  color: var(--maroon);
+  background: rgba(122, 46, 46, 0.12);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.price-period-yearly { display: none; }
+#pricingGrid.yearly .price-period-monthly { display: none; }
+#pricingGrid.yearly .price-period-yearly { display: revert; }
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

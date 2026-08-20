@@ -25,6 +25,22 @@ document.querySelectorAll("[data-download]").forEach((button) => {
   button.addEventListener("click", showToast);
 });
 
+// Pricing monthly/yearly toggle: just flips a class on #pricingGrid —
+// the monthly/yearly price variants are both already in the markup,
+// CSS handles which one is visible (see .price-period-monthly/-yearly
+// in style.css).
+const priceToggleButtons = document.querySelectorAll(".price-toggle-btn");
+const pricingGrid = document.getElementById("pricingGrid");
+
+if (pricingGrid && priceToggleButtons.length) {
+  priceToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      pricingGrid.classList.toggle("yearly", button.dataset.period === "yearly");
+      priceToggleButtons.forEach((b) => b.classList.toggle("active", b === button));
+    });
+  });
+}
+
 // Phone screenshot carousel: advances through the screens on its own,
 // but a visitor can also drag/swipe it or tap a dot to jump directly.
 // Any manual interaction pauses autoplay for a bit, then it resumes

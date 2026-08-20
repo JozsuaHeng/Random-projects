@@ -56,3 +56,7 @@ front door for the GitHub Pages site
 - Keep the hub page itself minimal — it's a directory, not a project in
   its own right. No build step, no dependencies, just plain HTML/CSS
   (plus Google Fonts for a couple of display fonts used in the tile art).
+- The header (`.head`) is just the "you have entered" eyebrow and the
+  "The Quagmire" `<h1>` — no subtitle line underneath. There used to be
+  one; it was cut on purpose (along with its now-unused `.sub` CSS
+  rule), so don't add a tagline back under the title.

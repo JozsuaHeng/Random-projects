@@ -64,17 +64,28 @@ this folder.
   6px higher via `transform: translateY(-6px)` — collapses to `none` in
   the single-column mobile layout). The jokes are load-bearing, not
   decorative, so keep them if this section is ever edited: **Free**
-  ($0/mo) is "forever free, emotionally nothing is"; **Premium** ($19/mo)
-  is priced as "or pay what you feel you owe — most pay more," a
-  guilt-based variable-pricing gag, and its feature list calls back to
-  the "2:14 AM" delivery-time joke from the features section
-  (`#features` → "Delivered at the Right Moment") — don't let that
-  timestamp drift between the two sections if either is edited;
-  **Enterprise** is "Contact Sales — we already have your number,"
-  the classic SaaS "talk to us" tier played straight. All three CTA
-  buttons carry `data-download` like every other fake button on this
-  page, so they trigger the same toast cycle — no separate wiring
-  needed in `app.js`.
+  ($0/mo) is "forever free, emotionally nothing is"; **Premium**
+  ($19/mo monthly, $15/mo billed $180/year) is priced as "or pay what
+  you feel you owe — most pay more," a guilt-based variable-pricing
+  gag, and its feature list calls back to the "2:14 AM" delivery-time
+  joke from the features section (`#features` → "Delivered at the
+  Right Moment") — don't let that timestamp drift between the two
+  sections if either is edited; **Enterprise** is "Contact Sales — we
+  already have your number," the classic SaaS "talk to us" tier played
+  straight (its price stays "Custom" regardless of billing period — no
+  monthly/yearly variant needed there). All three CTA buttons carry
+  `data-download` like every other fake button on this page, so they
+  trigger the same toast cycle — no separate wiring needed in `app.js`.
+- **Monthly/yearly toggle** (`.price-toggle` / `#pricingGrid`): two
+  buttons swap an `active` class on themselves and a `yearly` class on
+  `#pricingGrid`; CSS does the rest — `.price-period-monthly` /
+  `.price-period-yearly` spans (Premium's price and sub-copy each have
+  both variants already written into the markup) are shown/hidden with
+  `display: none` / `display: revert` off that one class, so `app.js`
+  never touches text content directly. The 21% "Save" figure on the
+  Yearly button is derived from $19×12=$228 vs. $180/year — if either
+  Premium price ever changes, recompute that percentage rather than
+  leaving it stale.
 - **Press marquee** (`.press-marquee` / `.press-track`): same
   duplicate-and-loop technique as the testimonials marquee below — the
   eight logos are followed by an `aria-hidden="true"` duplicate of the

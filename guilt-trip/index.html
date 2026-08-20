@@ -376,7 +376,12 @@
       <p class="eyebrow">Pricing</p>
       <h2>Choose how much guilt you can afford.</h2>
     </div>
-    <div class="pricing-grid">
+    <div class="price-toggle" role="group" aria-label="Billing period">
+      <button class="price-toggle-btn active" data-period="monthly">Monthly</button>
+      <button class="price-toggle-btn" data-period="yearly">Yearly <span class="price-save">Save 21%</span></button>
+    </div>
+
+    <div class="pricing-grid" id="pricingGrid">
 
       <div class="price-card">
         <h3 class="price-name">Free</h3>
@@ -394,8 +399,13 @@
       <div class="price-card price-card-popular">
         <span class="price-badge">Most Popular</span>
         <h3 class="price-name">Premium</h3>
-        <div class="price-amount"><span class="price-num">$19</span><span class="price-period">/mo</span></div>
-        <p class="price-sub">Or pay what you feel you owe. Most pay more.</p>
+        <div class="price-amount">
+          <span class="price-num price-period-monthly">$19</span>
+          <span class="price-num price-period-yearly">$15</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="price-sub price-period-monthly">Or pay what you feel you owe. Most pay more.</p>
+        <p class="price-sub price-period-yearly">Billed $180/year. Or pay what you feel you owe.</p>
         <ul class="price-features">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Unlimited relationships monitored</li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Real-time guilt detection</li>
@@ -409,7 +419,7 @@
       <div class="price-card">
         <h3 class="price-name">Enterprise</h3>
         <div class="price-amount"><span class="price-num">Custom</span></div>
-        <p class="price-sub">Contact Sales. We already have your number.</p>
+        <p class="price-sub">Contact Sales. We already have your number, monthly or annually.</p>
         <ul class="price-features">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Everything in Premium</li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Org-wide deployment (HR, extended family, group chats)</li>
