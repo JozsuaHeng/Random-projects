@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="favPipe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8615f"/>
+      <stop offset="100%" stop-color="#ab2b2b"/>
+    </linearGradient>
+    <linearGradient id="favCoin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffbf5c"/>
+      <stop offset="100%" stop-color="#f2900f"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#ffffff" stroke="#ededed" stroke-width="1"/>
+  <path d="M8 23 C8 6, 24 6, 24 16 V21" fill="none" stroke="url(#favPipe)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M10 20 C10 9, 21 9, 21 15" fill="none" stroke="#ff9d9b" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
+  <circle cx="24" cy="25" r="5.2" fill="url(#favCoin)" stroke="#c97a12" stroke-width="1"/>
+  <path d="M20.5 22.5 a5.5 5.5 0 0 1 5 -1.5" stroke="#ffffff" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <text x="24" y="27.8" font-size="6.2" font-weight="bold" text-anchor="middle" fill="#ffffff">฿</text>
+</svg>

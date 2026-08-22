@@ -513,6 +513,61 @@ body {
   transform: translateY(-3px);
 }
 
+/* --- theme: northstar (Free Bitcoins — plain 2012-faucet redesign) --- */
+
+.tile[data-theme="northstar"] .art {
+  background: #ffffff;
+  border-bottom: 3px solid #a33;
+  padding: 14px 16px;
+}
+.tile[data-theme="northstar"] .ns-faucet {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+}
+.tile[data-theme="northstar"] .art-title {
+  top: 14px;
+  left: 52px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  color: #999;
+}
+.tile[data-theme="northstar"] .ns-btc {
+  color: #f7931a;
+  font-weight: bold;
+}
+.tile[data-theme="northstar"] .ns-q {
+  position: absolute;
+  top: 42px;
+  left: 14px;
+  right: 14px;
+  margin: 0;
+  font-size: 10.5px;
+  font-style: italic;
+  line-height: 1.35;
+  color: #888;
+}
+.tile[data-theme="northstar"] .ns-caption {
+  position: absolute;
+  bottom: 13px;
+  left: 14px;
+  right: 14px;
+  font-size: 9px;
+  color: #bbb;
+}
+.tile[data-theme="northstar"] .go {
+  color: #a33;
+  background: rgba(255, 255, 255, 0.85);
+}
+.tile[data-theme="northstar"] {
+  border-color: rgba(170, 51, 51, 0.3);
+}
+.tile[data-theme="northstar"]:hover {
+  border-color: #a33;
+  transform: translateY(-3px);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 

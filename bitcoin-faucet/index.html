@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Bitcoins</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <div class="header-row">
+      <svg class="faucet-icon" viewBox="0 0 108 134" width="185" height="230" aria-hidden="true">
+        <defs>
+          <linearGradient id="pipeGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8615f"/>
+            <stop offset="100%" stop-color="#ab2b2b"/>
+          </linearGradient>
+          <linearGradient id="metalGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c9c9c9"/>
+            <stop offset="100%" stop-color="#8f8f8f"/>
+          </linearGradient>
+          <linearGradient id="coinGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffbf5c"/>
+            <stop offset="100%" stop-color="#f2900f"/>
+          </linearGradient>
+          <filter id="faucetShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2"/>
+          </filter>
+        </defs>
+
+        <!-- ground shadow -->
+        <ellipse cx="34" cy="108" rx="22" ry="3.5" fill="#000000" opacity="0.08" filter="url(#faucetShadow)"/>
+
+        <!-- counter-mount base -->
+        <ellipse cx="34" cy="100" rx="20" ry="7" fill="url(#metalGrad)" stroke="#6f6f6f" stroke-width="1"/>
+
+        <!-- riser body -->
+        <rect x="27" y="62" width="14" height="40" rx="7" fill="url(#pipeGrad)"/>
+        <rect x="29" y="64" width="4" height="32" rx="2" fill="#ff9d9b" opacity="0.5"/>
+
+        <!-- single lever handle -->
+        <rect x="4" y="68" width="26" height="8" rx="4" fill="url(#metalGrad)" stroke="#6f6f6f" stroke-width="1" transform="rotate(-18 30 72)"/>
+
+        <!-- gooseneck: one continuous curved tube from riser to spout -->
+        <path d="M34 62 C34 10, 90 10, 90 48 V78" fill="none" stroke="url(#pipeGrad)" stroke-width="15" stroke-linecap="round"/>
+        <path d="M38 58 C38 16, 84 16, 84 46" fill="none" stroke="#ff9d9b" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+
+        <!-- nozzle -->
+        <ellipse cx="90" cy="80" rx="9" ry="4.5" fill="#7a1c1c"/>
+        <ellipse cx="90" cy="79" rx="6" ry="2.8" fill="#5a1414"/>
+
+        <!-- drip -->
+        <path d="M90 81 Q91 87 92 91" stroke="#f7b94d" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <circle cx="93" cy="103" r="9" fill="url(#coinGrad)" stroke="#c97a12" stroke-width="1.3"/>
+        <path d="M87.5 98.5 a7 7 0 0 1 8 -2.5" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <text x="93" y="106.3" font-size="9.5" font-weight="bold" text-anchor="middle" fill="#fff">฿</text>
+        <circle cx="94" cy="123" r="5" fill="url(#coinGrad)" opacity="0.6"/>
+        <text x="94" y="125.5" font-size="5" font-weight="bold" text-anchor="middle" fill="#fff" opacity="0.85">฿</text>
+      </svg>
+      <h1 class="big-title"><span class="btc-symbol">฿</span> Free Bitcoins</h1>
+    </div>
+
+    <div class="content-row">
+
+      <aside class="sidebar">
+        <p class="available"><span class="btc-symbol">฿</span><span id="available">750</span> available</p>
+        <p class="other-sites-label">Other Sites:</p>
+        <ul class="other-sites">
+          <li>TotallyLegitFaucet.biz <span class="defunct">(offline since 2013)</span></li>
+          <li>Free Coins 4 U <span class="defunct">(flagged by antivirus)</span></li>
+        </ul>
+      </aside>
+
+      <div class="main">
+
+        <h2>Get Bitcoins from the Bitcoin Faucet</h2>
+        <p class="lede">I'm giving away 5 bitcoins per visitor; just solve the "captcha" then press Get Some:</p>
+
+        <div class="captcha-box">
+          <div class="captcha-display">
+            <p class="captcha-question" id="questionText"></p>
+            <div class="captcha-icons">
+              <button type="button" class="icon-btn" id="reloadBtn" title="Get a different question">↻</button>
+              <button type="button" class="icon-btn" title="Audio not available" disabled>🔊</button>
+            </div>
+          </div>
+          <div class="captcha-input-row">
+            <label for="answerInput">Type your answer:</label>
+            <input type="text" id="answerInput" autocomplete="off">
+          </div>
+          <p class="captcha-badge">CRYPTOCAPTCHA™<br><span>humans only, allegedly</span></p>
+        </div>
+
+        <div class="claim-row">
+          <button type="button" class="get-some-btn" id="submitBtn">Get Some!</button>
+        </div>
+
+        <p class="verifying" id="verifying" hidden>Checking your answer…</p>
+
+        <div class="transcript" id="transcript"></div>
+
+        <h2>What are Bitcoins?</h2>
+        <p>Bitcoins are a decentralized digital currency, first described in 2008 and launched in 2009. They aren't issued by a bank or government — new coins are created through a process called mining, and ownership is tracked on a public ledger called the blockchain. None of that has anything to do with what's happening on this page.</p>
+
+        <h2>How do I get a Bitcoin Receiving Address?</h2>
+        <p>You don't need one here. This faucet has never sent a single satoshi to anyone, including its creator. The number in the sidebar is for atmosphere only.</p>
+
+        <h2>I've got Bitcoins; how can I help?</h2>
+        <p>Congratulations on acquiring real bitcoins through means entirely unrelated to this website. This faucet cannot accept, hold, or forward them. Please don't send anything here.</p>
+
+        <h2>What's the catch?</h2>
+        <p>No catch — or rather, the whole thing is the catch: this is a satirical recreation of 2012-era Bitcoin faucet sites, built purely for laughs. No real Bitcoin, or any other currency, changes hands here, ever.<br>-- not Gavin, not Satoshi, just a guy with a faucet</p>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
