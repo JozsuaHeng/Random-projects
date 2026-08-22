@@ -12,53 +12,21 @@
   <div class="page">
 
     <div class="header-row">
-      <svg class="faucet-icon" viewBox="0 0 108 134" width="185" height="230" aria-hidden="true">
-        <defs>
-          <linearGradient id="pipeGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#e8615f"/>
-            <stop offset="100%" stop-color="#ab2b2b"/>
-          </linearGradient>
-          <linearGradient id="metalGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#c9c9c9"/>
-            <stop offset="100%" stop-color="#8f8f8f"/>
-          </linearGradient>
-          <linearGradient id="coinGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ffbf5c"/>
-            <stop offset="100%" stop-color="#f2900f"/>
-          </linearGradient>
-          <filter id="faucetShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2"/>
-          </filter>
-        </defs>
-
-        <!-- ground shadow -->
-        <ellipse cx="34" cy="108" rx="22" ry="3.5" fill="#000000" opacity="0.08" filter="url(#faucetShadow)"/>
-
-        <!-- counter-mount base -->
-        <ellipse cx="34" cy="100" rx="20" ry="7" fill="url(#metalGrad)" stroke="#6f6f6f" stroke-width="1"/>
-
-        <!-- riser body -->
-        <rect x="27" y="62" width="14" height="40" rx="7" fill="url(#pipeGrad)"/>
-        <rect x="29" y="64" width="4" height="32" rx="2" fill="#ff9d9b" opacity="0.5"/>
-
-        <!-- single lever handle -->
-        <rect x="4" y="68" width="26" height="8" rx="4" fill="url(#metalGrad)" stroke="#6f6f6f" stroke-width="1" transform="rotate(-18 30 72)"/>
-
-        <!-- gooseneck: one continuous curved tube from riser to spout -->
-        <path d="M34 62 C34 10, 90 10, 90 48 V78" fill="none" stroke="url(#pipeGrad)" stroke-width="15" stroke-linecap="round"/>
-        <path d="M38 58 C38 16, 84 16, 84 46" fill="none" stroke="#ff9d9b" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
-
+      <svg class="faucet-icon" viewBox="0 0 96 118" width="170" height="209" aria-hidden="true">
+        <!-- wall mount -->
+        <rect x="8" y="30" width="18" height="20" rx="5" fill="#9a9a9a"/>
+        <!-- handle -->
+        <rect x="13" y="22" width="8" height="10" rx="4" fill="#9a9a9a"/>
+        <circle cx="17" cy="14" r="9" fill="#cc3333"/>
+        <!-- pipe + spout: one flat-color curved tube -->
+        <path d="M26 40 H58 Q72 40 72 54 V78" fill="none" stroke="#cc3333" stroke-width="16" stroke-linecap="round"/>
         <!-- nozzle -->
-        <ellipse cx="90" cy="80" rx="9" ry="4.5" fill="#7a1c1c"/>
-        <ellipse cx="90" cy="79" rx="6" ry="2.8" fill="#5a1414"/>
-
+        <ellipse cx="72" cy="80" rx="9" ry="4" fill="#a02525"/>
         <!-- drip -->
-        <path d="M90 81 Q91 87 92 91" stroke="#f7b94d" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
-        <circle cx="93" cy="103" r="9" fill="url(#coinGrad)" stroke="#c97a12" stroke-width="1.3"/>
-        <path d="M87.5 98.5 a7 7 0 0 1 8 -2.5" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
-        <text x="93" y="106.3" font-size="9.5" font-weight="bold" text-anchor="middle" fill="#fff">฿</text>
-        <circle cx="94" cy="123" r="5" fill="url(#coinGrad)" opacity="0.6"/>
-        <text x="94" y="125.5" font-size="5" font-weight="bold" text-anchor="middle" fill="#fff" opacity="0.85">฿</text>
+        <path d="M72 82 Q73 87 74 90" stroke="#f7b94d" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <!-- coin -->
+        <circle cx="75" cy="100" r="9" fill="#f7931a" stroke="#c97a12" stroke-width="1.5"/>
+        <text x="75" y="103.3" font-size="9.5" font-weight="bold" text-anchor="middle" fill="#fff">฿</text>
       </svg>
       <h1 class="big-title"><span class="btc-symbol">฿</span> Free Bitcoins</h1>
     </div>

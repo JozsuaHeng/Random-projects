@@ -74,35 +74,29 @@ webfont, just system Arial/Helvetica. Nothing is submitted or stored
 anywhere; all state is in-memory JS that resets on refresh.
 
 - `index.html` — icon + title header. The faucet icon (`.faucet-icon`,
-  rendered at `185×230`, `viewBox="0 0 108 134"`) has gone through
-  several concepts: blocky rects, a smooth gradient tube with a wheel
-  handle, then a more detailed wall-mounted spigot with a cross/plus
-  valve handle (matching the reference page's actual icon shape) — all
-  wall-spigot variations. The current version abandons that concept
-  entirely for a **kitchen/bathroom gooseneck faucet** instead: a
-  counter-mount base (`<ellipse>`, grey gradient), a short vertical riser
-  with a single lever handle sticking out to the side (`transform=
-  "rotate(-18 30 72)"` on a rounded rect), and — the key shape — the
-  neck is **one continuous cubic-bezier `<path>`**
-  (`M34 62 C34 10, 90 10, 90 48 V78`) stroked thick with
-  `stroke-linecap="round"`, arcing up from the riser, over the top, and
-  down to the spout in a single smooth curve, rather than being built
-  from separate straight/curved segments. This was a deliberate pivot
-  away from trying to match the reference page's specific wall-spigot
-  icon shape more closely (three attempts at that didn't land) toward a
-  faucet silhouette that's more universally recognizable on its own
-  terms — if revisited again, that's the tradeoff being made: less
-  literal fidelity to the reference screenshot's icon, more of a
-  standalone "nice icon." Same supporting techniques as before: a
-  gradient highlight streak roughly parallel to the neck path for a
-  glossy look, a two-ellipse nozzle (rim + darker opening), a blurred
-  `<ellipse>` ground shadow (`filter="url(#faucetShadow)"`), and it
-  drips small ฿-coin shapes instead of water as the running sight gag.
-  `favicon.svg` and the hub tile's `.ns-faucet` use a simplified version
-  of the same gooseneck-arc-plus-coin composition (no base/riser/handle,
-  since those wash out at 16–26px) — keep the single continuous curved
-  path technique if this icon is revisited again, since that's what
-  makes the neck read as one smooth piece rather than a joint.
+  rendered at `170×209`, `viewBox="0 0 96 118"`) went through several
+  gradient-and-detail-heavy concepts first — blocky rects, a gradient
+  tube with a wheel handle, a wall-spigot with a cross valve handle and
+  outline-then-fill edges, a gooseneck arc with a lever handle and a
+  blurred drop shadow — each adding more shading/decoration than the
+  last, and each one got sent back. The current version is a deliberate
+  opposite move: **flat design, no gradients, minimal element count**.
+  A simple wall-mount tap: a flat grey bracket, a plain solid-red circle
+  as the handle (no wheel spokes, no cross bars — just a circle, which
+  reads clearly at any size), one continuous flat-red `<path>`
+  (`M26 40 H58 Q72 40 72 54 V78`, `stroke-linecap="round"`) for the
+  pipe+spout curve, a single dark-red ellipse for the nozzle, and the
+  ฿-coin drip — around 8 shapes total, versus 20+ in the most detailed
+  earlier version. No `linearGradient`s, no double-stroke outlines, no
+  highlight streaks, no shadow filter. The bet here: several rounds of
+  adding more illustrative polish didn't land, so this strips back to
+  see if a bolder, simpler silhouette reads better — if this also gets
+  reworked, the next move should probably be a genuinely different
+  concept again (not another gradient pass on this same shape) or
+  getting explicit feedback on what specifically isn't landing before
+  guessing again. `favicon.svg` mirrors this same flat wall-mount-tap
+  composition at 32×32, simplified further (bracket + handle circle +
+  pipe curve + coin, no separate stem detail).
   Below the header: a narrow sidebar (available count + "Other Sites"),
   and a main column: `.captcha-box` (current question in `#questionText`
   — plain, italic, well-aligned text; an earlier version rendered each
@@ -155,10 +149,18 @@ This project's tile on the `ai-slop/` root hub ("The Quagmire",
 `../index.html` + `../style.css`, `data-theme="northstar"` — the CSS
 class name predates several renames, including the folder rename to
 `bitcoin-faucet/`, and hasn't been changed since it's purely internal)
-matches this version: plain white card, red faucet icon with an orange
-฿-coin drip, "฿ Free Bitcoins" title, and a small greyed sample question.
-Its `href` points at `.../bitcoin-faucet/` — keep that in sync if the
-folder is ever renamed again.
+went through a faucet-icon-in-the-corner layout first (matching whatever
+the hero icon looked like at the time) before switching to a different
+composition: a miniature mockup of the page's actual `.captcha-box`
+widget (`.ns-captcha` — a small red-bordered box with a pink question
+strip and a tan bottom bar, recreating the real captcha box's two-tier
+look at tile scale) as the tile's centerpiece, since that widget is
+arguably a more recognizable, distinctive piece of this project's
+identity than the faucet icon itself, and reads clearly even shrunk down.
+The sample question text (`What is 7 × 4?`) is static, just for flavor —
+it doesn't need to track whatever `app.js`'s actual question banks
+currently contain. Its `href` points at `.../bitcoin-faucet/` — keep
+that in sync if the folder is ever renamed again.
 
 ## Running it
 
