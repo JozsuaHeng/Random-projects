@@ -149,18 +149,31 @@ This project's tile on the `ai-slop/` root hub ("The Quagmire",
 `../index.html` + `../style.css`, `data-theme="northstar"` — the CSS
 class name predates several renames, including the folder rename to
 `bitcoin-faucet/`, and hasn't been changed since it's purely internal)
-went through a faucet-icon-in-the-corner layout first (matching whatever
-the hero icon looked like at the time) before switching to a different
-composition: a miniature mockup of the page's actual `.captcha-box`
-widget (`.ns-captcha` — a small red-bordered box with a pink question
-strip and a tan bottom bar, recreating the real captcha box's two-tier
-look at tile scale) as the tile's centerpiece, since that widget is
-arguably a more recognizable, distinctive piece of this project's
-identity than the faucet icon itself, and reads clearly even shrunk down.
-The sample question text (`What is 7 × 4?`) is static, just for flavor —
-it doesn't need to track whatever `app.js`'s actual question banks
-currently contain. Its `href` points at `.../bitcoin-faucet/` — keep
-that in sync if the folder is ever renamed again.
+went through a faucet-icon-in-the-corner layout, then a captcha-box
+mockup (red-bordered box, pink top strip, tan bottom bar) with a sample
+question, then the same box with the question text stripped out — that
+last one read as an oddly-placed empty red box rather than a
+recognizable "captcha widget" once there was nothing inside it to
+explain what it was, so it got dropped rather than iterated on further.
+The current version drops the box shape entirely and follows a layout
+`guilt-trip`'s tile already uses successfully: `.art` becomes a
+centered flex column (title, then a stat block, then nothing else).
+That first landed as a two-line `.ns-balance` block ("Your Balance
+฿0.00000004 / 750 available") mirroring guilt-trip's relationship-score
+block closely, then got pared down further to just `.ns-avail`: one
+big bold orange number (`฿750`, `font-size: 32px`) with a small tracked
+uppercase "Available" label under it — a single stat instead of two,
+which is what actually makes it read as sleek rather than busy. Static,
+not live — this is a hub tile, not the actual page, so the number
+doesn't need to track `app.js`'s real state. The card's accent shifted
+from red (`#cc3333`, felt alarm-ish after the boxed-red-widget attempts)
+to Bitcoin orange (`#f7931a`) for the border, number, and hover state —
+one consistent accent color throughout rather than mixing red and
+orange. If revisited again, prefer adapting an already-working sibling
+tile's pattern (like this did) over inventing a new bespoke widget
+shape, and lean toward fewer elements rather than more if it starts to
+feel busy again. Its `href` points at `.../bitcoin-faucet/` — keep that
+in sync if the folder is ever renamed again.
 
 ## Running it
 
