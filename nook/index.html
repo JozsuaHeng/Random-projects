@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nook</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="board" id="board">
+    <div class="board-inner" id="boardInner">
+      <svg id="connectorLayer" class="connector-layer"></svg>
+    </div>
+  </div>
+
+  <div class="create-ghost" id="createGhost">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 24 24" width="20" height="20">
+        <rect x="2" y="2" width="20" height="20" rx="6" fill="#b9622d"/>
+        <rect x="12.5" y="12.5" width="9" height="9" rx="3" fill="#f7ecd9"/>
+      </svg>
+      <span>Nook</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="pill-btn" id="newBtn" title="Add a new note">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        New
+      </button>
+      <button class="pill-btn" id="pasteBtn" title="Paste clipboard text as a new note">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>
+        Paste
+      </button>
+      <button class="pill-btn" id="zoneBtn" title="Add a labeled zone to group notes into">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-dasharray="3 2.4"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/></svg>
+        Zone
+      </button>
+      <span class="topbar-divider"></span>
+      <button class="icon-btn" id="fitBtn" title="Fit everything in view">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 4H5a1 1 0 00-1 1v4M15 4h4a1 1 0 011 1v4M9 20H5a1 1 0 01-1-1v-4M15 20h4a1 1 0 001-1v-4"/></svg>
+      </button>
+      <button class="icon-btn" id="exportBtn" title="Download a backup of all notes">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+      </button>
+      <button class="icon-btn" id="importBtn" title="Restore notes from a backup file">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 15V3m0 0L8 7m4-4l4 4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+      </button>
+      <span class="topbar-divider"></span>
+      <button class="icon-btn" id="themeBtn" title="Switch light / dark">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="zoom-control" id="zoomControl">
+    <button id="zoomOutBtn" title="Zoom out">−</button>
+    <span id="zoomLabel">100%</span>
+    <button id="zoomInBtn" title="Zoom in">+</button>
+  </div>
+
+  <div class="empty-hint" id="emptyHint" hidden>
+    <svg viewBox="0 0 24 24" width="28" height="28">
+      <rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor" opacity="0.3"/>
+      <rect x="12.5" y="12.5" width="9" height="9" rx="3" fill="currentColor" opacity="0.6"/>
+    </svg>
+    <p>Double-click anywhere on the board to drop a note.</p>
+    <button class="pill-btn" id="emptyNewBtn">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      New note
+    </button>
+  </div>
+
+  <div class="expand-overlay" id="expandOverlay" hidden>
+    <div class="expand-card" id="expandCard">
+      <div class="expand-head">
+        <span class="note-color-dot" id="expandColorDot" title="Change color"></span>
+        <div class="expand-head-actions">
+          <button class="note-action" id="expandCopyBtn" title="Copy text">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>
+          </button>
+          <button class="note-action" id="expandExportBtn" title="Export as .md">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+          </button>
+          <button class="note-action danger" id="expandDeleteBtn" title="Delete note">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-8 0l1 13a1 1 0 001 1h6a1 1 0 001-1l1-13"/></svg>
+          </button>
+          <button class="note-action" id="expandCloseBtn" title="Close">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="expand-body">
+        <div class="note-render" id="expandRender"></div>
+        <textarea class="note-edit" id="expandEdit" hidden spellcheck="false"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <input type="file" id="importFile" accept="application/json" hidden>
+
+  <template id="noteTemplate">
+    <div class="note-card">
+      <div class="note-head">
+        <button class="note-color-dot" title="Change color"></button>
+        <div class="note-head-actions">
+          <button class="note-action expand-btn" title="Expand">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H5a1 1 0 00-1 1v4M15 4h4a1 1 0 011 1v4M9 20H5a1 1 0 01-1-1v-4M15 20h4a1 1 0 001-1v-4"/></svg>
+          </button>
+          <button class="note-action copy-btn" title="Copy text">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>
+          </button>
+          <button class="note-action delete-btn danger" title="Delete note">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="note-body">
+        <div class="note-render"></div>
+        <textarea class="note-edit" hidden spellcheck="false"></textarea>
+      </div>
+      <div class="note-resize-handle"></div>
+      <span class="note-connect-handle" title="Drag to another note to connect them"></span>
+    </div>
+  </template>
+
+  <template id="colorPopoverTemplate">
+    <div class="color-popover">
+      <button data-color="clay" style="background:var(--accent-clay)"></button>
+      <button data-color="ink" style="background:var(--accent-ink)"></button>
+      <button data-color="moss" style="background:var(--accent-moss)"></button>
+      <button data-color="plum" style="background:var(--accent-plum)"></button>
+      <button data-color="ochre" style="background:var(--accent-ochre)"></button>
+      <button data-color="berry" style="background:var(--accent-berry)"></button>
+    </div>
+  </template>
+
+  <template id="zoneTemplate">
+    <div class="zone-frame">
+      <span class="zone-edge edge-top" title="Drag to move this zone"></span>
+      <span class="zone-edge edge-right" title="Drag to move this zone"></span>
+      <span class="zone-edge edge-bottom" title="Drag to move this zone"></span>
+      <span class="zone-edge edge-left" title="Drag to move this zone"></span>
+      <span class="zone-label" spellcheck="false"></span>
+      <button class="zone-delete" title="Remove this zone">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="zone-resize-handle"></div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

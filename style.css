@@ -518,26 +518,27 @@ body {
 .tile[data-theme="northstar"] .art {
   background: #ffffff;
   border-bottom: 3px solid #cc3333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 12px 14px;
 }
 .tile[data-theme="northstar"] .art-title {
-  top: 10px;
-  left: 14px;
+  position: static;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-size: 15px;
   color: #999;
+  text-align: center;
 }
 .tile[data-theme="northstar"] .ns-btc {
   color: #f7931a;
   font-weight: bold;
 }
 .tile[data-theme="northstar"] .ns-captcha {
-  position: absolute;
-  top: 36px;
-  left: 14px;
-  right: 14px;
-  border: 2px solid #cc3333;
+  width: 100%;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -547,18 +548,16 @@ body {
   font-size: 11px;
   font-style: italic;
   color: #888;
+  text-align: center;
 }
 .tile[data-theme="northstar"] .ns-captcha-bar {
   background: #f5e7b0;
   height: 11px;
 }
-.tile[data-theme="northstar"] .ns-caption {
-  position: absolute;
-  bottom: 11px;
-  left: 14px;
-  right: 14px;
-  font-size: 9px;
-  color: #bbb;
+.tile[data-theme="northstar"] .ns-captcha-fill {
+  background: #f7931a;
+  height: 100%;
+  width: 89.6%;
 }
 .tile[data-theme="northstar"] .go {
   color: #cc3333;
@@ -570,6 +569,54 @@ body {
 .tile[data-theme="northstar"]:hover {
   border-color: #cc3333;
   transform: translateY(-3px);
+}
+
+/* --- theme: nook --- */
+
+.tile[data-theme="nook"] .art {
+  background-color: #0c0906;
+  background-image:
+    radial-gradient(ellipse at 22% 30%, rgba(185, 98, 45, 0.28) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 90px 90px;
+  border-bottom: 3px solid #3a2c18;
+}
+.tile[data-theme="nook"] .art-title {
+  bottom: 14px;
+  left: 16px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 22px;
+  color: #f3d9ad;
+  letter-spacing: 0.01em;
+}
+.tile[data-theme="nook"] .nook-zone-line {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 14px;
+  width: 44%;
+  height: 58%;
+  border: 1px solid rgba(243, 217, 173, 0.15);
+  border-radius: 8px;
+}
+.tile[data-theme="nook"] .nook-dot {
+  position: absolute;
+  z-index: 2;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+.tile[data-theme="nook"] .go { color: #ef8677; }
+.tile[data-theme="nook"] {
+  border-color: rgba(242, 178, 92, 0.22);
+}
+.tile[data-theme="nook"]:hover {
+  border-color: #f2b25c;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(242, 178, 92, 0.3);
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate
