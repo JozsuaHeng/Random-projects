@@ -398,6 +398,15 @@ textarea, input { font-family: inherit; color: inherit; }
 
 .note-card {
   position: absolute;
+  /* Matches the JS zCounter starting value (see "bringToFront" in
+     app.js) so a note keeps the same baseline stacking order whether it
+     was just created (gets an inline z-index from bringToFront) or
+     loaded from storage on page load (never does, until you interact
+     with it) — without this, a reloaded note has no z-index at all and
+     loses to the connector layer's explicit z-index:20, letting
+     connector lines show through note cards instead of hiding behind
+     them. */
+  z-index: 50;
   display: flex;
   flex-direction: column;
   background: var(--card-paper);
