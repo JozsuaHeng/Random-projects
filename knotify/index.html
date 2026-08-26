@@ -7,49 +7,76 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav class="nav">
-  <span class="brand">⚓ Knotify</span>
+  <span class="brand">Knotify</span>
   <div class="nav-links">
+    <a href="#try-it">Try It</a>
     <a href="#features">Features</a>
-    <a href="#stats">Why Knotify</a>
+    <a href="#pricing">Pricing</a>
   </div>
   <a href="converter.html" class="btn-primary btn-small">Open App →</a>
 </nav>
 
 <header class="hero">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-
-  <span class="chip">✨ AI-POWERED MARINE INTELLIGENCE</span>
-  <h1>One Conversion Engine.<br><span class="gradient-text">Every Marine Sport.</span></h1>
+  <p class="eyebrow">the unified marine conversion platform</p>
+  <h1>One Conversion Engine.<br>Every Marine Sport.</h1>
   <p class="hero-sub">
     Knotify unifies speed, depth, pressure, temperature, and distance
-    conversions across sailing, diving, surfing, and fishing into a single
-    intelligent measurement platform — trusted by mariners who used to have
-    six apps for this.
+    conversions across sailing, diving, surfing, kitesurfing, and fishing
+    into a single measurement platform — trusted by mariners who used to
+    have six apps for this.
   </p>
   <div class="hero-ctas">
     <a href="converter.html" class="btn-primary">Open Full App →</a>
-    <a href="#features" class="btn-ghost">See what's inside</a>
-  </div>
-
-  <div class="demo-widget">
-    <p class="demo-label"><span class="dot-live"></span> Try it live — Knot Speed Converter</p>
-    <div class="demo-grid">
-      <label>Knots<input id="demoKnots" type="number" value="12" inputmode="decimal"></label>
-      <label>km/h<input id="demoKmh" type="number" inputmode="decimal"></label>
-      <label>mph<input id="demoMph" type="number" inputmode="decimal"></label>
-      <label>m/s<input id="demoMs" type="number" inputmode="decimal"></label>
-    </div>
-    <p class="demo-caption">This one's real. The other 8 below are not — yet.</p>
+    <a href="#try-it" class="btn-ghost">Try it free</a>
   </div>
 </header>
+
+<section id="try-it" class="try-it">
+  <p class="eyebrow section-eyebrow">try before you buy</p>
+  <h2 class="section-heading">Three live converters. No signup.</h2>
+  <p class="features-sub">
+    The other 15 are still in the shipyard — see the full roadmap below.
+  </p>
+
+  <div class="try-it-grid">
+
+    <div class="panel demo-widget">
+      <p class="demo-label"><span class="dot-live"></span> Knot Speed</p>
+      <div class="demo-grid">
+        <label>Knots<input id="demoSpeedKnots" type="number" value="12" inputmode="decimal"></label>
+        <label>km/h<input id="demoSpeedKmh" type="number" inputmode="decimal"></label>
+        <label>mph<input id="demoSpeedMph" type="number" inputmode="decimal"></label>
+        <label>m/s<input id="demoSpeedMs" type="number" inputmode="decimal"></label>
+      </div>
+    </div>
+
+    <div class="panel demo-widget">
+      <p class="demo-label"><span class="dot-live"></span> Wind Force</p>
+      <div class="demo-grid demo-grid-3">
+        <label>Knots<input id="demoWindKnots" type="number" value="18" inputmode="decimal"></label>
+        <label>km/h<input id="demoWindKmh" type="number" inputmode="decimal"></label>
+        <label>mph<input id="demoWindMph" type="number" inputmode="decimal"></label>
+      </div>
+      <p class="beaufort-readout" id="demoWindBeaufort"></p>
+    </div>
+
+    <div class="panel demo-widget">
+      <p class="demo-label"><span class="dot-live"></span> Depth &amp; Fathoms</p>
+      <div class="demo-grid demo-grid-3">
+        <label>Fathoms<input id="demoDepthFathoms" type="number" value="10" inputmode="decimal"></label>
+        <label>Meters<input id="demoDepthMeters" type="number" inputmode="decimal"></label>
+        <label>Feet<input id="demoDepthFeet" type="number" inputmode="decimal"></label>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <section class="stats-band" id="stats">
   <div class="stats-grid">
@@ -58,103 +85,221 @@
       <span class="stat-label">conversions run today</span>
     </div>
     <div class="stat">
-      <span class="stat-num">50+</span>
-      <span class="stat-label">marine sports supported*</span>
+      <span class="stat-num">18</span>
+      <span class="stat-label">converters across every marine sport*</span>
     </div>
     <div class="stat">
       <span class="stat-num">99.9%</span>
-      <span class="stat-label">accuracy on the one that works</span>
+      <span class="stat-label">accuracy on the ones that work</span>
     </div>
     <div class="stat">
       <span class="stat-num">4.9★</span>
       <span class="stat-label">rating, based on 3 reviews</span>
     </div>
   </div>
-  <p class="stats-fineprint">*one (1) is currently supported. 49+ are on the roadmap.</p>
+  <p class="stats-fineprint">*3 of 18 are currently live. The rest are in extremely active development.</p>
 </section>
 
 <section id="features" class="features">
-  <h2>Everything a modern mariner needs<span class="gradient-text">.</span></h2>
-  <p class="features-sub">A unified conversion layer across every marine discipline — some of it even exists.</p>
+  <p class="eyebrow section-eyebrow">the full roadmap</p>
+  <h2>Everything a modern mariner needs<span class="gold-dot">.</span></h2>
+  <p class="features-sub">A unified conversion layer across sailing, diving, surfing, kitesurfing, fishing, and open water — three of it even exists.</p>
 
   <div class="feature-grid">
 
     <div class="feature-card feature-live">
-      <span class="feature-icon" style="--a:#22c55e;--b:#0ea5e9;">🧭</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16 16 11"/><circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/></svg></span>
       <span class="status-pill status-live">● LIVE</span>
       <h3>Knot Speed Converter</h3>
-      <p>Knots, km/h, mph and m/s, converted in real time. The whole reason this page exists.</p>
+      <p>Knots, km/h, mph and m/s, converted in real time.</p>
     </div>
 
-    <div class="feature-card">
-      <span class="feature-icon" style="--a:#3b82f6;--b:#06b6d4;">🌊</span>
-      <span class="status-pill">🔒 Coming Soon</span>
-      <h3>Wave Height Converter</h3>
-      <p>Feet, meters, and the surf-report scale your local break actually uses.</p>
-    </div>
-
-    <div class="feature-card">
-      <span class="feature-icon" style="--a:#8b5cf6;--b:#3b82f6;">💨</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+    <div class="feature-card feature-live">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11a2.2 2.2 0 1 0-1.8-3.6"/><path d="M3 12h14a2.2 2.2 0 1 1-1.8 3.6"/><path d="M3 17h8"/></svg></span>
+      <span class="status-pill status-live">● LIVE</span>
       <h3>Wind Force Converter</h3>
-      <p>Beaufort scale ↔ knots ↔ km/h, for when "a bit breezy" isn't precise enough.</p>
+      <p>Knots/km-h/mph, plus the Beaufort scale reading to go with it.</p>
     </div>
 
-    <div class="feature-card">
-      <span class="feature-icon" style="--a:#0ea5e9;--b:#6366f1;">⚓</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+    <div class="feature-card feature-live">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.4" fill="currentColor" stroke="none"/><path d="M12 6v14"/><path d="M7 11h10"/><path d="M6 15c0 3.3 2.7 6 6 6s6-2.7 6-6"/></svg></span>
+      <span class="status-pill status-live">● LIVE</span>
       <h3>Depth &amp; Fathoms Converter</h3>
       <p>Fathoms, meters, feet — because charts and depth sounders never agree.</p>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon" style="--a:#ec4899;--b:#8b5cf6;">🤿</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0 4-2 6 0"/><path d="M2 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0 4-2 6 0" opacity="0.5"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Wave Height Converter</h3>
+      <p>Feet, meters, and the surf-report scale your local break actually uses.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="5" width="8" height="15" rx="3.5"/><path d="M10.5 3v3M13.5 3v3"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
       <h3>Tank Pressure Converter</h3>
       <p>Bar ↔ PSI, so your dive computer and your tank gauge can finally agree.</p>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon" style="--a:#f59e0b;--b:#ec4899;">🎣</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v11a4 4 0 0 0 8 0"/><circle cx="9" cy="3" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
       <h3>Line Strength Converter</h3>
       <p>Pounds, kilograms, and kilonewtons of line/rope breaking strength.</p>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon" style="--a:#06b6d4;--b:#22c55e;">🌡️</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5a2 2 0 0 0-2 2v8.7a4 4 0 1 0 4 0V5.5a2 2 0 0 0-2-2z"/><circle cx="12" cy="18.5" r="1.8" fill="currentColor" stroke="none"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
       <h3>Water Temp &amp; Wetsuit Advisor</h3>
       <p>°C ↔ °F, plus a wetsuit-thickness suggestion nobody asked you for.</p>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon" style="--a:#6366f1;--b:#ec4899;">🗺️</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="1.6"/><circle cx="19" cy="6" r="1.6"/><path d="M6.4 16.7 17.6 7.3" stroke-dasharray="2.2 2.2"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
       <h3>Nautical Distance Converter</h3>
       <p>Nautical miles ↔ statute miles ↔ kilometers, for passage planning.</p>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon" style="--a:#22c55e;--b:#0ea5e9;">⛽</span>
-      <span class="status-pill">🔒 Coming Soon</span>
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="9" height="15" rx="1.5"/><path d="M13 9h3a1.6 1.6 0 0 1 1.6 1.6V17a1.6 1.6 0 0 1-3.2 0v-2"/><path d="M7 9h3"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
       <h3>Fuel Range Converter</h3>
       <p>Liters/NM ↔ gallons/NM, so you know exactly how far your excuses will float.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20h12"/><path d="M8 20V4l9 16z"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Sail Area Converter</h3>
+      <p>Square feet ↔ square meters, for when the sailmaker quotes in the wrong system.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 0 5 5 5 11s-2 7-5 7-5-1-5-7 2-11 5-11z"/><path d="M12 6v14"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Board Volume Converter</h3>
+      <p>Liters ↔ cubic inches, for surfboards, SUPs, and the eternal "will it float me" question.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 12 12 21 4 12z"/><path d="M4 12h16M12 3v18"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Kite &amp; Sail Size Converter</h3>
+      <p>Square meters ↔ square feet, for kitesurfing and windsurfing rigs.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Engine Power Converter</h3>
+      <p>Horsepower ↔ kilowatts, for comparing outboards that advertise in different units on purpose.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M5 6h14"/><path d="M5 6l-3 7a3.5 3.5 0 0 0 7 0z"/><path d="M19 6l-3 7a3.5 3.5 0 0 0 7 0z"/><rect x="8" y="18" width="8" height="3" rx="1"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Displacement &amp; Tonnage Converter</h3>
+      <p>Kilograms ↔ pounds ↔ long tons, for boats and the arguments about them.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 12 15.5 9"/><path d="M12 6v1.2M18 12h-1.2M12 18v-1.2M6 12h1.2"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Barometric Pressure Converter</h3>
+      <p>hPa ↔ inHg ↔ mmHg, for weather routing and passage planning.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a7 7 0 0 0-7 7c0 5 7 11 7 11s7-6 7-11a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="2.2"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>GPS Coordinates Converter</h3>
+      <p>Degrees-Minutes-Seconds ↔ Decimal Degrees, for chartplotters that never agree.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7.5"/><path d="M12 13V8.5"/><path d="M9.5 2.5h5"/><path d="M17.5 5.5l1.2-1.2"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Swim Pace Converter</h3>
+      <p>Min/100m ↔ min/100yd, for open-water swimmers who trained in the wrong pool.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></span>
+      <span class="status-pill">Coming Soon</span>
+      <h3>Visibility &amp; Clarity Converter</h3>
+      <p>Meters ↔ feet of underwater visibility, for divers and snorkelers comparing notes.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="pricing" class="pricing">
+  <p class="eyebrow section-eyebrow">showcase, then buy</p>
+  <h2 class="section-heading">Simple, honest pricing.</h2>
+  <p class="features-sub">Pay monthly or yearly. Either way, you get the same 3 converters.</p>
+
+  <div class="price-toggle">
+    <button type="button" class="active" data-period="monthly">Monthly</button>
+    <button type="button" data-period="yearly">Yearly — save 21%</button>
+  </div>
+
+  <div class="pricing-grid" id="pricingGrid">
+
+    <div class="price-card">
+      <h3>Crew</h3>
+      <p class="price-tagline">For casual sailors.</p>
+      <p class="price-amount">$0<span>/mo</span></p>
+      <ul class="price-features">
+        <li>3 live converters</li>
+        <li>Unlimited conversions</li>
+        <li>The other 15 stay locked, probably forever</li>
+      </ul>
+      <a href="converter.html" class="btn-ghost price-cta">Get Started</a>
+    </div>
+
+    <div class="price-card price-card-popular">
+      <span class="price-badge">Most Popular</span>
+      <h3>Skipper</h3>
+      <p class="price-tagline">For mariners who mean it.</p>
+      <p class="price-amount">
+        <span class="price-period-monthly">$19<span>/mo</span></span>
+        <span class="price-period-yearly">$15<span>/mo, billed $180/yr</span></span>
+      </p>
+      <ul class="price-features">
+        <li>Same 3 converters</li>
+        <li>A nicer font on the numbers</li>
+        <li>Priority access to converters that don't exist yet</li>
+      </ul>
+      <a href="converter.html" class="btn-primary price-cta">Get Started</a>
+    </div>
+
+    <div class="price-card">
+      <h3>Fleet</h3>
+      <p class="price-tagline">For teams who need this at scale.</p>
+      <p class="price-amount">Custom</p>
+      <ul class="price-features">
+        <li>Dedicated account manager</li>
+        <li>SLA on features we haven't built</li>
+        <li>Custom invoice for the same 3 converters</li>
+      </ul>
+      <a href="#" class="btn-ghost price-cta">Contact Sales</a>
     </div>
 
   </div>
 </section>
 
 <section class="cta-band">
-  <div class="blob blob-4"></div>
   <h2>Ready to convert smarter?</h2>
-  <p>Join the mariners already using 1 out of 9 planned Knotify converters.</p>
+  <p>Join the mariners already using 3 of 18 planned Knotify converters.</p>
   <a href="converter.html" class="btn-primary btn-large">Launch Knotify Free →</a>
 </section>
 
 <footer class="foot">
-  <span class="brand">⚓ Knotify</span>
-  <p>Not a real platform. Also not real intelligence. The knot converter is real, though.</p>
+  <span class="brand">Knotify</span>
+  <p>Not a real platform. Also not real intelligence. Three converters are real, though.</p>
 </footer>
 
 <script src="app.js"></script>

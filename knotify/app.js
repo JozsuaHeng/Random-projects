@@ -1,30 +1,97 @@
-// Knotify — the one real feature. Everything else on the landing page is vaporware.
+// Knotify — three real converters. Everything else on the page is vaporware.
 
-const KNOT_FACTORS = { knots: 1, kmh: 1.852, mph: 1.150779, ms: 0.514444 };
+const SPEED_FACTORS = { knots: 1, kmh: 1.852, mph: 1.150779, ms: 0.514444 };
+const DEPTH_FACTORS = { fathoms: 1, meters: 1.8288, feet: 6 };
 
-function initConverter(idPrefix) {
-  const fields = {
-    knots: document.getElementById(`${idPrefix}Knots`),
-    kmh: document.getElementById(`${idPrefix}Kmh`),
-    mph: document.getElementById(`${idPrefix}Mph`),
-    ms: document.getElementById(`${idPrefix}Ms`),
-  };
-  if (!fields.knots) return;
+const BEAUFORT_SCALE = [
+  { max: 1, force: 0, label: "Calm" },
+  { max: 3, force: 1, label: "Light Air" },
+  { max: 6, force: 2, label: "Light Breeze" },
+  { max: 10, force: 3, label: "Gentle Breeze" },
+  { max: 16, force: 4, label: "Moderate Breeze" },
+  { max: 21, force: 5, label: "Fresh Breeze" },
+  { max: 27, force: 6, label: "Strong Breeze" },
+  { max: 33, force: 7, label: "Near Gale" },
+  { max: 40, force: 8, label: "Gale" },
+  { max: 47, force: 9, label: "Strong Gale" },
+  { max: 55, force: 10, label: "Storm" },
+  { max: 63, force: 11, label: "Violent Storm" },
+  { max: Infinity, force: 12, label: "Hurricane Force" },
+];
+
+function beaufortFromKnots(knots) {
+  return BEAUFORT_SCALE.find((b) => knots <= b.max) || BEAUFORT_SCALE[BEAUFORT_SCALE.length - 1];
+}
+
+// Generic bidirectional converter: typing in any field recomputes the rest
+// from a shared base value, using `factors` (each unit's multiplier relative
+// to whichever unit has factor 1).
+function wireLinear(fields, factors, seedUnit) {
+  const present = Object.keys(fields).filter((unit) => fields[unit]);
+  if (present.length === 0) return null;
 
   function recompute(sourceUnit) {
     const raw = Number(fields[sourceUnit].value);
-    const knotsValue = Number.isFinite(raw) ? raw / KNOT_FACTORS[sourceUnit] : 0;
-    for (const unit in fields) {
+    const baseValue = Number.isFinite(raw) ? raw / factors[sourceUnit] : 0;
+    for (const unit of present) {
       if (unit === sourceUnit) continue;
-      fields[unit].value = (knotsValue * KNOT_FACTORS[unit]).toFixed(2);
+      fields[unit].value = (baseValue * factors[unit]).toFixed(2);
     }
+    return baseValue;
   }
 
-  for (const unit in fields) {
+  for (const unit of present) {
     fields[unit].addEventListener("input", () => recompute(unit));
   }
+  recompute(seedUnit);
+  return recompute;
+}
 
-  recompute("knots");
+function initSpeedConverter(prefix) {
+  wireLinear(
+    {
+      knots: document.getElementById(`${prefix}Knots`),
+      kmh: document.getElementById(`${prefix}Kmh`),
+      mph: document.getElementById(`${prefix}Mph`),
+      ms: document.getElementById(`${prefix}Ms`),
+    },
+    SPEED_FACTORS,
+    "knots"
+  );
+}
+
+function initDepthConverter(prefix) {
+  wireLinear(
+    {
+      fathoms: document.getElementById(`${prefix}Fathoms`),
+      meters: document.getElementById(`${prefix}Meters`),
+      feet: document.getElementById(`${prefix}Feet`),
+    },
+    DEPTH_FACTORS,
+    "fathoms"
+  );
+}
+
+function initWindConverter(prefix) {
+  const beaufortEl = document.getElementById(`${prefix}Beaufort`);
+  const fields = {
+    knots: document.getElementById(`${prefix}Knots`),
+    kmh: document.getElementById(`${prefix}Kmh`),
+    mph: document.getElementById(`${prefix}Mph`),
+  };
+  if (!fields.knots) return;
+
+  function updateBeaufort() {
+    const knots = Number(fields.knots.value) || 0;
+    const { force, label } = beaufortFromKnots(knots);
+    if (beaufortEl) beaufortEl.textContent = `Force ${force} — ${label}`;
+  }
+
+  const recompute = wireLinear(fields, SPEED_FACTORS, "knots");
+  for (const unit in fields) {
+    fields[unit].addEventListener("input", updateBeaufort);
+  }
+  updateBeaufort();
 }
 
 // The classic cheap-SaaS "live activity" ticker — fake, and not trying hard to hide it.
@@ -39,6 +106,24 @@ function initLiveStat() {
   }, 2200);
 }
 
-initConverter("demo");
-initConverter("tool");
+// Pricing monthly/yearly toggle, guilt-trip style: swap an `active` class on
+// the buttons and a `yearly` class on the grid; CSS shows/hides the rest.
+function initPricingToggle() {
+  const grid = document.getElementById("pricingGrid");
+  const buttons = document.querySelectorAll(".price-toggle button");
+  if (!grid || buttons.length === 0) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      grid.classList.toggle("yearly", btn.dataset.period === "yearly");
+    });
+  });
+}
+
+for (const prefix of ["demoSpeed", "toolSpeed"]) initSpeedConverter(prefix);
+for (const prefix of ["demoWind", "toolWind"]) initWindConverter(prefix);
+for (const prefix of ["demoDepth", "toolDepth"]) initDepthConverter(prefix);
 initLiveStat();
+initPricingToggle();

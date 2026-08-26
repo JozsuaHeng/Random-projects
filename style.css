@@ -774,81 +774,44 @@ body {
 }
 
 /* --- theme: knotify ---
-   Deliberately the odd one out: every other tile is dark and
-   hand-illustrated. This one is a light, glossy, gradient-mesh
-   "generated in five minutes" SaaS card on purpose — the tile itself
-   is the joke, previewing the project's own aesthetic (see
-   knotify/CLAUDE.md). Don't tone it down to match the others. */
+   A restrained dark-navy-and-gold nautical card, matching the palette of
+   the Knotify site itself (and of Golden Island Cruises' charter-booking
+   site, which this look was deliberately borrowed from — see
+   knotify/CLAUDE.md). An earlier version of this tile went all-in on a
+   light gradient-mesh "generated SaaS" look; that read as too literally
+   AI-generated rather than as a joke, so it was replaced with this. */
 
 .tile[data-theme="knotify"] .art {
-  background: linear-gradient(135deg, #ede9fe 0%, #fce7f3 55%, #dbeafe 100%);
-  border-bottom: 3px solid #fff;
+  background: radial-gradient(ellipse at 50% 24%, #1a2230 0%, #0a0a0f 78%);
+  border-bottom: 3px solid #4a3f28;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.tile[data-theme="knotify"] .knotify-blob {
-  position: absolute;
-  z-index: 1;
-  border-radius: 50%;
-  filter: blur(16px);
-  opacity: 0.65;
-  pointer-events: none;
-}
-.tile[data-theme="knotify"] .knotify-blob-a { width: 64px; height: 64px; background: #c4b5fd; top: -18px; left: 8%; }
-.tile[data-theme="knotify"] .knotify-blob-b { width: 54px; height: 54px; background: #f9a8d4; bottom: -14px; right: 12%; }
-.tile[data-theme="knotify"] .knotify-blob-c { width: 40px; height: 40px; background: #93c5fd; top: 10%; right: 28%; }
-.tile[data-theme="knotify"] .knotify-chip {
-  position: absolute;
-  z-index: 2;
-  top: 10px;
-  left: 12px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  color: #7c3aed;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(124, 58, 237, 0.25);
-  padding: 3px 7px;
-  border-radius: 999px;
-}
-.tile[data-theme="knotify"] .knotify-rating {
-  position: absolute;
-  z-index: 2;
-  top: 10px;
-  right: 12px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  color: #92400e;
-  background: rgba(255, 255, 255, 0.75);
-  padding: 3px 7px;
-  border-radius: 999px;
+.tile[data-theme="knotify"] .knotify-compass {
+  width: 74px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  opacity: 0.5;
 }
 .tile[data-theme="knotify"] .art-title {
   position: static;
   z-index: 2;
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-size: 21px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+  color: #d4af6a;
   text-align: center;
-  background: linear-gradient(90deg, #7c3aed, #ec4899);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
-.tile[data-theme="knotify"] .go {
-  color: #fff;
-  background: linear-gradient(90deg, #7c3aed, #ec4899);
-}
+.tile[data-theme="knotify"] .go { color: #d4af6a; }
 .tile[data-theme="knotify"] {
-  border-color: rgba(124, 58, 237, 0.25);
+  border-color: rgba(212, 175, 106, 0.25);
 }
 .tile[data-theme="knotify"]:hover {
-  border-color: #ec4899;
+  border-color: #d4af6a;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -12px rgba(124, 58, 237, 0.45);
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate
