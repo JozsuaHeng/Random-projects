@@ -85,14 +85,30 @@ one page with an anchor scroll.
 
 All in `app.js`, all genuinely correct and genuinely live — the whole
 joke depends on these actually working while everything around them is
-fake, so don't let any of them regress into decoration:
+fake, so don't let any of them regress into decoration. Each also has a
+derived **categorization readout** underneath its fields
+(`.category-readout`, shared styling for all three) — the pattern started
+with Beaufort and was deliberately extended to the other two so all three
+converters feel equally "real":
 
 - **Knot Speed**: knots ↔ km/h ↔ mph ↔ m/s (`SPEED_FACTORS`; 1 knot =
-  1.852 km/h = 1.150779 mph = 0.514444 m/s).
+  1.852 km/h = 1.150779 mph = 0.514444 m/s). Readout: **Speed Class**
+  (`SPEED_CLASS_SCALE`, informal displacement/planing bands — not an
+  official scale like Beaufort, just widely-used rule-of-thumb knots
+  ranges: Displacement/Trolling, Cruising, Planing, High-Performance).
 - **Wind Force**: same `SPEED_FACTORS` fields, plus the derived Beaufort
-  reading (`BEAUFORT_SCALE`, standard knots-based bands, force 0–12).
+  reading (`BEAUFORT_SCALE`, standard knots-based bands, force 0–12,
+  e.g. "Force 5 — Fresh Breeze").
 - **Depth & Fathoms**: fathoms ↔ meters ↔ feet (`DEPTH_FACTORS`; 1 fathom
-  = 1.8288 m = 6 ft exactly).
+  = 1.8288 m = 6 ft exactly). Readout: **Dive Zone**
+  (`DIVE_ZONE_SCALE`, bands roughly matching real PADI recreational
+  certification depth limits: Open Water, Advanced Open Water, Deep
+  Diving, Technical Diving, Extended Range).
+
+All three readouts share one `classify(value, scale)` helper (Beaufort
+keeps its own function since it also needs the numeric force number, not
+just a label). If a fourth live converter is ever added, give it a
+categorization readout too rather than leaving it as the odd one out.
 
 ## The trust band (`.trust-band`)
 
@@ -104,6 +120,22 @@ same "seriousness as the joke" mechanism as guilt-trip's security badges:
 Zero Signup/Zero Tracking (there's no server to send data to), Instant
 (no API to time out), Works Anywhere (a browser is all it needs). Don't
 let these drift into obviously-jokey copy — the deadpan is the point.
+
+## Icons
+
+Small monochrome stroke SVGs (24×24 viewBox, `stroke="currentColor"`,
+no fill except tiny solid accent dots) run throughout, reusing the same
+handful of shapes rather than inventing a new icon per spot: the
+speedometer/wind-lines/anchor trio from the feature grid also appears
+next to the matching `.try-it`/tool-page card titles; the brand mark
+(`.brand-icon`, a stylized anchor) appears in both navs and both
+footers; `.stat-icon` sits above each stats-band number; `.price-icon`
+sits in a small rounded badge at the top of each pricing card
+(life-ring/wheel/fleet-chevrons for Crew/Skipper/Fleet); `.lock-icon`
+replaced the emoji lock on `converter.html`'s locked-teaser box. If
+adding a new icon, match this style rather than reaching for emoji —
+emoji-as-icons was one of the tells of the first (too-AI-generated)
+design pass, see above.
 
 ## What's intentionally not built
 
@@ -118,17 +150,19 @@ any of these belongs in a different, non-satirical project.
 
 ## Pricing section
 
-Three tiers (`#pricing` / `.pricing-grid` / `.price-card`), standard SaaS
-pricing-table layout — `.price-card-popular` (Skipper) gets an orange
-border, a floating "Most Popular" badge, and sits 6px higher via
-`transform: translateY(-6px)` (collapses to `none` under 700px). The jokes
-are load-bearing: **Crew** ($0) is "3 live converters... the other 15 stay
-locked, probably forever"; **Skipper** ($19/mo, or $15/mo billed
-$180/yr — the 21% figure on the Yearly toggle button is derived from
-$19×12=$228 vs $180/yr, recompute it if either price ever changes) is "a
-nicer font on the numbers" and "priority access to converters that don't
-exist yet"; **Fleet** is "Contact Sales" for "SLA on features we haven't
-built." Keep these if the section is ever edited.
+Three tiers (`#pricing` / `.pricing-grid` / `.price-card`), each with a
+`.price-icon` badge, standard SaaS pricing-table layout —
+`.price-card-popular` (Skipper) gets an orange border/icon, a floating
+"Most Popular" badge, and sits 6px higher via `transform:
+translateY(-6px)` (collapses to `none` under 700px). Pricing is
+deliberately cheap/simple-app-tier, not enterprise B2B: **Crew** ($0) is
+"3 live converters... the other 15 stay locked, probably forever";
+**Skipper** is $0.99/mo, or $0.83/mo billed $9.99/yr — the "Save 16%" on
+the Yearly toggle button is `1 − 9.99/(0.99×12) ≈ 15.9%`, recompute this
+if either price ever changes — with "a nicer font on the numbers" and
+"priority access to converters that don't exist yet"; **Fleet** is
+"Contact Sales" for "SLA on features we haven't built." Keep these jokes
+if the section is ever edited.
 
 ## Hub page tile
 

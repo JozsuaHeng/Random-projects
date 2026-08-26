@@ -23,6 +23,28 @@ function beaufortFromKnots(knots) {
   return BEAUFORT_SCALE.find((b) => knots <= b.max) || BEAUFORT_SCALE[BEAUFORT_SCALE.length - 1];
 }
 
+// Informal displacement/planing speed bands — not an official scale like
+// Beaufort, but a widely-used rule of thumb (hull speed vs. planing).
+const SPEED_CLASS_SCALE = [
+  { max: 5, label: "Displacement / Trolling" },
+  { max: 12, label: "Cruising" },
+  { max: 25, label: "Planing" },
+  { max: Infinity, label: "High-Performance" },
+];
+
+// Recreational dive-depth bands, roughly matching PADI certification limits.
+const DIVE_ZONE_SCALE = [
+  { max: 12, label: "Open Water" },
+  { max: 18, label: "Advanced Open Water" },
+  { max: 30, label: "Deep Diving" },
+  { max: 40, label: "Technical Diving" },
+  { max: Infinity, label: "Extended Range" },
+];
+
+function classify(value, scale) {
+  return (scale.find((b) => value <= b.max) || scale[scale.length - 1]).label;
+}
+
 // Generic bidirectional converter: typing in any field recomputes the rest
 // from a shared base value, using `factors` (each unit's multiplier relative
 // to whichever unit has factor 1).
@@ -48,49 +70,61 @@ function wireLinear(fields, factors, seedUnit) {
 }
 
 function initSpeedConverter(prefix) {
-  wireLinear(
-    {
-      knots: document.getElementById(`${prefix}Knots`),
-      kmh: document.getElementById(`${prefix}Kmh`),
-      mph: document.getElementById(`${prefix}Mph`),
-      ms: document.getElementById(`${prefix}Ms`),
-    },
-    SPEED_FACTORS,
-    "knots"
-  );
+  const fields = {
+    knots: document.getElementById(`${prefix}Knots`),
+    kmh: document.getElementById(`${prefix}Kmh`),
+    mph: document.getElementById(`${prefix}Mph`),
+    ms: document.getElementById(`${prefix}Ms`),
+  };
+  if (!fields.knots) return;
+  const classEl = document.getElementById(`${prefix}Class`);
+
+  wireLinear(fields, SPEED_FACTORS, "knots");
+
+  function updateClass() {
+    const knots = Number(fields.knots.value) || 0;
+    if (classEl) classEl.textContent = `Speed Class — ${classify(knots, SPEED_CLASS_SCALE)}`;
+  }
+  for (const unit in fields) fields[unit].addEventListener("input", updateClass);
+  updateClass();
 }
 
 function initDepthConverter(prefix) {
-  wireLinear(
-    {
-      fathoms: document.getElementById(`${prefix}Fathoms`),
-      meters: document.getElementById(`${prefix}Meters`),
-      feet: document.getElementById(`${prefix}Feet`),
-    },
-    DEPTH_FACTORS,
-    "fathoms"
-  );
+  const fields = {
+    fathoms: document.getElementById(`${prefix}Fathoms`),
+    meters: document.getElementById(`${prefix}Meters`),
+    feet: document.getElementById(`${prefix}Feet`),
+  };
+  if (!fields.fathoms) return;
+  const zoneEl = document.getElementById(`${prefix}Zone`);
+
+  wireLinear(fields, DEPTH_FACTORS, "fathoms");
+
+  function updateZone() {
+    const meters = Number(fields.meters.value) || 0;
+    if (zoneEl) zoneEl.textContent = `Dive Zone — ${classify(meters, DIVE_ZONE_SCALE)}`;
+  }
+  for (const unit in fields) fields[unit].addEventListener("input", updateZone);
+  updateZone();
 }
 
 function initWindConverter(prefix) {
-  const beaufortEl = document.getElementById(`${prefix}Beaufort`);
   const fields = {
     knots: document.getElementById(`${prefix}Knots`),
     kmh: document.getElementById(`${prefix}Kmh`),
     mph: document.getElementById(`${prefix}Mph`),
   };
   if (!fields.knots) return;
+  const beaufortEl = document.getElementById(`${prefix}Beaufort`);
+
+  wireLinear(fields, SPEED_FACTORS, "knots");
 
   function updateBeaufort() {
     const knots = Number(fields.knots.value) || 0;
     const { force, label } = beaufortFromKnots(knots);
     if (beaufortEl) beaufortEl.textContent = `Force ${force} — ${label}`;
   }
-
-  const recompute = wireLinear(fields, SPEED_FACTORS, "knots");
-  for (const unit in fields) {
-    fields[unit].addEventListener("input", updateBeaufort);
-  }
+  for (const unit in fields) fields[unit].addEventListener("input", updateBeaufort);
   updateBeaufort();
 }
 

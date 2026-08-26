@@ -13,7 +13,10 @@
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="brand brand-link">Knotify</a>
+  <a href="index.html" class="brand brand-link">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M12 6.5v13"/><path d="M6 12h12"/><path d="M4.5 16c0 4.1 3.4 7.5 7.5 7.5s7.5-3.4 7.5-7.5"/></svg>
+    Knotify
+  </a>
   <span class="nav-tag">Full App</span>
 </nav>
 
@@ -23,36 +26,49 @@
   <p class="tool-sub">Type in any field — the rest update instantly. No signup, no rounding tricks.</p>
 
   <div class="panel tool-card">
-    <h3 class="tool-card-title">Knot Speed</h3>
+    <h3 class="tool-card-title">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16 16 11"/><circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/></svg>
+      Knot Speed
+    </h3>
     <div class="tool-grid">
       <label>Knots<input id="toolSpeedKnots" type="number" value="12" inputmode="decimal"></label>
       <label>km/h<input id="toolSpeedKmh" type="number" inputmode="decimal"></label>
       <label>mph<input id="toolSpeedMph" type="number" inputmode="decimal"></label>
       <label>m/s<input id="toolSpeedMs" type="number" inputmode="decimal"></label>
     </div>
+    <p class="category-readout" id="toolSpeedClass"></p>
   </div>
 
   <div class="panel tool-card">
-    <h3 class="tool-card-title">Wind Force</h3>
+    <h3 class="tool-card-title">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11a2.2 2.2 0 1 0-1.8-3.6"/><path d="M3 12h14a2.2 2.2 0 1 1-1.8 3.6"/><path d="M3 17h8"/></svg>
+      Wind Force
+    </h3>
     <div class="tool-grid">
       <label>Knots<input id="toolWindKnots" type="number" value="18" inputmode="decimal"></label>
       <label>km/h<input id="toolWindKmh" type="number" inputmode="decimal"></label>
       <label>mph<input id="toolWindMph" type="number" inputmode="decimal"></label>
     </div>
-    <p class="beaufort-readout" id="toolWindBeaufort"></p>
+    <p class="category-readout" id="toolWindBeaufort"></p>
   </div>
 
   <div class="panel tool-card">
-    <h3 class="tool-card-title">Depth &amp; Fathoms</h3>
+    <h3 class="tool-card-title">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.4" fill="currentColor" stroke="none"/><path d="M12 6v14"/><path d="M7 11h10"/><path d="M6 15c0 3.3 2.7 6 6 6s6-2.7 6-6"/></svg>
+      Depth &amp; Fathoms
+    </h3>
     <div class="tool-grid">
       <label>Fathoms<input id="toolDepthFathoms" type="number" value="10" inputmode="decimal"></label>
       <label>Meters<input id="toolDepthMeters" type="number" inputmode="decimal"></label>
       <label>Feet<input id="toolDepthFeet" type="number" inputmode="decimal"></label>
     </div>
+    <p class="category-readout" id="toolDepthZone"></p>
   </div>
 
   <div class="locked-teaser">
-    <p>🔒 <strong>15 more converters</strong> unlock in the full Knotify platform — Wave Height, Tank Pressure,
+    <p>
+      <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <strong>15 more converters</strong> unlock in the full Knotify platform — Wave Height, Tank Pressure,
     Line Strength, Water Temp &amp; Wetsuit Advisor, Nautical Distance, Fuel Range, Sail Area, Board Volume,
     Kite &amp; Sail Size, Engine Power, Displacement &amp; Tonnage, Barometric Pressure, GPS Coordinates,
     Swim Pace, and Visibility &amp; Clarity.</p>
@@ -61,7 +77,10 @@
 </main>
 
 <footer class="foot">
-  <span class="brand">Knotify</span>
+  <span class="brand">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M12 6.5v13"/><path d="M6 12h12"/><path d="M4.5 16c0 4.1 3.4 7.5 7.5 7.5s7.5-3.4 7.5-7.5"/></svg>
+    Knotify
+  </span>
   <p>Not a real platform. Also not real intelligence. Three converters are real, though.</p>
 </footer>
 
