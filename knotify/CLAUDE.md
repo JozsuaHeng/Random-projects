@@ -116,7 +116,14 @@ background and a 3px top border, purely for visual rhythm across a
 green-for-live convention). `grid-template-columns: repeat(auto-fit,
 minmax(180px, 1fr))` — plain auto-fit, not a bento/mixed-span layout,
 deliberately: this section needed to look richer/more colorful than the
-rest of the page without becoming fragile across breakpoints.
+rest of the page without becoming fragile across breakpoints. Icons went
+through two rounds — the first pass was too abstract to read at a
+glance (e.g. freediving was a vague leaf/flame blob, kayaking was four
+dots joined by two lines); the current set favors recognizable silhouettes
+over cleverness (a monofin shape for freediving, an actual crossed-paddle
+icon for kayaking, a diving mask with lens circles for scuba). If revising
+further, judge each icon by "would this read correctly at 20px with no
+label," not just whether it looks fine at full size in an editor.
 
 ## The three real features
 
@@ -150,7 +157,14 @@ categorization readout too rather than leaving it as the odd one out.
 ## The trust band (`.trust-band`)
 
 Four "why people trust Knotify" items, dark navy band right after
-`#sports`. The joke here is that every claim is **actually true** of a static
+`#sports`. The offline item's copy is deliberately vivid rather than
+generic ("no standing on the bow waving your phone at the sky for one
+bar" instead of just "no problem") — the brief was specifically to make
+this land as a concrete, relatable moment, not a bland feature bullet.
+The hero also carries a small `.hero-badge` ("Works with zero bars — no
+signal required, ever.") right under the CTAs, reinforcing the same
+point before a visitor even scrolls to the trust band — don't let these
+two drift out of sync if either is edited. The joke here is that every claim is **actually true** of a static
 webpage with no backend, just reframed in premium trust-badge language —
 same "seriousness as the joke" mechanism as guilt-trip's security badges:
 100% Offline-Capable (it's static files, of course it works offline),

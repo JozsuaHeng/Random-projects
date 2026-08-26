@@ -160,6 +160,18 @@ a { color: inherit; }
   flex-wrap: wrap;
 }
 
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy-deep);
+}
+
+.hero-badge-icon { width: 18px; height: 18px; stroke: var(--orange); flex-shrink: 0; }
+
 .hero-wave {
   display: block;
   width: 100%;
