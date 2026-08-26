@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knotify — The Unified Marine Conversion Platform</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <span class="brand">⚓ Knotify</span>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#stats">Why Knotify</a>
+  </div>
+  <a href="converter.html" class="btn-primary btn-small">Open App →</a>
+</nav>
+
+<header class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <span class="chip">✨ AI-POWERED MARINE INTELLIGENCE</span>
+  <h1>One Conversion Engine.<br><span class="gradient-text">Every Marine Sport.</span></h1>
+  <p class="hero-sub">
+    Knotify unifies speed, depth, pressure, temperature, and distance
+    conversions across sailing, diving, surfing, and fishing into a single
+    intelligent measurement platform — trusted by mariners who used to have
+    six apps for this.
+  </p>
+  <div class="hero-ctas">
+    <a href="converter.html" class="btn-primary">Open Full App →</a>
+    <a href="#features" class="btn-ghost">See what's inside</a>
+  </div>
+
+  <div class="demo-widget">
+    <p class="demo-label"><span class="dot-live"></span> Try it live — Knot Speed Converter</p>
+    <div class="demo-grid">
+      <label>Knots<input id="demoKnots" type="number" value="12" inputmode="decimal"></label>
+      <label>km/h<input id="demoKmh" type="number" inputmode="decimal"></label>
+      <label>mph<input id="demoMph" type="number" inputmode="decimal"></label>
+      <label>m/s<input id="demoMs" type="number" inputmode="decimal"></label>
+    </div>
+    <p class="demo-caption">This one's real. The other 8 below are not — yet.</p>
+  </div>
+</header>
+
+<section class="stats-band" id="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <span class="stat-num" id="liveStat">1,247</span>
+      <span class="stat-label">conversions run today</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">marine sports supported*</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">99.9%</span>
+      <span class="stat-label">accuracy on the one that works</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4.9★</span>
+      <span class="stat-label">rating, based on 3 reviews</span>
+    </div>
+  </div>
+  <p class="stats-fineprint">*one (1) is currently supported. 49+ are on the roadmap.</p>
+</section>
+
+<section id="features" class="features">
+  <h2>Everything a modern mariner needs<span class="gradient-text">.</span></h2>
+  <p class="features-sub">A unified conversion layer across every marine discipline — some of it even exists.</p>
+
+  <div class="feature-grid">
+
+    <div class="feature-card feature-live">
+      <span class="feature-icon" style="--a:#22c55e;--b:#0ea5e9;">🧭</span>
+      <span class="status-pill status-live">● LIVE</span>
+      <h3>Knot Speed Converter</h3>
+      <p>Knots, km/h, mph and m/s, converted in real time. The whole reason this page exists.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#3b82f6;--b:#06b6d4;">🌊</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Wave Height Converter</h3>
+      <p>Feet, meters, and the surf-report scale your local break actually uses.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#8b5cf6;--b:#3b82f6;">💨</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Wind Force Converter</h3>
+      <p>Beaufort scale ↔ knots ↔ km/h, for when "a bit breezy" isn't precise enough.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#0ea5e9;--b:#6366f1;">⚓</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Depth &amp; Fathoms Converter</h3>
+      <p>Fathoms, meters, feet — because charts and depth sounders never agree.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#ec4899;--b:#8b5cf6;">🤿</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Tank Pressure Converter</h3>
+      <p>Bar ↔ PSI, so your dive computer and your tank gauge can finally agree.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#f59e0b;--b:#ec4899;">🎣</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Line Strength Converter</h3>
+      <p>Pounds, kilograms, and kilonewtons of line/rope breaking strength.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#06b6d4;--b:#22c55e;">🌡️</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Water Temp &amp; Wetsuit Advisor</h3>
+      <p>°C ↔ °F, plus a wetsuit-thickness suggestion nobody asked you for.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#6366f1;--b:#ec4899;">🗺️</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Nautical Distance Converter</h3>
+      <p>Nautical miles ↔ statute miles ↔ kilometers, for passage planning.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon" style="--a:#22c55e;--b:#0ea5e9;">⛽</span>
+      <span class="status-pill">🔒 Coming Soon</span>
+      <h3>Fuel Range Converter</h3>
+      <p>Liters/NM ↔ gallons/NM, so you know exactly how far your excuses will float.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="blob blob-4"></div>
+  <h2>Ready to convert smarter?</h2>
+  <p>Join the mariners already using 1 out of 9 planned Knotify converters.</p>
+  <a href="converter.html" class="btn-primary btn-large">Launch Knotify Free →</a>
+</section>
+
+<footer class="foot">
+  <span class="brand">⚓ Knotify</span>
+  <p>Not a real platform. Also not real intelligence. The knot converter is real, though.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
