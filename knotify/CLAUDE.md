@@ -64,16 +64,39 @@ one page with an anchor scroll.
 - `index.html` — the marketing page: nav (Sports / Try It / Features /
   Pricing + "Open App"), a two-column hero (copy + CTAs on the left, the
   `.phone-mockup` on the right — order flips via `.hero-visual { order:
-  -1 }` under 860px), a `.hero-wave` SVG divider (fill hardcoded to match
-  whatever section comes right after it, so it seams cleanly — currently
-  white, since `#sports` follows directly), an **`#sports` "Built for
-  every water sport" section** (`.sport-grid`, 10 activity cards — see
-  below), a `.trust-band` "why people trust Knotify" section, a
-  **`#try-it` section with all 3 live converters stacked full-width**
-  (`.try-it-grid`, three `.panel` cards), a stats band, the 18-card
-  `#features` grid (3 `.feature-live` cards + 15 "Premium"), and a
-  `#pricing` section (3 tiers: Free/Premium/Business, monthly/yearly
-  toggle).
+  -1 }` under 860px), then a chain of full-bleed sections connected by
+  `.section-wave` SVG dividers (see below): a light-blue **`#sports`
+  "Built for every water sport" section** (`.sport-grid`, 10 activity
+  cards — see below), a dark-navy `.trust-band` "why people trust
+  Knotify" section, a white **`#try-it` section with all 3 live
+  converters stacked full-width** (`.try-it-grid`, three `.panel`
+  cards), a light-blue stats band, the white 18-card `#features` grid
+  (3 `.feature-live` cards + 15 "Premium"), a white `#pricing` section
+  (3 tiers: Free/Premium/Business, monthly/yearly toggle), and a
+  white-to-light-blue `.cta-band`.
+
+**Section-wave dividers** (`.section-wave`): the same technique repeated
+six times — an SVG (`viewBox="0 0 1200 70"`, `preserveAspectRatio="none"`,
+`margin-top: -1px` to kill the subpixel seam) sitting as the **last
+child of the section it belongs to**, with a single wave `<path>` filled
+with whatever color the *next* section uses. This is the "blue wavy
+container" look the whole page uses to connect sections — hero→sports
+(fill `#eaf4fb`), sports→trust-band (fill `#0b3556`), trust-band→try-it
+(fill `#ffffff`), try-it→stats (fill `#eaf4fb`), stats→features (fill
+`#ffffff`), cta-band→footer (fill `#0b3556`). **The section itself must
+have zero padding for this to work** — padding pushes the wave away from
+the section's real bottom edge, leaving a flat color gap between the
+wave and the actual seam (this happened once already and had to be
+fixed). The pattern is always: outer `<section>` carries only the
+background color, an inner wrapper (`.sports-inner`, `.trust-inner`,
+`.stats-inner`, `.cta-inner` — `.hero-inner` for the hero, which
+predates this system) carries `max-width`/`margin:auto`/`padding`, and
+the wave is a sibling of that inner wrapper, not a child of it. `.try-it`
+and `.features`/`.pricing` keep padding directly on the section since
+they have no background color of their own (plain white matching
+`body`), so there's no seam to protect. If a new section is inserted
+into this chain, follow the same pattern rather than putting padding
+back on the outer section.
 - `converter.html` — "the actual tool": the same 3 converters as full-width
   `.panel` cards, framed as "Converters 1–3 of 18," plus a
   `.locked-teaser` box listing the other 15 by name and linking back to
