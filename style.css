@@ -774,16 +774,14 @@ body {
 }
 
 /* --- theme: knotify ---
-   A restrained dark-navy-and-gold nautical card, matching the palette of
-   the Knotify site itself (and of Golden Island Cruises' charter-booking
-   site, which this look was deliberately borrowed from — see
-   knotify/CLAUDE.md). An earlier version of this tile went all-in on a
-   light gradient-mesh "generated SaaS" look; that read as too literally
-   AI-generated rather than as a joke, so it was replaced with this. */
+   A restrained dark-navy-and-orange nautical card, matching the Knotify
+   site's own palette (deep ocean navy + safety-orange, chosen there to
+   read as trustworthy/reliable rather than luxury or "generated SaaS" —
+   see knotify/CLAUDE.md for the two earlier design passes this replaced). */
 
 .tile[data-theme="knotify"] .art {
-  background: radial-gradient(ellipse at 50% 24%, #1a2230 0%, #0a0a0f 78%);
-  border-bottom: 3px solid #4a3f28;
+  background: radial-gradient(ellipse at 50% 24%, #123a5e 0%, #0b1e30 78%);
+  border-bottom: 3px solid #ff6b35;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -793,24 +791,24 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -55%);
-  opacity: 0.5;
+  opacity: 0.55;
 }
 .tile[data-theme="knotify"] .art-title {
   position: static;
   z-index: 2;
-  font-family: "Playfair Display", Georgia, serif;
-  font-weight: 700;
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
   font-size: 20px;
-  letter-spacing: 0.01em;
-  color: #d4af6a;
+  letter-spacing: -0.01em;
+  color: #fff;
   text-align: center;
 }
-.tile[data-theme="knotify"] .go { color: #d4af6a; }
+.tile[data-theme="knotify"] .go { color: #ff6b35; }
 .tile[data-theme="knotify"] {
-  border-color: rgba(212, 175, 106, 0.25);
+  border-color: rgba(255, 107, 53, 0.3);
 }
 .tile[data-theme="knotify"]:hover {
-  border-color: #d4af6a;
+  border-color: #ff6b35;
   transform: translateY(-3px);
 }
 

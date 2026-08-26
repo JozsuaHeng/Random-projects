@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,19 +23,80 @@
 </nav>
 
 <header class="hero">
-  <p class="eyebrow">the unified marine conversion platform</p>
-  <h1>One Conversion Engine.<br>Every Marine Sport.</h1>
-  <p class="hero-sub">
-    Knotify unifies speed, depth, pressure, temperature, and distance
-    conversions across sailing, diving, surfing, kitesurfing, and fishing
-    into a single measurement platform — trusted by mariners who used to
-    have six apps for this.
-  </p>
-  <div class="hero-ctas">
-    <a href="converter.html" class="btn-primary">Open Full App →</a>
-    <a href="#try-it" class="btn-ghost">Try it free</a>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow">the unified marine conversion platform</p>
+      <h1>One Conversion Engine.<br>Every Marine Sport.</h1>
+      <p class="hero-sub">
+        Knotify unifies speed, depth, pressure, temperature, and distance
+        conversions across sailing, diving, surfing, kitesurfing, and fishing
+        into a single measurement platform — trusted by mariners who used to
+        have six apps for this.
+      </p>
+      <div class="hero-ctas">
+        <a href="converter.html" class="btn-primary">Open Full App →</a>
+        <a href="#try-it" class="btn-ghost">Try it free</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="phone-mockup">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <p class="phone-app-bar"><span class="phone-dot"></span> Knotify</p>
+          <div class="phone-card">
+            <p class="phone-card-label">Knot Speed</p>
+            <p class="phone-card-value">12<span>knots</span></p>
+            <div class="phone-card-row"><span>km/h</span><strong>22.2</strong></div>
+            <div class="phone-card-row"><span>mph</span><strong>13.8</strong></div>
+            <div class="phone-card-row"><span>m/s</span><strong>6.2</strong></div>
+          </div>
+          <div class="phone-card">
+            <p class="phone-card-label">Wind Force</p>
+            <p class="phone-card-value">18<span>knots</span></p>
+            <span class="phone-badge">Force 5 — Fresh Breeze</span>
+          </div>
+        </div>
+        <div class="phone-home-indicator"></div>
+      </div>
+    </div>
   </div>
+
+  <svg class="hero-wave" viewBox="0 0 1200 70" preserveAspectRatio="none">
+    <path d="M0,35 C200,70 400,0 600,25 C800,50 1000,10 1200,30 L1200,70 L0,70 Z" fill="#0b3556"/>
+  </svg>
 </header>
+
+<section class="trust-band">
+  <div class="trust-inner">
+    <div class="trust-head">
+      <h2>Why sailors trust Knotify</h2>
+      <p>Not marketing fluff — this is just what a static webpage with no backend gets you for free.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 9a4 4 0 0 1 1 7.87"/><path d="M3 3l18 18"/></svg></span>
+        <h3>100% Offline-Capable</h3>
+        <p>No signal at sea? No problem — Knotify runs entirely in your browser. Nothing to load, nothing to lose.</p>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Zero Signup, Zero Tracking</h3>
+        <p>Your conversions never leave your device. We couldn't sell your data if we wanted to — there's no server to send it to.</p>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></span>
+        <h3>Instant, Every Time</h3>
+        <p>No spinners, no API timeouts, no "servers are busy." Just math, immediately.</p>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+        <h3>Works Anywhere</h3>
+        <p>Mid-ocean, dead zone, airplane mode — if your browser's open, Knotify is open.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="try-it" class="try-it">
   <p class="eyebrow section-eyebrow">try before you buy</p>
@@ -58,7 +119,7 @@
 
     <div class="panel demo-widget">
       <p class="demo-label"><span class="dot-live"></span> Wind Force</p>
-      <div class="demo-grid demo-grid-3">
+      <div class="demo-grid">
         <label>Knots<input id="demoWindKnots" type="number" value="18" inputmode="decimal"></label>
         <label>km/h<input id="demoWindKmh" type="number" inputmode="decimal"></label>
         <label>mph<input id="demoWindMph" type="number" inputmode="decimal"></label>
@@ -68,7 +129,7 @@
 
     <div class="panel demo-widget">
       <p class="demo-label"><span class="dot-live"></span> Depth &amp; Fathoms</p>
-      <div class="demo-grid demo-grid-3">
+      <div class="demo-grid">
         <label>Fathoms<input id="demoDepthFathoms" type="number" value="10" inputmode="decimal"></label>
         <label>Meters<input id="demoDepthMeters" type="number" inputmode="decimal"></label>
         <label>Feet<input id="demoDepthFeet" type="number" inputmode="decimal"></label>
@@ -102,7 +163,7 @@
 
 <section id="features" class="features">
   <p class="eyebrow section-eyebrow">the full roadmap</p>
-  <h2>Everything a modern mariner needs<span class="gold-dot">.</span></h2>
+  <h2>Everything a modern mariner needs<span class="accent-dot">.</span></h2>
   <p class="features-sub">A unified conversion layer across sailing, diving, surfing, kitesurfing, fishing, and open water — three of it even exists.</p>
 
   <div class="feature-grid">
