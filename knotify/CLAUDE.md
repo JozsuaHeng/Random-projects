@@ -6,10 +6,23 @@
 marine unit conversion. It advertises **18 converters** across sailing,
 diving, surfing, kitesurfing, fishing, and open water ("one conversion
 engine, every marine sport") — exactly **3 of them are real**. The other
-15 are permanently "Coming Soon" feature cards. There's also a full
+15 are permanently labeled **"Premium"** (not "Coming Soon" — see the
+Pricing section below for why that reads funnier). There's also a full
 pricing section (three tiers, monthly/yearly toggle) selling access to
 those same 3 converters — because the brief was explicitly "showcase the
 app to people before buying," the way a real SaaS marketing site would.
+
+**Copy is deliberately generic, not sailing-specific.** An earlier pass
+used "mariners"/"sailors" as the default persona throughout (hero copy,
+trust-band heading, pricing tier names "Crew"/"Skipper"/"Fleet") — this
+was cut because it reads as a walled garden for boat people specifically,
+when the actual premise ("every marine sport") explicitly includes
+divers, surfers, kitesurfers, swimmers, and anyone else in/on/under the
+water. Copy now either stays persona-neutral ("Why people trust
+Knotify") or, where a persona is useful for texture, lists several
+("trusted by sailors, divers, surfers, and everyone else...") rather than
+defaulting to one. Keep this in mind if editing copy again — it's easy to
+slip back into boat-only language given the domain.
 
 The joke is structural (real functionality, wildly oversold marketing
 around it, dead-straight B2B SaaS pricing/feature-grid copy), not visual —
@@ -40,7 +53,7 @@ history below) and read as too literally AI-generated rather than funny.
    count. Added a CSS-drawn iPhone mockup in the hero (`.phone-mockup`,
    no real device photo, same technique as guilt-trip's phone —
    `../guilt-trip/CLAUDE.md` has the fuller explanation of why) and a
-   dark-navy `.trust-band` "why sailors trust Knotify" section right
+   dark-navy `.trust-band` "why people trust Knotify" section right
    after the hero, both discussed further below.
 
 ## Structure — landing page vs. the actual tool
@@ -48,16 +61,19 @@ history below) and read as too literally AI-generated rather than funny.
 The landing page and the actual tool are deliberately separate pages, not
 one page with an anchor scroll.
 
-- `index.html` — the marketing page: nav (Try It / Features / Pricing +
-  "Open App"), a two-column hero (copy + CTAs on the left, the
+- `index.html` — the marketing page: nav (Sports / Try It / Features /
+  Pricing + "Open App"), a two-column hero (copy + CTAs on the left, the
   `.phone-mockup` on the right — order flips via `.hero-visual { order:
   -1 }` under 860px), a `.hero-wave` SVG divider (fill hardcoded to match
-  `--navy-deep` exactly, so it seams into the section below), a
-  `.trust-band` "why sailors trust Knotify" section, a **`#try-it` section
-  with all 3 live converters stacked full-width** (`.try-it-grid`, three
-  `.panel` cards), a stats band, the 18-card `#features` grid (3
-  `.feature-live` cards + 15 "Coming Soon"), and a `#pricing` section (3
-  tiers: Crew/Skipper/Fleet, monthly/yearly toggle).
+  whatever section comes right after it, so it seams cleanly — currently
+  white, since `#sports` follows directly), an **`#sports` "Built for
+  every water sport" section** (`.sport-grid`, 10 activity cards — see
+  below), a `.trust-band` "why people trust Knotify" section, a
+  **`#try-it` section with all 3 live converters stacked full-width**
+  (`.try-it-grid`, three `.panel` cards), a stats band, the 18-card
+  `#features` grid (3 `.feature-live` cards + 15 "Premium"), and a
+  `#pricing` section (3 tiers: Free/Premium/Business, monthly/yearly
+  toggle).
 - `converter.html` — "the actual tool": the same 3 converters as full-width
   `.panel` cards, framed as "Converters 1–3 of 18," plus a
   `.locked-teaser` box listing the other 15 by name and linking back to
@@ -77,9 +93,30 @@ one page with an anchor scroll.
   landing page only). `initPricingToggle()` swaps an `active` class
   between the two `.price-toggle` buttons and toggles a `yearly` class on
   `#pricingGrid`, which CSS uses to show/hide the `.price-period-monthly`/
-  `.price-period-yearly` spans inside the Skipper card's price — the other
+  `.price-period-yearly` spans inside the Premium card's price — the other
   two tiers' prices don't change with billing period, so they're plain
   text outside that toggle.
+
+## Sports & activities (`#sports`)
+
+Ten activity cards (`.sport-card`) right after the hero, directly
+delivering on the "Every Marine Sport" headline before anything else on
+the page: Sailing, Scuba Diving, Surfing, Kite & Windsurfing,
+Powerboating, Fishing, Freediving, Paddleboarding, Open-Water Swimming,
+Kayaking & Rowing. Each card names the real conversions relevant to that
+activity (e.g. Fishing → "Line strength, distance") — genuine domain
+knowledge, not filler, even though the converters themselves mostly
+don't exist yet. Icons are small stroke SVGs, one distinct shape per
+activity (no reuse of the feature-grid icons here — these represent the
+*activity*, not a specific converter). Cards cycle through three accent
+colors via `:nth-child(3n+1/2/0)` (`--orange`, `--teal`, `--coral` — the
+latter two introduced specifically for this section) on the icon badge
+background and a 3px top border, purely for visual rhythm across a
+10-card grid — not tied to any meaning (unlike the feature grid's
+green-for-live convention). `grid-template-columns: repeat(auto-fit,
+minmax(180px, 1fr))` — plain auto-fit, not a bento/mixed-span layout,
+deliberately: this section needed to look richer/more colorful than the
+rest of the page without becoming fragile across breakpoints.
 
 ## The three real features
 
@@ -112,8 +149,8 @@ categorization readout too rather than leaving it as the odd one out.
 
 ## The trust band (`.trust-band`)
 
-Four "why sailors trust Knotify" items, dark navy band right after the
-hero. The joke here is that every claim is **actually true** of a static
+Four "why people trust Knotify" items, dark navy band right after
+`#sports`. The joke here is that every claim is **actually true** of a static
 webpage with no backend, just reframed in premium trust-badge language —
 same "seriousness as the joke" mechanism as guilt-trip's security badges:
 100% Offline-Capable (it's static files, of course it works offline),
@@ -131,38 +168,58 @@ next to the matching `.try-it`/tool-page card titles; the brand mark
 (`.brand-icon`, a stylized anchor) appears in both navs and both
 footers; `.stat-icon` sits above each stats-band number; `.price-icon`
 sits in a small rounded badge at the top of each pricing card
-(life-ring/wheel/fleet-chevrons for Crew/Skipper/Fleet); `.lock-icon`
-replaced the emoji lock on `converter.html`'s locked-teaser box. If
-adding a new icon, match this style rather than reaching for emoji —
-emoji-as-icons was one of the tells of the first (too-AI-generated)
-design pass, see above.
+(life-ring/wheel/fleet-chevrons for Free/Premium/Business); `.lock-icon`
+replaced the emoji lock on `converter.html`'s locked-teaser box;
+`#sports`' ten `.sport-icon`s are their own distinct set (see the Sports
+section above). If adding a new icon, match this style rather than
+reaching for emoji — emoji-as-icons was one of the tells of the first
+(too-AI-generated) design pass, see above. The favicon (`favicon.svg`)
+has followed the same three passes as the rest of the site (purple
+gradient → navy+orange → current flat navy+white anchor mark, no
+gradient) — it was flagged as "still too colorful/AI-generated" even
+after matching the navy+orange site palette, so it's now deliberately
+two-tone only. If the site's palette changes again, don't reflexively
+add a second accent color back into the favicon just because it's in
+the palette — a plain single-accent-color mark reads calmer at
+favicon size regardless.
 
 ## What's intentionally not built
 
-The 15 "Coming Soon" converters (Wave Height, Tank Pressure, Line
+The 15 "Premium" converters (Wave Height, Tank Pressure, Line
 Strength, Water Temp & Wetsuit Advisor, Nautical Distance, Fuel Range,
 Sail Area, Board Volume, Kite & Sail Size, Engine Power, Displacement &
 Tonnage, Barometric Pressure, GPS Coordinates, Swim Pace, Visibility &
 Clarity) are named identically in `index.html`'s feature grid and
 `converter.html`'s locked-teaser box — if one is ever renamed, update
 both places. None of them should ever get built here; a real version of
-any of these belongs in a different, non-satirical project.
+any of these belongs in a different, non-satirical project. Their
+`.status-pill` reads **"Premium"**, not "Coming Soon" — deliberately
+implying they're paywalled rather than unbuilt, which sharpens the joke:
+the Premium *pricing tier* (see below) claims to unlock them, but since
+nothing behind that paywall is actually built, paying gets you nothing
+new. Don't revert this to "Coming Soon" — "Premium" is funnier and ties
+directly into the pricing section.
 
 ## Pricing section
 
 Three tiers (`#pricing` / `.pricing-grid` / `.price-card`), each with a
 `.price-icon` badge, standard SaaS pricing-table layout —
-`.price-card-popular` (Skipper) gets an orange border/icon, a floating
-"Most Popular" badge, and sits 6px higher via `transform:
-translateY(-6px)` (collapses to `none` under 700px). Pricing is
-deliberately cheap/simple-app-tier, not enterprise B2B: **Crew** ($0) is
-"3 live converters... the other 15 stay locked, probably forever";
-**Skipper** is $0.99/mo, or $0.83/mo billed $9.99/yr — the "Save 16%" on
-the Yearly toggle button is `1 − 9.99/(0.99×12) ≈ 15.9%`, recompute this
-if either price ever changes — with "a nicer font on the numbers" and
-"priority access to converters that don't exist yet"; **Fleet** is
-"Contact Sales" for "SLA on features we haven't built." Keep these jokes
-if the section is ever edited.
+`.price-card-popular` (**Premium**) gets an orange border/icon, a
+floating "Most Popular" badge, and sits 6px higher via `transform:
+translateY(-6px)` (collapses to `none` under 700px). Tier names are
+generic on purpose (**Free** / **Premium** / **Business**, not sailing
+jargon like the earlier Crew/Skipper/Fleet — see the note on generic
+copy near the top of this file) — and **Premium** as a tier name is a
+deliberate pun on the "Premium" status-pill label above, not a
+coincidence. Pricing itself is deliberately cheap/simple-app-tier, not
+enterprise B2B: **Free** ($0) is "3 live converters... the other 15 stay
+locked, probably forever"; **Premium** is $0.99/mo, or $0.83/mo billed
+$9.99/yr — the "Save 16%" on the Yearly toggle button is `1 −
+9.99/(0.99×12) ≈ 15.9%`, recompute this if either price ever changes —
+with "a nicer font on the numbers" and "priority access to converters
+that don't exist yet"; **Business** is "Contact Sales" for "SLA on
+features we haven't built." Keep these jokes if the section is ever
+edited.
 
 ## Hub page tile
 

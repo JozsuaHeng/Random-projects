@@ -7,6 +7,10 @@
   --ink-dim: #5b7185;
   --orange: #ff6b35;
   --orange-soft: #ff6b351a;
+  --teal: #0e88a3;
+  --teal-soft: #0e88a31a;
+  --coral: #e0575b;
+  --coral-soft: #e0575b1a;
   --green: #1f9d6e;
   --green-soft: #1f9d6e1a;
   --border: #dce8f0;
@@ -282,6 +286,59 @@ a { color: inherit; }
   background: rgba(255, 255, 255, 0.35);
   border-radius: 2px;
 }
+
+/* --- sports / activities --- */
+
+.sports {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 5rem;
+  text-align: center;
+}
+
+.sports h2 { font-size: clamp(1.6rem, 3.2vw, 2.1rem); color: var(--navy-deep); }
+
+.sport-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.1rem;
+  text-align: left;
+}
+
+.sport-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--orange);
+  border-radius: 12px;
+  padding: 1.35rem 1.25rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sport-card:hover { transform: translateY(-3px); box-shadow: 0 14px 26px -18px rgba(11, 53, 86, 0.28); }
+
+.sport-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--orange-soft);
+  margin-bottom: 0.9rem;
+}
+
+.sport-icon svg { width: 20px; height: 20px; stroke: var(--orange); }
+
+.sport-card:nth-child(3n+2) { border-top-color: var(--teal); }
+.sport-card:nth-child(3n+2) .sport-icon { background: var(--teal-soft); }
+.sport-card:nth-child(3n+2) .sport-icon svg { stroke: var(--teal); }
+
+.sport-card:nth-child(3n) { border-top-color: var(--coral); }
+.sport-card:nth-child(3n) .sport-icon { background: var(--coral-soft); }
+.sport-card:nth-child(3n) .sport-icon svg { stroke: var(--coral); }
+
+.sport-card h3 { font-size: 1rem; color: var(--ink); margin: 0 0 0.35rem; }
+.sport-card p { margin: 0; color: var(--ink-dim); font-size: 0.85rem; }
 
 /* --- trust / perks band --- */
 
