@@ -625,6 +625,154 @@ body {
   box-shadow: 0 16px 30px -14px rgba(242, 178, 92, 0.3);
 }
 
+/* --- theme: ipsum foundry ---
+   A torn, stained specimen sheet rather than a clean logo lockup —
+   jagged clip-path bottom edge, a crooked rubber stamp, a coffee
+   ring, and word-scraps in mismatched type treatments (one struck
+   through, one circled like a proofreader's mark). Deliberately
+   rough/collaged rather than symmetric, so it doesn't read as another
+   smooth gradient card. */
+
+.tile[data-theme="foundry"] .art {
+  background-color: #e7dcc0;
+  background-image:
+    radial-gradient(circle at 85% 78%, rgba(120, 84, 42, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 12% 90%, rgba(120, 84, 42, 0.09) 0%, transparent 42%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.15 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 100% 100%, 150px 150px;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 92% 97%, 84% 90%, 76% 97%, 68% 90%, 60% 97%, 52% 90%, 44% 97%, 36% 90%, 28% 97%, 20% 90%, 12% 97%, 4% 90%, 0% 97%);
+}
+.tile[data-theme="foundry"] .art-title {
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  background: #faf6ea;
+  border: 2px solid #201c17;
+  padding: 7px 16px;
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  color: #201c17;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  box-shadow: 3px 4px 0 rgba(32, 28, 23, 0.2);
+}
+.tile[data-theme="foundry"] .foundry-ring {
+  position: absolute;
+  z-index: 1;
+  top: -20px;
+  left: -16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(120, 84, 42, 0.2);
+}
+.tile[data-theme="foundry"] .foundry-scrap {
+  position: absolute;
+  z-index: 2;
+  color: #3a3226;
+}
+.tile[data-theme="foundry"] .foundry-scrap-a {
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  opacity: 0.85;
+}
+.tile[data-theme="foundry"] .foundry-scrap-b {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  background: #f7f1e3;
+  border: 1px solid rgba(58, 50, 38, 0.25);
+  padding: 2px 6px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
+}
+.tile[data-theme="foundry"] .foundry-scrap-c {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 12px;
+  text-decoration: line-through;
+  text-decoration-color: #a4272c;
+  text-decoration-thickness: 2px;
+}
+.tile[data-theme="foundry"] .foundry-scrap-d {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1.5px solid #a4272c;
+  border-radius: 50%;
+  padding: 3px 8px;
+}
+.tile[data-theme="foundry"] .foundry-scrap-e {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #201c17;
+  color: #f3ede1;
+  border-radius: 3px;
+  padding: 2px 6px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+.tile[data-theme="foundry"] .foundry-scrap-f {
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+  font-size: 12px;
+  color: #a4272c;
+  text-decoration: underline wavy;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.tile[data-theme="foundry"] .foundry-scrap-g {
+  position: absolute;
+  z-index: 1;
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #201c17;
+  opacity: 0.14;
+}
+.tile[data-theme="foundry"] .foundry-scrap-h {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px dashed rgba(58, 50, 38, 0.5);
+  background: rgba(247, 241, 227, 0.6);
+  padding: 2px 6px;
+}
+.tile[data-theme="foundry"] .foundry-stamp {
+  position: absolute;
+  z-index: 2;
+  top: 6px;
+  right: -14px;
+  width: 118px;
+  text-align: center;
+  border: 3px double rgba(164, 39, 44, 0.8);
+  padding: 3px 2px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: rgba(164, 39, 44, 0.8);
+  text-shadow: 1px 0 0 rgba(164, 39, 44, 0.35), -1px 1px 0 rgba(164, 39, 44, 0.25);
+  transform: rotate(-13deg);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.tile[data-theme="foundry"] .go { color: #c1502e; }
+.tile[data-theme="foundry"] {
+  border-color: rgba(193, 80, 46, 0.22);
+}
+.tile[data-theme="foundry"]:hover {
+  border-color: #c1502e;
+  transform: translateY(-3px) rotate(-0.4deg);
+  box-shadow: 0 16px 30px -14px rgba(193, 80, 46, 0.35);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ipsum Foundry</title>
+<meta name="description" content="Themed placeholder text — classic Latin, pirate, corporate, noir, and more — cast to order.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>
+  // Applied before CSS paints anything, so there's no flash of the
+  // wrong theme on load. app.js only handles the manual toggle.
+  (function () {
+    try {
+      var saved = localStorage.getItem("ipsumFoundryMode");
+      var mode = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-mode", mode);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">&para;</span>
+      <span class="wordmark">Ipsum Foundry</span>
+    </div>
+    <p class="tagline">themed placeholder text, cast to order</p>
+    <div class="topbar-actions">
+      <button type="button" class="icon-btn" id="aboutBtn" aria-label="What is Lorem Ipsum?">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="8" r="0.9" fill="currentColor" stroke="none"/></svg>
+        <span class="btn-label">What is Lorem Ipsum?</span>
+      </button>
+      <button type="button" class="icon-btn icon-btn-square" id="modeToggle" aria-label="Toggle light/dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.4 4.4l1.8 1.8M17.8 17.8l1.8 1.8M2.5 12H5M19 12h2.5M4.4 19.6l1.8-1.8M17.8 6.2l1.8-1.8"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="panel controls" aria-label="Generator controls">
+
+      <div class="control-group">
+        <h2 class="group-label">Style</h2>
+        <p class="group-hint">Classic Latin ipsum is the default &mdash; browse 14 more voices below.</p>
+        <div class="theme-grid" id="themeGrid" role="radiogroup" aria-label="Choose a theme">
+          <button type="button" class="theme-card" data-theme="classic" role="radio" aria-checked="true">
+            <span class="default-badge">Default</span>
+            <span class="theme-name">Classic</span>
+            <span class="theme-preview">lorem &middot; ipsum &middot; dolor</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="pirate" role="radio" aria-checked="false">
+            <span class="theme-name">Pirate</span>
+            <span class="theme-preview">arrr &middot; doubloons &middot; shiver me timbers</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="corporate" role="radio" aria-checked="false">
+            <span class="theme-name">Corporate</span>
+            <span class="theme-preview">synergy &middot; circle back &middot; bandwidth</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="shakespeare" role="radio" aria-checked="false">
+            <span class="theme-name">Shakespearean</span>
+            <span class="theme-preview">hark &middot; forsooth &middot; prithee</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="hacker" role="radio" aria-checked="false">
+            <span class="theme-name">Hacker</span>
+            <span class="theme-preview">decrypt &middot; mainframe &middot; zero-day</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="noir" role="radio" aria-checked="false">
+            <span class="theme-name">Noir</span>
+            <span class="theme-preview">dame &middot; alibi &middot; double-cross</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="wizard" role="radio" aria-checked="false">
+            <span class="theme-name">Wizard</span>
+            <span class="theme-preview">arcane rune &middot; grimoire &middot; ley line</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="cowboy" role="radio" aria-checked="false">
+            <span class="theme-name">Cowboy</span>
+            <span class="theme-preview">reckon &middot; saddle up &middot; six-shooter</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="surfer" role="radio" aria-checked="false">
+            <span class="theme-name">Surfer</span>
+            <span class="theme-preview">gnarly wave &middot; chill vibes &middot; shred the barrel</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="valleygirl" role="radio" aria-checked="false">
+            <span class="theme-name">Valley Girl</span>
+            <span class="theme-preview">no cap &middot; vibe &middot; iconic</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="knight" role="radio" aria-checked="false">
+            <span class="theme-name">Medieval Knight</span>
+            <span class="theme-preview">honor &middot; quest &middot; valiant</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="conspiracy" role="radio" aria-checked="false">
+            <span class="theme-name">Conspiracy Theorist</span>
+            <span class="theme-preview">wake up sheeple &middot; deep state &middot; redacted</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="infomercial" role="radio" aria-checked="false">
+            <span class="theme-name">Infomercial</span>
+            <span class="theme-preview">but wait, there's more &middot; unbeatable &middot; call now</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="drillsergeant" role="radio" aria-checked="false">
+            <span class="theme-name">Drill Sergeant</span>
+            <span class="theme-preview">drop and give me twenty &middot; boot camp &middot; relentless</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="fortuneteller" role="radio" aria-checked="false">
+            <span class="theme-name">Fortune Teller</span>
+            <span class="theme-preview">the stars have spoken &middot; crystal ball &middot; cosmic</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <h2 class="group-label">Amount</h2>
+        <div class="unit-toggle" id="unitToggle" role="radiogroup" aria-label="Unit">
+          <button type="button" class="unit-btn active" data-unit="paragraphs" aria-checked="true">Paragraphs</button>
+          <button type="button" class="unit-btn" data-unit="sentences" aria-checked="false">Sentences</button>
+          <button type="button" class="unit-btn" data-unit="words" aria-checked="false">Words</button>
+        </div>
+        <div class="stepper">
+          <button type="button" class="step-btn" id="stepDown" aria-label="Decrease">&minus;</button>
+          <input type="number" id="countInput" value="8" min="1" max="12" step="1" inputmode="numeric">
+          <button type="button" class="step-btn" id="stepUp" aria-label="Increase">+</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="opener-toggle">
+          <input type="checkbox" id="openerCheck">
+          <span class="opener-box"></span>
+          <span class="opener-label">Begin with the classic opener</span>
+        </label>
+      </div>
+
+      <button type="button" class="generate-btn" id="generateBtn">
+        <span class="pilcrow">&para;</span> Generate
+      </button>
+      <button type="button" class="surprise-btn" id="surpriseBtn">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="8.5" cy="8.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg>
+        Surprise me
+      </button>
+
+    </section>
+
+    <section class="panel output" aria-label="Generated text">
+      <div class="output-toolbar">
+        <span class="output-stat" id="outputStat">0 words</span>
+        <div class="toolbar-actions">
+          <button type="button" class="copy-btn" id="downloadBtn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v11"/><path d="M7.5 11.5L12 16l4.5-4.5"/><path d="M5 19h14"/></svg>
+            <span>Download</span>
+          </button>
+          <button type="button" class="copy-btn" id="copyBtn">
+            <svg class="copy-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+            <span id="copyLabel">Copy</span>
+          </button>
+        </div>
+      </div>
+      <div class="manuscript" id="output"></div>
+      <div id="liveStatus" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Every run is freshly cast &mdash; nothing is stored.</p>
+  </footer>
+
+</div>
+
+<dialog id="aboutDialog" class="about-dialog">
+  <button type="button" class="about-close" id="aboutClose" aria-label="Close">&times;</button>
+  <h2>What is Lorem Ipsum?</h2>
+
+  <h3>The short version</h3>
+  <p>Lorem Ipsum is dummy text: scrambled, meaningless pseudo-Latin used to fill a layout before real content exists. It's been the standard placeholder in printing and design for so long that the opening words &mdash; "Lorem ipsum dolor sit amet&hellip;" &mdash; are instantly recognizable even though the phrase itself means nothing.</p>
+
+  <h3>Why use nonsense at all?</h3>
+  <p>Because readable text is distracting. Drop in a real sentence and people start reading it, judging it, editing it &mdash; instead of looking at the typeface, the spacing, the layout, which is the actual thing being tested. Gibberish with the right rhythm and letter distribution lets a design get judged as a design.</p>
+
+  <h3>Where it actually comes from</h3>
+  <p>It's not made-up Latin &mdash; it's real Latin, badly mangled. The source is a passage from Cicero's <em>De Finibus Bonorum et Malorum</em> ("On the Ends of Good and Evil"), written in 45 BC, a philosophical dialogue about the nature of pleasure and pain. At some point &mdash; the popular story points to a 16th-century typesetter scrambling a galley of type to make a specimen sheet &mdash; words got cut, reordered, and Latin-ified further, and the resulting nonsense stuck around and outlived whatever the typesetter was actually trying to sell. It got a second life in the 1960s on Letraset dry-transfer sheets (rub-on lettering graphic designers used before computers), and again in the 1980s&ndash;90s when it shipped as the default filler in desktop publishing software like Aldus PageMaker &mdash; which is how it ended up as the universal default it is today.</p>
+
+  <h3>Is it actually Latin, though?</h3>
+  <p>Sort of. Every individual word traces back to real Latin, but the sentences don't mean anything and wouldn't parse to a Latin speaker. "Lorem" itself isn't even a real Latin word on its own &mdash; it's a fragment sliced out of the middle of "dolorem" (a form of "pain, sorrow"), leaving a chunk that looks and sounds like a word but was never meant to stand alone. The whole passage is best thought of as Latin-flavored static: real letters, real word roots, zero grammar or meaning.</p>
+
+  <h3>How much should you actually use?</h3>
+  <p>Only as much as the layout needs, and treat it as temporary. Filler text is for judging proportions, line length, and hierarchy &mdash; not for testing how a design handles real edge cases (long headlines, short headlines, a name with no vowels, an empty state). Swap in real content as early as possible, since dummy text has a well-known habit of accidentally surviving into production if nobody remembers to replace it.</p>
+
+  <h3>What this site adds</h3>
+  <p>Ipsum Foundry keeps the classic Latin version as the default (it's the one true original, after all) but also generates the same kind of filler in fourteen other voices &mdash; still meaningless, still safe to drop into a layout, just wearing a different costume.</p>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

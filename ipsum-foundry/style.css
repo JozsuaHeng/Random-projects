@@ -1,0 +1,651 @@
+:root {
+  --paper: #f3ede1;
+  --paper-2: #eee5d3;
+  --ink: #201c17;
+  --ink-soft: #5c5646;
+  --rule: #d9cdb3;
+  --accent: #c1502e;
+  --accent-ink: #fff8ef;
+  --surface-selected: #fffdf8;
+  --radius: 10px;
+}
+
+/* Dark mode is an explicit toggle (see app.js), not just a media query —
+   :root[data-mode] always wins once JS has set it. The inline script in
+   <head> sets this before first paint so there's no flash. */
+:root[data-mode="dark"] {
+  --paper: #1d1a15;
+  --paper-2: #26221b;
+  --ink: #ece4d3;
+  --ink-soft: #a89f8a;
+  --rule: #3d372a;
+  --accent: #e2733f;
+  --accent-ink: #1d1a15;
+  --surface-selected: #332c1f;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--paper);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12 0 0 0 0 0.11 0 0 0 0 0.09 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  color: var(--ink);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* --- header --- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+}
+
+.wordmark {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  margin-right: auto;
+  padding-left: 16px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 7px 11px;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.icon-btn-square {
+  padding: 7px;
+}
+
+.icon-moon {
+  display: none;
+}
+
+:root[data-mode="dark"] .icon-sun {
+  display: none;
+}
+
+:root[data-mode="dark"] .icon-moon {
+  display: block;
+}
+
+/* --- layout --- */
+
+.layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+/* --- controls panel --- */
+
+.control-group + .control-group {
+  margin-top: 28px;
+}
+
+.group-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .theme-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.theme-card {
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: inherit;
+  color: var(--ink);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.theme-card:hover {
+  border-color: var(--accent);
+}
+
+.theme-card[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--surface-selected);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  position: relative;
+}
+
+.default-badge {
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.group-hint {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: -6px;
+  margin-bottom: 12px;
+}
+
+.theme-name {
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.theme-preview {
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.unit-toggle {
+  display: flex;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.unit-btn {
+  flex: 1;
+  background: var(--paper);
+  border: none;
+  border-right: 1px solid var(--rule);
+  padding: 9px 6px;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.unit-btn:last-child {
+  border-right: none;
+}
+
+.unit-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.step-btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.step-btn:hover {
+  background: var(--rule);
+}
+
+#countInput {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  -moz-appearance: textfield;
+}
+
+#countInput::-webkit-outer-spin-button,
+#countInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.opener-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.opener-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.opener-box {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+.opener-toggle input:checked + .opener-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.opener-toggle input:checked + .opener-box::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--accent-ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.generate-btn {
+  width: 100%;
+  margin-top: 24px;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.generate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -10px rgba(193, 80, 46, 0.6);
+}
+
+.generate-btn .pilcrow {
+  font-size: 16px;
+}
+
+.surprise-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed var(--rule);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.surprise-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* --- output panel --- */
+
+.output-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.output-stat {
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.manuscript {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink);
+  min-height: 200px;
+}
+
+.manuscript p {
+  margin-bottom: 1.1em;
+}
+
+.manuscript p:last-child {
+  margin-bottom: 0;
+}
+
+.manuscript p.drop-cap::first-letter {
+  float: left;
+  font-size: 3.1em;
+  line-height: 0.8;
+  padding-right: 8px;
+  padding-top: 4px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* --- about dialog --- */
+
+.about-dialog {
+  /* Explicit fixed-position centering rather than relying on the
+     browser's native <dialog> UA centering (absolute/fixed + inset:0 +
+     margin:auto) — that behavior has proven inconsistent across
+     browsers in practice, so this pins it dead center unconditionally
+     instead of hoping the UA stylesheet does the right thing. */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  max-width: 560px;
+  width: calc(100vw - 48px);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 32px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.about-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.about-dialog h2 {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  padding-right: 24px;
+}
+
+.about-dialog h3 {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+.about-dialog h3:first-of-type {
+  margin-top: 0;
+}
+
+.about-dialog p {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.about-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.about-close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* --- footer --- */
+
+.foot {
+  text-align: center;
+  margin-top: 48px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* --- small screens ---
+   Layout/theme-grid column collapses live next to the rules they
+   collapse (.layout at 960px, .theme-grid at 640px/380px above); this
+   block is everything else that needs to shrink or reflow: spacing,
+   type scale, and turning the About button into an icon-only control
+   once there's no room for its label. */
+
+@media (max-width: 720px) {
+  .page {
+    padding: 32px 16px 56px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .wordmark {
+    font-size: 19px;
+  }
+
+  .topbar {
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .brand {
+    margin-right: auto;
+  }
+
+  .tagline {
+    padding-left: 0;
+    margin-right: 0;
+    width: 100%;
+    order: 3;
+  }
+
+  .about-dialog {
+    padding: 22px;
+    width: calc(100% - 32px);
+  }
+
+  .about-dialog h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-label {
+    display: none;
+  }
+
+  .icon-btn {
+    padding: 10px;
+  }
+
+  .unit-btn {
+    font-size: 10px;
+    padding: 9px 4px;
+  }
+
+  .step-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .manuscript {
+    font-size: 16px;
+  }
+}
