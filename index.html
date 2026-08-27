@@ -21,18 +21,18 @@
 
       <a class="tile" data-theme="galleries" href="https://jozsuaheng.github.io/Art-Projects/world-art-galleries/">
         <div class="art">
-          <span class="deco gallery-wire"></span>
-          <svg class="deco gallery-facade" viewBox="0 0 100 60" fill="none" stroke="#d4a76a" stroke-width="2.2" stroke-linejoin="round">
-            <path d="M20 26 L50 8 L80 26 Z"/>
-            <line x1="16" y1="26" x2="84" y2="26"/>
-            <line x1="24" y1="29" x2="24" y2="50"/>
-            <line x1="36" y1="29" x2="36" y2="50"/>
-            <line x1="50" y1="29" x2="50" y2="50"/>
-            <line x1="64" y1="29" x2="64" y2="50"/>
-            <line x1="76" y1="29" x2="76" y2="50"/>
-            <line x1="16" y1="50" x2="84" y2="50" stroke-width="2.6"/>
+          <svg class="deco gallery-art" viewBox="0 0 100 60" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <filter id="gallery-blur" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" />
+              </filter>
+            </defs>
+            <g filter="url(#gallery-blur)">
+              <ellipse cx="26" cy="20" rx="24" ry="17" fill="#b8663f" opacity="0.5" />
+              <ellipse cx="66" cy="38" rx="22" ry="16" fill="#5c7a5c" opacity="0.45" />
+              <ellipse cx="50" cy="10" rx="16" ry="11" fill="#c9a15a" opacity="0.4" />
+            </g>
           </svg>
-          <span class="chip gallery-chip">50 GALLERIES</span>
           <h2 class="art-title">World Art<br>Galleries</h2>
           <span class="go">Open →</span>
         </div>
