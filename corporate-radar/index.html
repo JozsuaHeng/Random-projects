@@ -30,55 +30,61 @@
     <button class="tool-tab" data-target="view-excuses">Excuses</button>
     <button class="tool-tab" data-target="view-signoffs">Sign-Offs</button>
   </nav>
-  <p id="tab-description" class="tab-description">Paste something corporate. Find out what it actually means.</p>
+  <div class="tab-description-outer">
+    <p id="tab-description" class="tab-description">💡 Paste something corporate. Find out what it actually means.</p>
+  </div>
 
   <main class="site-main">
 
     <!-- Buzzword Decoder (default view) -->
     <section id="view-buzzword" class="tool-view">
       <h1 class="view-title">Buzzword Decoder</h1>
-      <div class="layout">
-        <section class="panel input-panel">
-          <h2>Paste something corporate</h2>
-          <div id="buzzword-example-buttons" class="example-buttons"></div>
-          <textarea id="buzzword-input" rows="9" placeholder="Paste a memo, standup update, or all-hands email here..."></textarea>
+      <section class="panel input-panel input-panel-full">
+        <h2>Paste something corporate</h2>
+        <p class="textarea-hint">✏️ This is just an example — edit it or paste your own text.</p>
+        <div id="buzzword-example-buttons" class="example-buttons"></div>
+        <textarea id="buzzword-input" rows="6" placeholder="Paste a memo, standup update, or all-hands email here..."></textarea>
 
-          <div class="toggle-row">
-            <span class="toggle-label">Tone</span>
-            <div id="buzzword-tone-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
-              <button type="button" class="toggle-btn" data-tone="cynical">What They Really Mean</button>
+        <button id="buzzword-decode-btn" type="button" class="btn btn-run">Decode</button>
+      </section>
+
+      <section class="panel output-panel">
+        <h2>Results</h2>
+        <div id="buzzword-empty-state" class="empty-state">
+          <p>Paste some corporate-speak and hit <strong>Decode</strong> — or load an example.</p>
+        </div>
+        <div id="buzzword-result" class="result hidden">
+          <div class="stats">
+            <div class="stat"><span class="stat-num" id="buzzword-stats-count">0</span><span class="stat-label">buzzwords found</span></div>
+            <div class="stat"><span class="stat-num" id="buzzword-stats-density">0%</span><span class="stat-label">jargon density</span></div>
+            <div class="stat stat-tier"><span class="stat-num" id="buzzword-stats-tier-label">—</span><span class="stat-label" id="buzzword-stats-tier-blurb"></span></div>
+          </div>
+          <div class="meter"><div class="meter-fill" id="buzzword-meter-fill"></div></div>
+
+          <div class="layout">
+            <div class="output-block">
+              <h3 class="output-subhead">Analysis</h3>
+              <p class="output-subhead-hint">Your original text — hover or focus a highlighted buzzword to see what it means.</p>
+              <div id="buzzword-output-text" class="output-text"></div>
+            </div>
+
+            <div class="output-block">
+              <div class="output-subhead-row">
+                <div>
+                  <h3 class="output-subhead">Translation</h3>
+                  <p class="output-subhead-hint">The whole thing, rewritten in the tone below.</p>
+                </div>
+                <div id="buzzword-tone-toggle" class="toggle-group toggle-group-sm">
+                  <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+                  <button type="button" class="toggle-btn" data-tone="cynical">What They Really Mean</button>
+                </div>
+              </div>
+              <div id="buzzword-translation-text" class="output-text translation-text"></div>
+              <button id="buzzword-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
             </div>
           </div>
-          <div class="toggle-row">
-            <span class="toggle-label">View</span>
-            <div id="buzzword-view-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
-              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
-            </div>
-          </div>
-
-          <button id="buzzword-decode-btn" type="button" class="btn btn-run">Decode</button>
-        </section>
-
-        <section class="panel output-panel">
-          <h2>Translation</h2>
-          <div id="buzzword-empty-state" class="empty-state">
-            <p>Paste some corporate-speak and hit <strong>Decode</strong> — or load an example.</p>
-          </div>
-          <div id="buzzword-result" class="result hidden">
-            <div class="stats">
-              <div class="stat"><span class="stat-num" id="buzzword-stats-count">0</span><span class="stat-label">buzzwords found</span></div>
-              <div class="stat"><span class="stat-num" id="buzzword-stats-density">0%</span><span class="stat-label">jargon density</span></div>
-              <div class="stat stat-tier"><span class="stat-num" id="buzzword-stats-tier-label">—</span><span class="stat-label" id="buzzword-stats-tier-blurb"></span></div>
-            </div>
-            <div class="meter"><div class="meter-fill" id="buzzword-meter-fill"></div></div>
-            <div id="buzzword-output-text" class="output-text"></div>
-            <button id="buzzword-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
-            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a buzzword to see its translation.</p>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <section class="glossary-section">
         <h2>Full Glossary</h2>
@@ -92,48 +98,52 @@
     <!-- Weasel Word Scanner -->
     <section id="view-weasel" class="tool-view hidden">
       <h1 class="view-title">Weasel Word Scanner</h1>
-      <div class="layout">
-        <section class="panel input-panel">
-          <h2>Paste a draft</h2>
-          <div id="weasel-example-buttons" class="example-buttons"></div>
-          <textarea id="weasel-input" rows="9" placeholder="Paste a status update, review, or email draft here..."></textarea>
+      <section class="panel input-panel input-panel-full">
+        <h2>Paste a draft</h2>
+        <p class="textarea-hint">✏️ This is just an example — edit it or paste your own text.</p>
+        <div id="weasel-example-buttons" class="example-buttons"></div>
+        <textarea id="weasel-input" rows="6" placeholder="Paste a status update, review, or email draft here..."></textarea>
 
-          <div class="toggle-row">
-            <span class="toggle-label">Tone</span>
-            <div id="weasel-tone-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
-              <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+        <button id="weasel-decode-btn" type="button" class="btn btn-run">Scan</button>
+      </section>
+
+      <section class="panel output-panel">
+        <h2>Results</h2>
+        <div id="weasel-empty-state" class="empty-state">
+          <p>Paste a draft and hit <strong>Scan</strong> — or load an example.</p>
+        </div>
+        <div id="weasel-result" class="result hidden">
+          <div class="stats">
+            <div class="stat"><span class="stat-num" id="weasel-stats-count">0</span><span class="stat-label">weasel words found</span></div>
+            <div class="stat"><span class="stat-num" id="weasel-stats-density">0%</span><span class="stat-label">hedge density</span></div>
+            <div class="stat stat-tier"><span class="stat-num" id="weasel-stats-tier-label">—</span><span class="stat-label" id="weasel-stats-tier-blurb"></span></div>
+          </div>
+          <div class="meter"><div class="meter-fill" id="weasel-meter-fill"></div></div>
+
+          <div class="layout">
+            <div class="output-block">
+              <h3 class="output-subhead">Analysis</h3>
+              <p class="output-subhead-hint">Your original text — hover or focus a highlighted phrase to see what it signals.</p>
+              <div id="weasel-output-text" class="output-text"></div>
+            </div>
+
+            <div class="output-block">
+              <div class="output-subhead-row">
+                <div>
+                  <h3 class="output-subhead">Translation</h3>
+                  <p class="output-subhead-hint">The whole thing, rewritten in the tone below.</p>
+                </div>
+                <div id="weasel-tone-toggle" class="toggle-group toggle-group-sm">
+                  <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+                  <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+                </div>
+              </div>
+              <div id="weasel-translation-text" class="output-text translation-text"></div>
+              <button id="weasel-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
             </div>
           </div>
-          <div class="toggle-row">
-            <span class="toggle-label">View</span>
-            <div id="weasel-view-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
-              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
-            </div>
-          </div>
-
-          <button id="weasel-decode-btn" type="button" class="btn btn-run">Scan</button>
-        </section>
-
-        <section class="panel output-panel">
-          <h2>Scan Results</h2>
-          <div id="weasel-empty-state" class="empty-state">
-            <p>Paste a draft and hit <strong>Scan</strong> — or load an example.</p>
-          </div>
-          <div id="weasel-result" class="result hidden">
-            <div class="stats">
-              <div class="stat"><span class="stat-num" id="weasel-stats-count">0</span><span class="stat-label">weasel words found</span></div>
-              <div class="stat"><span class="stat-num" id="weasel-stats-density">0%</span><span class="stat-label">hedge density</span></div>
-              <div class="stat stat-tier"><span class="stat-num" id="weasel-stats-tier-label">—</span><span class="stat-label" id="weasel-stats-tier-blurb"></span></div>
-            </div>
-            <div class="meter"><div class="meter-fill" id="weasel-meter-fill"></div></div>
-            <div id="weasel-output-text" class="output-text"></div>
-            <button id="weasel-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
-            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a weasel word to see what it signals.</p>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <section class="glossary-section">
         <h2>Full Glossary</h2>
@@ -147,48 +157,52 @@
     <!-- Manufactured Urgency Detector -->
     <section id="view-urgency" class="tool-view hidden">
       <h1 class="view-title">Manufactured Urgency Detector</h1>
-      <div class="layout">
-        <section class="panel input-panel">
-          <h2>Paste a message</h2>
-          <div id="urgency-example-buttons" class="example-buttons"></div>
-          <textarea id="urgency-input" rows="9" placeholder="Paste a Slack message or email here..."></textarea>
+      <section class="panel input-panel input-panel-full">
+        <h2>Paste a message</h2>
+        <p class="textarea-hint">✏️ This is just an example — edit it or paste your own text.</p>
+        <div id="urgency-example-buttons" class="example-buttons"></div>
+        <textarea id="urgency-input" rows="6" placeholder="Paste a Slack message or email here..."></textarea>
 
-          <div class="toggle-row">
-            <span class="toggle-label">Tone</span>
-            <div id="urgency-tone-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
-              <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+        <button id="urgency-decode-btn" type="button" class="btn btn-run">Detect</button>
+      </section>
+
+      <section class="panel output-panel">
+        <h2>Results</h2>
+        <div id="urgency-empty-state" class="empty-state">
+          <p>Paste a message and hit <strong>Detect</strong> — or load an example.</p>
+        </div>
+        <div id="urgency-result" class="result hidden">
+          <div class="stats">
+            <div class="stat"><span class="stat-num" id="urgency-stats-count">0</span><span class="stat-label">urgency signals found</span></div>
+            <div class="stat"><span class="stat-num" id="urgency-stats-density">0%</span><span class="stat-label">urgency density</span></div>
+            <div class="stat stat-tier"><span class="stat-num" id="urgency-stats-tier-label">—</span><span class="stat-label" id="urgency-stats-tier-blurb"></span></div>
+          </div>
+          <div class="meter"><div class="meter-fill" id="urgency-meter-fill"></div></div>
+
+          <div class="layout">
+            <div class="output-block">
+              <h3 class="output-subhead">Analysis</h3>
+              <p class="output-subhead-hint">Your original text — hover or focus a highlighted signal to see what it really means.</p>
+              <div id="urgency-output-text" class="output-text"></div>
+            </div>
+
+            <div class="output-block">
+              <div class="output-subhead-row">
+                <div>
+                  <h3 class="output-subhead">Translation</h3>
+                  <p class="output-subhead-hint">The whole thing, rewritten in the tone below.</p>
+                </div>
+                <div id="urgency-tone-toggle" class="toggle-group toggle-group-sm">
+                  <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+                  <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+                </div>
+              </div>
+              <div id="urgency-translation-text" class="output-text translation-text"></div>
+              <button id="urgency-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
             </div>
           </div>
-          <div class="toggle-row">
-            <span class="toggle-label">View</span>
-            <div id="urgency-view-toggle" class="toggle-group">
-              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
-              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
-            </div>
-          </div>
-
-          <button id="urgency-decode-btn" type="button" class="btn btn-run">Detect</button>
-        </section>
-
-        <section class="panel output-panel">
-          <h2>Urgency Reading</h2>
-          <div id="urgency-empty-state" class="empty-state">
-            <p>Paste a message and hit <strong>Detect</strong> — or load an example.</p>
-          </div>
-          <div id="urgency-result" class="result hidden">
-            <div class="stats">
-              <div class="stat"><span class="stat-num" id="urgency-stats-count">0</span><span class="stat-label">urgency signals found</span></div>
-              <div class="stat"><span class="stat-num" id="urgency-stats-density">0%</span><span class="stat-label">urgency density</span></div>
-              <div class="stat stat-tier"><span class="stat-num" id="urgency-stats-tier-label">—</span><span class="stat-label" id="urgency-stats-tier-blurb"></span></div>
-            </div>
-            <div class="meter"><div class="meter-fill" id="urgency-meter-fill"></div></div>
-            <div id="urgency-output-text" class="output-text"></div>
-            <button id="urgency-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
-            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a signal to see what it really means.</p>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <section class="glossary-section">
         <h2>Full Glossary</h2>
@@ -205,8 +219,9 @@
       <div class="layout">
         <section class="panel input-panel">
           <h2>Paste your analysis</h2>
+          <p class="textarea-hint">✏️ This is just an example — edit it or paste your own text.</p>
           <div id="sowhat-example-buttons" class="example-buttons"></div>
-          <textarea id="sowhat-input" rows="9" placeholder="Paste a paragraph of analysis, findings, or a status update here..."></textarea>
+          <textarea id="sowhat-input" rows="6" placeholder="Paste a paragraph of analysis, findings, or a status update here..."></textarea>
           <button id="sowhat-run-btn" type="button" class="btn btn-run">Run the Test</button>
         </section>
 

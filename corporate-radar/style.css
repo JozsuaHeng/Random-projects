@@ -183,13 +183,22 @@ body {
   color: var(--navy);
 }
 
-.tab-description {
+.tab-description-outer {
   max-width: 1100px;
-  margin: 0.7rem auto 0;
+  margin: 0.9rem auto 0;
   padding: 0 1.5rem;
-  color: var(--ink-muted);
-  font-style: italic;
-  font-size: 0.9rem;
+}
+
+.tab-description {
+  margin: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--navy);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .site-main {
@@ -226,6 +235,13 @@ body {
   border-radius: 4px;
   padding: 1.4rem;
   box-shadow: 2px 2px 0 rgba(31, 28, 20, 0.05);
+}
+
+/* Stacked full-width panels (input on top, results below) — the .layout
+   grid used to space these via `gap` when they sat side by side; now
+   they're plain siblings, so they need their own spacing. */
+.tool-view > .panel + .panel {
+  margin-top: 1.4rem;
 }
 
 .panel h2 {
@@ -270,26 +286,28 @@ body {
   resize: vertical;
 }
 
+/* Dims the pre-loaded example text specifically — not a general "muted
+   textarea" look, since real typed input must stay full-opacity. JS
+   removes this class on the first `input` event, so it only ever
+   applies to text the user hasn't touched yet. */
+.input-panel textarea.is-example {
+  color: rgba(31, 28, 20, 0.45);
+}
+
 .input-panel textarea:focus {
   outline: none;
   border-color: var(--navy-light);
 }
 
-.toggle-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-top: 0.9rem;
-  flex-wrap: wrap;
+.textarea-hint {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(31, 28, 20, 0.5);
 }
 
-.toggle-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-muted);
-  flex-shrink: 0;
-  width: 3.2rem;
+.input-panel-full .btn-run {
+  max-width: 220px;
 }
 
 .toggle-group {
@@ -297,6 +315,12 @@ body {
   border: 1px solid var(--border);
   border-radius: 4px;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+.toggle-group-sm .toggle-btn {
+  padding: 0.32rem 0.6rem;
+  font-size: 0.72rem;
 }
 
 .toggle-btn {
@@ -412,10 +436,49 @@ body {
   width: 0;
 }
 
+.output-block {
+  margin-bottom: 1.3rem;
+}
+
+.output-block:last-child {
+  margin-bottom: 0;
+}
+
+.output-subhead-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.output-subhead {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--navy);
+}
+
+.output-subhead-hint {
+  margin: 0.15rem 0 0.6rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
 .output-text {
   white-space: pre-wrap;
   line-height: 1.7;
   font-size: 1rem;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.8rem 0.9rem;
+}
+
+.translation-text {
+  background: #fbf2ee;
 }
 
 .match {

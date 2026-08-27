@@ -20,8 +20,30 @@ Three tools share one scanning mechanic (paste text → highlight dictionary
 matches → density score): **Buzzword Decoder** (corporate jargon),
 **Weasel Word Scanner** (hedges: "kind of," "I think," "mistakes were
 made"), **Manufactured Urgency Detector** (fake time pressure: "ASAP,"
-"per my last email," "quick favor"). Each has a Plain/Cynical tone
-toggle, a Highlight/Full-Rewrite view toggle, and a searchable glossary.
+"per my last email," "quick favor"). Each is laid out input-on-top,
+results-below rather than side by side — a full-width input panel (paste
+text, run it), then a full-width results panel underneath holding the
+stats/meter plus two output boxes at once, side by side — **Analysis**
+(your original text, matches underlined and hoverable for their meaning)
+and **Translation** (the whole thing rewritten) — plus a searchable
+glossary further down. A Plain/Cynical **Tone** toggle sits right next
+to the Translation heading, since that's the only thing it visibly
+changes. Every textarea carries a small italic, low-opacity
+`.textarea-hint` line right under its heading (before the example
+buttons) — a loaded example reads as finished content unless something
+explicitly says "edit me."
+
+(This went through two revisions from feedback. First: one output box
+with a second Highlight/Full-Rewrite "View" toggle alongside Tone —
+confusing, because toggling Tone while in Highlight view didn't visibly
+change anything, since the alternate wording only ever showed up in a
+tooltip. Fixed by always showing both outputs instead of switching
+between them. Second: input and results sat side by side in a 2-column
+`.layout` — cramped for a textarea, and Analysis/Translation stacked
+vertically inside the narrow results column read as one long block.
+Fixed by stacking input-then-results full-width instead, and moving the
+2-column `.layout` grid one level in, to sit between Analysis and
+Translation specifically.)
 
 **The So-What Test** works differently — sentence by sentence rather than
 phrase by phrase, checking whether each sentence states an implication or
@@ -127,17 +149,24 @@ Plain HTML/CSS/JS, ES modules, no framework, no build step, no backend.
     without committing to switching.
   - **`createScanner({ prefix, dictionary, categories, tiers, examples
     })`** — one factory function that wires up an entire scanner tool
-    (textarea, example buttons, tone/view toggles, decode button, output
-    rendering with hover/focus tooltips, the density meter, and the
-    glossary with search + category filters) from a config object. It's
+    (textarea, example buttons, tone toggle, decode button, the density
+    meter, and the glossary with search + category filters) from a
+    config object. `renderResult()` always calls both `renderAnalysis()`
+    (into `{prefix}-output-text`: original text, matches wrapped in
+    hover/focus-tooltip spans) and `renderTranslation()` (into
+    `{prefix}-translation-text`: the whole thing rewritten in the current
+    tone) — no toggle decides which one shows, both always render. It's
     called three times — once each for `prefix: "buzzword"`, `"weasel"`,
     `"urgency"` — relying on each tool's DOM ids following the same
-    `{prefix}-input`, `{prefix}-decode-btn`, etc. pattern in `index.html`.
-    At the end of the factory it also loads `examples[0]` into the
-    textarea and runs it immediately, so every scanner shows real output
-    on first paint. Adding a fourth scanning tool later means adding its
-    data to `data.js`, a same-shaped section to `index.html` with a new
-    prefix, and one more `createScanner({...})` call — no new logic.
+    `{prefix}-input`, `{prefix}-decode-btn`, `{prefix}-translation-text`,
+    etc. pattern in `index.html`. At the end of the factory it also loads
+    `examples[0]` into the textarea and runs it immediately, so every
+    scanner shows real output on first paint (the textarea also gets a
+    `.textarea-hint` line under it — a loaded example reads as "finished
+    content" unless something says otherwise, so it says otherwise).
+    Adding a fourth scanning tool later means adding its data to
+    `data.js`, a same-shaped section to `index.html` with a new prefix,
+    and one more `createScanner({...})` call — no new logic.
   - **So-What Test wiring** is separate (different shape: per-sentence
     rows, not per-phrase highlighting), but follows the same "run the
     first example on load" pattern.

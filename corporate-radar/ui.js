@@ -30,12 +30,12 @@ function setMeter(fillEl, tierIndex, tierCount, ratio, invert = false) {
 // tab is hovered/focused, falling back to the active tab otherwise — a
 // lookup table again, just keyed by view id instead of a phrase. ---
 const TOOL_DESCRIPTIONS = {
-  "view-buzzword": "Paste something corporate. Find out what it actually means.",
-  "view-weasel": "Paste a draft. Find every hedge, qualifier, and built-in excuse.",
-  "view-urgency": "Paste a message. Find out how much of the urgency is real.",
-  "view-sowhat": "Paste your analysis. Sentence by sentence: does it say something, or just describe it?",
-  "view-excuses": "Pick your crime. Get a corporate-safe alibi.",
-  "view-signoffs": "Say what you mean, without saying what you mean.",
+  "view-buzzword": "💡 Paste something corporate. Find out what it actually means.",
+  "view-weasel": "💡 Paste a draft. Find every hedge, qualifier, and built-in excuse.",
+  "view-urgency": "💡 Paste a message. Find out how much of the urgency is real.",
+  "view-sowhat": "💡 Paste your analysis. Sentence by sentence: does it say something, or just describe it?",
+  "view-excuses": "💡 Pick your crime. Get a corporate-safe alibi.",
+  "view-signoffs": "💡 Say what you mean, without saying what you mean.",
 };
 
 const toolTabs = document.querySelectorAll(".tool-tab");
@@ -95,13 +95,21 @@ async function copyToClipboard(text, btn, defaultLabel) {
 // and Manufactured Urgency Detector. All three are "paste text, highlight
 // dictionary matches, show a density score, browse the glossary" — this
 // function is that shape, configured three different ways below instead
-// of being copy-pasted three times. ---
+// of being copy-pasted three times.
+//
+// Earlier this had a second "View" toggle (Highlight vs. Full Rewrite),
+// so only one output box existed and switching Tone while in Highlight
+// view visibly did nothing (the substituted text only ever showed up in
+// a tooltip). Feedback: that was confusing. Now both outputs render
+// unconditionally — "Analysis" (original text, matches highlighted,
+// hover for the current tone's meaning) and "Translation" (the whole
+// text rewritten in the current tone) — so Tone has one job and always
+// visibly does it. ---
 function createScanner({ prefix, dictionary, categories, tiers, examples, countLabel }) {
   const els = {
     exampleButtons: document.getElementById(`${prefix}-example-buttons`),
     input: document.getElementById(`${prefix}-input`),
     toneToggle: document.getElementById(`${prefix}-tone-toggle`),
-    viewToggle: document.getElementById(`${prefix}-view-toggle`),
     decodeBtn: document.getElementById(`${prefix}-decode-btn`),
     copyBtn: document.getElementById(`${prefix}-copy-btn`),
     emptyState: document.getElementById(`${prefix}-empty-state`),
@@ -112,16 +120,25 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
     statsTierBlurb: document.getElementById(`${prefix}-stats-tier-blurb`),
     meterFill: document.getElementById(`${prefix}-meter-fill`),
     outputText: document.getElementById(`${prefix}-output-text`),
+    translationText: document.getElementById(`${prefix}-translation-text`),
     glossarySearch: document.getElementById(`${prefix}-glossary-search`),
     glossaryFilters: document.getElementById(`${prefix}-glossary-filters`),
     glossaryList: document.getElementById(`${prefix}-glossary-list`),
   };
 
   let tone = "plain";
-  let view = "highlight";
   let currentText = "";
   let currentSegments = [];
   let activeCategory = "all";
+
+  // Loading an example sets the dim "is-example" look; the very first
+  // time the user actually edits the field (not just clicks into it),
+  // that class comes off for good — see the `input` listener below.
+  function loadExample(text) {
+    els.input.value = text;
+    els.input.classList.add("is-example");
+    run();
+  }
 
   function populateExamples() {
     els.exampleButtons.innerHTML = "";
@@ -130,10 +147,7 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
       btn.type = "button";
       btn.className = "btn-mini";
       btn.textContent = example.label;
-      btn.addEventListener("click", () => {
-        els.input.value = example.text;
-        run();
-      });
+      btn.addEventListener("click", () => loadExample(example.text));
       els.exampleButtons.appendChild(btn);
     }
   }
@@ -144,7 +158,7 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
     });
   }
 
-  function renderHighlight() {
+  function renderAnalysis() {
     els.outputText.innerHTML = "";
     for (const seg of currentSegments) {
       if (seg.type === "text") {
@@ -164,18 +178,18 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
     }
   }
 
-  function renderRewrite() {
-    els.outputText.innerHTML = "";
+  function renderTranslation() {
+    els.translationText.innerHTML = "";
     for (const seg of currentSegments) {
       if (seg.type === "text") {
-        els.outputText.appendChild(document.createTextNode(seg.value));
+        els.translationText.appendChild(document.createTextNode(seg.value));
         continue;
       }
       const span = document.createElement("span");
       span.className = "rewritten";
       span.style.setProperty("--cat-color", categories[seg.category].color);
       span.textContent = seg[tone];
-      els.outputText.appendChild(span);
+      els.translationText.appendChild(span);
     }
   }
 
@@ -197,8 +211,8 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
     const tierIndex = tiers.indexOf(stats.tier);
     setMeter(els.meterFill, tierIndex, tiers.length, stats.density / 0.3);
 
-    if (view === "highlight") renderHighlight();
-    else renderRewrite();
+    renderAnalysis();
+    renderTranslation();
   }
 
   function run() {
@@ -292,19 +306,19 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
       renderResult();
     });
   });
-  els.viewToggle.querySelectorAll(".toggle-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      view = btn.dataset.view;
-      setActiveButton(els.viewToggle, view, "view");
-      renderResult();
-    });
-  });
   els.decodeBtn.addEventListener("click", run);
   els.copyBtn.addEventListener("click", () => {
     if (currentSegments.length === 0) return;
     copyToClipboard(rewriteText(currentSegments, tone), els.copyBtn, els.copyBtn.textContent);
   });
   els.glossarySearch.addEventListener("input", renderGlossary);
+  els.input.addEventListener("input", () => els.input.classList.remove("is-example"));
+  els.input.addEventListener("focus", () => {
+    if (els.input.classList.contains("is-example")) {
+      els.input.value = "";
+      els.input.classList.remove("is-example");
+    }
+  });
 
   populateExamples();
   populateGlossaryFilters();
@@ -313,8 +327,7 @@ function createScanner({ prefix, dictionary, categories, tiers, examples, countL
   // Load with the first example already run, so the tool shows real
   // output the moment you land on it instead of an empty state.
   if (examples.length > 0) {
-    els.input.value = examples[0].text;
-    run();
+    loadExample(examples[0].text);
   }
 
   return { dictionary };
@@ -338,6 +351,12 @@ const sowhatStatsTierBlurb = document.getElementById("sowhat-stats-tier-blurb");
 const sowhatMeterFill = document.getElementById("sowhat-meter-fill");
 const sowhatOutputText = document.getElementById("sowhat-output-text");
 
+function loadSoWhatExample(text) {
+  sowhatInput.value = text;
+  sowhatInput.classList.add("is-example");
+  runSoWhatTest();
+}
+
 function populateSoWhatExamples() {
   sowhatExampleButtons.innerHTML = "";
   for (const example of SO_WHAT_EXAMPLES) {
@@ -345,10 +364,7 @@ function populateSoWhatExamples() {
     btn.type = "button";
     btn.className = "btn-mini";
     btn.textContent = example.label;
-    btn.addEventListener("click", () => {
-      sowhatInput.value = example.text;
-      runSoWhatTest();
-    });
+    btn.addEventListener("click", () => loadSoWhatExample(example.text));
     sowhatExampleButtons.appendChild(btn);
   }
 }
@@ -392,11 +408,17 @@ function runSoWhatTest() {
 
 populateSoWhatExamples();
 sowhatRunBtn.addEventListener("click", runSoWhatTest);
+sowhatInput.addEventListener("input", () => sowhatInput.classList.remove("is-example"));
+sowhatInput.addEventListener("focus", () => {
+  if (sowhatInput.classList.contains("is-example")) {
+    sowhatInput.value = "";
+    sowhatInput.classList.remove("is-example");
+  }
+});
 
 // Same as the scanners above: show real output immediately.
 if (SO_WHAT_EXAMPLES.length > 0) {
-  sowhatInput.value = SO_WHAT_EXAMPLES[0].text;
-  runSoWhatTest();
+  loadSoWhatExample(SO_WHAT_EXAMPLES[0].text);
 }
 
 // --- History list, shared shape for both generators: newest first, capped
