@@ -83,7 +83,13 @@
     <div class="expand-card" id="expandCard">
       <div class="expand-head">
         <span class="note-color-dot" id="expandColorDot" title="Change color"></span>
-        <div class="expand-head-actions">
+        <div class="note-format-actions" id="expandFormatActions" hidden>
+          <button data-format="bold" title="Bold">B</button>
+          <button data-format="underline" title="Underline">U</button>
+          <button data-format="highlight" title="Highlight">H</button>
+          <button data-format="caps" title="ALL CAPS">AA</button>
+        </div>
+        <div class="expand-head-actions" id="expandHeadActions">
           <button class="note-action" id="expandCopyBtn" title="Copy text">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>
           </button>
@@ -113,6 +119,12 @@
     <div class="note-card">
       <div class="note-head">
         <button class="note-color-dot" title="Change color"></button>
+        <div class="note-format-actions" hidden>
+          <button data-format="bold" title="Bold">B</button>
+          <button data-format="underline" title="Underline">U</button>
+          <button data-format="highlight" title="Highlight">H</button>
+          <button data-format="caps" title="ALL CAPS">AA</button>
+        </div>
         <div class="note-head-actions">
           <button class="note-action expand-btn" title="Expand">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H5a1 1 0 00-1 1v4M15 4h4a1 1 0 011 1v4M9 20H5a1 1 0 01-1-1v-4M15 20h4a1 1 0 001-1v-4"/></svg>

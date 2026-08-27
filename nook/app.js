@@ -34,6 +34,8 @@
   const expandColorDot = el('expandColorDot');
   const expandRender = el('expandRender');
   const expandEdit = el('expandEdit');
+  const expandFormatActions = el('expandFormatActions');
+  const expandHeadActions = el('expandHeadActions');
 
   // ---------------- utils ----------------
 
@@ -45,12 +47,29 @@
   }
 
   function inlineMd(s) {
+    // Pull inline `code spans` out before anything else touches the
+    // string, so **/++ /==/^^ formatting markers (or literal code like
+    // `a==b` or `i++`) inside them are never misread as bold/underline/
+    // highlight/caps syntax — substituted back in, escaped, at the end.
+    const inlineCodes = [];
+    s = s.replace(/`([^`]+)`/g, (m, code) => {
+      const idx = inlineCodes.length;
+      inlineCodes.push(code);
+      // No surrounding spaces in the placeholder (unlike the fenced-code
+      // one below, which always sits on its own line) — inline code can
+      // sit hard against punctuation mid-sentence, and padding this with
+      // spaces would visibly insert whitespace that wasn't there.
+      return `⁣IC${idx}⁣`;
+    });
     s = escapeHtml(s);
-    s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
     s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
     s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     s = s.replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, '$1<em>$2</em>');
+    s = s.replace(/\+\+(.+?)\+\+/g, '<u>$1</u>');
+    s = s.replace(/==(.+?)==/g, '<mark>$1</mark>');
+    s = s.replace(/\^\^(.+?)\^\^/g, '<span class="caps-text">$1</span>');
     s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    s = s.replace(/⁣IC(\d+)⁣/g, (m, idx) => `<code>${escapeHtml(inlineCodes[+idx])}</code>`);
     return s;
   }
 
@@ -508,16 +527,20 @@
     const deleteBtn = card.querySelector('.delete-btn');
     const resizeHandle = card.querySelector('.note-resize-handle');
     const connectHandle = card.querySelector('.note-connect-handle');
+    const headActions = card.querySelector('.note-head-actions');
+    const formatActions = card.querySelector('.note-format-actions');
 
     renderEl.innerHTML = renderMarkdown(note.content);
 
-    const refs = { card, renderEl, editEl, colorDot };
+    const refs = { card, renderEl, editEl, colorDot, headActions, formatActions };
     noteRefs.set(note.id, refs);
     boardInner.appendChild(card);
 
+    wireFormatButtons(formatActions, editEl);
+
     // click-to-edit / drag from anywhere on the card body
     card.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.note-action, .note-color-dot, .note-resize-handle, .note-connect-handle')) return;
+      if (e.target.closest('.note-action, .note-color-dot, .note-resize-handle, .note-connect-handle, .note-format-actions')) return;
       if (e.target.tagName === 'TEXTAREA') return;
       e.preventDefault();
       bringToFront(note, card);
@@ -622,10 +645,58 @@
     return refs;
   }
 
+  // Wraps the current textarea selection in the given Markdown-ish marker
+  // (bold/underline/highlight/caps all use the same wrap-the-raw-text
+  // approach — see renderMarkdown/inlineMd for how each renders). Clicking
+  // again on an already-wrapped selection un-wraps it, so the buttons
+  // double as toggles.
+  const FORMAT_MARKS = { bold: '**', underline: '++', highlight: '==', caps: '^^' };
+  function applyFormat(textarea, kind) {
+    const mark = FORMAT_MARKS[kind];
+    if (!mark || !textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const value = textarea.value;
+    const selected = value.slice(start, end);
+    const before = value.slice(Math.max(0, start - mark.length), start);
+    const after = value.slice(end, end + mark.length);
+    let newValue, newStart, newEnd;
+    if (selected && before === mark && after === mark) {
+      newValue = value.slice(0, start - mark.length) + selected + value.slice(end + mark.length);
+      newStart = start - mark.length;
+    } else {
+      newValue = value.slice(0, start) + mark + selected + mark + value.slice(end);
+      newStart = start + mark.length;
+    }
+    newEnd = newStart + selected.length;
+    textarea.value = newValue;
+    textarea.focus();
+    textarea.setSelectionRange(newStart, newEnd);
+  }
+
+  function wireFormatButtons(container, textarea) {
+    if (!container) return;
+    container.querySelectorAll('button[data-format]').forEach((btn) => {
+      // pointerdown + preventDefault (not click) so the textarea never
+      // loses focus to the button — losing focus would fire its blur
+      // handler and swap it back to rendered view before this even runs,
+      // and would also lose the selection applyFormat needs to read.
+      btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        applyFormat(textarea, btn.dataset.format);
+      });
+    });
+  }
+
   function enterEditMode(note, refs) {
     refs.renderEl.hidden = true;
     refs.editEl.hidden = false;
     refs.editEl.value = note.content;
+    // The header's own actions (expand/copy/delete) don't apply mid-type;
+    // swap that slot for the formatting toolbar for the duration of the edit.
+    if (refs.headActions) refs.headActions.hidden = true;
+    if (refs.formatActions) refs.formatActions.hidden = false;
     requestAnimationFrame(() => {
       refs.editEl.focus();
       const len = refs.editEl.value.length;
@@ -647,6 +718,8 @@
     refs.editEl.hidden = true;
     refs.renderEl.innerHTML = renderMarkdown(note.content);
     refs.renderEl.hidden = false;
+    if (refs.headActions) refs.headActions.hidden = false;
+    if (refs.formatActions) refs.formatActions.hidden = true;
   }
 
   function deleteNote(note) {
@@ -839,6 +912,8 @@
     expandRender.innerHTML = renderMarkdown(note.content);
     expandRender.hidden = false;
     expandEdit.hidden = true;
+    expandFormatActions.hidden = true;
+    expandHeadActions.hidden = false;
     expandOverlay.hidden = false;
   }
 
@@ -855,6 +930,8 @@
     note.updatedAt = Date.now();
     saveBoard();
     expandEdit.hidden = true;
+    expandFormatActions.hidden = true;
+    expandHeadActions.hidden = false;
     expandRender.innerHTML = renderMarkdown(note.content);
     expandRender.hidden = false;
     const refs = noteRefs.get(note.id);
@@ -873,9 +950,12 @@
     expandRender.hidden = true;
     expandEdit.hidden = false;
     expandEdit.value = note.content;
+    expandHeadActions.hidden = true;
+    expandFormatActions.hidden = false;
     expandEdit.focus();
   });
   expandEdit.addEventListener('blur', saveExpandEdit);
+  wireFormatButtons(expandFormatActions, expandEdit);
   expandColorDot.addEventListener('click', (e) => {
     e.stopPropagation();
     const note = getNote(expandedId);
