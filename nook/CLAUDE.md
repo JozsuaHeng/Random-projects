@@ -37,19 +37,28 @@ build, each of which permanently ruled things out — worth knowing before
   recovery mechanism if you pan away and lose track.
 - **Bright by default, dark available via toggle.** Default is light
   regardless of OS preference — not `prefers-color-scheme`-driven.
-- **Not a sticky-note board, not a Notion clone, not a Miro clone.** Two
-  things drove this, in order: (1) solid pastel fills on plain cards read
-  as both "post-it" and "Notion" — fixed by moving color into a slim
-  accent (stripe/fold/tab, see "Note shapes") on a shared warm-paper body
-  instead of a full-bleed fill; (2) the crisp dot-grid board background —
-  the single most recognizable "digital whiteboard tool" signature (Miro/
-  FigJam/Excalidraw all use it) — read as generic canvas-app chrome even
-  after the card redesign. Fixed by replacing it with a tiled low-alpha
-  SVG noise texture + soft vignette (see ".board" in `style.css`) and
-  applying the same grain, fainter, to note cards themselves — a
-  physical-paper material language instead of flat digital rectangles.
-  **Do not reintroduce a dot/grid board background or a full-color note
-  fill** — both have already been tried and explicitly moved away from.
+- **Not a sticky-note board, not a Notion clone.** Solid pastel fills on
+  plain cards read as both "post-it" and "Notion" — fixed by moving
+  color into a slim accent (stripe/fold/tab, see "Note shapes") on a
+  shared warm-paper body instead of a full-bleed fill. **Don't
+  reintroduce a full-color note fill** — already tried, moved away from.
+- **The board background went through several rounds and landed back on
+  the plain dot grid.** The crisp dot-grid was originally cut for
+  reading too much like Miro/FigJam/Excalidraw's own canvas chrome — it
+  was replaced with paper grain + a vignette, then a warm glow + a fine
+  linen-weave crosshatch (this one caused genuine eye strain — small,
+  tightly-repeating high-contrast patterns can trigger a scintillating-
+  grid-style effect regardless of how low the opacity is; see the
+  memento project's CLAUDE.md for the same lesson learned once already
+  elsewhere on this shelf), then a larger 56px box+diamond lattice
+  (called "too obvious"). None of the alternatives landed, and the dot
+  grid was explicitly asked back by name (`--board-dot`, `.board` in
+  `style.css`) — this is a deliberate final call, made *after* trying
+  the alternatives, not an oversight. **If "make it less Miro" comes up
+  again, don't reach for another grid variant** (box+diamond was
+  already one) — the paper-grain/glow family is the unexplored direction
+  actually worth revisiting, and keep any repeating pattern at a large,
+  sparse scale (50px+) to avoid the eye-strain failure mode.
 - **Zones are a thin grey outline, not a filled/dashed/labeled box.** The
   first zones implementation (dashed border, translucent fill, pill-
   shaped colored label badge) was called out as "too obvious." Zones are

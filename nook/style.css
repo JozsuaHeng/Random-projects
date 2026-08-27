@@ -1,6 +1,6 @@
 :root {
   --bg: #faf6ef;
-  --board-vignette: rgba(60, 45, 20, 0.05);
+  --board-dot: rgba(60, 50, 35, 0.12);
   --panel: #ffffff;
   --panel-2: #f2ede1;
   --border: #e5ddcc;
@@ -36,7 +36,7 @@
 
 :root[data-theme="dark"] {
   --bg: #14110d;
-  --board-vignette: rgba(0, 0, 0, 0.35);
+  --board-dot: rgba(255, 244, 224, 0.07);
   --panel: #1a1610;
   --panel-2: #201b14;
   --border: #2c2519;
@@ -85,20 +85,19 @@ textarea, input { font-family: inherit; color: inherit; }
 
 /* ---------------- board ---------------- */
 
-/* Deliberately not a crisp dot/grid pattern — that's the single most
-   recognizable "digital whiteboard tool" signature (Miro, FigJam,
-   Excalidraw all use it), and was called out as reading too much like
-   those. A soft paper-grain texture (a tiled low-alpha SVG noise
-   filter, no external asset) plus a faint vignette reads as a physical
-   desk surface instead of an app canvas. */
+/* Back to the original dot grid, by explicit request — after several
+   from-scratch alternatives (paper grain, a warm glow + weave, a large
+   box+diamond lattice) none of them landed. This does read closer to
+   Miro/FigJam's own dot-grid than any of those attempts did; that
+   trade-off was made deliberately after the alternatives were tried,
+   not overlooked. If "less Miro/Notion" comes up again, revisit the
+   glow/grain family of ideas rather than immediately reaching for a
+   grid variant — several were already tried this round. */
 .board {
   position: fixed;
   inset: 0;
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, var(--board-vignette), transparent 65%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 100% 100%, 180px 180px;
+  background: radial-gradient(var(--board-dot) 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
   cursor: grab;
 }
 
