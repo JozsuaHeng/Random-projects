@@ -650,7 +650,7 @@
   // approach — see renderMarkdown/inlineMd for how each renders). Clicking
   // again on an already-wrapped selection un-wraps it, so the buttons
   // double as toggles.
-  const FORMAT_MARKS = { bold: '**', underline: '++', highlight: '==', caps: '^^' };
+  const FORMAT_MARKS = { bold: '**', italic: '*', underline: '++', highlight: '==', caps: '^^' };
   function applyFormat(textarea, kind) {
     const mark = FORMAT_MARKS[kind];
     if (!mark || !textarea) return;
@@ -660,8 +660,17 @@
     const selected = value.slice(start, end);
     const before = value.slice(Math.max(0, start - mark.length), start);
     const after = value.slice(end, end + mark.length);
+    // Italic's single `*` is a substring of bold's `**` — toggling italic
+    // on a selection that's actually wrapped in **bold** would otherwise
+    // match "one `*` immediately adjacent" and strip a single asterisk
+    // off each side, corrupting the bold marker instead of doing nothing.
+    // Only treat it as a real italic wrap if there isn't *another* `*`
+    // just outside the one being matched.
+    const oneMoreBefore = value.slice(Math.max(0, start - mark.length - 1), start - mark.length);
+    const oneMoreAfter = value.slice(end + mark.length, end + mark.length + 1);
+    const isAmbiguousStar = mark === '*' && (oneMoreBefore === '*' || oneMoreAfter === '*');
     let newValue, newStart, newEnd;
-    if (selected && before === mark && after === mark) {
+    if (selected && before === mark && after === mark && !isAmbiguousStar) {
       newValue = value.slice(0, start - mark.length) + selected + value.slice(end + mark.length);
       newStart = start - mark.length;
     } else {
@@ -991,6 +1000,24 @@
     e.preventDefault();
     createNoteAtViewportCenter(text);
     toast('Pasted into a new note');
+  });
+
+  // Cmd/Ctrl+B/I/U while actually typing in a note — deliberately not a
+  // custom shortcut scheme (that was cut earlier for needing to be
+  // learned): these three are muscle memory from every other Mac/Windows
+  // text app, so supporting them is "make it easy," not a shortcut you
+  // have to discover. Scoped to .note-edit specifically so it can never
+  // fire while typing a zone label or anywhere else. Deliberately not
+  // extended to highlight/caps — there's no standard OS binding for
+  // either, so a made-up one would be exactly the kind of thing-to-
+  // remember this app avoids; those stay toolbar/mouse-only.
+  document.addEventListener('keydown', (e) => {
+    if (!(e.metaKey || e.ctrlKey)) return;
+    if (!e.target.classList || !e.target.classList.contains('note-edit')) return;
+    const kind = { b: 'bold', i: 'italic', u: 'underline' }[e.key.toLowerCase()];
+    if (!kind) return;
+    e.preventDefault();
+    applyFormat(e.target, kind);
   });
 
   el('exportBtn').addEventListener('click', () => {

@@ -20,9 +20,18 @@ This app has gone through three rounds of user feedback after the initial
 build, each of which permanently ruled things out — worth knowing before
 "improving" any of this back toward what was already tried and rejected:
 
-- **No keyboard shortcuts, anywhere.** Every action is a click. No keydown
-  listener exists in `app.js` — not even Escape-to-close; overlays/
-  popovers close by clicking an × or the backdrop.
+- **No custom keyboard shortcuts.** Every action is a click — not even
+  Escape-to-close exists; overlays/popovers close by clicking an × or the
+  backdrop. **The one deliberate exception**: `⌘/Ctrl+B/I/U` while a
+  `.note-edit` textarea is focused apply bold/italic/underline (see the
+  `keydown` listener near the `paste` listener in `app.js`). These aren't
+  a scheme you have to learn — they're standard Mac/Windows text-editing
+  shortcuts every user already knows from every other text app, which is
+  categorically different from the app-specific `⌘N`/`⌘F`/`⌘\` scheme cut
+  in the first round for needing to be discovered. Don't extend this
+  pattern to highlight/caps (no standard OS binding exists for either —
+  inventing one would just recreate the thing this rule avoids), and
+  don't add any shortcut that isn't a pre-existing, universally-known one.
 - **No sidebar, no note list, no search box.** Notes live directly on a
   pannable/zoomable canvas. "Fit everything in view" (`#fitBtn`) is the
   recovery mechanism if you pan away and lose track.
@@ -218,6 +227,63 @@ bullet glyphs beyond `-`/`*` (`•‣◦○·`), and renders ordered lists as re
 `<ol><li>` so numbering is always sequential regardless of what digits
 were in the source. See inline comments in `renderMarkdown()` for the
 `firstBlockEmitted` mechanics if extending this.
+
+**Inline code is protected from every other inline rule.** `inlineMd()`
+extracts `` `code spans` `` into a side array *before* escaping/bold/
+italic/underline/highlight/caps run, substituting them back in (escaped)
+at the very end — using invisible `⁣` (U+2063) delimiters, not spaces,
+since inline code can sit hard against punctuation mid-sentence and a
+space-padded placeholder would visibly insert whitespace that wasn't
+there. This exists because `++`/`==`/`^^` are exactly the kind of
+characters real code contains (`i++`, `a == b`, `x ^= 1`) — without this,
+pasting a code snippet outside a fenced block would have those
+misread as underline/highlight/caps markup. **If you ever touch the
+placeholder format, don't go back to space-padding or to ` `** — a
+literal NUL byte was tried once already and silently corrupted the file
+in a way that made even `grep`/`Edit`-tool string matching fail against
+the very byte sequence that was supposedly there; `⁣` doesn't have
+that problem and is invisible when rendered either way.
+
+### Formatting toolbar: bold, italic, underline, highlight, all-caps
+
+Selecting text while editing swaps the note header's own actions
+(expand/copy/delete) for a small toolbar (`.note-format-actions`) —
+clicking B/I/U/H/AA wraps the current textarea selection in a marker
+(`applyFormat()` + `FORMAT_MARKS`: `**`/`*`/`++`/`==`/`^^`) and
+`renderMarkdown()` turns those into `<strong>`/`<em>`/`<u>`/`<mark>`/
+`<span class="caps-text">`. Clicking again on an already-wrapped
+selection un-wraps it — this is a **toggle**, not just an "insert
+markers" action. All-caps is non-destructive: it wraps the text in
+`^^...^^` and lets CSS `text-transform: uppercase` do the display work,
+rather than mutating the actual stored characters, so toggling it back
+off restores the original casing exactly.
+
+Two non-obvious bits if extending this:
+
+- **Toolbar buttons use `pointerdown` + `preventDefault()`, not
+  `click`.** A `<button>` steals focus on click by default, which would
+  blur the textarea *before* the click handler even runs — losing the
+  selection `applyFormat()` needs, and (worse) triggering
+  `saveAndRender()`'s blur handler, swapping back to rendered view out
+  from under the toolbar. `preventDefault()` on `pointerdown` stops the
+  browser's default focus-shift, so the textarea never loses focus at
+  all.
+- **Italic's `*` needs a same-character disambiguation guard against
+  bold's `**`.** Since `**bold**` contains `*` as a substring, naively
+  checking "is there one `*` immediately outside the selection" for
+  italic would also match the inner edge of a `**` pair — toggling
+  italic on already-bold text would then strip one asterisk from each
+  side, corrupting the bold marker into a stray single `*`, instead of
+  correctly stacking into `***bold and italic***`. `applyFormat()`
+  guards this by also checking there isn't *another* `*` just beyond the
+  one being matched (`isAmbiguousStar`) before treating it as a real
+  italic-wrap-to-remove; if that guard is ever refactored away, this
+  exact bug will come back.
+
+**`⌘/Ctrl+B/I/U` also work**, but only while a `.note-edit` textarea is
+focused (see the `keydown` listener near the `paste` listener) — see
+"No custom keyboard shortcuts" above for why these three specifically
+are an exception and highlight/caps deliberately aren't.
 
 ### Clipboard integration, delete-with-undo, backup/restore
 

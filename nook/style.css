@@ -572,6 +572,7 @@ textarea, input { font-family: inherit; color: inherit; }
   color: var(--muted);
 }
 .note-format-actions button:hover { color: var(--accent); background: color-mix(in srgb, currentColor 10%, transparent); }
+.note-format-actions button[data-format="italic"] { font-style: italic; font-weight: 600; }
 .note-format-actions button[data-format="underline"] { text-decoration: underline; text-underline-offset: 2px; }
 .note-format-actions button[data-format="highlight"] {
   background: color-mix(in srgb, var(--note-accent, var(--accent)) 30%, transparent);
