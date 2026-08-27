@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate Radar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <p class="eyebrow">Internal use only</p>
+    <h1>Corporate Radar</h1>
+    <p class="tagline">Signal vs. noise for the modern workplace.</p>
+    <button id="bingo-btn" type="button" class="btn btn-bingo">📡 Pick Up a Random Signal</button>
+    <p class="disclaimer">🔒 Nothing you type here is stored, sent anywhere, or logged. It all runs locally in your browser — refresh the page and it's gone.</p>
+  </header>
+
+  <div id="bingo-card" class="bingo-card hidden">
+    <span class="bingo-tag" id="bingo-tag"></span>
+    <p id="bingo-text" class="bingo-text"></p>
+    <button id="bingo-close" type="button" class="bingo-close" aria-label="Dismiss">×</button>
+  </div>
+
+  <nav class="tools-nav">
+    <button class="tool-tab active" data-target="view-buzzword">Buzzword Decoder</button>
+    <button class="tool-tab" data-target="view-weasel">Weasel Scanner</button>
+    <button class="tool-tab" data-target="view-urgency">Urgency Detector</button>
+    <button class="tool-tab" data-target="view-sowhat">So-What Test</button>
+    <button class="tool-tab" data-target="view-excuses">Excuses</button>
+    <button class="tool-tab" data-target="view-signoffs">Sign-Offs</button>
+  </nav>
+  <p id="tab-description" class="tab-description">Paste something corporate. Find out what it actually means.</p>
+
+  <main class="site-main">
+
+    <!-- Buzzword Decoder (default view) -->
+    <section id="view-buzzword" class="tool-view">
+      <h1 class="view-title">Buzzword Decoder</h1>
+      <div class="layout">
+        <section class="panel input-panel">
+          <h2>Paste something corporate</h2>
+          <div id="buzzword-example-buttons" class="example-buttons"></div>
+          <textarea id="buzzword-input" rows="9" placeholder="Paste a memo, standup update, or all-hands email here..."></textarea>
+
+          <div class="toggle-row">
+            <span class="toggle-label">Tone</span>
+            <div id="buzzword-tone-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+              <button type="button" class="toggle-btn" data-tone="cynical">What They Really Mean</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">View</span>
+            <div id="buzzword-view-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
+              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
+            </div>
+          </div>
+
+          <button id="buzzword-decode-btn" type="button" class="btn btn-run">Decode</button>
+        </section>
+
+        <section class="panel output-panel">
+          <h2>Translation</h2>
+          <div id="buzzword-empty-state" class="empty-state">
+            <p>Paste some corporate-speak and hit <strong>Decode</strong> — or load an example.</p>
+          </div>
+          <div id="buzzword-result" class="result hidden">
+            <div class="stats">
+              <div class="stat"><span class="stat-num" id="buzzword-stats-count">0</span><span class="stat-label">buzzwords found</span></div>
+              <div class="stat"><span class="stat-num" id="buzzword-stats-density">0%</span><span class="stat-label">jargon density</span></div>
+              <div class="stat stat-tier"><span class="stat-num" id="buzzword-stats-tier-label">—</span><span class="stat-label" id="buzzword-stats-tier-blurb"></span></div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="buzzword-meter-fill"></div></div>
+            <div id="buzzword-output-text" class="output-text"></div>
+            <button id="buzzword-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
+            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a buzzword to see its translation.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="glossary-section">
+        <h2>Full Glossary</h2>
+        <p class="glossary-intro">Every phrase this tool knows, browsable directly — this is the lookup table itself.</p>
+        <input id="buzzword-glossary-search" type="search" placeholder="Search the glossary..." class="glossary-search">
+        <div id="buzzword-glossary-filters" class="glossary-filters"></div>
+        <div id="buzzword-glossary-list" class="glossary-list"></div>
+      </section>
+    </section>
+
+    <!-- Weasel Word Scanner -->
+    <section id="view-weasel" class="tool-view hidden">
+      <h1 class="view-title">Weasel Word Scanner</h1>
+      <div class="layout">
+        <section class="panel input-panel">
+          <h2>Paste a draft</h2>
+          <div id="weasel-example-buttons" class="example-buttons"></div>
+          <textarea id="weasel-input" rows="9" placeholder="Paste a status update, review, or email draft here..."></textarea>
+
+          <div class="toggle-row">
+            <span class="toggle-label">Tone</span>
+            <div id="weasel-tone-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+              <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">View</span>
+            <div id="weasel-view-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
+              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
+            </div>
+          </div>
+
+          <button id="weasel-decode-btn" type="button" class="btn btn-run">Scan</button>
+        </section>
+
+        <section class="panel output-panel">
+          <h2>Scan Results</h2>
+          <div id="weasel-empty-state" class="empty-state">
+            <p>Paste a draft and hit <strong>Scan</strong> — or load an example.</p>
+          </div>
+          <div id="weasel-result" class="result hidden">
+            <div class="stats">
+              <div class="stat"><span class="stat-num" id="weasel-stats-count">0</span><span class="stat-label">weasel words found</span></div>
+              <div class="stat"><span class="stat-num" id="weasel-stats-density">0%</span><span class="stat-label">hedge density</span></div>
+              <div class="stat stat-tier"><span class="stat-num" id="weasel-stats-tier-label">—</span><span class="stat-label" id="weasel-stats-tier-blurb"></span></div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="weasel-meter-fill"></div></div>
+            <div id="weasel-output-text" class="output-text"></div>
+            <button id="weasel-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
+            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a weasel word to see what it signals.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="glossary-section">
+        <h2>Full Glossary</h2>
+        <p class="glossary-intro">Every hedge and qualifier this tool knows.</p>
+        <input id="weasel-glossary-search" type="search" placeholder="Search the glossary..." class="glossary-search">
+        <div id="weasel-glossary-filters" class="glossary-filters"></div>
+        <div id="weasel-glossary-list" class="glossary-list"></div>
+      </section>
+    </section>
+
+    <!-- Manufactured Urgency Detector -->
+    <section id="view-urgency" class="tool-view hidden">
+      <h1 class="view-title">Manufactured Urgency Detector</h1>
+      <div class="layout">
+        <section class="panel input-panel">
+          <h2>Paste a message</h2>
+          <div id="urgency-example-buttons" class="example-buttons"></div>
+          <textarea id="urgency-input" rows="9" placeholder="Paste a Slack message or email here..."></textarea>
+
+          <div class="toggle-row">
+            <span class="toggle-label">Tone</span>
+            <div id="urgency-tone-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-tone="plain">Plain English</button>
+              <button type="button" class="toggle-btn" data-tone="cynical">What It Really Signals</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">View</span>
+            <div id="urgency-view-toggle" class="toggle-group">
+              <button type="button" class="toggle-btn active" data-view="highlight">Highlight</button>
+              <button type="button" class="toggle-btn" data-view="rewrite">Full Rewrite</button>
+            </div>
+          </div>
+
+          <button id="urgency-decode-btn" type="button" class="btn btn-run">Detect</button>
+        </section>
+
+        <section class="panel output-panel">
+          <h2>Urgency Reading</h2>
+          <div id="urgency-empty-state" class="empty-state">
+            <p>Paste a message and hit <strong>Detect</strong> — or load an example.</p>
+          </div>
+          <div id="urgency-result" class="result hidden">
+            <div class="stats">
+              <div class="stat"><span class="stat-num" id="urgency-stats-count">0</span><span class="stat-label">urgency signals found</span></div>
+              <div class="stat"><span class="stat-num" id="urgency-stats-density">0%</span><span class="stat-label">urgency density</span></div>
+              <div class="stat stat-tier"><span class="stat-num" id="urgency-stats-tier-label">—</span><span class="stat-label" id="urgency-stats-tier-blurb"></span></div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="urgency-meter-fill"></div></div>
+            <div id="urgency-output-text" class="output-text"></div>
+            <button id="urgency-copy-btn" type="button" class="btn btn-copy">Copy Translation</button>
+            <p class="hint">In <strong>Highlight</strong> mode, hover or focus a signal to see what it really means.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="glossary-section">
+        <h2>Full Glossary</h2>
+        <p class="glossary-intro">Every urgency signal this tool knows.</p>
+        <input id="urgency-glossary-search" type="search" placeholder="Search the glossary..." class="glossary-search">
+        <div id="urgency-glossary-filters" class="glossary-filters"></div>
+        <div id="urgency-glossary-list" class="glossary-list"></div>
+      </section>
+    </section>
+
+    <!-- So-What Test -->
+    <section id="view-sowhat" class="tool-view hidden">
+      <h1 class="view-title">The So-What Test</h1>
+      <div class="layout">
+        <section class="panel input-panel">
+          <h2>Paste your analysis</h2>
+          <div id="sowhat-example-buttons" class="example-buttons"></div>
+          <textarea id="sowhat-input" rows="9" placeholder="Paste a paragraph of analysis, findings, or a status update here..."></textarea>
+          <button id="sowhat-run-btn" type="button" class="btn btn-run">Run the Test</button>
+        </section>
+
+        <section class="panel output-panel">
+          <h2>Sentence by Sentence</h2>
+          <div id="sowhat-empty-state" class="empty-state">
+            <p>Paste something and hit <strong>Run the Test</strong> — or load an example.</p>
+          </div>
+          <div id="sowhat-result" class="result hidden">
+            <div class="stats">
+              <div class="stat"><span class="stat-num" id="sowhat-stats-count">0</span><span class="stat-label">of <span id="sowhat-stats-total">0</span> sentences have a so-what</span></div>
+              <div class="stat"><span class="stat-num" id="sowhat-stats-density">0%</span><span class="stat-label">actionability score</span></div>
+              <div class="stat stat-tier"><span class="stat-num" id="sowhat-stats-tier-label">—</span><span class="stat-label" id="sowhat-stats-tier-blurb"></span></div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="sowhat-meter-fill"></div></div>
+            <div id="sowhat-output-text" class="sowhat-list"></div>
+            <p class="hint"><span class="tag-yes">✓ Has a so-what</span> means the sentence states an implication or action. <span class="tag-no">⚠ So what?</span> means it only describes.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Excuse Generator -->
+    <section id="view-excuses" class="tool-view hidden">
+      <h1 class="view-title">Excuse Generator</h1>
+      <div class="layout">
+        <section class="panel excuse-panel">
+          <h2>What are you covering for?</h2>
+          <div id="scenario-buttons" class="scenario-buttons"></div>
+          <button id="excuse-btn" type="button" class="btn btn-run">Generate Excuse</button>
+          <div id="excuse-result" class="generator-result hidden">
+            <span class="generator-tag" id="excuse-scenario-label"></span>
+            <p id="excuse-text" class="generator-text"></p>
+            <button id="excuse-copy-btn" type="button" class="btn btn-copy">Copy Excuse</button>
+          </div>
+        </section>
+
+        <section class="panel history-panel">
+          <h2>Previously Generated</h2>
+          <div id="excuse-history" class="history-list">
+            <p class="history-empty">Nothing generated yet — hit Generate to start.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Sign-Off Generator -->
+    <section id="view-signoffs" class="tool-view hidden">
+      <h1 class="view-title">Sign-Off Generator</h1>
+      <div class="layout">
+        <section class="panel signoff-panel">
+          <h2>Pick your mood</h2>
+          <div id="mood-buttons" class="scenario-buttons"></div>
+          <button id="signoff-btn" type="button" class="btn btn-run">Generate Sign-Off</button>
+          <div id="signoff-result" class="generator-result hidden">
+            <span class="generator-tag" id="signoff-mood-label"></span>
+            <p id="signoff-text" class="generator-text"></p>
+            <button id="signoff-copy-btn" type="button" class="btn btn-copy">Copy Sign-Off</button>
+          </div>
+        </section>
+
+        <section class="panel history-panel">
+          <h2>Previously Generated</h2>
+          <div id="signoff-history" class="history-list">
+            <p class="history-empty">Nothing generated yet — hit Generate to start.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <p><a href="../index.html">← Back to The Quagmire</a></p>
+  </footer>
+
+  <div id="tooltip" class="tooltip hidden"></div>
+
+  <script type="module" src="ui.js"></script>
+</body>
+</html>

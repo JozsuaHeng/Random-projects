@@ -13,42 +13,54 @@
 }
 
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 800px 500px at 12% -10%, rgba(90, 130, 90, 0.16), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(120, 90, 160, 0.14), transparent 55%),
+    radial-gradient(ellipse 900px 600px at 50% 110%, rgba(60, 100, 130, 0.12), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 64px 24px;
+  padding: 72px 24px 96px;
 }
 
 .wrap {
   width: 100%;
-  max-width: 920px;
+  max-width: 1180px;
 }
 
 .head {
-  margin-bottom: 40px;
+  margin-bottom: 56px;
 }
 
 .eyebrow {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 13px;
   color: var(--muted);
-  letter-spacing: 0.02em;
-  margin-bottom: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 
 .head h1 {
-  font-size: 44px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: "Baloo 2", -apple-system, sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  background: linear-gradient(120deg, #f4f4f8 30%, #9fdba8 65%, #b18aff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
   align-items: start;
 }
 
@@ -58,16 +70,52 @@ body {
   flex-direction: column;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   text-decoration: none;
   color: var(--text);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease;
+  animation: tile-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.grid .tile:nth-child(1) { animation-delay: 0.02s; }
+.grid .tile:nth-child(2) { animation-delay: 0.06s; }
+.grid .tile:nth-child(3) { animation-delay: 0.1s; }
+.grid .tile:nth-child(4) { animation-delay: 0.14s; }
+.grid .tile:nth-child(5) { animation-delay: 0.18s; }
+.grid .tile:nth-child(6) { animation-delay: 0.22s; }
+.grid .tile:nth-child(n+7) { animation-delay: 0.26s; }
+
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .tile:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 30px -14px rgba(0, 0, 0, 0.6);
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.65);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    animation: none;
+  }
+  .tile,
+  .go {
+    transition: none;
+  }
+  /* Blanket rule so every tile's ambient animation (radar sweep, star
+     twinkle, chip breathe, etc.) is covered in one place, rather than
+     needing a matching line here every time a new one is added. */
+  .art * {
+    animation: none !important;
+  }
 }
 
 /* --- art banner (the illustrated part) --- */
@@ -812,6 +860,79 @@ body {
   transform: translateY(-3px);
 }
 
+/* corporate-radar — navy background, a radar scope with a rotating sweep and a
+   couple of blips, buzzword chips crossed out for flavor. */
+
+.tile[data-theme="radar"] .art {
+  background: #102030;
+  border-bottom: 3px solid #c65142;
+}
+.radar-scope {
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.radar-scope .deco {
+  position: static;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(198, 81, 66, 0.55), transparent 35%);
+  animation: radar-rotate 4s linear infinite;
+}
+@keyframes radar-rotate {
+  to { transform: rotate(360deg); }
+}
+.radar-blip {
+  animation: radar-blip-pulse 2.4s ease-in-out infinite;
+}
+.radar-blip-b {
+  animation-delay: 1.1s;
+}
+@keyframes radar-blip-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.buzzword-chip {
+  position: absolute;
+  z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #d9d2bd;
+  background: rgba(217, 210, 189, 0.12);
+  border: 1px solid rgba(217, 210, 189, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.tile[data-theme="radar"] .art-title {
+  bottom: 8%;
+  left: 6%;
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #f3efe4;
+}
+.tile[data-theme="radar"] .go { color: #c65142; }
+.tile[data-theme="radar"] {
+  border-color: rgba(198, 81, 66, 0.3);
+}
+.tile[data-theme="radar"]:hover {
+  border-color: #c65142;
+  transform: translateY(-3px);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
@@ -837,16 +958,95 @@ body {
 }
 
 .foot {
-  margin-top: 40px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 13px;
+  letter-spacing: 0.01em;
 }
 
 @media (max-width: 640px) {
+  body {
+    padding: 48px 18px 72px;
+  }
   .grid {
     grid-template-columns: 1fr;
   }
   .head h1 {
-    font-size: 34px;
+    font-size: 36px;
   }
+}
+
+/* --- Ambient tile animations ---
+   One quiet, looping detail per tile so the grid doesn't sit dead still.
+   Two shared keyframes, reused with different durations per tile so the
+   whole page doesn't pulse in unison:
+     - tile-breathe: a gentle 15% opacity dip, for "this is alive" without
+       drawing the eye.
+     - tile-flicker: a deeper dip, reserved for things that are naturally
+       flickery/twinkly (stars, exhaust, a coin catching light) so the
+       bigger swing still reads as subtle *for that motif* rather than
+       as a glitch. Disabled entirely under prefers-reduced-motion via
+       the `.art *` rule above. */
+
+@keyframes tile-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes tile-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.tile[data-theme="broetry"] .reaction-bar {
+  animation: tile-breathe 4.6s ease-in-out infinite;
+}
+
+.tile[data-theme="madlibs"] .chip {
+  animation: tile-breathe 5.2s ease-in-out infinite;
+}
+
+.tile[data-theme="archive"] .star {
+  animation: tile-flicker 3.6s ease-in-out infinite;
+}
+
+.tile[data-theme="launchpad"] .exhaust {
+  animation: tile-flicker 2.4s ease-in-out infinite;
+}
+
+.tile[data-theme="factlas"] .deco:nth-of-type(2) {
+  animation: tile-breathe 5.8s ease-in-out infinite;
+}
+
+.tile[data-theme="guilt"] .guilt-score-delta {
+  animation: tile-flicker 3.8s ease-in-out infinite;
+}
+
+.tile[data-theme="memento"] .deco > g {
+  animation: tile-breathe 4.2s ease-in-out infinite;
+}
+
+.tile[data-theme="northstar"] .ns-btc {
+  animation: tile-flicker 3.2s ease-in-out infinite;
+}
+
+.tile[data-theme="nook"] .nook-mini-card {
+  animation: tile-breathe 5.4s ease-in-out infinite;
+}
+
+.tile[data-theme="foundry"] .foundry-stamp {
+  animation: tile-breathe 4.4s ease-in-out infinite;
+}
+
+@keyframes knotify-needle-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.tile[data-theme="knotify"] .knotify-compass path:nth-child(3) {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: knotify-needle-wobble 6s ease-in-out infinite;
 }
