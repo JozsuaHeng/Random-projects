@@ -1,7 +1,6 @@
 :root {
   --bg: #faf6ef;
-  --board-glow: rgba(196, 140, 74, 0.1);
-  --board-weave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect x='0.5' y='0.5' width='55' height='55' fill='none' stroke='rgba(60,48,32,0.07)' stroke-width='1'/%3E%3Cpath d='M28 8L48 28 28 48 8 28Z' fill='none' stroke='rgba(60,48,32,0.06)' stroke-width='1'/%3E%3C/svg%3E");
+  --board-vignette: rgba(60, 45, 20, 0.05);
   --panel: #ffffff;
   --panel-2: #f2ede1;
   --border: #e5ddcc;
@@ -37,8 +36,7 @@
 
 :root[data-theme="dark"] {
   --bg: #14110d;
-  --board-glow: rgba(232, 163, 85, 0.07);
-  --board-weave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect x='0.5' y='0.5' width='55' height='55' fill='none' stroke='rgba(255,244,224,0.055)' stroke-width='1'/%3E%3Cpath d='M28 8L48 28 28 48 8 28Z' fill='none' stroke='rgba(255,244,224,0.045)' stroke-width='1'/%3E%3C/svg%3E");
+  --board-vignette: rgba(0, 0, 0, 0.35);
   --panel: #1a1610;
   --panel-2: #201b14;
   --border: #2c2519;
@@ -90,40 +88,17 @@ textarea, input { font-family: inherit; color: inherit; }
 /* Deliberately not a crisp dot/grid pattern — that's the single most
    recognizable "digital whiteboard tool" signature (Miro, FigJam,
    Excalidraw all use it), and was called out as reading too much like
-   those. A plain noise-only replacement then read as "just blank" — no
-   pattern to register as intentional depth at a glance, even though the
-   grain is technically there.
-
-   A first attempt at a pattern (an 11px diagonal crosshatch) caused real
-   eye strain — not just a stylistic miss. At that tile size/contrast it's
-   in the same family as the "scintillating grid" illusion (see the
-   memento project's CLAUDE.md for the same lesson learned the hard way):
-   small, tightly-repeating, regular patterns can read as vibrating
-   regardless of how low the opacity is, because the problem is spatial
-   *frequency*, not darkness. The fix is scale, not further-lowering
-   opacity: --board-weave is now a 56px tile (a square outline + an
-   inscribed diamond, both ~1px hairlines) — large and sparse enough that
-   it can't set up that interference effect, while still reading clearly
-   as an intentional grid+diamond lattice rather than "just blank."
-   **If this is ever tightened back down toward ~10-15px for a "denser"
-   look, re-check for the illusion before shipping it** — this isn't a
-   matter of taste, it caused genuine discomfort at that scale.
-
-   Combined with a warm "pooled light" radial glow (evokes a lamp-lit
-   reading nook — literal to the name, and inherently not a Miro/Notion
-   look since it's a light gradient, not a repeating icon) and the
-   original paper grain underneath for close-up texture (random noise
-   doesn't cause the same periodic-interference problem a regular
-   pattern can, regardless of scale). */
+   those. A soft paper-grain texture (a tiled low-alpha SVG noise
+   filter, no external asset) plus a faint vignette reads as a physical
+   desk surface instead of an app canvas. */
 .board {
   position: fixed;
   inset: 0;
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 1100px 750px at 50% 12%, var(--board-glow), transparent 62%),
-    var(--board-weave),
+    radial-gradient(ellipse at 50% 0%, var(--board-vignette), transparent 65%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 100% 100%, 56px 56px, 180px 180px;
+  background-size: 100% 100%, 180px 180px;
   cursor: grab;
 }
 
