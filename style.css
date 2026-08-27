@@ -272,6 +272,49 @@ body {
   pointer-events: none;
 }
 
+/* --- theme: world art galleries --- */
+
+.tile[data-theme="galleries"] .art {
+  background:
+    radial-gradient(ellipse 130px 90px at 50% 44%, rgba(212, 167, 106, 0.22), transparent 70%),
+    linear-gradient(160deg, #201e19 0%, #14120e 100%);
+  border-bottom: 3px solid #c0925a;
+}
+.tile[data-theme="galleries"] .gallery-wire {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 12px;
+  background: rgba(212, 167, 106, 0.4);
+  transform: translateX(-50%);
+}
+.tile[data-theme="galleries"] .gallery-facade {
+  top: 14px;
+  left: 12%;
+  width: 76%;
+  height: 58px;
+}
+.tile[data-theme="galleries"] .gallery-chip {
+  top: 12px;
+  right: 12px;
+  color: #d4a76a;
+  border-color: rgba(212, 167, 106, 0.45);
+  background: rgba(212, 167, 106, 0.12);
+}
+.tile[data-theme="galleries"] .art-title {
+  bottom: 12px;
+  left: 16px;
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  color: #f0ede6;
+}
+.tile[data-theme="galleries"] .go { color: #d4a76a; }
+.tile[data-theme="galleries"]:hover {
+  border-color: #6b5138;
+}
+
 /* --- theme: broetry generator --- */
 
 .tile[data-theme="broetry"] .art {
