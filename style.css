@@ -887,20 +887,20 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, rgba(198, 81, 66, 0.55), transparent 35%);
-  animation: radar-rotate 4s linear infinite;
+  background: conic-gradient(from 0deg, rgba(198, 81, 66, 0.4), transparent 35%);
+  animation: radar-rotate 24.5s linear infinite;
 }
 @keyframes radar-rotate {
   to { transform: rotate(360deg); }
 }
 .radar-blip {
-  animation: radar-blip-pulse 2.4s ease-in-out infinite;
+  animation: radar-blip-pulse 4.8s ease-in-out infinite;
 }
 .radar-blip-b {
-  animation-delay: 1.1s;
+  animation-delay: 2.4s;
 }
 @keyframes radar-blip-pulse {
-  0%, 100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.64; }
   50% { opacity: 1; }
 }
 .buzzword-chip {
@@ -979,74 +979,155 @@ body {
 }
 
 /* --- Ambient tile animations ---
-   One quiet, looping detail per tile so the grid doesn't sit dead still.
-   Two shared keyframes, reused with different durations per tile so the
-   whole page doesn't pulse in unison:
-     - tile-breathe: a gentle 15% opacity dip, for "this is alive" without
-       drawing the eye.
-     - tile-flicker: a deeper dip, reserved for things that are naturally
-       flickery/twinkly (stars, exhaust, a coin catching light) so the
-       bigger swing still reads as subtle *for that motif* rather than
-       as a glitch. Disabled entirely under prefers-reduced-motion via
-       the `.art *` rule above. */
+   One looping detail per tile, each animating actual motion (rotate,
+   translate, scale, a traveling dash) rather than a plain opacity blink
+   — matching the radar tile's sweep, which reads as "alive" precisely
+   because something moves, not just dims. Where an element already has
+   an inline or CSS base `transform`, its keyframes reproduce that base
+   value at 0%/100% so nothing jumps when the animation starts — CSS
+   animations fully own whichever property they animate, they don't
+   layer on top of it. Disabled entirely under prefers-reduced-motion via
+   the `.art *` rule above. */
 
-@keyframes tile-breathe {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.85; }
+/* Broetry: the two reaction icons give a quick "new like" pop, offset
+   so they don't land together. */
+@keyframes reaction-pop {
+  0%, 78%, 100% { transform: scale(1); }
+  88% { transform: scale(1.29); }
+}
+.tile[data-theme="broetry"] .reaction-dot:nth-of-type(1) {
+  animation: reaction-pop 3.1s ease-in-out infinite;
+}
+.tile[data-theme="broetry"] .reaction-dot:nth-of-type(2) {
+  animation: reaction-pop 3.1s ease-in-out infinite;
+  animation-delay: 0.6s;
 }
 
-@keyframes tile-flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+/* Mad-Libs: the five buzzword chips bob in a small cascading wave,
+   each keeping its own printed tilt. */
+@keyframes chip-bob {
+  0%, 100% { transform: rotate(var(--chip-rot)) translateY(0); }
+  50% { transform: rotate(var(--chip-rot)) translateY(-2.9px); }
 }
+.tile[data-theme="madlibs"] .art > .chip:nth-child(1) { --chip-rot: -8deg; animation: chip-bob 2.6s ease-in-out infinite; animation-delay: 0s; }
+.tile[data-theme="madlibs"] .art > .chip:nth-child(2) { --chip-rot: 5deg; animation: chip-bob 2.6s ease-in-out infinite; animation-delay: 0.18s; }
+.tile[data-theme="madlibs"] .art > .chip:nth-child(3) { --chip-rot: 9deg; animation: chip-bob 2.6s ease-in-out infinite; animation-delay: 0.36s; }
+.tile[data-theme="madlibs"] .art > .chip:nth-child(4) { --chip-rot: -3deg; animation: chip-bob 2.6s ease-in-out infinite; animation-delay: 0.54s; }
+.tile[data-theme="madlibs"] .art > .chip:nth-child(5) { --chip-rot: 7deg; animation: chip-bob 2.6s ease-in-out infinite; animation-delay: 0.72s; }
 
-.tile[data-theme="broetry"] .reaction-bar {
-  animation: tile-breathe 4.6s ease-in-out infinite;
+/* Archive: stars twinkle by growing and brightening together, a real
+   size change rather than a flat opacity dip. */
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.57; transform: scale(0.78); }
+  50% { opacity: 1; transform: scale(1.29); }
 }
-
-.tile[data-theme="madlibs"] .chip {
-  animation: tile-breathe 5.2s ease-in-out infinite;
-}
-
 .tile[data-theme="archive"] .star {
-  animation: tile-flicker 3.6s ease-in-out infinite;
+  animation: star-twinkle 2.2s ease-in-out infinite;
 }
 
+/* Launchpad: exhaust puffs drift down and fade like real thrust, the
+   rocket itself idles with a tiny vibration. */
+@keyframes exhaust-puff {
+  0% { opacity: 0.85; transform: translateY(0) scale(0.86); }
+  75% { opacity: 0.22; transform: translateY(5px) scale(1.22); }
+  100% { opacity: 0.12; transform: translateY(6.5px) scale(1.29); }
+}
 .tile[data-theme="launchpad"] .exhaust {
-  animation: tile-flicker 2.4s ease-in-out infinite;
+  animation: exhaust-puff 1.3s ease-out infinite;
+}
+.tile[data-theme="launchpad"] .exhaust + .exhaust {
+  animation-delay: 0.5s;
+}
+@keyframes rocket-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.1px); }
+}
+.tile[data-theme="launchpad"] .rocket {
+  animation: rocket-idle 1.9s ease-in-out infinite;
 }
 
+/* Factlas: the dotted route has a signal traveling along it; the pin
+   gives a small drop-bounce. */
+@keyframes route-travel {
+  to { stroke-dashoffset: -14; }
+}
+.tile[data-theme="factlas"] .deco:nth-of-type(1) path {
+  animation: route-travel 1.9s linear infinite;
+}
+@keyframes pin-drop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2.9px); }
+}
 .tile[data-theme="factlas"] .deco:nth-of-type(2) {
-  animation: tile-breathe 5.8s ease-in-out infinite;
+  animation: pin-drop 2.4s ease-in-out infinite;
 }
 
+/* Guilt Trip: the delta arrow actively "drops" — motion doing the joke
+   the opacity version couldn't. */
+@keyframes delta-drop {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(2.9px); opacity: 0.71; }
+}
 .tile[data-theme="guilt"] .guilt-score-delta {
-  animation: tile-flicker 3.8s ease-in-out infinite;
+  display: inline-block;
+  animation: delta-drop 2.3s ease-in-out infinite;
 }
 
-.tile[data-theme="memento"] .deco > g {
-  animation: tile-breathe 4.2s ease-in-out infinite;
+/* Memento: the little face actually blinks, eyes only. */
+@keyframes eye-blink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.35); }
+}
+.tile[data-theme="memento"] .deco > g circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: eye-blink 3.8s ease-in-out infinite;
 }
 
+/* Free Bitcoin: the ฿ glyph wobbles like a coin balanced on its edge. */
+@keyframes coin-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-7deg); }
+  75% { transform: rotate(7deg); }
+}
 .tile[data-theme="northstar"] .ns-btc {
-  animation: tile-flicker 3.2s ease-in-out infinite;
+  display: inline-block;
+  animation: coin-wobble 2.9s ease-in-out infinite;
 }
 
-.tile[data-theme="nook"] .nook-mini-card {
-  animation: tile-breathe 5.4s ease-in-out infinite;
+/* Nook: the two note cards give a small independent shuffle, each
+   keeping its own printed tilt. */
+@keyframes card-shuffle {
+  0%, 100% { transform: rotate(var(--card-rot)); }
+  50% { transform: rotate(calc(var(--card-rot) + 2.9deg)); }
+}
+.tile[data-theme="nook"] .nook-mini-card:nth-of-type(1) {
+  --card-rot: -6deg;
+  animation: card-shuffle 3.1s ease-in-out infinite;
+}
+.tile[data-theme="nook"] .nook-mini-card:nth-of-type(2) {
+  --card-rot: 5deg;
+  animation: card-shuffle 3.1s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
+/* Ipsum Foundry: the stamp thumps down periodically, like it's being
+   freshly re-stamped, instead of sitting there fading. */
+@keyframes stamp-thump {
+  0%, 82%, 100% { transform: rotate(-13deg) scale(1); }
+  90% { transform: rotate(-14.4deg) scale(0.93); }
+}
 .tile[data-theme="foundry"] .foundry-stamp {
-  animation: tile-breathe 4.4s ease-in-out infinite;
+  animation: stamp-thump 3.4s ease-in-out infinite;
 }
 
+/* Knotify: needle settling, same as before. */
 @keyframes knotify-needle-wobble {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(3deg); }
+  50% { transform: rotate(5deg); }
 }
-
 .tile[data-theme="knotify"] .knotify-compass path:nth-child(3) {
   transform-box: fill-box;
   transform-origin: center;
-  animation: knotify-needle-wobble 6s ease-in-out infinite;
+  animation: knotify-needle-wobble 4.8s ease-in-out infinite;
 }
