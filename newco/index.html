@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewCo</title>
+<meta name="description" content="Startup name and tagline generator.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">N</span>
+      <span class="wordmark">NewCo</span>
+    </div>
+    <p class="tagline">startup name &amp; tagline generator</p>
+  </header>
+
+  <main class="layout">
+
+    <div class="chips" id="chips" role="radiogroup" aria-label="Category">
+      <button type="button" class="chip active" data-category="all" role="radio" aria-checked="true">All</button>
+      <button type="button" class="chip" data-category="fintech" role="radio" aria-checked="false">Fintech</button>
+      <button type="button" class="chip" data-category="health" role="radio" aria-checked="false">Health</button>
+      <button type="button" class="chip" data-category="ai" role="radio" aria-checked="false">AI &amp; Dev</button>
+      <button type="button" class="chip" data-category="climate" role="radio" aria-checked="false">Climate</button>
+      <button type="button" class="chip" data-category="consumer" role="radio" aria-checked="false">Consumer</button>
+      <button type="button" class="chip" data-category="edtech" role="radio" aria-checked="false">EdTech</button>
+      <button type="button" class="chip" data-category="legal" role="radio" aria-checked="false">Legal</button>
+      <button type="button" class="chip" data-category="web3" role="radio" aria-checked="false">Web3</button>
+      <button type="button" class="chip" data-category="logistics" role="radio" aria-checked="false">Logistics</button>
+    </div>
+
+    <div class="seed-row">
+      <input type="text" id="seedInput" class="seed-input" placeholder="Fold in your own word (optional)" maxlength="16" autocomplete="off" spellcheck="false">
+    </div>
+
+    <section class="stage">
+      <div class="stage-content" id="stageContent">
+        <span class="stage-category" id="categoryTag">Fintech</span>
+        <div class="stage-name-row">
+          <h1 class="stage-name" id="stageName">Vantage</h1>
+          <button type="button" class="field-icon" id="regenNameBtn" aria-label="Regenerate name only" title="Regenerate name only">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+          </button>
+        </div>
+        <div class="stage-tagline-row">
+          <p class="stage-tagline" id="stageTagline">The frictionless way to move money.</p>
+          <button type="button" class="field-icon small" id="regenTaglineBtn" aria-label="Regenerate tagline only" title="Regenerate tagline only">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+          </button>
+        </div>
+        <div class="stage-description-row">
+          <p class="stage-description" id="stageDescription">Vantage helps ambitious teams move money, without the invoice getting in the way.</p>
+          <button type="button" class="field-icon small" id="regenDescriptionBtn" aria-label="Regenerate description only" title="Regenerate description only">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+          </button>
+        </div>
+        <p class="stage-domain" id="stageDomain">vantage.com &mdash; taken &middot; vantage.io &mdash; available</p>
+      </div>
+    </section>
+    <p class="hint">Press <kbd>Space</kbd> to generate a whole new one &middot; <svg class="hint-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg> rerolls just that line &mdash; everything else stays</p>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" id="generateBtn">Generate</button>
+      <button type="button" class="btn-ghost" id="copyBtn">Copy</button>
+    </div>
+
+    <section class="recent" aria-label="Recently generated">
+      <div class="recent-header">
+        <button type="button" class="ghost-icon" id="historyPrevBtn" aria-label="Older" title="Older">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <h2 class="recent-label">Recent</h2>
+        <button type="button" class="ghost-icon" id="historyNextBtn" aria-label="Newer" title="Newer">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="recent-list" id="recentList"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>NewCo is not a real company. Neither is the one you just generated.</p>
+  </footer>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
