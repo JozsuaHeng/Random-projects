@@ -209,6 +209,14 @@ Open `index.html` directly in a browser — no server needed.
 ## Deployment
 
 Static hosting only, served as part of the shared `ai-slop` GitHub
-Pages site. Not yet linked from "The Quagmire" hub (`../index.html`) —
-add a themed tile there per `../CLAUDE.md`'s convention once the design
-is finalized.
+Pages site. Linked from "The Quagmire" hub (`../index.html`,
+`data-theme="newco"` in `../style.css`) — the tile deliberately reuses
+NewCo's own palette (near-black, single amber accent, italic Fraunces
+wordmark) rather than inventing tile-only colors, the same way
+`../knotify`'s tile borrows its site's navy/orange. Kept restrained on
+purpose (mark + wordmark + the domain-availability line, no scattered
+chips/deco) since the real site is a quiet one-pager and a busy tile
+would misrepresent it. Adding this tile also added `Fraunces` to the
+hub's shared Google Fonts `<link>` — it wasn't loaded before, so
+`../guilt-trip`'s tile (which also specifies `font-family: "Fraunces"`)
+was silently falling back to Georgia; it now renders correctly too.

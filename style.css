@@ -962,6 +962,74 @@ body {
   transform: translateY(-3px);
 }
 
+/* --- theme: newco — matches the NewCo site's own palette exactly
+   (near-black, single amber accent, italic Fraunces wordmark) rather
+   than inventing new tile-only colors, the same way knotify's tile
+   borrows its site's navy/orange instead of a generic scheme. Kept
+   deliberately restrained (mark + wordmark + one small domain-joke
+   line) rather than busy with scattered chips/deco — NewCo's own
+   design is a quiet one-pager, and a cluttered tile would misrepresent
+   it. */
+
+.tile[data-theme="newco"] .art {
+  background:
+    radial-gradient(ellipse 160px 90px at 50% 0%, rgba(224, 166, 54, 0.16), transparent 70%),
+    #0b0b0d;
+  border-bottom: 3px solid #e0a636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tile[data-theme="newco"] .newco-mark {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 14px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: #e0a636;
+  color: #14120d;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tile[data-theme="newco"] .art-title {
+  position: static;
+  z-index: 2;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 27px;
+  color: #f3f1ea;
+  letter-spacing: -0.01em;
+}
+.tile[data-theme="newco"] .newco-domain {
+  position: absolute;
+  z-index: 2;
+  bottom: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.01em;
+  color: rgba(243, 241, 234, 0.4);
+  white-space: nowrap;
+}
+.tile[data-theme="newco"] .go { color: #e0a636; }
+.tile[data-theme="newco"] {
+  border-color: rgba(224, 166, 54, 0.22);
+}
+.tile[data-theme="newco"]:hover {
+  border-color: #e0a636;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -14px rgba(224, 166, 54, 0.35);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
