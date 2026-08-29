@@ -962,63 +962,36 @@ body {
   transform: translateY(-3px);
 }
 
-/* --- theme: newco — matches the NewCo site's own palette exactly
-   (near-black, single amber accent, italic Fraunces wordmark) rather
-   than inventing new tile-only colors, the same way knotify's tile
-   borrows its site's navy/orange instead of a generic scheme. Kept
-   deliberately restrained (mark + wordmark + one small domain-joke
-   line) rather than busy with scattered chips/deco — NewCo's own
-   design is a quiet one-pager, and a cluttered tile would misrepresent
-   it. */
+/* --- theme: newco — a corporate seal, not a sample of the tool's
+   output. Three earlier passes each showed a fake generated name
+   ("Ledgerly") as a stand-in for the product — a bare wordmark, a
+   product-card mockup, a brainstorm-with-circled-winner, then a
+   crossed-out-placeholder-to-real-name transform — and by request none
+   of that content survives here; this doesn't reference any sample
+   output at all. Instead it leans on the one fact that's true of the
+   real product regardless of what it ever generates: "NewCo" is a
+   genuine placeholder — the actual term used on real legal paperwork
+   for a company before it has its real name — so the tile treats the
+   brand mark itself as a wax-seal/rubber-stamp emblem: two concentric
+   rings, a circular inscription running around the seal (real SVG
+   `<textPath>` text-on-a-circle, via the `#newco-seal-ring` arc path
+   in index.html — not achievable with a CSS border, and not a
+   technique any other tile in this grid uses), and the "N" mark
+   (the same glyph as the real app's own header badge) large in the
+   center. It reads as official/certified rather than as a generated
+   example, which sidesteps "is this a good enough sample" entirely. */
 
 .tile[data-theme="newco"] .art {
-  background:
-    radial-gradient(ellipse 160px 90px at 50% 0%, rgba(224, 166, 54, 0.16), transparent 70%),
-    #0b0b0d;
-  border-bottom: 3px solid #e0a636;
+  background: #0b0b0d;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.tile[data-theme="newco"] .newco-mark {
-  position: absolute;
+.tile[data-theme="newco"] .newco-seal {
+  position: relative;
   z-index: 2;
-  top: 12px;
-  left: 14px;
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  background: #e0a636;
-  color: #14120d;
-  font-family: "Fraunces", Georgia, serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.tile[data-theme="newco"] .art-title {
-  position: static;
-  z-index: 2;
-  font-family: "Fraunces", Georgia, serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: 27px;
-  color: #f3f1ea;
-  letter-spacing: -0.01em;
-}
-.tile[data-theme="newco"] .newco-domain {
-  position: absolute;
-  z-index: 2;
-  bottom: 11px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8.5px;
-  letter-spacing: 0.01em;
-  color: rgba(243, 241, 234, 0.4);
-  white-space: nowrap;
+  width: 92px;
+  height: 92px;
 }
 .tile[data-theme="newco"] .go { color: #e0a636; }
 .tile[data-theme="newco"] {
@@ -1028,6 +1001,10 @@ body {
   border-color: #e0a636;
   transform: translateY(-3px);
   box-shadow: 0 16px 34px -14px rgba(224, 166, 54, 0.35);
+}
+.tile[data-theme="newco"]:hover .newco-seal circle {
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate

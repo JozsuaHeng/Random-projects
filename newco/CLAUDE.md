@@ -210,13 +210,42 @@ Open `index.html` directly in a browser — no server needed.
 
 Static hosting only, served as part of the shared `ai-slop` GitHub
 Pages site. Linked from "The Quagmire" hub (`../index.html`,
-`data-theme="newco"` in `../style.css`) — the tile deliberately reuses
-NewCo's own palette (near-black, single amber accent, italic Fraunces
-wordmark) rather than inventing tile-only colors, the same way
-`../knotify`'s tile borrows its site's navy/orange. Kept restrained on
-purpose (mark + wordmark + the domain-availability line, no scattered
-chips/deco) since the real site is a quiet one-pager and a busy tile
-would misrepresent it. Adding this tile also added `Fraunces` to the
+`data-theme="newco"` in `../style.css`). The tile's art
+(`.newco-seal`) is a corporate seal, not a sample of the tool's
+output — three concentric circles (r=53/42/34 in a 120×120 viewBox):
+the outer one has a dotted/beaded edge (a single `<circle>` with
+`stroke-dasharray="0.5 6.2"` and `stroke-linecap="round"`, not
+individually placed dots — the round linecap is what turns each dash
+into a bead), the two inner ones are plain thin rings, and the italic
+"N" mark sits in the center — the same glyph as the real app's own
+header badge. There is **no `.art-title` element on this tile**,
+unlike every other tile in the grid — the seal used to carry "NEWCO"
+as circular text around the ring (real SVG `<textPath>`) which doubled
+as the name label, but by request that text is gone too now (see
+below), so this
+tile currently has no visible name at all beyond the "N" mark and the
+`href`/hover "Open →". If that's ever raised as an issue, that's a
+real gap to weigh against the beaded ring's cleanliness — not
+something to silently "fix" by cramming text back in without
+reconsidering the whole composition.
+
+This is the **seventh** pass. Sixth had "NEWCO" repeated as circular
+`<textPath>` text around the ring (replacing an even earlier
+"INCORPORATED · STATE OF NOWHERE · EST. TODAY" legal-paperwork joke
+that read as confusing rather than clever at tile scale) — cut by
+request in favor of no text on the ring at all, replaced with the
+dotted/beaded edge. Passes one through four (bare wordmark →
+product-card mockup → "brainstorm" with rejected candidates crossed
+out and one winner hand-circled → a crossed-out-placeholder-to-real-
+name arrow transform) all showed a fake sample output ("Ledgerly")
+standing in for the product; pass five dropped that in favor of
+treating the brand mark as an official seal instead of a generated
+example — "NewCo" is a genuine placeholder, the actual term real legal
+paperwork uses for a company before it has its real name — which is
+still the core idea. Colors still reuse NewCo's own palette
+(near-black, single amber accent, italic Fraunces) rather than
+inventing tile-only ones, the same way `../knotify`'s tile borrows its
+site's navy/orange. Adding this tile also added `Fraunces` to the
 hub's shared Google Fonts `<link>` — it wasn't loaded before, so
 `../guilt-trip`'s tile (which also specifies `font-family: "Fraunces"`)
 was silently falling back to Georgia; it now renders correctly too.
