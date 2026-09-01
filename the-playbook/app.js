@@ -18,6 +18,7 @@
       });
       cat.hidden = !catHasMatch;
       if (catHasMatch) anyVisible = true;
+      if (catHasMatch && q) cat.open = true;
     });
 
     empty.hidden = anyVisible || !q;
@@ -27,7 +28,7 @@
   input.addEventListener("input", filter);
 
   document.getElementById("expand-all").addEventListener("click", function () {
-    document.querySelectorAll(".skill").forEach(function (d) { d.open = true; });
+    document.querySelectorAll(".category, .skill").forEach(function (d) { d.open = true; });
   });
   document.getElementById("collapse-all").addEventListener("click", function () {
     document.querySelectorAll(".skill").forEach(function (d) { d.open = false; });

@@ -9,11 +9,19 @@ Skills — installed to `~/.claude/skills/` and used by Claude directly.
 This project exists purely so Jozsua (or anyone else) can *view* that
 same content easily in a browser, as a tile in The Quagmire.
 
-- Single page: `index.html` + `style.css` + `app.js` (client-side search
-  filter only, no backend).
-- All 26 skills' full content (both `SKILL.md` and any `references/*.md`)
-  is generated into `index.html` by `build.py`, between the
-  `<!-- CONTENT:START -->` / `<!-- CONTENT:END -->` markers.
+- `index.html` + `style.css` + `app.js`: the catalog page (client-side
+  search filter only, no backend). Categories and skills are both
+  `<details>`/`<summary>` — collapsible at both levels, plus
+  Expand-all/Collapse-all controls.
+- `guide.html`: a separate step-by-step how-to page (install, trigger
+  behavior, writing your own), including two hand-drawn inline SVG
+  diagrams (progressive disclosure trigger flow, install flow) — linked
+  from `index.html`'s top nav.
+- All skills' full content (both `SKILL.md` and any `references/*.md`) is
+  generated into `index.html` by `build.py`, between the
+  `<!-- CONTENT:START -->` / `<!-- CONTENT:END -->` markers. The category
+  list (name + slugs, in order) is hardcoded in `build.py` — add a new
+  skill there too when one is added to the source library.
 
 ## Keeping it in sync
 

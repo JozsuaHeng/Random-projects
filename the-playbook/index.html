@@ -34,17 +34,19 @@
       <nav class="cat-nav" aria-label="Categories">
         <a href="#strategic-analysis">Strategic analysis</a>
         <a href="#client-stakeholder-deliverables">Client deliverables</a>
+        <a href="#change-program-management">Change &amp; program</a>
         <a href="#research-intelligence">Research</a>
         <a href="#financial-operational">Financial &amp; ops</a>
         <a href="#business-owner-day-to-day">Day-to-day</a>
+        <a href="guide.html" class="cat-nav-guide">How to use this &rarr;</a>
       </nav>
     </header>
 
     <p id="empty-state" class="empty-state" hidden>No skills match &ldquo;<span id="empty-query"></span>&rdquo;.</p>
 
     <!-- CONTENT:START -->
-    <section class="category" id="strategic-analysis">
-      <h2 class="category-title">Strategic analysis</h2>
+    <details class="category" id="strategic-analysis" open>
+      <summary class="category-title">Strategic analysis<span class="category-count">8</span></summary>
       <div class="skill-list">
       <details class="skill" data-search="mece problem structuring breaks an ambiguous, open-ended business question into a mece (mutually exclusive, collectively exhaustive) issue tree so every possible cause or option is captured once and only once. use when the user asks a broad &quot;why&quot; or &quot;what should we do&quot; question, wants to structure a problem before analyzing it, or explicitly mentions mece, an issue tree, or problem structuring.">
         <summary>
@@ -321,11 +323,41 @@
 <p>Root cause: inquiry handling lacked a documented, cross-trained backup — not simply "we lost a team member," which is the surface-level symptom explanation. Fix aimed at root cause: document the inquiry process and cross-train a second person. Symptom-level mitigation in the meantime: temporarily reassign inquiry handling to another available team member.</p></div>
         </div>
       </details>
-      </div>
-    </section>
 
-    <section class="category" id="client-stakeholder-deliverables">
-      <h2 class="category-title">Client & stakeholder deliverables</h2>
+      <details class="skill" data-search="plan on a page builds a single-page strategic or program summary — vision/purpose, honest current state, a small set of priorities, and how people/process/systems support them — the condensed visual format used to align a team or brief an executive audience in one view. use when the user needs a &quot;plan on a page,&quot; a one-page strategy summary, or a condensed visual of a strategy/program for leadership.">
+        <summary>
+          <span class="skill-name">Plan On A Page</span>
+          <span class="skill-desc">Builds a single-page strategic or program summary — vision/purpose, honest current state, a small set of priorities, and how people/process/systems support them — the condensed visual format used to align a team or brief an executive audience in one view. Use when the user needs a "plan on a page," a one-page strategy summary, or a condensed visual of a strategy/program for leadership.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Plan on a Page</h1>
+<h2>When to use this</h2>
+<p>The user needs to condense a strategy, program, or function's direction into a single page that a busy audience can absorb at a glance — for team alignment or an executive briefing.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A fuller strategic analysis hasn't actually been done yet — this format condenses existing thinking, it doesn't replace the work of arriving at real priorities (use the strategic-analysis skills first, e.g. <code>swot-strategic-review</code>, <code>mece-problem-structuring</code>).</li><li>The audience needs full detail, not a summary — don't compress something meant to stay comprehensive.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>State purpose/vision in one line</strong> — what this function, team, or program exists to achieve. If it takes a paragraph to say, it's not focused enough yet.</li><li><strong>State current state honestly, in 2-4 bullets</strong> — real facts, not spin. A "plan on a page" that oversells the starting point undermines its own credibility with anyone who knows the real situation.</li><li><strong>Define 3-5 priorities or pillars — no more.</strong> This format's entire value is forcing prioritization; a longer list defeats the purpose and signals nothing was actually deprioritized.</li><li><strong>For each priority, show what changes</strong> — briefly, across people, process, and systems/tools, so the priority reads as something that will visibly happen, not just an aspiration.</li><li><strong>Fit it on one page.</strong> If it doesn't fit, the priorities aren't prioritized enough yet — cut, don't shrink the font.</li></ol>
+<h2>Output format</h2>
+<pre><code>## [Function/team/program] — Plan on a Page</code></pre>
+<p><strong>Purpose</strong>: [one line]</p>
+<p><strong>Current state</strong>: - [honest fact] - [honest fact]</p>
+<p><strong>Priorities</strong>: 1. [Priority] — People: [...] Process: [...] Systems: [...] 2. [Priority] — People: [...] Process: [...] Systems: [...] 3. [Priority] — People: [...] Process: [...] Systems: [...] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Cramming in more than 3-5 priorities, which defeats the format's purpose.</li><li>Current state written as spin rather than an honest starting point.</li><li>Vague pillars that could apply to any organisation ("excellence," "innovation") instead of what this specific team is actually focusing on.</li><li>Treating this as the strategic thinking itself, rather than a condensation of thinking already done elsewhere.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Purpose fits in one line</li><li class="check"><span class="box" aria-hidden="true"></span>Current state is honest, not spin</li><li class="check"><span class="box" aria-hidden="true"></span>No more than 3-5 priorities</li><li class="check"><span class="box" aria-hidden="true"></span>Each priority shows what actually changes (people/process/systems), not just a label</li><li class="check"><span class="box" aria-hidden="true"></span>The whole thing fits on one page</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: Golden Island Cruises — Plan on a Page</h3>
+<p><strong>Purpose</strong>: Deliver distinctive, well-run phinisi charter experiences in Lombok that build a sustainable, repeat-visit business.</p>
+<p><strong>Current state</strong>: - Day-trip and multi-day products are established and profitable - Booking process is manual and staff-dependent, creating a response-time bottleneck - No second route beyond current offering; growth is currently capacity- constrained, not demand-constrained</p>
+<p><strong>Priorities</strong>: 1. <strong>Fix the booking bottleneck</strong> — People: cross-train a second person on inquiries. Process: define a documented backup process. Systems: move off the shared spreadsheet onto a dedicated booking platform. 2. <strong>Validate the Gili route opportunity</strong> — People: ops lead runs scouting. Process: apply structured unit economics before committing. Systems: none new required at validation stage. 3. <strong>Protect service quality while growing</strong> — People: none new. Process: track review rating as a guardrail metric alongside booking growth. Systems: none new required.</p>
+<p>Note only three priorities, each concrete enough to check progress against — not an exhaustive list of everything worth doing (the loyalty program and website redesign ideas from earlier prioritization work are real, just not among the top 3-5 for this page).</p></div>
+        </div>
+      </details>
+      </div>
+    </details>
+
+    <details class="category" id="client-stakeholder-deliverables" open>
+      <summary class="category-title">Client & stakeholder deliverables<span class="category-count">8</span></summary>
       <div class="skill-list">
       <details class="skill" data-search="executive summary writer converts analysis, research, or a long document into a one-page executive summary using the pyramid principle — leading with the answer/recommendation, then the supporting logic, then the detail. use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly.">
         <summary>
@@ -474,6 +506,75 @@
         </div>
       </details>
 
+      <details class="skill" data-search="government tender response drafts a response to a government rfq or rft (request for quote/tender) — understanding of requirements, value proposition, capability and experience, commercial offer, and standard compliance declarations — following the structure procurement panels actually evaluate against. use when the user needs to respond to a government tender, rfq, or public-sector procurement request.">
+        <summary>
+          <span class="skill-name">Government Tender Response</span>
+          <span class="skill-desc">Drafts a response to a government RFQ or RFT (Request for Quote/Tender) — understanding of requirements, value proposition, capability and experience, commercial offer, and standard compliance declarations — following the structure procurement panels actually evaluate against. Use when the user needs to respond to a government tender, RFQ, or public-sector procurement request.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Government Tender / RFQ Response</h1>
+<h2>When to use this</h2>
+<p>A government agency or public-sector body has issued an RFQ/RFT and the user needs a structured response — distinct from a general client proposal (<code>proposal-sow-drafter</code>) because government responses are evaluated against explicit, published criteria and require standard compliance declarations.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A general private-sector client proposal with no formal evaluation criteria or compliance requirements — use <code>proposal-sow-drafter</code>, which is less rigid and more relationship-driven.</li><li>The RFQ/RFT document and its evaluation criteria haven't actually been reviewed yet — read those first; this response should be built around them, not written generically and hoped to fit.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Read the RFQ's evaluation criteria first</strong>, before drafting anything — evaluators score against stated criteria, not against how good the response reads. Structure the whole response so each criterion is explicitly, visibly addressed (not just implicitly covered somewhere in the prose).</li><li><strong>State understanding of requirements in the buyer's own language</strong>, referencing their actual stated objectives and context — a response that reads as generic/templated is an easy one for an evaluator to discount.</li><li><strong>Build a genuine value proposition tied to evidence</strong> — track record, price competitiveness, specific sector experience relevant to this buyer — not generic claims ("we're the best," "outstanding value") with nothing backing them.</li><li><strong>Present the proposed approach concretely</strong> — what will actually be done, in what sequence, producing what outputs — mirroring how the RFQ describes the need, so the evaluator can map response to requirement easily.</li><li><strong>State the commercial offer clearly</strong> — rates, total cost estimate, any panel arrangement or existing pre-negotiated rate that applies.</li><li><strong>Address standard declarations explicitly</strong> — conflict of interest (or lack thereof), compliance with any stated requirements — missing these can disqualify an otherwise strong response outright, so treat them as non-negotiable inclusions, not an afterthought.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Response: [RFQ/RFT name] — [issuing agency]</code></pre>
+<p>### Understanding of requirements [In the buyer's language, referencing their stated context]</p>
+<p>### Value proposition [Specific, evidence-backed — not generic claims]</p>
+<p>### Proposed approach [Concrete steps/phases, mapped to what the RFQ actually asked for]</p>
+<p>### Capability &amp; experience [Relevant track record — specific, not a generic capability statement]</p>
+<p>### Commercial offer [Rates / total cost / panel arrangement if relevant]</p>
+<p>### Declarations - Conflict of interest: [statement] - [Any other standard compliance declarations required by this RFQ]</p>
+<p>### Evaluation criteria cross-check [Confirm each stated evaluation criterion is addressed somewhere above — list criterion → where it's addressed] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Writing a strong general proposal that doesn't map explicitly to the RFQ's actual evaluation criteria — loses marks even when the content is good, because evaluators score against criteria, not impressions.</li><li>Generic value propositions with no specific evidence attached.</li><li>Missing a required declaration (conflict of interest, compliance statement) — can disqualify the response regardless of quality elsewhere.</li><li>Templated language that doesn't reference the buyer's specific context, reading as copy-pasted from a previous response.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every stated evaluation criterion is explicitly addressed and cross-checked at the end</li><li class="check"><span class="box" aria-hidden="true"></span>Value proposition claims are backed by specific evidence</li><li class="check"><span class="box" aria-hidden="true"></span>Standard declarations are included, not omitted</li><li class="check"><span class="box" aria-hidden="true"></span>Language references the buyer's actual context, not generic boilerplate</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative structure only</h3>
+<p>This is a generic, illustrative structure — not based on any real client's actual tender content, which stays confidential to that engagement.</p>
+<p>Say a fictional consultancy is responding to an RFQ from a public-sector agency for "strategic planning workshop facilitation" support, with published evaluation criteria: (1) understanding of requirements — 20%, (2) relevant experience — 30%, (3) proposed approach — 30%, (4) value for money — 20%.</p>
+<p>### Evaluation criteria cross-check (built early, drives the whole draft) | Criterion | Weight | Addressed in | |---|---|---| | Understanding of requirements | 20% | "Understanding of requirements" section | | Relevant experience | 30% | "Capability &amp; experience" section | | Proposed approach | 30% | "Proposed approach" section | | Value for money | 20% | "Commercial offer" section |</p>
+<p>Building this table <strong>first</strong>, before drafting prose, is what keeps the response evaluator-focused rather than narrative-focused — every section exists because a criterion demands it, not because it "seems like the kind of thing a proposal should cover."</p>
+<h5>Value proposition — weak vs. strong</h5>
+<p>Weak (generic, no evidence): "We are the best provider for this project due to our extensive experience and outstanding value for money."</p>
+<p>Strong (specific, evidence-backed): "We have facilitated [N] strategic planning workshops for public-sector clients in the past three years, including [comparable-scale example if disclosable], and our proposed day rates sit [X]% below the panel median for this service category."</p>
+<p>The difference is entirely about attaching a specific, checkable claim instead of an unsupported assertion — this is what actually moves an evaluator's score, not confident language.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="workshop agenda designer designs a structured workshop — clear objectives, a timed agenda, participation-driving activities, and facilitation notes — for strategic planning sessions, kickoffs, or stakeholder workshops. use when the user needs to plan or facilitate a workshop, design a workshop agenda, or run a strategic planning session.">
+        <summary>
+          <span class="skill-name">Workshop Agenda Designer</span>
+          <span class="skill-desc">Designs a structured workshop — clear objectives, a timed agenda, participation-driving activities, and facilitation notes — for strategic planning sessions, kickoffs, or stakeholder workshops. Use when the user needs to plan or facilitate a workshop, design a workshop agenda, or run a strategic planning session.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Workshop Agenda Designer</h1>
+<h2>When to use this</h2>
+<p>The user needs to plan a workshop — a session with a group where a specific output (a decision, a plan, an agreed set of priorities) needs to exist by the end, not just a discussion.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A regular status meeting with no specific workshop-style output needed — a normal agenda is enough.</li><li>The output/objective genuinely isn't known yet — clarify that first; designing activities before knowing the required output produces a workshop that runs well but doesn't land anywhere.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>State the required end-output in one sentence before designing anything</strong> — "a strategic plan" is vague; "agreed, updated objectives for the next planning cycle, with each objective's KPI defined" is a real target to design toward.</li><li><strong>Work backward from that output</strong> to the activities that produce it — each agenda item should visibly build toward the stated output, not just be a generally-relevant topic.</li><li><strong>Design for participation, not presentation.</strong> Long stretches of one person presenting to a passive room produce weak output — build in small-group work, structured discussion prompts, or individual input before group discussion (so quieter voices contribute before the loudest opinion anchors the room).</li><li><strong>Allocate realistic time, including breaks.</strong> A packed agenda with no breathing room degrades output quality in the back half — budget buffer, not just the optimistic minimum per section.</li><li><strong>Write facilitation notes</strong>, not just topic titles — what the facilitator actually says to open each section, how to handle a dominant voice or a stalled discussion, and what "done" looks like for each activity before moving on.</li><li><strong>Plan output capture explicitly</strong> — who's taking notes, in what format, and what artifact exists at the end — a great workshop with no captured output loses most of its value within a week.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Workshop: [name]
+Required output by end of session: [one sentence]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Time</th><th>Duration</th><th>Section</th><th>Activity</th><th>Produces</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Facilitation notes [Per section: opening prompt, how to handle common friction, what "done" looks like before moving on]</p>
+<p>### Output capture [Who captures what, in what format, and what happens to it afterward] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>No clearly stated required output — the workshop runs but doesn't land on a decision or artifact.</li><li>All-presentation, no-participation design.</li><li>Over-packed agenda with no buffer, degrading the back half of the session.</li><li>No plan for capturing output — insights discussed live but never written down get lost.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Required output is stated in one sentence before the agenda is built</li><li class="check"><span class="box" aria-hidden="true"></span>Every agenda item visibly builds toward that output</li><li class="check"><span class="box" aria-hidden="true"></span>Activities include real participation, not just presentation</li><li class="check"><span class="box" aria-hidden="true"></span>Time allocation includes buffer/breaks, not just optimistic minimums</li><li class="check"><span class="box" aria-hidden="true"></span>Output capture method and owner are explicit</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC annual strategic planning workshop</h3>
+<p>Required output by end of session: agreed priorities for the next 12 months, each with an owner and a rough timeline (feeding into <code>plan-on-a-page</code>).</p>
+<div class="table-wrap"><table><thead><tr><th>Time</th><th>Duration</th><th>Section</th><th>Activity</th><th>Produces</th></tr></thead><tbody><tr><td>9:00</td><td>15 min</td><td>Opening</td><td>Frame the session's required output; quick round of "one thing going well, one thing you're worried about"</td><td>Shared context, everyone's spoken once early</td></tr><tr><td>9:15</td><td>45 min</td><td>Current state</td><td>Individually write 3 honest current-state observations, then share and cluster as a group</td><td>A shared, non-spin view of where things stand</td></tr><tr><td>10:00</td><td>15 min</td><td>Break</td><td>—</td><td>—</td></tr><tr><td>10:15</td><td>60 min</td><td>Priority generation</td><td>Small-group brainstorm (2 groups of 2) on "what would most move the business forward this year," then cross-share</td><td>A long-list of candidate priorities</td></tr><tr><td>11:15</td><td>15 min</td><td>Break</td><td>—</td><td>—</td></tr><tr><td>11:30</td><td>45 min</td><td>Prioritization</td><td>Apply <code>impact-effort-prioritizer</code> live to the long-list as a group</td><td>A short-list of 3-5 real priorities</td></tr><tr><td>12:15</td><td>30 min</td><td>Ownership &amp; close</td><td>Assign an owner and rough timeline to each priority; confirm next check-in date</td><td>The actual required output</td></tr></tbody></table></div>
+<p>### Facilitation notes - Opening round: keep it to one sentence each — this is about getting everyone's voice in the room early, not a full discussion yet. - Current state section: do the individual-write step before any group discussion — this prevents the most senior or loudest voice from anchoring everyone else's view of "how things are going." - If the brainstorm stalls, prompt with "what's the thing we keep saying we should do but haven't" — usually unlocks real answers.</p>
+<p>### Output capture One person (not the facilitator, who should stay focused on running the session) takes notes throughout, using the agenda's "Produces" column as a structure — the final artifact is the priority list with owners, written up and circulated within 2 business days while it's still fresh.</p></div>
+        </div>
+      </details>
+
       <details class="skill" data-search="stakeholder influence map maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in.">
         <summary>
           <span class="skill-name">Stakeholder Influence Map</span>
@@ -504,11 +605,254 @@
 <ul><li><strong>Owner/decision-maker (you)</strong> — High influence, high interest → Manage closely (this is the driving stakeholder, not one being "managed" in the traditional sense, but still worth mapping to keep the plan honest about where the decision authority sits)</li><li><strong>Booking/inquiry team member</strong> — High influence (day-to-day system user, adoption depends on them), high interest (directly affects their daily work) → Manage closely — involve them in choosing/testing the system, not just informing them once decided</li><li><strong>Boat captains/crew leads</strong> — Medium-low influence, medium interest (affects scheduling visibility but not their core job) → Keep informed</li><li><strong>Existing booking platform/agent partners</strong> — Variable influence depending on how much business they route, likely low-medium interest unless the change affects how they submit bookings → Keep satisfied or informed depending on actual integration impact — worth confirming directly rather than assuming</li></ul></div>
         </div>
       </details>
-      </div>
-    </section>
 
-    <section class="category" id="research-intelligence">
-      <h2 class="category-title">Research & intelligence</h2>
+      <details class="skill" data-search="stakeholder engagement log maintains an ongoing, chronological log of stakeholder engagement — who was contacted, when, why, what was discussed, and what follow-up resulted — as a project runs. use when the user needs to track engagement history over a project&#x27;s life, log meeting outcomes with stakeholders, or wants a record of who&#x27;s been engaged and about what, distinct from a one-time influence/interest map.">
+        <summary>
+          <span class="skill-name">Stakeholder Engagement Log</span>
+          <span class="skill-desc">Maintains an ongoing, chronological log of stakeholder engagement — who was contacted, when, why, what was discussed, and what follow-up resulted — as a project runs. Use when the user needs to track engagement history over a project's life, log meeting outcomes with stakeholders, or wants a record of who's been engaged and about what, distinct from a one-time influence/interest map.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Stakeholder Engagement Log</h1>
+<h2>When to use this</h2>
+<p>A project is underway with ongoing stakeholder contact, and the user needs a running record of that contact history — not a one-time prioritization exercise (<code>stakeholder-influence-map</code> covers that separately, and both commonly exist side by side on a real project).</p>
+<h2>When NOT to use this</h2>
+<ul><li>A one-off engagement with no ongoing relationship to track — a simple note is enough.</li><li>What's actually needed is the influence/interest prioritization, not a history log — use <code>stakeholder-influence-map</code>.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Log each interaction as it happens</strong>, or as close to it as practical — reconstructing engagement history from memory weeks later loses accuracy and detail fast.</li><li><strong>Capture consistently for every entry</strong>: who was involved (both sides), the date, the purpose of the contact, the actual discussion points (not just "had a meeting"), and the outcome or follow-up needed.</li><li><strong>Use it operationally, not just as a record</strong> — before a new meeting with a stakeholder, check the log for prior context so the conversation doesn't repeat ground already covered.</li><li><strong>Review periodically for engagement gaps</strong> — a stakeholder who hasn't appeared in the log for a while, especially one who's high-influence, is a risk worth noticing before it becomes a problem.</li><li><strong>Use it to brief new team members quickly</strong> — a well-kept log lets someone joining the project understand engagement history without a long verbal handover.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Stakeholder engagement log: [project]</code></pre>
+<p>| # | Stakeholder(s) | Date | Purpose | Discussion points | Outcome / follow-up | |---|---|---|---|---|---| | 1 | ... | ... | ... | ... | ... | ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Logging in bulk after the fact instead of as engagement happens — detail and accuracy degrade quickly from memory.</li><li>Vague entries ("had a catch-up") that give a future reader no useful context.</li><li>Never reviewing the log for gaps — a stakeholder who's gone quiet is a signal, not a non-event.</li><li>Confusing this with <code>stakeholder-influence-map</code> — the two serve different purposes (ongoing record vs. one-time prioritization) and a real project benefits from both existing together.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Entries are logged close to when the interaction happened, not reconstructed later</li><li class="check"><span class="box" aria-hidden="true"></span>Every entry has specific discussion points, not a generic summary</li><li class="check"><span class="box" aria-hidden="true"></span>Outcomes/follow-ups are captured, not just that a meeting occurred</li><li class="check"><span class="box" aria-hidden="true"></span>The log is periodically reviewed for stakeholders who've gone quiet</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC Gili route stakeholder engagement log (excerpt)</h3>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>Stakeholder(s)</th><th>Date</th><th>Purpose</th><th>Discussion points</th><th>Outcome / follow-up</th></tr></thead><tbody><tr><td>1</td><td>Local dock operator (prospective partner)</td><td>[date]</td><td>Initial introduction and feasibility check</td><td>Dock capacity, mooring depth at low tide, indicative costs</td><td>Scouting trip scheduled to verify low-tide viability directly</td></tr><tr><td>2</td><td>Ops lead (internal)</td><td>[date]</td><td>Debrief after scouting trip</td><td>Low-tide mooring issue confirmed; alternative dock options discussed</td><td>Ops lead to shortlist 2 alternative docks by [date]</td></tr><tr><td>3</td><td>Local dock operator #2 (alternative)</td><td>[date]</td><td>Follow-up feasibility check</td><td>Availability, cost, low-tide depth confirmed viable</td><td>Move forward with this operator pending final agreement</td></tr></tbody></table></div>
+<p>### Using the log operationally Before entry #3's call, the log was checked — it showed exactly why the first operator didn't work out (mooring depth at low tide), so the second conversation could ask that question directly and early, rather than repeating the same discovery process from scratch.</p>
+<p>### Reviewing for gaps If a high-influence stakeholder (e.g. the alternative dock operator) hasn't appeared in the log for several weeks after an agreement was expected, that gap itself is worth flagging and following up on — not waiting for them to reach out first.</p></div>
+        </div>
+      </details>
+      </div>
+    </details>
+
+    <details class="category" id="change-program-management" open>
+      <summary class="category-title">Change & program management<span class="category-count">7</span></summary>
+      <div class="skill-list">
+      <details class="skill" data-search="change impact assessment assesses who and what is impacted by a planned change (people, process, systems, culture) before it&#x27;s rolled out, so change-management effort targets what actually needs it instead of guessing. use when the user is planning a system rollout, process change, reorg, or any initiative that changes how people work, and needs to understand impact before building a change plan.">
+        <summary>
+          <span class="skill-name">Change Impact Assessment</span>
+          <span class="skill-desc">Assesses who and what is impacted by a planned change (people, process, systems, culture) before it's rolled out, so change-management effort targets what actually needs it instead of guessing. Use when the user is planning a system rollout, process change, reorg, or any initiative that changes how people work, and needs to understand impact before building a change plan.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Change Impact Assessment (CIA)</h1>
+<h2>When to use this</h2>
+<p>A change is planned (new system, new process, org restructure) and, before building a rollout or communication plan, the user needs to know specifically who is affected, how much, and in what way.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The change is trivial/low-impact enough that a full assessment is more process than the decision needs — say so rather than over-formalizing a small tweak.</li><li>Impact is already well understood and documented — update the existing assessment rather than starting over.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Describe the change precisely.</strong> "New booking system" is vague; "replacing the shared spreadsheet booking process with a dedicated booking platform, changing how bookings are entered and how availability is checked" is assessable.</li><li><strong>Identify every group touched</strong>, not just the obvious one — direct users, adjacent teams whose workflow depends on the changed thing, customers/external parties, and anyone whose role changes even if the system/process itself doesn't touch them directly.</li><li><strong>For each group, assess impact across dimensions:</strong> - <strong>Process</strong> — what they do differently, step by step - <strong>Systems/tools</strong> — what they now use instead of / in addition to before - <strong>People/roles</strong> — whether responsibilities, reporting lines, or required skills change - <strong>Culture/ways of working</strong> — anything that shifts how the group operates day to day, beyond the mechanical change</li><li><strong>Rate the magnitude honestly</strong> (e.g. Small / Medium / Large) per group — don't rate everything as "large" for emphasis; a mixed picture is more useful and more credible than uniform severity.</li><li><strong>Get this from the people affected, not just from planning assumptions</strong> — a quick check with someone actually doing the work catches impacts a top-down view misses.</li><li><strong>Feed the result forward</strong> — this assessment is normally the input to a change roadmap (<code>change-management-roadmap</code>), a readiness check (<code>change-readiness-assessment</code>), or a communications plan (<code>communication-engagement-plan</code>), not an end in itself.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Change impact assessment: [change, precisely described]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Process impact</th><th>Systems impact</th><th>People/role impact</th><th>Culture impact</th><th>Magnitude</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>Small/Medium/Large</td></tr></tbody></table></div>
+<p>### Groups needing the most support [Who's most affected and why, in plain language]</p>
+<p>### Confidence [Where this is based on direct input from affected people vs. assumption] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Guessing impact from a planning document instead of checking with people actually doing the affected work.</li><li>Rating every group as equally impacted, which tells the reader nothing about where to focus effort.</li><li>Stopping at the obvious/direct users and missing adjacent teams or external parties who are also affected.</li><li>Treating this as a one-off exercise when the change design itself changes — re-check if scope shifts.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every genuinely affected group is included, not just the obvious direct users</li><li class="check"><span class="box" aria-hidden="true"></span>Each group is rated across process/systems/people/culture, not just one dimension</li><li class="check"><span class="box" aria-hidden="true"></span>Magnitude ratings are differentiated, not uniformly high</li><li class="check"><span class="box" aria-hidden="true"></span>Based on input from affected people where possible, with confidence noted where it's assumption instead</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC booking system replacement</h3>
+<p>Change: replacing the shared spreadsheet booking process with a dedicated booking platform.</p>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Process impact</th><th>Systems impact</th><th>People/role impact</th><th>Culture impact</th><th>Magnitude</th></tr></thead><tbody><tr><td>Booking/inquiry staff</td><td>Full change — availability checked and bookings entered in a new system, not a spreadsheet</td><td>New platform to learn; old spreadsheet retired</td><td>None — same role, new tool</td><td>Some initial frustration expected during learning curve</td><td>Large</td></tr><tr><td>Ops/crew scheduling</td><td>Minor — still receives a schedule, just generated from a different source</td><td>Views schedule in new platform instead of shared file</td><td>None</td><td>Minimal</td><td>Small</td></tr><tr><td>Accounting</td><td>Deposit/payment data now flows from the new platform instead of manual entry</td><td>New integration point to understand</td><td>None</td><td>Minimal, though errors during transition need a fallback plan</td><td>Medium</td></tr><tr><td>Customers</td><td>Booking confirmation process may look slightly different (new email template, possibly a booking portal)</td><td>None directly</td><td>None</td><td>Minimal — mostly invisible to them if done well</td><td>Small</td></tr></tbody></table></div>
+<p>### Groups needing the most support Booking/inquiry staff — full process and tool change, direct daily impact. This is where training and hands-on support should concentrate; other groups need only light communication.</p>
+<p>### Confidence Based on a direct conversation with the two people who currently handle inquiries (high confidence on their impact); accounting and customer impact are based on planning assumptions and should be checked once the platform's integration details are confirmed.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="change management roadmap builds a change management strategy and roadmap using the adkar model (awareness, desire, knowledge, ability, reinforcement) so a change actually sticks after go-live instead of just being announced. use when the user needs a change management plan or roadmap for a rollout, system implementation, or organisational change, or explicitly mentions adkar.">
+        <summary>
+          <span class="skill-name">Change Management Roadmap</span>
+          <span class="skill-desc">Builds a change management strategy and roadmap using the ADKAR model (Awareness, Desire, Knowledge, Ability, Reinforcement) so a change actually sticks after go-live instead of just being announced. Use when the user needs a change management plan or roadmap for a rollout, system implementation, or organisational change, or explicitly mentions ADKAR.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Change Management Roadmap (ADKAR)</h1>
+<h2>When to use this</h2>
+<p>A change is planned or underway and the user needs a structured plan for how people move from not knowing about it to actually working the new way, sustainably — not just a communications announcement.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only a communications plan is needed (who says what, when) without the fuller change-adoption structure — <code>communication-engagement-plan</code> covers that on its own.</li><li>The change is too small to need structured change management — a one-line heads-up may be all that's needed.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Use impact data as the input</strong>, ideally from <code>change-impact-assessment</code> — the roadmap should target groups by how much they're actually affected, not treat everyone identically.</li><li><strong>Build activities against each ADKAR stage, in order — skipping a stage is the most common reason change doesn't stick:</strong> - <strong>Awareness</strong> — people know the change is coming and why - <strong>Desire</strong> — people are willing to support and participate in it (this requires addressing "what's in it for me / what am I worried about," not just announcing) - <strong>Knowledge</strong> — people know how to change (training, documentation) - <strong>Ability</strong> — people can actually demonstrate the new skill/behavior in practice, not just in a training session - <strong>Reinforcement</strong> — the change is sustained after go-live (this stage is the one most often skipped, and skipping it is why changes regress to old behavior weeks after launch)</li><li><strong>Sequence activities across a timeline</strong> — pre-launch (Awareness, Desire, Knowledge), launch (Ability — go-live support), post-launch (Reinforcement — this needs real duration, not a single follow-up email).</li><li><strong>Assign an owner to each activity</strong> — an unowned change activity doesn't happen.</li><li><strong>Plan reinforcement concretely</strong>: what specifically happens at 2 weeks, 6 weeks, 3 months post-launch to catch regression to old behavior and address it.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Change roadmap: [change]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Stage</th><th>Activity</th><th>Audience</th><th>Timing</th><th>Owner</th></tr></thead><tbody><tr><td>Awareness</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>Desire</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>Knowledge</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>Ability</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>Reinforcement</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Reinforcement plan (the stage most often skipped) [Specific checks/support at defined intervals post-launch] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating "Awareness" (an announcement) as if it covers the whole change — the other four stages are where adoption actually happens.</li><li>Designing Knowledge (training) without Ability (practice/support) — people can pass a training session and still fail at applying it live.</li><li>No Reinforcement plan, or a token one — this is why changes visibly succeed at launch and quietly regress a month later.</li><li>One-size-fits-all activities for groups with very different impact levels (see <code>change-impact-assessment</code>).</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>All five ADKAR stages have specific activities, not just Awareness and Knowledge</li><li class="check"><span class="box" aria-hidden="true"></span>Activities are targeted by group/impact level, not uniform</li><li class="check"><span class="box" aria-hidden="true"></span>Every activity has an owner</li><li class="check"><span class="box" aria-hidden="true"></span>Reinforcement has concrete, timed check-ins, not a single post-launch email</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC booking system rollout (booking staff)</h3>
+<div class="table-wrap"><table><thead><tr><th>Stage</th><th>Activity</th><th>Audience</th><th>Timing</th><th>Owner</th></tr></thead><tbody><tr><td>Awareness</td><td>Team meeting explaining why the spreadsheet is being replaced and the rough timeline</td><td>Booking staff</td><td>4 weeks before go-live</td><td>Owner</td></tr><tr><td>Desire</td><td>1:1 conversation addressing concerns (will this make my job harder before it gets easier?) and what's better about the new way</td><td>Booking staff</td><td>3 weeks before</td><td>Owner</td></tr><tr><td>Knowledge</td><td>Hands-on training session on the new platform</td><td>Booking staff</td><td>2 weeks before</td><td>Platform vendor / owner</td></tr><tr><td>Ability</td><td>Shadowed practice period — staff use the new system for real bookings with an experienced person available to help</td><td>Booking staff</td><td>Launch week</td><td>Owner (available on-call)</td></tr><tr><td>Reinforcement</td><td>Daily 10-minute check-in for the first week, then weekly for a month; explicitly ask "what's still going back to the old habit?"</td><td>Booking staff</td><td>Weeks 1-4 post-launch</td><td>Owner</td></tr></tbody></table></div>
+<p>### Reinforcement plan - Day 1-5: daily 10-minute check-in, fix friction immediately - Week 2-4: weekly check-in, watch for reversion to the spreadsheet for "just this one booking" - Week 6: confirm the old spreadsheet is genuinely no longer being used by anyone before considering the change complete</p>
+<p>This is the stage a rushed rollout skips — without it, it's common for one or two bookings a week to quietly go back into the old spreadsheet "just this once," and within two months the old habit is fully back.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="change readiness assessment assesses an organisation&#x27;s or team&#x27;s readiness for an upcoming change — capability gaps, sentiment, and support needs — based on real evidence rather than assumption, so the change plan addresses actual gaps. use when the user wants to check readiness before a go-live, needs a training needs analysis, or wants to gauge how prepared people are for a change.">
+        <summary>
+          <span class="skill-name">Change Readiness Assessment</span>
+          <span class="skill-desc">Assesses an organisation's or team's readiness for an upcoming change — capability gaps, sentiment, and support needs — based on real evidence rather than assumption, so the change plan addresses actual gaps. Use when the user wants to check readiness before a go-live, needs a training needs analysis, or wants to gauge how prepared people are for a change.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Change Readiness Assessment</h1>
+<h2>When to use this</h2>
+<p>A change is approaching (go-live, rollout, reorg taking effect) and the user wants to know, before it happens, whether the affected group is actually ready — not assume readiness because no one has complained.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Too early — before the change is concretely defined, there's nothing specific to assess readiness against.</li><li>As a one-time check with no plan to re-check closer to go-live — readiness can change (for better or worse) as the date approaches.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Define readiness dimensions relevant to this change:</strong> - <strong>Capability</strong> — do people have the skills/knowledge needed, or is there a training gap? - <strong>Sentiment/attitude</strong> — are people supportive, neutral, resistant? (Silence isn't the same as support.) - <strong>Communication reach</strong> — has the message actually reached everyone who needs it, in a form they've absorbed (not just "was sent")? - <strong>Leadership/sponsorship support</strong> — do people see their own manager visibly backing the change, not just a general announcement from elsewhere?</li><li><strong>Gather real evidence</strong>, not assumption — a short survey, a few direct conversations, or manager input. "No one's complained" is not evidence of readiness.</li><li><strong>Score readiness per group/dimension</strong>, and be specific about what's driving a low score — a low capability score means training is needed; a low sentiment score means the Desire stage (see <code>change-management-roadmap</code>) needs more work, not more training.</li><li><strong>Turn gaps into specific actions with owners and a deadline before go-live</strong> — an assessment that doesn't lead to action is just a report.</li><li><strong>Re-check closer to the go-live date</strong> if there's meaningful time between the assessment and launch — readiness isn't static.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Readiness assessment: [change], as of [date]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Capability</th><th>Sentiment</th><th>Communication reach</th><th>Leadership support</th><th>Overall</th></tr></thead><tbody><tr><td>...</td><td>Low/Med/High</td><td>Low/Med/High</td><td>Low/Med/High</td><td>Low/Med/High</td><td>...</td></tr></tbody></table></div>
+<p>### Gaps requiring action before go-live | Gap | Action | Owner | Deadline | |---|---|---|---| | ... | ... | ... | ... |</p>
+<p>### Evidence basis [Survey / conversations / manager input — and where this is still assumption] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating absence of complaints as evidence of readiness.</li><li>Vague "medium readiness" scores with no explanation of what's actually missing, making the score useless for planning action.</li><li>Assessing once, early, and never re-checking as go-live approaches.</li><li>Skipping sentiment/leadership-support dimensions and only checking capability — a technically-trained but unsupported team still under-adopts.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Scores are based on real evidence (survey/conversations), not assumption — and that basis is stated</li><li class="check"><span class="box" aria-hidden="true"></span>Each low score has a specific driver, not just a rating</li><li class="check"><span class="box" aria-hidden="true"></span>Gaps convert into owned, dated actions</li><li class="check"><span class="box" aria-hidden="true"></span>There's a plan to re-check readiness closer to go-live if time allows</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: readiness check, 1 week before booking system go-live</h3>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Capability</th><th>Sentiment</th><th>Communication reach</th><th>Leadership support</th><th>Overall</th></tr></thead><tbody><tr><td>Booking staff</td><td>Medium — trained, but one person missed the session</td><td>Medium — one team member openly worried about slowing down during peak season</td><td>High — both aware and have used the test environment</td><td>High — owner visibly involved in training</td><td>Medium</td></tr></tbody></table></div>
+<p>### Gaps requiring action before go-live | Gap | Action | Owner | Deadline | |---|---|---|---| | One staff member missed training | Schedule a 1:1 catch-up session | Owner | 3 days before go-live | | Concern about slower bookings during peak season | Address directly: agree a temporary "buddy" system for the first two weeks so a second person is available during peak hours | Owner | Before go-live |</p>
+<p>### Evidence basis Based on a direct conversation with both booking staff members (high confidence) — sentiment score reflects an actual stated concern, not a guess. Leadership support score is self-assessed by the owner and not independently verified, which is a reasonable limitation for a two-person team.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="communication engagement plan builds a structured communication and engagement plan for a change or program — audience segments, key messages, channels, senders, and timing — so communication is targeted rather than one blanket message to everyone. use when the user needs a comms plan, engagement roadmap, or is planning how to communicate a change to different audiences.">
+        <summary>
+          <span class="skill-name">Communication Engagement Plan</span>
+          <span class="skill-desc">Builds a structured communication and engagement plan for a change or program — audience segments, key messages, channels, senders, and timing — so communication is targeted rather than one blanket message to everyone. Use when the user needs a comms plan, engagement roadmap, or is planning how to communicate a change to different audiences.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Communication &amp; Engagement Plan</h1>
+<h2>When to use this</h2>
+<p>A change, program, or initiative needs to be communicated to more than one audience, and a single blanket announcement won't serve everyone's actual information needs.</p>
+<h2>When NOT to use this</h2>
+<ul><li>One audience, one simple message — just write the message directly.</li><li>The plan is really about the fuller change-adoption picture (training, reinforcement, not just messaging) — use <code>change-management-roadmap</code>, which this plan feeds into.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Segment the audience</strong> — ideally from a <code>change-impact-assessment</code> or <code>stakeholder-influence-map</code> — since different groups need different information, not the same message repeated.</li><li><strong>For each segment, define what they specifically need to know and by when</strong> — a booking-staff audience needs process detail; a customer audience needs only "what changes for you," not internal process detail.</li><li><strong>Match channel to audience</strong>, not one channel for everyone — a team meeting works for staff, an email works for customers, a notice board works for on-site crew who don't check email often.</li><li><strong>Sequence messages across the timeline</strong> — don't front-load every detail at first announcement; build understanding progressively (what's changing → why → what it means for you → how to get ready).</li><li><strong>Choose the right sender for credibility</strong> — some messages land better from a direct manager than from a general company announcement; note who should deliver each message, not just what it says.</li><li><strong>Build in two-way engagement, not just broadcast</strong> — a channel for questions/feedback, and a plan to actually respond to it. One-way communication that never acknowledges questions erodes trust fast.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Communication &amp; engagement plan: [change/program]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Audience</th><th>Key message</th><th>Channel</th><th>Sender</th><th>Timing</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Two-way engagement [How feedback/questions get captured and who responds, and by when]</p>
+<p>### Timeline view [Simple sequence: announcement → detail → readiness support → go-live → post-launch] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>One message for every audience regardless of what they actually need to know.</li><li>Front-loading all detail at the first announcement instead of building understanding progressively.</li><li>No feedback channel, or a feedback channel that's never actually monitored/responded to.</li><li>Choosing convenience of channel over what the audience actually reads (e.g. email to a crew that doesn't check it regularly).</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Messages are tailored per audience, not copy-pasted</li><li class="check"><span class="box" aria-hidden="true"></span>Channel and sender are chosen for the specific audience, not defaulted</li><li class="check"><span class="box" aria-hidden="true"></span>Messages are sequenced across time, not delivered all at once</li><li class="check"><span class="box" aria-hidden="true"></span>A real two-way feedback mechanism exists and has an owner</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC booking system change</h3>
+<div class="table-wrap"><table><thead><tr><th>Audience</th><th>Key message</th><th>Channel</th><th>Sender</th><th>Timing</th></tr></thead><tbody><tr><td>Booking staff</td><td>What's changing, why, and what training looks like</td><td>Team meeting + follow-up doc</td><td>Owner</td><td>4 weeks before</td></tr><tr><td>Crew/ops</td><td>Schedules will come from a new source but nothing changes for how they work day to day</td><td>Brief in-person mention at a regular crew meeting</td><td>Ops lead</td><td>1 week before</td></tr><tr><td>Customers</td><td>Booking confirmations may look slightly different; nothing they need to do differently</td><td>Short email note alongside their next booking confirmation</td><td>Booking staff (as part of normal comms)</td><td>At go-live</td></tr></tbody></table></div>
+<p>### Two-way engagement Booking staff have a direct line to the owner for questions during the transition (not a suggestion box that goes unanswered) — questions get a same-day response during the first two weeks, since that's the period uncertainty is highest.</p>
+<p>### Timeline view Announcement (why + timeline) → training detail (what/how) → go-live support (day-of availability) → post-launch check-ins (per the reinforcement plan in <code>change-management-roadmap</code>).</p>
+<p>Note customers get almost no advance detail — correctly so, since the change is nearly invisible to them and over-communicating to an unaffected audience creates unnecessary anxiety about a "big change" that isn't big for them.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="raid log builder builds and maintains a raid log (risks, assumptions, issues, dependencies) — the standard project-governance artifact tracking what could go wrong, what&#x27;s being assumed, what&#x27;s already gone wrong, and what the project depends on. use when the user needs a raid log, project governance tracking, or wants to track assumptions and dependencies alongside risks, not just risks alone.">
+        <summary>
+          <span class="skill-name">Raid Log Builder</span>
+          <span class="skill-desc">Builds and maintains a RAID log (Risks, Assumptions, Issues, Dependencies) — the standard project-governance artifact tracking what could go wrong, what's being assumed, what's already gone wrong, and what the project depends on. Use when the user needs a RAID log, project governance tracking, or wants to track assumptions and dependencies alongside risks, not just risks alone.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>RAID Log Builder</h1>
+<h2>When to use this</h2>
+<p>An ongoing project or program needs a single governance artifact tracking risks, assumptions, issues, and dependencies together — the standard format used for regular project status reporting.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only risks need deep treatment (with likelihood/impact scoring and detailed mitigation planning) — use <code>risk-register-builder</code> for that focused exercise; a RAID log is broader but shallower per item, meant for ongoing tracking rather than deep risk analysis.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Keep the four categories genuinely distinct — this is the discipline that makes a RAID log useful, not just a list:</strong> - <strong>Risk</strong> — something that *might* happen and would have a negative effect if it did (hasn't happened yet) - <strong>Assumption</strong> — something believed to be true, not yet verified, that the plan depends on (if wrong, the plan needs to change) - <strong>Issue</strong> — something that *has already* happened and needs resolving now (not hypothetical anymore) - <strong>Dependency</strong> — something the project needs from outside itself to proceed (another team, a decision, an external delivery)</li><li><strong>Don't let a risk sit in "issue" before it's happened</strong>, and don't leave an issue miscategorized as a risk once it's real — reclassify promptly as status changes.</li><li><strong>Assign an owner and a status to every item</strong> — an item with no owner doesn't get worked.</li><li><strong>Review and update on a set cadence</strong> (e.g. weekly), not just at creation — a RAID log that isn't maintained becomes actively misleading (it looks current but isn't).</li><li><strong>Convert unverified assumptions into confirmed facts or explicit risks as they resolve</strong> — an assumption that's been quietly wrong for weeks is a common source of project surprises.</li></ol>
+<h2>Output format</h2>
+<pre><code>## RAID log: [project], updated [date]</code></pre>
+<p>### Risks | Risk | Likelihood | Impact | Owner | Status | |---|---|---|---|---|</p>
+<p>### Assumptions | Assumption | If wrong, impact is... | Owner | Status (unverified/confirmed/false) | |---|---|---|---|</p>
+<p>### Issues | Issue | Impact | Owner | Status | Resolution target | |---|---|---|---|---|</p>
+<p>### Dependencies | Dependency | Needed from | Needed by (date) | Owner | Status | |---|---|---|---|---| ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Blurring risk and issue (something that's already happened still tracked as a "risk").</li><li>Assumptions written once and never revisited to confirm or invalidate.</li><li>No owner on an item, so it never actually moves.</li><li>Treating the log as a one-time deliverable rather than a living document reviewed on a cadence.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Each item is in the correct one of the four categories</li><li class="check"><span class="box" aria-hidden="true"></span>Every item has an owner and a current status</li><li class="check"><span class="box" aria-hidden="true"></span>Assumptions are being actively verified, not just logged and forgotten</li><li class="check"><span class="box" aria-hidden="true"></span>The log has an update date and is reviewed on a real cadence</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC Gili route launch RAID log (excerpt)</h3>
+<p>### Risks | Risk | Likelihood | Impact | Owner | Status | |---|---|---|---|---| | Weather disrupts scheduled crossings | Medium | Medium | Ops lead | Open |</p>
+<p>### Assumptions | Assumption | If wrong, impact is... | Owner | Status | |---|---|---|---| | A local dock partnership can be secured before launch | Launch delayed, or a costlier alternative dock needed | Owner | Unverified | | Fuel costs stay within current budget assumptions | Route pricing/margin needs revisiting | Owner | Unverified |</p>
+<p>### Issues | Issue | Impact | Owner | Status | Resolution target | |---|---|---|---|---| | Scouting trip revealed the first-choice dock isn't viable at low tide | Delays confirming route logistics | Ops lead | In progress | 2 weeks |</p>
+<p>### Dependencies | Dependency | Needed from | Needed by | Owner | Status | |---|---|---|---|---| | Crew training/scouting completion | Ops team | Before public marketing starts | Ops lead | In progress |</p>
+<p>Note the dock issue: it started life as a risk ("dock might not be viable"), and once the scouting trip confirmed the problem, it moved into Issues with a resolution target — this is the reclassification discipline the skill calls out, not a new item created from scratch.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="program governance structure defines the governance structure for a program or project — decision-making forums, escalation paths, meeting cadence, and a decision log — so decisions get made at the right level without every issue escalating to the top. use when the user is setting up a new program or project and needs a governance model, decision rights, or an escalation structure.">
+        <summary>
+          <span class="skill-name">Program Governance Structure</span>
+          <span class="skill-desc">Defines the governance structure for a program or project — decision-making forums, escalation paths, meeting cadence, and a decision log — so decisions get made at the right level without every issue escalating to the top. Use when the user is setting up a new program or project and needs a governance model, decision rights, or an escalation structure.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Program Governance Structure</h1>
+<h2>When to use this</h2>
+<p>A program or project of meaningful size is starting, or an existing one is struggling with unclear decision-making (everything escalates, or nothing gets decided), and needs an explicit governance structure.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A small, single-owner initiative — formal governance structure adds overhead a simple project doesn't need.</li><li>The ask is really about one specific decision, not an ongoing structure — just make the decision.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Map decision types to the right level</strong>, roughly: - <strong>Operational/day-to-day</strong> — the delivery team decides directly, no meeting needed - <strong>Scope/budget/timeline changes within tolerance</strong> — a working group or steering-level forum - <strong>Strategic direction, major budget/scope changes</strong> — sponsor or executive-level forum</li><li><strong>Define each forum explicitly</strong>: purpose, who's in it (and why — membership should be the minimum needed to decide, not everyone interested), cadence, and exactly what decisions it has authority over.</li><li><strong>Define an escalation path</strong>: what specifically triggers escalation (e.g. "impact beyond X budget or Y week delay"), and to which forum — vague escalation criteria are why everything ends up escalating by default.</li><li><strong>Set up a decision log</strong> — what was decided, by whom, when, and the rationale — so decisions aren't quietly re-argued weeks later by someone who wasn't in the room.</li><li><strong>Right-size the structure</strong> — too many forums creates governance fatigue and slows delivery; too few creates a bottleneck at the top. Match the number of forums to the program's actual complexity, not a template.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Governance structure: [program]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Forum</th><th>Purpose</th><th>Membership</th><th>Cadence</th><th>Decision authority</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Escalation triggers | Trigger | Escalates to | |---|---| | ... | ... |</p>
+<p>### Decision log | Date | Decision | Made by | Rationale | |---|---|---|---| ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Too many governance layers for the program's actual size, slowing delivery without adding real oversight value.</li><li>Vague escalation criteria, causing everything (or nothing) to escalate.</li><li>Membership padded with "interested parties" rather than the minimum needed to actually decide.</li><li>No decision log, so settled decisions get quietly re-opened later.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Each forum has a clearly stated decision authority, not just a general purpose</li><li class="check"><span class="box" aria-hidden="true"></span>Escalation triggers are specific and measurable, not vague</li><li class="check"><span class="box" aria-hidden="true"></span>Number of forums matches the program's actual size/complexity</li><li class="check"><span class="box" aria-hidden="true"></span>A decision log exists and captures rationale, not just outcomes</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC Gili route launch governance (small-scale, right-sized)</h3>
+<div class="table-wrap"><table><thead><tr><th>Forum</th><th>Purpose</th><th>Membership</th><th>Cadence</th><th>Decision authority</th></tr></thead><tbody><tr><td>Weekly check-in</td><td>Track progress, unblock day-to-day issues</td><td>Owner, ops lead</td><td>Weekly</td><td>Operational decisions within existing budget</td></tr><tr><td>Go/no-go review</td><td>Decide whether to proceed to public launch</td><td>Owner (sole decision-maker for a business this size)</td><td>Once, after scouting + unit economics complete</td><td>Launch decision itself</td></tr></tbody></table></div>
+<p>### Escalation triggers | Trigger | Escalates to | |---|---| | Any change requiring budget beyond the originally agreed scouting budget | Owner, immediately (not held for the weekly check-in) | | Any safety-related finding from the scouting trip | Owner, immediately |</p>
+<p>### Decision log | Date | Decision | Made by | Rationale | |---|---|---|---| | [date] | Proceed with scouting trip | Owner | Needed before any launch decision can be made responsibly | | [date] | Delay public marketing pending dock resolution | Owner | Scouting trip found the first-choice dock unviable at low tide (see RAID log) |</p>
+<p>For a two-person operation, this is deliberately lightweight — one weekly check-in and one go/no-go review, not a multi-layered committee structure a much larger program would need. The discipline that matters here is the escalation triggers and the decision log, not forum count.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="project retrospective runs a structured retrospective on a completed project, program phase, or initiative — what worked, what didn&#x27;t, root causes, and specific recommendations for next time — so lessons actually change future work instead of being filed away. use when a project or phase has just finished and the user wants a retrospective, lessons-learned review, or post-mortem (backward-looking; for a forward-looking pre-decision version, see pre-mortem-facilitator).">
+        <summary>
+          <span class="skill-name">Project Retrospective</span>
+          <span class="skill-desc">Runs a structured retrospective on a completed project, program phase, or initiative — what worked, what didn't, root causes, and specific recommendations for next time — so lessons actually change future work instead of being filed away. Use when a project or phase has just finished and the user wants a retrospective, lessons-learned review, or post-mortem (backward-looking; for a forward-looking pre-decision version, see pre-mortem-facilitator).</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Project Retrospective</h1>
+<h2>When to use this</h2>
+<p>A project, program phase, or initiative has just wrapped up, and the user wants to capture what actually happened and turn it into improvements for next time — not just a summary of activities.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The project hasn't started or finished yet — for a pre-decision version of this thinking, use <code>pre-mortem-facilitator</code> instead.</li><li>The goal is just a status update, not a lessons-learned exercise — use <code>weekly-ops-report</code> or <code>board-investor-memo</code> instead.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Gather input broadly</strong>, not just from leadership — the people who actually did the work see friction and workarounds that a top-down view misses entirely.</li><li><strong>Separate fact from interpretation.</strong> "The training session ran two weeks late" is a fact; "the timeline was unrealistic" is an interpretation — capture both, but don't let interpretation pass as fact.</li><li><strong>Group findings into what worked, what didn't, and root causes</strong> — for a recurring or serious "what didn't work" item, apply <code>root-cause-five-whys</code> rather than stopping at the surface symptom.</li><li><strong>Frame findings around the system/process, not blame on individuals</strong> — "the approval step had no defined turnaround time" leads to a fixable recommendation; "so-and-so was slow to approve" doesn't, and makes people defensive in future retros.</li><li><strong>Turn every real finding into a specific, actionable recommendation</strong> — "communicate better" is not actionable; "add a defined 48-hour turnaround expectation to the approval step" is.</li><li><strong>Assign an owner to each recommendation.</strong> A retrospective with no ownership for its recommendations is a report that gets filed and forgotten — its value is entirely in whether it changes the next project.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Retrospective: [project/phase], [dates]</code></pre>
+<p>### Context [Brief — what this project/phase was]</p>
+<p>### What worked - [Specific, not generic]</p>
+<p>### What didn't work (with root cause where it matters) - [Finding] — Root cause: [from 5-Whys or direct evidence]</p>
+<p>### Recommendations for next time | Recommendation | Owner | Applies to | |---|---|---| | ... | ... | [next project / ongoing process] | ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Only interviewing leadership/sponsors, missing frontline reality.</li><li>Blame-framed findings that make people defensive rather than useful process fixes.</li><li>Vague recommendations ("communicate better," "plan more carefully") that no one can actually act on.</li><li>No ownership assigned, so recommendations never make it into the next project.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Input gathered from people who did the work, not just leadership</li><li class="check"><span class="box" aria-hidden="true"></span>Findings distinguish fact from interpretation</li><li class="check"><span class="box" aria-hidden="true"></span>"What didn't work" items include root cause, not just symptom</li><li class="check"><span class="box" aria-hidden="true"></span>Every recommendation is specific, actionable, and has an owner</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC booking system rollout retrospective</h3>
+<p>### Context Retrospective on the 6-week booking system replacement project, held 2 weeks after go-live.</p>
+<p>### What worked - Hands-on training with shadowed practice (Ability stage) meant staff were comfortable within days, not weeks. - Daily check-ins in week 1 caught small issues before they became habits.</p>
+<p>### What didn't work - One staff member missed the initial training session and wasn't caught until the readiness check a week later. Root cause (5-Whys): training was scheduled around one calendar, not checked against both staff members' actual availability — a scheduling process gap, not an individual's fault. - The old spreadsheet was still being used for one edge case (group bookings over 10 people) three weeks post-launch. Root cause: the new platform's group-booking flow wasn't covered in training, since it's used rarely — an actual capability gap, not a habit-reversion issue.</p>
+<p>### Recommendations for next time | Recommendation | Owner | Applies to | |---|---|---| | Confirm training attendance against both staff members' calendars before scheduling, not just one | Owner | Next system rollout | | Explicitly cover edge-case workflows (not just the common path) in training, even if rare | Owner | Next system rollout | | Extend the readiness check to 3 weeks post-launch, not 1, to catch low-frequency workflow gaps | Owner | Ongoing process |</p>
+<p>Note the group-booking finding: it looked like habit-reversion at first glance, but the root cause was a genuine training gap, not backsliding — worth the extra step of checking before assuming the obvious explanation.</p></div>
+        </div>
+      </details>
+      </div>
+    </details>
+
+    <details class="category" id="research-intelligence" open>
+      <summary class="category-title">Research & intelligence<span class="category-count">3</span></summary>
       <div class="skill-list">
       <details class="skill" data-search="competitor research brief produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. use when the user wants deep research on one specific competitor, asks &quot;what do we know about [company],&quot; or needs a research brief before a strategic decision.">
         <summary>
@@ -616,10 +960,10 @@
         </div>
       </details>
       </div>
-    </section>
+    </details>
 
-    <section class="category" id="financial-operational">
-      <h2 class="category-title">Financial & operational</h2>
+    <details class="category" id="financial-operational" open>
+      <summary class="category-title">Financial & operational<span class="category-count">5</span></summary>
       <div class="skill-list">
       <details class="skill" data-search="unit economics breakdown breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what&#x27;s actually profitable, separating fixed from variable costs. use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings.">
         <summary>
@@ -788,10 +1132,10 @@
         </div>
       </details>
       </div>
-    </section>
+    </details>
 
-    <section class="category" id="business-owner-day-to-day">
-      <h2 class="category-title">Business-owner day-to-day</h2>
+    <details class="category" id="business-owner-day-to-day" open>
+      <summary class="category-title">Business-owner day-to-day<span class="category-count">7</span></summary>
       <div class="skill-list">
       <details class="skill" data-search="meeting notes to actions turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation.">
         <summary>
@@ -992,8 +1336,37 @@
 <p>Note what changed from the weak version: "great service" (unfalsifiable, generic) became "owner-operated, crew's local knowledge shapes the route" (specific, checkable, genuinely differentiating from a named alternative type of competitor).</p></div>
         </div>
       </details>
+
+      <details class="skill" data-search="capability competency matrix builds a role-based competency or development framework — the skills expected at each seniority level for a team&#x27;s roles — used for hiring bars, performance conversations, and staff development planning. use when the user needs a skills matrix, competency framework, or development framework for staff or team roles.">
+        <summary>
+          <span class="skill-name">Capability Competency Matrix</span>
+          <span class="skill-desc">Builds a role-based competency or development framework — the skills expected at each seniority level for a team's roles — used for hiring bars, performance conversations, and staff development planning. Use when the user needs a skills matrix, competency framework, or development framework for staff or team roles.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Capability / Competency Matrix</h1>
+<h2>When to use this</h2>
+<p>The user manages or is designing a team structure and needs a shared, concrete definition of what's expected at each seniority level — for hiring, performance conversations, or development planning.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A single, one-off hiring decision with no need for an ongoing framework — a simple job description is enough.</li><li>The framework would immediately go unused (see pitfalls) — worth confirming there's a real plan to use it before building it.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>List the disciplines/skill areas relevant to what this team actually does</strong> — generic categories borrowed from elsewhere are less useful than ones specific to the real work (e.g. for a consulting team: client management, problem-solving/analysis, change management, project management, business development — adapt to the actual team).</li><li><strong>Define the seniority levels</strong> relevant to this team (e.g. Consultant → Senior Consultant → Manager → Senior Manager → Director, or whatever titles/levels actually exist).</li><li><strong>For every discipline × level cell, write a real description of what "good" looks like at that level</strong> — not just a 1-5 rating with no definition. "Has led a project applying this discipline and holds relevant accreditation" is usable in a real conversation; a bare number 4/5 is not.</li><li><strong>Distinguish level progression clearly</strong> — what specifically changes between "foundational" and "strong" for a given discipline, so the matrix can actually answer "what does this person need to do to get to the next level."</li><li><strong>State explicitly how the framework will be used</strong> (hiring bar, development conversations, promotion criteria) — a framework built and never referenced in an actual conversation has no value; note this so it doesn't become a shelf document.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Competency framework: [team/roles]</code></pre>
+<p>Legend: [level definitions, e.g. Basic / Foundational / Strong / Expert]</p>
+<div class="table-wrap"><table><thead><tr><th>Discipline</th><th>[Level 1]</th><th>[Level 2]</th><th>[Level 3]</th><th>[Level 4]</th></tr></thead><tbody><tr><td>...</td><td>[description]</td><td>[description]</td><td>[description]</td><td>[description]</td></tr></tbody></table></div>
+<p>### How this gets used [Hiring / development conversations / promotion criteria — specific, not generic] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Rating cells with a number and no description, which is unusable in an actual coaching conversation.</li><li>Disciplines too generic to help a manager give specific feedback.</li><li>Building the framework and never actually referencing it in hiring or development conversations — the most common way this becomes wasted effort.</li><li>Levels that don't clearly distinguish from each other, making progression criteria fuzzy.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Disciplines are specific to what this team actually does</li><li class="check"><span class="box" aria-hidden="true"></span>Every cell has a real description, not just a rating</li><li class="check"><span class="box" aria-hidden="true"></span>Level-to-level progression is clear enough to guide a development conversation</li><li class="check"><span class="box" aria-hidden="true"></span>There's a stated, real use for the framework (not a shelf document)</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative consulting-team competency framework</h3>
+<p>Legend: Basic (negligible/basic exposure) / Foundational (led a workstream) / Strong (led projects, holds relevant accreditation) / Expert (leads numerous significant projects, recognized authority)</p>
+<div class="table-wrap"><table><thead><tr><th>Discipline</th><th>Basic</th><th>Foundational</th><th>Strong</th><th>Expert</th></tr></thead><tbody><tr><td>Client management</td><td>Attends client meetings, minimal independent contact</td><td>Manages day-to-day client relationship on one workstream</td><td>Manages the overall client relationship on a project independently</td><td>Trusted advisor across multiple client relationships, brought in for the hardest conversations</td></tr><tr><td>Business analysis / problem-solving</td><td>Supports analysis under close direction</td><td>Has independently structured and analyzed a defined problem</td><td>Leads problem structuring on ambiguous, high-stakes questions</td><td>Sets the analytical approach across a program, coaches others in it</td></tr><tr><td>Change management</td><td>Basic understanding, no independent delivery</td><td>Delivered change activities (e.g. training sessions) under a change lead</td><td>Has led a change workstream end to end, holds relevant accreditation</td><td>Designs change strategy for large, complex, multi-release programs</td></tr></tbody></table></div>
+<p>### How this gets used - <strong>Hiring</strong>: candidates are assessed against the Foundational bar for the discipline most central to the role they're hiring for, not every discipline equally. - <strong>Development conversations</strong>: quarterly 1:1s reference specific cells — "you're Foundational on change management; the gap to Strong is leading a workstream end to end, not just delivering activities under someone else's lead" — concrete enough to set a real development goal against. - <strong>Promotion criteria</strong>: progression to the next title requires Strong in at least two disciplines, not just tenure — makes the promotion bar explicit rather than a judgment call with no shared reference point.</p></div>
+        </div>
+      </details>
       </div>
-    </section>
+    </details>
     <!-- CONTENT:END -->
 
     <footer class="foot">

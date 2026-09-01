@@ -24,13 +24,26 @@ CATEGORIES = [
         "market-sizing-tam-sam-som",
         "competitive-landscape-mapper",
         "root-cause-five-whys",
+        "plan-on-a-page",
     ]),
     ("Client & stakeholder deliverables", [
         "executive-summary-writer",
         "consulting-deck-storyliner",
         "board-investor-memo",
         "proposal-sow-drafter",
+        "government-tender-response",
+        "workshop-agenda-designer",
         "stakeholder-influence-map",
+        "stakeholder-engagement-log",
+    ]),
+    ("Change & program management", [
+        "change-impact-assessment",
+        "change-management-roadmap",
+        "change-readiness-assessment",
+        "communication-engagement-plan",
+        "raid-log-builder",
+        "program-governance-structure",
+        "project-retrospective",
     ]),
     ("Research & intelligence", [
         "competitor-research-brief",
@@ -51,6 +64,7 @@ CATEGORIES = [
         "okr-drafter",
         "impact-effort-prioritizer",
         "positioning-pitch-crafter",
+        "capability-competency-matrix",
     ]),
 ]
 
@@ -178,11 +192,11 @@ def build():
         cat_id = re.sub(r"[^a-z0-9]+", "-", cat_name.lower()).strip("-")
         skills_html = "\n".join(build_skill(s) for s in slugs)
         sections.append(f'''
-    <section class="category" id="{cat_id}">
-      <h2 class="category-title">{cat_name}</h2>
+    <details class="category" id="{cat_id}" open>
+      <summary class="category-title">{cat_name}<span class="category-count">{len(slugs)}</span></summary>
       <div class="skill-list">{skills_html}
       </div>
-    </section>''')
+    </details>''')
 
     main_html = "\n".join(sections)
 

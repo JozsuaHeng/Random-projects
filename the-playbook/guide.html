@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to use The Playbook</title>
+<meta name="description" content="Step-by-step guide to installing and using Claude Skills, with diagrams of how a skill actually triggers and how installation works.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="index.html">&larr; The Playbook</a>
+
+  <main class="wrap guide-wrap">
+
+    <header class="hero guide-hero">
+      <p class="eyebrow">how to use this</p>
+      <h1>Installing &amp; using a Claude Skill</h1>
+      <p class="tagline">A Skill is a folder with instructions in it &mdash;
+        no code required. This page walks through what it actually does,
+        how to make one live, and how to use it day to day.</p>
+    </header>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">1</span>What a Skill actually is</h2>
+      <p>Every skill in this library is a folder containing a <code>SKILL.md</code>
+        file &mdash; plain Markdown, no code required. It has two parts: a short
+        <strong>name</strong> and <strong>description</strong> that Claude keeps loaded at all
+        times for every skill you have installed (this costs almost nothing,
+        roughly 100 tokens per skill), and the full <strong>instructions body</strong>,
+        which Claude only reads once your request actually matches that
+        description.</p>
+      <p>This is called <strong>progressive disclosure</strong>, and it's the whole
+        reason you can have dozens of skills installed without them
+        cluttering every conversation:</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 640 460" role="img" aria-label="Diagram: a user request is matched against every installed skill's name and description, which are always loaded; the matching skill's full instructions load next, and its reference files or scripts load only if the instructions actually call for them, before producing output." style="color: var(--ink)">
+          <defs>
+            <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <!-- Level 1: always loaded -->
+          <rect x="70" y="14" width="500" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="320" y="37" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Every installed skill's name + description</text>
+          <text x="320" y="55" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Level 1 &middot; always loaded, ~100 tokens each</text>
+
+          <line x1="320" y1="70" x2="320" y2="104" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow1)"/>
+
+          <!-- user request -->
+          <rect x="140" y="106" width="360" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="320" y="137" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">You describe a task in plain language</text>
+
+          <line x1="320" y1="158" x2="320" y2="192" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow1)"/>
+
+          <!-- match -->
+          <rect x="120" y="194" width="400" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="320" y="225" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Claude matches it to a skill's description</text>
+
+          <line x1="320" y1="246" x2="320" y2="280" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow1)"/>
+
+          <!-- level 2 -->
+          <rect x="90" y="282" width="460" height="56" rx="10" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+          <text x="320" y="305" text-anchor="middle" font-size="13" font-weight="600" fill="var(--accent)">That skill's full SKILL.md instructions load</text>
+          <text x="320" y="323" text-anchor="middle" font-size="11" fill="var(--accent)" opacity="0.75">Level 2 &middot; loaded only now, under ~5k tokens</text>
+
+          <line x1="320" y1="338" x2="320" y2="372" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow1)"/>
+
+          <!-- branch to level 3 -->
+          <line x1="320" y1="310" x2="580" y2="310" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <line x1="580" y1="310" x2="580" y2="360" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#arrow1)"/>
+          <rect x="480" y="362" width="150" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <text x="555" y="384" text-anchor="middle" font-size="10.5" fill="currentColor">references/ file or</text>
+          <text x="555" y="398" text-anchor="middle" font-size="10.5" fill="currentColor">a script &mdash; only if</text>
+          <text x="555" y="412" text-anchor="middle" font-size="10.5" fill="currentColor">the task needs it</text>
+
+          <!-- output -->
+          <rect x="140" y="374" width="300" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="290" y="405" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Your output, following the skill's method</text>
+        </svg>
+        <figcaption>Only what's needed loads, in order &mdash; that's why installing dozens of skills doesn't slow anything down or clutter a conversation.</figcaption>
+      </figure>
+    </section>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">2</span>Install a skill (make it live)</h2>
+      <p>The skills in this library live in a separate project
+        (<code>claude-skills-library/</code>) as the source of truth. To
+        actually use one, it needs to be copied into a folder Claude Code
+        looks in &mdash; either <code>~/.claude/skills/</code> (personal,
+        works in every project) or a project's own
+        <code>.claude/skills/</code> (only active in that project).</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 700 140" role="img" aria-label="Diagram: a skill folder is copied from claude-skills-library, the source of truth, into the personal skills directory, where it becomes active in every Claude Code session." style="color: var(--ink)">
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <rect x="10" y="35" width="210" height="70" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="115" y="65" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">claude-skills-library/</text>
+          <text x="115" y="80" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">skills/&lt;name&gt;/</text>
+          <text x="115" y="97" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">source of truth</text>
+
+          <line x1="220" y1="70" x2="266" y2="70" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow2)"/>
+          <text x="243" y="58" text-anchor="middle" font-size="10.5" font-family="ui-monospace, monospace" fill="currentColor">cp -r</text>
+
+          <rect x="268" y="35" width="210" height="70" rx="10" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+          <text x="373" y="65" text-anchor="middle" font-size="12" font-weight="600" fill="var(--accent)">~/.claude/skills/</text>
+          <text x="373" y="80" text-anchor="middle" font-size="12" font-weight="600" fill="var(--accent)">&lt;name&gt;/</text>
+          <text x="373" y="97" text-anchor="middle" font-size="10.5" fill="var(--accent)" opacity="0.75">installed copy</text>
+
+          <line x1="478" y1="70" x2="524" y2="70" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow2)"/>
+          <text x="501" y="58" text-anchor="middle" font-size="10.5" fill="currentColor">active in</text>
+
+          <rect x="526" y="35" width="164" height="70" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="608" y="65" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Every Claude Code</text>
+          <text x="608" y="80" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">session, any project</text>
+        </svg>
+        <figcaption>Edit the source copy, never the installed one &mdash; re-run the copy after any change so the two don't drift apart.</figcaption>
+      </figure>
+
+      <p>To install everything at once:</p>
+      <pre><code>cp -r claude-skills-library/skills/* ~/.claude/skills/</code></pre>
+      <p>Or just one skill:</p>
+      <pre><code>cp -r claude-skills-library/skills/swot-strategic-review ~/.claude/skills/</code></pre>
+    </section>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">3</span>Just describe your task</h2>
+      <p>Once installed, you don't invoke anything by name. Describe what
+        you need in normal language, and Claude checks it against every
+        installed skill's description automatically:</p>
+      <blockquote>"Help me figure out why our September bookings dropped"</blockquote>
+      <p>&hellip; will likely trigger <code>root-cause-five-whys</code> or
+        <code>mece-problem-structuring</code> on its own, because their
+        descriptions say exactly when to use them.</p>
+    </section>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">4</span>Be explicit when it matters</h2>
+      <p>If a task is ambiguous, or you want a specific framework rather
+        than whichever one Claude guesses is closest, just name it:</p>
+      <blockquote>"Use the swot-strategic-review skill on our current position"</blockquote>
+      <p>You can also chain skills in one request &mdash; "run a SWOT, then
+        turn it into an executive summary" pulls in two skills in sequence.</p>
+    </section>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">5</span>Using it on claude.ai instead</h2>
+      <p>Skills work a bit differently on the website/app versus this
+        terminal tool. Zip a skill folder, then upload it under
+        <strong>Settings &rarr; Features &rarr; Skills</strong> (requires code
+        execution enabled, Pro/Max/Team/Enterprise plans). Skills uploaded
+        there are separate from Claude Code skills &mdash; install in both
+        places if you want it available everywhere.</p>
+      <pre><code>zip -r swot.zip swot-strategic-review</code></pre>
+    </section>
+
+    <section class="guide-section">
+      <h2 class="guide-step-title"><span class="step-num">6</span>Writing your own</h2>
+      <p>Every skill in this library follows the same shape &mdash; copy it
+        as a starting template:</p>
+      <pre><code>---
+name: your-skill-name
+description: What this does, in one sentence. Use when [specific situation].
+---
+
+# Your Skill Name
+
+## When to use this
+## When NOT to use this
+## Workflow
+## Output format
+## Common pitfalls
+## Quality checklist</code></pre>
+      <p>The <code>description</code> field is the one that matters most &mdash;
+        it's literally what Claude matches your request against, so it has
+        to say both <em>what</em> the skill does and <em>when</em> to use it.
+        Keep the name lowercase-hyphenated, under 64 characters, and never
+        containing "claude" or "anthropic."</p>
+    </section>
+
+    <footer class="foot">
+      <p>Full detail on every rule (naming limits, security notes, where
+        skills sync and where they don't) lives in <code>GUIDE.md</code> in
+        the source project.</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
