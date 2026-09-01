@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Playbook</title>
+<meta name="description" content="26 practical frameworks for management consulting and running a business, built as Claude Skills.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="../index.html">&larr; The Quagmire</a>
+
+  <main class="wrap">
+
+    <header class="hero">
+      <p class="eyebrow">a Claude Skills library</p>
+      <h1>The Playbook</h1>
+      <p class="tagline">26 practical frameworks for management consulting and
+        running a business &mdash; each one a working Claude Skill you can
+        install and use, not just a reference page.</p>
+
+      <div class="search-row">
+        <input type="search" id="search" placeholder="Search skills&hellip; (e.g. &ldquo;pricing&rdquo;, &ldquo;SWOT&rdquo;, &ldquo;meeting notes&rdquo;)" aria-label="Search skills">
+      </div>
+
+      <nav class="cat-nav" aria-label="Categories">
+        <a href="#strategic-analysis">Strategic analysis</a>
+        <a href="#client-stakeholder-deliverables">Client deliverables</a>
+        <a href="#research-intelligence">Research</a>
+        <a href="#financial-operational">Financial &amp; ops</a>
+        <a href="#business-owner-day-to-day">Day-to-day</a>
+      </nav>
+    </header>
+
+    <p id="empty-state" class="empty-state" hidden>No skills match &ldquo;<span id="empty-query"></span>&rdquo;.</p>
+
+    <!-- CONTENT:START -->
+    <section class="category" id="strategic-analysis">
+      <h2 class="category-title">Strategic analysis</h2>
+      <div class="skill-list">
+      <details class="skill" data-search="mece problem structuring breaks an ambiguous, open-ended business question into a mece (mutually exclusive, collectively exhaustive) issue tree so every possible cause or option is captured once and only once. use when the user asks a broad &quot;why&quot; or &quot;what should we do&quot; question, wants to structure a problem before analyzing it, or explicitly mentions mece, an issue tree, or problem structuring.">
+        <summary>
+          <span class="skill-name">MECE Problem Structuring</span>
+          <span class="skill-desc">Breaks an ambiguous, open-ended business question into a MECE (Mutually Exclusive, Collectively Exhaustive) issue tree so every possible cause or option is captured once and only once. Use when the user asks a broad "why" or "what should we do" question, wants to structure a problem before analyzing it, or explicitly mentions MECE, an issue tree, or problem structuring.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>MECE Problem Structuring</h1>
+<h2>When to use this</h2>
+<p>The user has a broad, fuzzy business question and needs it broken into parts before it can be analyzed or answered — e.g. "why did bookings drop," "what should we do about rising costs," "what are our options here." The goal is structure, not yet an answer.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The question is already narrow and specific (e.g. "what was our cancellation rate last month" — just answer it).</li><li>The user wants a quick opinion, not a structured breakdown.</li><li>Don't force a tree onto a problem that's genuinely simple — see "MECE theater" under pitfalls.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Restate the question as a decision question.</strong> Turn "bookings are down" into "what is driving the drop in bookings, and what (if anything) should we do about it?" A clear question makes the branching obvious; a vague one doesn't.</li><li><strong>Choose one branching logic for the top level</strong> and hold it constant. Common choices: by driver type (e.g. Demand vs. Supply vs. Price), by P&amp;L line (Revenue vs. Cost), by stakeholder (Customer vs. Internal vs. Partner), by process step, or by internal vs. external. Pick whichever makes the branches genuinely non-overlapping — see <code>references/branching-menus.md</code> for a fuller list with examples.</li><li><strong>Test MECE at every level before going deeper:</strong> - *Mutually exclusive* — could one real-world fact belong to two branches? If yes, redraw the split. - *Collectively exhaustive* — is there an "other / none of the above" bucket needed? If the branches obviously don't cover everything, add one rather than pretend they do.</li><li><strong>Go two to three levels deep, only where it adds value.</strong> Don't decompose a branch further just because you can — stop once a branch is specific enough to actually investigate or test.</li><li><strong>Label each end branch as a hypothesis, not a conclusion.</strong> Each leaf of the tree is something to check against evidence, not something known to be true yet.</li></ol>
+<h2>Output format</h2>
+<p>A plain indented-bullet tree by default:</p>
+<pre><code>What is driving the drop in Q3 bookings?
+├── Demand-side
+│   ├── Fewer inquiries reaching us
+│   └── Lower conversion from inquiry to booking
+├── Supply-side
+│   ├── Fewer available boat/date slots
+│   └── Cancellations from our side
+└── Price/positioning
+    ├── Priced above what the market will bear
+    └── Losing share to a specific competitor</code></pre>
+<p>If working in an environment that can render diagrams (e.g. an Artifact), offer an SVG version — see <code>references/branching-menus.md</code> for layout notes.</p>
+<h2>Common pitfalls</h2>
+<ul><li><strong>MECE theater</strong>: forcing a rigid tree onto something that's actually simple, just to look rigorous. If the honest answer fits in two sentences, say that instead.</li><li><strong>Overlapping branches</strong>: e.g. splitting "customer-related" and "pricing-related" causes — a price complaint from a customer belongs to both. Pick one dimension per split.</li><li><strong>Mixing levels of abstraction</strong>: putting "the market" (huge) and "one competitor's discount" (tiny) as siblings under the same branch.</li><li><strong>Stopping at branches, never testing them</strong>: the tree is a starting point for analysis, not the analysis itself — the next step is usually <code>hypothesis</code> testing or <code>root-cause-five-whys</code> on the most likely branch.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every branch is genuinely distinct from its siblings (no overlap)</li><li class="check"><span class="box" aria-hidden="true"></span>The branches together cover the full question (no obvious gap)</li><li class="check"><span class="box" aria-hidden="true"></span>Depth is only as deep as useful, not maximal</li><li class="check"><span class="box" aria-hidden="true"></span>Each leaf reads as a testable hypothesis, not a stated fact</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Branching menus and worked examples</h3>
+<h4>Common top-level branching logics</h4>
+<div class="table-wrap"><table><thead><tr><th>Logic</th><th>Use when</th><th>Example split</th></tr></thead><tbody><tr><td>By driver type</td><td>Diagnosing a metric change</td><td>Demand vs. Supply vs. Price</td></tr><tr><td>By P&amp;L line</td><td>Financial performance question</td><td>Revenue vs. Cost vs. Margin</td></tr><tr><td>By stakeholder</td><td>Something touches multiple parties</td><td>Customer vs. Internal team vs. Partner/supplier</td></tr><tr><td>By process step</td><td>A workflow or funnel is underperforming</td><td>Awareness → Inquiry → Booking → Fulfillment → Repeat</td></tr><tr><td>Internal vs. external</td><td>Unclear if the cause is controllable</td><td>Internal (controllable) vs. External (market/macro)</td></tr><tr><td>By customer segment</td><td>Performance varies by who's buying</td><td>Segment A vs. Segment B vs. Segment C</td></tr></tbody></table></div>
+<p>Pick <strong>one</strong> logic per split. Don't blend two (e.g. "Revenue vs. Customer complaints" mixes a P&amp;L line with a stakeholder — they can overlap).</p>
+<h4>Worked example: Golden Island Cruises booking drop</h4>
+<p>Question: "What is driving the drop in Q3 bookings, and what should we do?"</p>
+<pre><code>Q3 booking drop
+├── Demand-side (fewer people wanting to book)
+│   ├── Fewer inquiries reaching us
+│   │   ├── Lower marketing/ad spend or reach this quarter
+│   │   └── Seasonal dip (low season in Lombok)
+│   └── Lower conversion from inquiry to booking
+│       ├── Slower response time to inquiries
+│       └── Quote perceived as too expensive vs. alternatives
+├── Supply-side (fewer trips we could actually sell)
+│   ├── Fewer available boat/date slots
+│   └── Cancellations or maintenance downtime
+└── Price/positioning
+    ├── Priced above what the market will currently bear
+    └── Losing share to a specific named competitor</code></pre>
+<p>Next step after structuring: pick the most plausible branch(es), state them as hypotheses, and test each against actual data (inquiry volume, response times, competitor pricing) — that's where this skill hands off to <code>root-cause-five-whys</code> or direct data analysis, not further structuring.</p>
+<h4>Worked example: "What should we do about rising fuel costs?"</h4>
+<p>Question reframed as a decision question: "Given rising fuel costs, what should GIC do to protect margin?"</p>
+<pre><code>Response to rising fuel costs
+├── Absorb the cost
+│   └── Accept lower margin per trip
+├── Pass the cost through
+│   ├── Raise prices across the board
+│   └── Add a fuel surcharge line item
+├── Reduce fuel consumption
+│   ├── Optimize routes/itineraries
+│   └── Adjust boat speed/scheduling
+└── Change the cost base
+    ├── Renegotiate fuel supplier terms
+    └── Explore fuel-efficient boat upgrades (longer-term)</code></pre>
+<p>Notice these four branches are genuinely different levers (not overlapping) and together cover the realistic option space (exhaustive) — that's what makes it MECE rather than just a list of ideas.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="swot strategic review runs a disciplined swot (strengths, weaknesses, opportunities, threats) analysis that forces every finding to connect to a strategic implication, instead of producing four disconnected bullet lists. use when the user asks for a swot, wants to know &quot;where do we stand,&quot; or is evaluating strategic position before a decision.">
+        <summary>
+          <span class="skill-name">SWOT Strategic Review</span>
+          <span class="skill-desc">Runs a disciplined SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis that forces every finding to connect to a strategic implication, instead of producing four disconnected bullet lists. Use when the user asks for a SWOT, wants to know "where do we stand," or is evaluating strategic position before a decision.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>SWOT Strategic Review</h1>
+<h2>When to use this</h2>
+<p>The user wants a structured view of a business's (or a specific initiative's) strategic position — internal strengths/weaknesses, external opportunities/threats — usually as an input to a bigger decision.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The user just wants a quick pro/con list for a small, tactical decision (a SWOT is overkill for "should I use vendor A or B").</li><li>A SWOT has already been done recently and nothing material has changed — say so rather than re-running one for its own sake.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm the unit of analysis.</strong> A SWOT needs a clear subject: the whole business, one product line, one market entry decision, one initiative. Ask if it's ambiguous — a SWOT of "the company" and a SWOT of "our new charter route to the Gilis" are different analyses.</li><li><strong>Strengths and Weaknesses are internal, and controllable.</strong> Only include things the business itself does, has, or controls — team skills, reputation, cost structure, asset quality, brand. Do not put market conditions here.</li><li><strong>Opportunities and Threats are external, and largely uncontrollable.</strong> Market trends, competitor moves, regulation, seasonality, currency, customer behavior shifts. Do not put internal weaknesses here disguised as threats.</li><li><strong>Cap each quadrant at 4-6 items.</strong> More than that dilutes into noise — force prioritization instead of listing everything.</li><li><strong>For every item, state the "so what."</strong> A strength or threat that doesn't change what the business should do isn't worth including. Pair each finding with a one-line implication.</li><li><strong>Cross the quadrants (TOWS step).</strong> This is what most SWOTs skip and what actually makes it useful: - Strength + Opportunity → where to go on offense - Weakness + Opportunity → what to fix to capture upside - Strength + Threat → what to defend with - Weakness + Threat → what's genuinely at risk</li></ol>
+<h2>Output format</h2>
+<pre><code>## SWOT: [subject]</code></pre>
+<p>### Strengths (internal, controllable) - [Finding] → So what: [implication]</p>
+<p>### Weaknesses (internal, controllable) - [Finding] → So what: [implication]</p>
+<p>### Opportunities (external, largely uncontrollable) - [Finding] → So what: [implication]</p>
+<p>### Threats (external, largely uncontrollable) - [Finding] → So what: [implication]</p>
+<p>### So what — strategic implications (TOWS) - Offense (Strength × Opportunity): ... - Fix-to-capture (Weakness × Opportunity): ... - Defense (Strength × Threat): ... - Risk (Weakness × Threat): ... ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Internal/external mix-ups: "the market is shrinking" is a threat, not a weakness; "we're slow to respond to inquiries" is a weakness, not a threat.</li><li>Listing without prioritizing — a 12-item quadrant is a brainstorm, not an analysis.</li><li>Skipping the TOWS cross — a SWOT without it is four lists that don't add up to a recommendation.</li><li>Stating findings as facts without evidence when they're really assumptions — flag anything unverified as such rather than asserting it.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every item is clearly internal (S/W) or external (O/T) — no mix-ups</li><li class="check"><span class="box" aria-hidden="true"></span>Each item has a stated "so what," not just a description</li><li class="check"><span class="box" aria-hidden="true"></span>Quadrants are prioritized (4-6 items), not exhaustive lists</li><li class="check"><span class="box" aria-hidden="true"></span>The TOWS cross produces at least one concrete recommendation</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: SWOT for a phinisi charter business entering a new route</h3>
+<p>Subject: Golden Island Cruises considering adding a new multi-day route to the Gili Islands.</p>
+<p>### Strengths - Established reputation and repeat customer base in Lombok → So what: can cross-sell the new route to existing customers at low acquisition cost. - Owned fleet (no chartering dependency) → So what: can pilot the new route without new capex, using existing boats in low-demand windows.</p>
+<p>### Weaknesses - No existing local dock/logistics relationships near the Gilis → So what: route launch will need lead time to build partnerships before selling it publicly. - Crew unfamiliar with Gili-area navigation and mooring points → So what: training/scouting trips needed before first paying guests.</p>
+<p>### Opportunities - Growing tourist interest in Gili Islands as a Bali alternative → So what: demand may exist without needing to build it from scratch. - Competitors currently only offer single-day Gili trips, not multi-day → So what: possible differentiated positioning if verified true (flag as assumption to confirm, not stated fact).</p>
+<p>### Threats - Weather/monsoon season affects Gili crossings more than current routes → So what: route may need to be seasonal, affecting year-round revenue planning. - A well-funded competitor could copy a multi-day Gili offering quickly → So what: speed to market and reputation may matter more than being first mover indefinitely.</p>
+<p>### So what — strategic implications - <strong>Offense (Strength × Opportunity)</strong>: Use the existing customer base and owned fleet to pilot 2-3 Gili trips in the next low season, testing demand before committing to marketing spend. - <strong>Fix-to-capture (Weakness × Opportunity)</strong>: Before public launch, invest in a scouting trip and one local dock relationship — a small, time-boxed fix rather than a large one. - <strong>Defense (Strength × Threat)</strong>: Owned fleet means the business can absorb a seasonal/weather-limited route without stranded chartering costs — lean into that flexibility rather than over-committing to fixed schedules. - <strong>Risk (Weakness × Threat)</strong>: Launching before crew familiarity and weather patterns are understood is the highest-risk combination — this is the item to resolve before any public marketing.</p>
+<p>Note the pattern: every bullet has a consequence attached. A SWOT that stops at description (no "so what") is not finished.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="porters five forces assesses competitive intensity in a market or industry across five forces (rivalry, buyer power, supplier power, threat of new entrants, threat of substitutes) to judge whether a market is structurally attractive to enter, defend, or exit. use when evaluating market entry, industry attractiveness, or why margins in a market are compressed.">
+        <summary>
+          <span class="skill-name">Porters Five Forces</span>
+          <span class="skill-desc">Assesses competitive intensity in a market or industry across five forces (rivalry, buyer power, supplier power, threat of new entrants, threat of substitutes) to judge whether a market is structurally attractive to enter, defend, or exit. Use when evaluating market entry, industry attractiveness, or why margins in a market are compressed.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Porter's Five Forces</h1>
+<h2>When to use this</h2>
+<p>The user is asking a structural question about a market — "is this market worth entering," "why are margins so thin in this industry," "how defensible is our position" — not a question about one specific competitor (use <code>competitive-landscape-mapper</code> for that) or about internal capability (use <code>swot-strategic-review</code> for that).</p>
+<h2>When NOT to use this</h2>
+<ul><li>The question is about one specific competitor's move — that's competitive analysis, not industry structure.</li><li>The market is extremely narrow or personal-scale (e.g. "should I raise my own freelance rate") — five forces is built for industry-level questions, not individual pricing decisions.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Define the market boundary precisely.</strong> "Tourism" is too broad; "multi-day phinisi charter tours out of Lombok" is analyzable. A vague boundary makes every force impossible to assess honestly.</li><li><strong>Work through each force, and for each, state the finding as High / Medium / Low intensity plus the reason:</strong> - <strong>Rivalry among existing competitors</strong> — how many players, how similar their offerings, how much they compete on price vs. differentiation. - <strong>Bargaining power of buyers (customers)</strong> — how easily customers can switch, compare prices, or negotiate. Concentrated, price-sensitive buyers = high power. - <strong>Bargaining power of suppliers</strong> — how much leverage the people you buy from (fuel, dock access, crew labor market, boat builders) have over you. - <strong>Threat of new entrants</strong> — how hard it is for someone new to start competing. Capital requirements, licensing, reputation-building time, access to key assets (boats, docks) all raise this barrier. - <strong>Threat of substitutes</strong> — not direct competitors, but different ways to meet the same underlying need (e.g. a resort stay instead of a boat charter; a day-trip instead of overnight).</li><li><strong>Synthesize, don't just list five ratings.</strong> State the 1-2 forces that actually matter most for this business right now, and what that implies (e.g. "rivalry and substitute threat are the two real pressures here; supplier and buyer power are low — so competing on differentiation matters more than cost").</li><li><strong>Separate facts from assumptions.</strong> If entrant barriers or buyer power aren't actually known, say "assumed" and flag it as something to verify, rather than asserting it with false confidence.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Five Forces: [market, precisely defined]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Force</th><th>Intensity</th><th>Why</th></tr></thead><tbody><tr><td>Rivalry among competitors</td><td>High/Med/Low</td><td>...</td></tr><tr><td>Buyer power</td><td>High/Med/Low</td><td>...</td></tr><tr><td>Supplier power</td><td>High/Med/Low</td><td>...</td></tr><tr><td>Threat of new entrants</td><td>High/Med/Low</td><td>...</td></tr><tr><td>Threat of substitutes</td><td>High/Med/Low</td><td>...</td></tr></tbody></table></div>
+<p>### What this means [1-2 forces that matter most, and the strategic implication] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating all five forces as equally important — usually one or two dominate; naming them is the actual insight.</li><li>Confusing "competitors" (rivalry) with "substitutes" — a rival phinisi operator is rivalry; a resort or a plane ticket to a different destination is a substitute.</li><li>Doing the analysis and stopping at ratings without a "so what" for the business's actual strategy.</li><li>Asserting entrant barriers or supplier power without evidence — these are the two forces most often guessed rather than known.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Market boundary is specific enough to actually assess</li><li class="check"><span class="box" aria-hidden="true"></span>Each force has a stated reason, not just a rating</li><li class="check"><span class="box" aria-hidden="true"></span>Facts vs. assumptions are labeled</li><li class="check"><span class="box" aria-hidden="true"></span>Synthesis names which 1-2 forces matter most and why</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Scoring rubric and cues for each force</h3>
+<p>Use these as reference cues when rating a force High / Medium / Low — not a rigid formula, but a way to keep ratings honest and comparable across analyses.</p>
+<p>## Rivalry among existing competitors - High: many similar-sized competitors, low differentiation, high fixed costs pushing everyone to compete on price, slow-growing market (fixed pie means share must be taken from someone). - Low: few competitors, meaningful differentiation, growing market (room for everyone to grow without fighting over share).</p>
+<p>## Bargaining power of buyers - High: buyers are concentrated (a few big accounts), the product is a commodity to them, switching cost is low, buyers are price-sensitive and well-informed (e.g. compare on TripAdvisor/Google before booking). - Low: buyers are fragmented (many small individual customers), product is differentiated in ways that matter to them, switching means real friction (e.g. lost deposit, unfamiliarity with a new operator).</p>
+<p>## Bargaining power of suppliers - High: few suppliers of a critical input (e.g. one fuel supplier, one boat builder in the region), switching suppliers is costly or slow, supplier could plausibly integrate forward into your business. - Low: many interchangeable suppliers, low switching cost, input is not differentiated.</p>
+<p>## Threat of new entrants - High: low capital requirement, no licensing/regulatory barrier, no need for reputation or relationships to start selling, easy to copy the offering quickly. - Low: high capital requirement (owning/chartering boats), licensing or permit requirements, reputation/trust takes years to build in a trip-booking category, access to key assets (good docks, experienced crew) is scarce.</p>
+<p>## Threat of substitutes - High: there's a genuinely different way to satisfy the same underlying need at comparable or lower cost/effort (a resort stay, a day-trip instead of overnight, a different destination entirely). - Low: the experience being sold is distinctive enough that "something else" doesn't really scratch the same itch.</p>
+<p>## Example: multi-day phinisi charters out of Lombok (illustrative, not verified data — treat as a template to fill with real data)</p>
+<div class="table-wrap"><table><thead><tr><th>Force</th><th>Illustrative rating</th><th>Why</th></tr></thead><tbody><tr><td>Rivalry</td><td>Medium</td><td>Several operators, but real differentiation exists (boat quality, route, service level) — not a pure price fight yet.</td></tr><tr><td>Buyer power</td><td>Medium</td><td>Individual travelers, fragmented, but highly price/review-comparison-savvy before booking.</td></tr><tr><td>Supplier power</td><td>Low-Medium</td><td>Fuel and crew labor have some alternatives; dock access in specific locations can be a local bottleneck.</td></tr><tr><td>New entrants</td><td>Low-Medium</td><td>Capital and reputation-building are real barriers, but not prohibitive for a well-funded new entrant.</td></tr><tr><td>Substitutes</td><td>Medium</td><td>Resort stays and day-trips are real alternatives for some of the same travel budget.</td></tr></tbody></table></div>
+<p>This table is a <strong>template pattern</strong>, not GIC's actual verified analysis — any real use of this skill should replace these with sourced, current findings, not reuse these illustrative numbers.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="business model canvas maps or redesigns a business&#x27;s value proposition, customer segments, channels, relationships, revenue streams, key resources, activities, partners, and cost structure on one page. use when the user wants to understand how a business makes money, evaluate a new business model, or redesign an existing offering.">
+        <summary>
+          <span class="skill-name">Business Model Canvas</span>
+          <span class="skill-desc">Maps or redesigns a business's value proposition, customer segments, channels, relationships, revenue streams, key resources, activities, partners, and cost structure on one page. Use when the user wants to understand how a business makes money, evaluate a new business model, or redesign an existing offering.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Business Model Canvas</h1>
+<h2>When to use this</h2>
+<p>The user wants a whole-business (or whole-offering) view of how value is created, delivered, and captured — e.g. "how does this business actually make money," "help me design a new offering," "what would change if we added a subscription model."</p>
+<h2>When NOT to use this</h2>
+<ul><li>The question is only about pricing — use <code>pricing</code>-adjacent reasoning directly or <code>unit-economics-breakdown</code> for the numbers.</li><li>The question is about competitive position, not the business's own model — use <code>swot-strategic-review</code> or <code>porters-five-forces</code>.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm the subject</strong>: the whole company, or one specific offering (e.g. "GIC's day-trip product" vs. "GIC as a whole"). Different offerings within one business can have different canvases.</li><li><strong>Fill the nine building blocks</strong>, in this order (each depends on the ones before it, so this order avoids circular reasoning): 1. <strong>Customer Segments</strong> — who is this for, specifically (not "tourists" but "honeymooning couples booking 3+ day trips" if that's the real segment). 2. <strong>Value Proposition</strong> — what problem is solved or need met, for each segment, and why choose this over alternatives. 3. <strong>Channels</strong> — how customers find out about, evaluate, buy, and receive the offering (marketing, booking platform, referral, direct). 4. <strong>Customer Relationships</strong> — how the relationship is built and kept (personal service, self-service, community, automated). 5. <strong>Revenue Streams</strong> — how money actually comes in (one-time booking fee, tiered pricing, add-ons, deposits) and from which segments. 6. <strong>Key Resources</strong> — what's essential to deliver the value prop (boats, crew, dock access, brand/reputation, booking system). 7. <strong>Key Activities</strong> — what the business must actively do well (route planning, guest experience delivery, maintenance, marketing). 8. <strong>Key Partners</strong> — who's relied on externally (fuel suppliers, dock operators, booking platforms, tour agents). 9. <strong>Cost Structure</strong> — what actually drives cost (fixed: boat maintenance, crew salaries; variable: fuel, provisioning per trip).</li><li><strong>Check for internal consistency.</strong> The Value Proposition should plausibly justify the Revenue Streams; Key Resources/Activities should plausibly be able to deliver the Value Proposition; Cost Structure should reflect the Key Resources/Activities actually listed.</li><li><strong>If redesigning (not just mapping)</strong>, isolate which block(s) are changing and trace the consequence through the other eight — a new Revenue Stream (e.g. adding subscriptions) usually forces changes to Customer Relationships and Channels too.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Business Model Canvas: [subject]</code></pre>
+<p><strong>Customer Segments</strong>: ... <strong>Value Proposition</strong>: ... <strong>Channels</strong>: ... <strong>Customer Relationships</strong>: ... <strong>Revenue Streams</strong>: ... <strong>Key Resources</strong>: ... <strong>Key Activities</strong>: ... <strong>Key Partners</strong>: ... <strong>Cost Structure</strong>: ...</p>
+<p>### Consistency check [Any block that doesn't line up with the others, flagged explicitly] ```</p>
+<p>A 3x3 grid layout (the traditional canvas visual) can be offered instead if working in a context that renders diagrams well — see <code>references/canvas-layout.md</code>.</p>
+<h2>Common pitfalls</h2>
+<ul><li>Vague customer segments ("everyone," "tourists") that make every other block impossible to make specific.</li><li>Filling blocks independently without checking they're mutually consistent (a "premium personalized service" value prop paired with a "self-service, lowest cost" cost structure is a contradiction worth flagging).</li><li>Treating this as a one-time exercise rather than something to revisit when a business changes what it sells or who it sells to.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Customer segments are specific, not generic</li><li class="check"><span class="box" aria-hidden="true"></span>Value proposition explains why this segment chooses this over alternatives</li><li class="check"><span class="box" aria-hidden="true"></span>All nine blocks are filled and internally consistent</li><li class="check"><span class="box" aria-hidden="true"></span>Any contradiction between blocks is explicitly flagged, not smoothed over</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Canvas layout for diagram output</h3>
+<p>When producing this as a visual (e.g. inside an Artifact or a slide), use the traditional 3x3+1 grid layout:</p>
+<pre><code>+----------------+----------------+----------------+----------------+
+| Key Partners   | Key Activities | Value          | Customer       |
+|                |                | Proposition    | Relationships  |
+|                +----------------+                +----------------+
+|                | Key Resources  |                | Channels       |
++----------------+----------------+----------------+----------------+
+| Cost Structure                  | Revenue Streams                 |
++----------------------------------+----------------------------------+
+                    | Customer Segments (spans full width, right side) |</code></pre>
+<p>Simplified reading order for a text/markdown rendering (used in the main SKILL.md output format): Customer Segments → Value Proposition → Channels → Relationships → Revenue → Resources → Activities → Partners → Cost. This follows the dependency order described in the workflow, which is easier to reason through than the traditional visual grid order.</p>
+<h4>Worked example: Golden Island Cruises, day-trip product</h4>
+<ul><li><strong>Customer Segments</strong>: International tourists in Lombok/Gili area booking 1-day boat trips, typically booking 1-2 weeks ahead via online research.</li><li><strong>Value Proposition</strong>: A scenic, well-run day trip with an experienced local crew, without the commitment or cost of a multi-day charter.</li><li><strong>Channels</strong>: Direct website booking, travel agent partnerships, review-platform visibility (TripAdvisor/Google).</li><li><strong>Customer Relationships</strong>: Mostly one-time, service-quality-driven; some repeat/referral relationship via word of mouth.</li><li><strong>Revenue Streams</strong>: Per-person day-trip fee; upsells (private charter upgrade, add-on activities).</li><li><strong>Key Resources</strong>: Day-trip-capable boats, trained crew, dock access, online booking presence/reputation.</li><li><strong>Key Activities</strong>: Trip scheduling and crewing, guest experience delivery, safety/maintenance, marketing and review management.</li><li><strong>Key Partners</strong>: Fuel suppliers, dock operators, travel agents, booking platforms.</li><li><strong>Cost Structure</strong>: Fixed (crew salaries, boat maintenance, insurance), variable (fuel, per-trip provisioning).</li></ul>
+<p>Consistency check example: if Revenue Streams shifts toward heavy discount promotions to compete on price, that puts pressure on the "scenic, well-run, experienced crew" Value Proposition — worth flagging as a tension rather than assuming the two coexist fine.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="market sizing tam sam som builds a defensible market size estimate broken into total addressable market, serviceable addressable market, and serviceable obtainable market, with every assumption shown explicitly rather than presented as a known fact. use when the user asks how big a market or opportunity is, wants a tam/sam/som estimate, or is sizing a new offering before investing in it.">
+        <summary>
+          <span class="skill-name">Market Sizing TAM SAM SOM</span>
+          <span class="skill-desc">Builds a defensible market size estimate broken into Total Addressable Market, Serviceable Addressable Market, and Serviceable Obtainable Market, with every assumption shown explicitly rather than presented as a known fact. Use when the user asks how big a market or opportunity is, wants a TAM/SAM/SOM estimate, or is sizing a new offering before investing in it.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Market Sizing (TAM / SAM / SOM)</h1>
+<h2>When to use this</h2>
+<p>The user needs a market size number — for a business case, a pitch, an investment decision, or to judge whether an opportunity is worth pursuing.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Real market data already exists and is available (a market research report, industry association data) — use that as the primary source and only fall back to estimation for gaps, don't estimate what's already known.</li><li>The decision doesn't actually hinge on the exact number — if a rough "this is clearly big enough" or "clearly too small" judgment is enough, a full TAM/SAM/SOM build may be more rigor than the decision needs.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Define the three layers precisely, for this specific case:</strong> - <strong>TAM (Total Addressable Market)</strong>: everyone who could theoretically want this category of product/service, if there were no constraints. - <strong>SAM (Serviceable Addressable Market)</strong>: the slice of TAM this specific business could realistically reach given its actual model — geography, channel, price point, positioning. - <strong>SOM (Serviceable Obtainable Market)</strong>: the slice of SAM this business could realistically capture in a defined time period, given competition and its own capacity/resources.</li><li><strong>Pick a build method and be explicit about which one:</strong> - <strong>Top-down</strong>: start from a large known figure (e.g. "X million tourists visit Lombok/Bali per year") and narrow it with stated percentages at each step. - <strong>Bottom-up</strong>: start from a unit (e.g. "Y bookings per month at current capacity, Z if capacity doubled") and build up. Bottom-up is usually more defensible for SOM specifically, since it's grounded in actual operating capacity. - Where possible, do both and sanity-check that they roughly agree — large disagreement usually means a bad assumption somewhere.</li><li><strong>Label every number's source.</strong> Three categories only: - <strong>Fact</strong> — from a cited source (say what the source is). - <strong>Estimate</strong> — a calculated number based on stated assumptions (show the calculation). - <strong>Assumption</strong> — a judgment call with no hard backing (say so plainly, don't dress it up as a fact).</li><li><strong>Show the math, not just the final number.</strong> Every multiplication or percentage narrowing should be visible so the user (or a client) can challenge any one step.</li><li><strong>State the sensitivity.</strong> If the number depends heavily on one uncertain assumption, say which one and what the range looks like if that assumption is wrong.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Market sizing: [subject]</code></pre>
+<p>### TAM: [number] Method: [top-down / bottom-up] [Calculation shown step by step, each figure labeled Fact/Estimate/Assumption]</p>
+<p>### SAM: [number] [Narrowing logic from TAM, e.g. geography/channel/price-point filter]</p>
+<p>### SOM: [number] [Narrowing logic from SAM, grounded in actual capacity/resources/timeframe]</p>
+<p>### Sensitivity The estimate is most sensitive to: [assumption]. If that assumption is [X instead], SOM would be closer to [range]. ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Presenting an assumption as a fact — the single most common way market sizing loses credibility. Always disclose the weakest link.</li><li>Confusing SAM with SOM — SAM is "could theoretically reach," SOM is "could actually capture given real constraints" (capacity, competition, time). Conflating them overstates the near-term opportunity.</li><li>Only doing top-down — a top-down number with no bottom-up sanity check is easy to get wrong by an order of magnitude without noticing.</li><li>Fabricating a source-sounding number ("studies show...") without an actual citation — if there's no real source, call it an assumption.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>TAM, SAM, and SOM are each defined for this specific case, not generic definitions</li><li class="check"><span class="box" aria-hidden="true"></span>Every number is labeled fact / estimate / assumption</li><li class="check"><span class="box" aria-hidden="true"></span>The calculation is shown, not just the result</li><li class="check"><span class="box" aria-hidden="true"></span>The most sensitive assumption is named explicitly</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: sizing a new multi-day Gili route</h3>
+<p>This uses invented illustrative figures to show the *method* — any real use of this skill should replace every number with sourced or clearly labeled current data, not reuse these.</p>
+<p>### TAM (top-down) "Annual international tourist arrivals to Lombok" — <strong>Fact</strong> (if pulled from a cited tourism board / BPS statistics figure, cite it here). → Multiply by "% who take any boat/marine tour during their visit" — <strong>Estimate</strong>, based on a stated source or comparable-market benchmark, or <strong>Assumption</strong> if no source exists — label whichever it actually is.</p>
+<p>### SAM (narrowing from TAM) Filter TAM down by: - Only tourists whose trip length and budget fit a multi-day charter (narrows by trip type) — <strong>Assumption</strong> unless backed by booking-platform or survey data. - Only tourists reachable through GIC's actual channels (website, existing agent partners, review platforms) — <strong>Assumption</strong>, since channel reach isn't precisely measurable without ad platform data.</p>
+<p>### SOM (bottom-up, grounded in real capacity) Build from GIC's actual operating constraints, not a percentage guess: - Number of boats that could realistically be allocated to the new route — <strong>Fact</strong> (known internally). - Trips per month each boat could run on this route, given crew and maintenance schedules — <strong>Fact/Estimate</strong> (known internally, or a reasonable estimate if the route is new). - Guests per trip × price → monthly revenue capacity — <strong>Estimate</strong> (calculation from the above facts). - Realistic booking/fill rate in year one, given it's a new route with no track record — <strong>Assumption</strong>, and probably the single most uncertain number in the whole build.</p>
+<p>### Sensitivity note In a build like this, SOM is almost always most sensitive to the <strong>fill rate assumption</strong> in year one, not to TAM or SAM — because SOM is capacity-constrained, not demand-constrained, in a new small route. That's worth stating explicitly: "even if SAM is off by 2x, SOM barely changes, because the real constraint is boats and crew, not addressable demand." This is the kind of insight a mechanical percentage-narrowing exercise would miss, but naming it is exactly what makes the sizing useful for a real decision.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="competitive landscape mapper builds a structured side-by-side comparison of named competitors — positioning, pricing, offering, and ownership — with sourcing discipline and verification of who actually owns/operates what. use when the user wants a competitor comparison, asks &quot;who else is in this space,&quot; or wants to understand the competitive landscape before a pricing or positioning decision.">
+        <summary>
+          <span class="skill-name">Competitive Landscape Mapper</span>
+          <span class="skill-desc">Builds a structured side-by-side comparison of named competitors — positioning, pricing, offering, and ownership — with sourcing discipline and verification of who actually owns/operates what. Use when the user wants a competitor comparison, asks "who else is in this space," or wants to understand the competitive landscape before a pricing or positioning decision.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Competitive Landscape Mapper</h1>
+<h2>When to use this</h2>
+<p>The user wants to compare specific named competitors against each other and against their own business — not a general market-structure question (that's <code>porters-five-forces</code>) and not deep research on one single competitor (that's <code>competitor-research-brief</code>).</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only one competitor is in scope and the need is depth, not comparison — use <code>competitor-research-brief</code> instead.</li><li>The question is about overall market attractiveness, not specific named players — use <code>porters-five-forces</code>.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Check the user's own brands/entities first.</strong> Before treating anything as a "competitor," confirm it isn't actually the user's own business under a different name or sub-brand, or a partner rather than a rival. This is a common mistake in market maps assembled from public listings.</li><li><strong>Verify ownership before listing an entity as a distinct competitor.</strong> Two differently-named boats or brands are sometimes owned by the same operator. Where ownership can't be confirmed, mark it as unverified rather than presenting it as fact.</li><li><strong>Pick comparison dimensions relevant to the actual decision</strong> — don't default to a generic list. For a charter/tourism business, useful dimensions are typically: offering (route/duration), price point, positioning/target customer, fleet size or scale, and review reputation (rating + volume). For other industries, adapt accordingly.</li><li><strong>Build the comparison as a table</strong>, one row per competitor, one column per dimension, plus a row for the user's own business so the comparison is relative, not just descriptive of others.</li><li><strong>Prefer a static, sourced snapshot over claiming real-time accuracy.</strong> Pricing and offerings change; state the date the information was gathered and note that it may be stale.</li><li><strong>Separate fact from inference.</strong> "Their website lists 3 boats" is a fact; "they appear to target a younger backpacker segment" is an inference — label which is which.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Competitive landscape: [market/segment], as of [date]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Competitor</th><th>Offering</th><th>Price point</th><th>Positioning</th><th>Scale</th><th>Reputation</th></tr></thead><tbody><tr><td>[Us]</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>[Competitor A]</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr><tr><td>[Competitor B]</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Notes - Ownership verified for: [...]. Unverified/unclear ownership: [...] - Sources: [where each figure came from] - Facts vs. inferences: [flag anything that's a judgment call, not a confirmed fact]</p>
+<p>### So what [1-3 sentences on what this comparison implies for positioning/pricing] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating the user's own sub-brand or a business partner as a competitor by mistake — always check this first, per <code>[[feedback_competitor_research_market_maps]]</code>-style discipline.</li><li>Presenting stale or guessed pricing as current fact.</li><li>Skipping ownership verification and double-counting one operator as two separate competitors.</li><li>A comparison table with no "so what" — the point is to inform a decision, not just catalogue competitors.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>User's own brands/entities excluded or clearly marked if included for context</li><li class="check"><span class="box" aria-hidden="true"></span>Ownership verified or explicitly marked unverified</li><li class="check"><span class="box" aria-hidden="true"></span>Data snapshot dated, sources noted</li><li class="check"><span class="box" aria-hidden="true"></span>Facts and inferences clearly distinguished</li><li class="check"><span class="box" aria-hidden="true"></span>Ends with a "so what," not just a table</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Comparison dimension menus by industry</h3>
+<p>Pick the 4-6 dimensions most relevant to the actual decision — don't use every dimension listed here for every comparison.</p>
+<p>## Tourism / charter / hospitality Offering (route, duration, inclusions), price point, positioning/target customer, fleet or room count (scale), review rating + volume, booking channel presence, seasonality of operation.</p>
+<p>## Professional services / consulting Service scope, pricing model (fixed/hourly/retainer), target client size, industry specialization, team size, notable clients or case studies (only if publicly disclosed).</p>
+<p>## Retail / e-commerce Product range, price tier, channel (online/physical/marketplace), shipping/fulfillment model, brand positioning, customer review profile.</p>
+<p>## General-purpose default (when industry isn't listed above) Offering, price point, positioning, scale, reputation/reviews — this is the default set used in the main SKILL.md output format.</p>
+<h4>A note on verification discipline</h4>
+<p>When public sources conflict (e.g. one review site says 3 boats, the company's own site says 5), state both and flag the discrepancy rather than picking one arbitrarily. When a competitor's ownership structure isn't publicly clear (e.g. franchise-style operations, or multiple brands sharing infrastructure), say "ownership unclear" rather than guessing — an unverified claim stated as fact is worse than an honest gap.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="root cause five whys drills from an observed symptom down to its root cause using the 5-whys method (and a fishbone/cause-category checklist for more complex cases), so fixes address the actual problem instead of a surface symptom. use when something is going wrong repeatedly, the user asks &quot;why did this happen,&quot; or a fix keeps not working.">
+        <summary>
+          <span class="skill-name">Root Cause Five Whys</span>
+          <span class="skill-desc">Drills from an observed symptom down to its root cause using the 5-Whys method (and a fishbone/cause-category checklist for more complex cases), so fixes address the actual problem instead of a surface symptom. Use when something is going wrong repeatedly, the user asks "why did this happen," or a fix keeps not working.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Root Cause Analysis (5-Whys)</h1>
+<h2>When to use this</h2>
+<p>Something specific and observable went wrong (a metric dropped, a process failed, a complaint pattern emerged) and the user wants to know the actual cause, not just the symptom — especially useful when a first attempted fix didn't work, which usually means the wrong layer was targeted.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The problem is broad and undefined ("why is the business struggling") — structure it first with <code>mece-problem-structuring</code>, then apply this to one specific branch.</li><li>The cause is already known and confirmed — this skill is for finding an unknown cause, not documenting a known one.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>State the symptom precisely and factually.</strong> "Bookings dropped" is vague; "confirmed bookings for September fell 30% versus August" is a stated symptom that can actually be traced.</li><li><strong>Ask "why" and answer with a real mechanism, not a restatement.</strong> Each answer must be a cause that, if true, would actually produce the effect above it — not a synonym for the symptom.</li><li><strong>Repeat until you hit a cause that is either (a) actionable — something the business can actually change, or (b) external and fixed — a constraint to plan around rather than solve. Stop there.</strong> Five is a guideline, not a rule: some chains resolve in three whys, others need seven. Stop when you hit something real, not at an arbitrary count.</li><li><strong>At each step, note whether the answer is a confirmed fact or a hypothesis to test.</strong> "Why did response time increase — because a team member left last month" is a fact if true; "why did response time increase — because inquiries got more complex" is a hypothesis until checked against actual inquiry data.</li><li><strong>For problems with multiple plausible contributing causes</strong>, don't force a single chain — use the fishbone categories in <code>references/fishbone-categories.md</code> to check across People, Process, Tools/Systems, and External factors, then trace the most likely one(s) with 5-Whys.</li><li><strong>End with the fix aimed at the root cause, not the symptom</strong> — and note if a quick symptom-level mitigation is also worth doing in the meantime while the root cause fix takes effect.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Root cause: [symptom, stated precisely]</code></pre>
+<ol><li>Why? → [cause] (fact / hypothesis to test)</li><li>Why? → [cause] (fact / hypothesis to test)</li><li>Why? → [cause] (fact / hypothesis to test) ...continue until root cause reached...</li></ol>
+<p>### Root cause [The cause the chain bottoms out at]</p>
+<p>### Recommended fix Aimed at root cause: [...] Symptom-level mitigation in the meantime (if needed): [...] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Stopping at the first plausible-sounding answer instead of continuing to ask why that's true.</li><li>Answers that just restate the symptom in different words ("bookings dropped because fewer people booked") rather than naming a mechanism.</li><li>Assuming a single linear chain when the real cause is actually two or three contributing factors — check the fishbone categories before committing to one chain.</li><li>Treating every "why" answer as a confirmed fact rather than flagging which ones are still hypotheses needing a data check.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Symptom is stated precisely and factually, not vaguely</li><li class="check"><span class="box" aria-hidden="true"></span>Each "why" step names a real mechanism, not a restatement</li><li class="check"><span class="box" aria-hidden="true"></span>Fact vs. hypothesis is labeled at each step</li><li class="check"><span class="box" aria-hidden="true"></span>The chain stops at something actionable or a confirmed external constraint, not arbitrarily at five</li><li class="check"><span class="box" aria-hidden="true"></span>The fix targets the root cause, with symptom mitigation noted separately if relevant</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Fishbone categories for multi-cause problems</h3>
+<p>When a symptom likely has more than one contributing cause, check across these categories before committing to a single 5-Whys chain. Adapt category names to the actual business context.</p>
+<ul><li><strong>People</strong> — skills, staffing levels, training, turnover, workload</li><li><strong>Process</strong> — how work is actually done, handoffs, response-time standards, approval steps</li><li><strong>Tools/Systems</strong> — booking system, communication tools, scheduling software, their reliability and ease of use</li><li><strong>External</strong> — seasonality, weather, competitor actions, currency, regulation, market-wide demand shifts</li></ul>
+<h4>Worked example: "Response time to booking inquiries got slower"</h4>
+<p>Quick fishbone pass across categories: - People: a team member who handled inquiries left last month (likely contributor — fact, checkable via staffing records) - Process: no formal backup/coverage plan for inquiry handling when someone is out (likely contributor) - Tools: booking inquiry inbox is shared with general email, easy for messages to get buried (possible contributor — check inbox structure) - External: inquiry volume itself increased due to seasonal demand (possible contributor — check volume data before assuming)</p>
+<p>Two categories (People, Process) look like the strongest candidates based on what's known; Tools and External are worth a quick data check before ruling in or out. From here, run 5-Whys on the strongest candidate:</p>
+<ol><li>Why did response time get slower? → Fewer people available to answer inquiries (fact: one team member left).</li><li>Why weren't inquiries redistributed? → No documented backup process for who covers inquiries when someone is out (fact: confirmed no such document exists).</li><li>Why was there no backup process? → Inquiry handling was informally owned by one person, never formally cross-trained (root cause: process/staffing structure, not a one-off event).</li></ol>
+<p>Root cause: inquiry handling lacked a documented, cross-trained backup — not simply "we lost a team member," which is the surface-level symptom explanation. Fix aimed at root cause: document the inquiry process and cross-train a second person. Symptom-level mitigation in the meantime: temporarily reassign inquiry handling to another available team member.</p></div>
+        </div>
+      </details>
+      </div>
+    </section>
+
+    <section class="category" id="client-stakeholder-deliverables">
+      <h2 class="category-title">Client & stakeholder deliverables</h2>
+      <div class="skill-list">
+      <details class="skill" data-search="executive summary writer converts analysis, research, or a long document into a one-page executive summary using the pyramid principle — leading with the answer/recommendation, then the supporting logic, then the detail. use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly.">
+        <summary>
+          <span class="skill-name">Executive Summary Writer</span>
+          <span class="skill-desc">Converts analysis, research, or a long document into a one-page executive summary using the Pyramid Principle — leading with the answer/recommendation, then the supporting logic, then the detail. Use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Executive Summary Writer</h1>
+<h2>When to use this</h2>
+<p>There's already analysis, research, or a long document, and it needs to become something a time-pressed reader (a client, a board member, an investor) can absorb in under a minute and know what to do with.</p>
+<h2>When NOT to use this</h2>
+<ul><li>There's no underlying analysis yet — this skill summarizes existing work, it doesn't generate the analysis itself. Do the analysis first (with whichever skill fits) then summarize it.</li><li>The audience wants full detail, not a summary — don't compress something that's supposed to stay comprehensive.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Identify the single main message.</strong> Before writing anything, state in one sentence: what does the reader most need to know or decide? If there isn't a clear single answer yet, the underlying analysis isn't finished — don't paper over that by writing a vague summary.</li><li><strong>Lead with the answer (Pyramid Principle), not the process.</strong> Don't open with "we analyzed X, then looked at Y, then considered Z" — open with the conclusion or recommendation itself. The reasoning comes after, to support the answer, not before it as a build-up.</li><li><strong>Structure the supporting logic as 3-5 grouped reasons</strong>, each one a genuine reason for the main message — not just restating it, and not an unrelated fact. Each reason should be a claim, not just a topic ("Costs are rising faster than revenue" not "Cost trends").</li><li><strong>State what should happen next.</strong> An executive summary that ends without a clear next step or ask is incomplete — even if the next step is "no action needed, monitor quarterly."</li><li><strong>Cut ruthlessly.</strong> If a sentence doesn't support the main message or the recommended action, it doesn't belong in the summary — it belongs in the full document being summarized.</li><li><strong>Keep it to one page (roughly 250-400 words)</strong> unless the user specifies otherwise.</li></ol>
+<h2>Output format</h2>
+<pre><code>## [Title: the subject, not a vague label like &quot;Summary&quot;]</code></pre>
+<p><strong>Bottom line</strong>: [the main message/recommendation, one to two sentences]</p>
+<p><strong>Why</strong>: - [Reason 1, stated as a claim] - [Reason 2, stated as a claim] - [Reason 3, stated as a claim]</p>
+<p><strong>What this means / next step</strong>: [the recommended action or decision needed, and by whom/when if relevant] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Burying the recommendation at the end instead of leading with it — the single most common executive summary mistake.</li><li>Listing topics instead of claims ("Market trends" instead of "The target market is growing 12% annually, faster than our current capacity").</li><li>Including process narrative ("first we did X, then Y") that belongs in the appendix, not the summary.</li><li>No clear next step — leaving the reader informed but not knowing what happens next.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>The main message is stated in the first two sentences</li><li class="check"><span class="box" aria-hidden="true"></span>Every supporting bullet is a claim, not a topic label</li><li class="check"><span class="box" aria-hidden="true"></span>A clear next step or ask is present</li><li class="check"><span class="box" aria-hidden="true"></span>Fits on one page / roughly 250-400 words</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>The Pyramid Principle, briefly</h3>
+<p>Developed by Barbara Minto at McKinsey, the core idea: structure written communication top-down, not bottom-up. Most people naturally write in the order they figured something out (background → analysis → conclusion). Readers, especially busy executive readers, need it the other way around (conclusion → supporting reasons → detail on request).</p>
+<h4>The shape</h4>
+<pre><code>                [Main message / answer]
+               /          |          \
+     [Reason 1]      [Reason 2]      [Reason 3]
+       /    \           /    \          /    \
+  [detail] [detail] [detail][detail] [detail][detail]</code></pre>
+<p>Each level answers "why?" or "so what?" for the level above it. A reader should be able to stop reading at any level and still have gotten the truth — just less detail.</p>
+<h4>Grouping reasons (the "MECE at the reasons level" check)</h4>
+<p>The 3-5 supporting reasons should ideally be genuinely distinct categories, not overlapping restatements. A quick test: could two of the reasons be merged into one without losing anything? If yes, they weren't really distinct reasons.</p>
+<h4>Worked example</h4>
+<p>Bad (bottom-up, buries the point): &gt; "We looked at Q3 booking data across all channels. Marketing spend was &gt; reduced by 15% in August. Response times to inquiries also increased &gt; from 2 hours to 6 hours average. Additionally, our main competitor &gt; launched a new discounted package in July. Taking all this together, &gt; bookings for Q3 fell 22% versus Q2."</p>
+<p>Good (Pyramid Principle, answer first): &gt; <strong>Bottom line</strong>: Q3 bookings fell 22% versus Q2, driven mainly by two &gt; controllable factors — reduced marketing spend and slower inquiry &gt; response times — not primarily by competitor activity. &gt; &gt; <strong>Why</strong>: &gt; - Marketing spend was cut 15% in August, reducing inquiry volume at the &gt;   top of the funnel. &gt; - Average inquiry response time rose from 2 hours to 6 hours, likely &gt;   reducing conversion of the inquiries that did come in. &gt; - A competitor's new discounted package launched in July, but timing &gt;   suggests it's a smaller contributor than the two factors above. &gt; &gt; <strong>What this means</strong>: Restoring response time to under 2 hours and &gt; reinstating August-level marketing spend are the two highest-leverage, &gt; controllable fixes for Q4.</p>
+<p>Same facts, radically more useful because the reader gets the answer immediately and the reasoning to trust it right after.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="consulting deck storyliner outlines a slide deck with a single storyline and one clear, action-titled message per slide, in the style used by strategy consulting firms. use when the user wants to structure a presentation, plan slide flow, or turn analysis into a deck outline before building actual slides.">
+        <summary>
+          <span class="skill-name">Consulting Deck Storyliner</span>
+          <span class="skill-desc">Outlines a slide deck with a single storyline and one clear, action-titled message per slide, in the style used by strategy consulting firms. Use when the user wants to structure a presentation, plan slide flow, or turn analysis into a deck outline before building actual slides.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Consulting Deck Storyliner</h1>
+<h2>When to use this</h2>
+<p>The user has content (analysis, findings, a recommendation) and needs it turned into a slide-by-slide outline — not the final designed slides themselves, but the structure and message of each one.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The content/analysis doesn't exist yet — storyline it after the thinking is done, not before, or the deck will be structured around nothing.</li><li>The user wants actual slide design/visuals built — this skill produces the outline and messages; building polished slides is a separate step (and PowerPoint-specific skills may help there).</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Write the storyline in one sentence first</strong>, independent of slides — what is this deck arguing, start to finish? If this sentence can't be written cleanly, the deck isn't ready to outline yet.</li><li><strong>Break the storyline into acts</strong> (typically 3-5): commonly Situation → Complication → Question → Answer → Implications, or for a recommendation deck: Context → Problem → Options considered → Recommendation → Next steps. Pick whichever act structure fits the actual content.</li><li><strong>For each slide, write the action title first</strong> — a full sentence stating the slide's takeaway, not a topic label. "Q3 bookings fell 22%, driven by two controllable factors" is an action title; "Q3 Booking Analysis" is a topic label and tells the reader nothing.</li><li><strong>One message per slide.</strong> If a slide's action title needs "and" to connect two unrelated claims, it's two slides, not one.</li><li><strong>Check the "governing thought" flow</strong>: reading only the action titles of every slide, in order, should tell the whole story on its own — this is the fastest way to test if the storyline actually holds together before building any visuals.</li><li><strong>Note what evidence/visual each slide needs</strong> (a chart, a table, a quote) without designing it — just flag what's needed to support the claim in the title.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Deck storyline: [one-sentence overall argument]</code></pre>
+<p>### Act 1: [name] <strong>Slide 1</strong> — [Action title, full sentence] Evidence needed: [chart/table/data described, not designed]</p>
+<p><strong>Slide 2</strong> — [Action title, full sentence] Evidence needed: ...</p>
+<p>### Act 2: [name] ...</p>
+<p>### Storyline check Reading just the action titles in order: [paste them as a flowing list — if it doesn't read as a coherent argument on its own, flag which transition breaks down] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Topic-label titles ("Market Overview," "Financial Summary") instead of action titles that state the actual finding.</li><li>Two claims crammed into one slide because they're "related enough" — if the title needs "and," split it.</li><li>Skipping the storyline-check step and only noticing the argument doesn't flow once slides are built.</li><li>Designing visuals before confirming the storyline holds — wastes effort if a later logic gap forces a restructure.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>One-sentence storyline exists and is clear</li><li class="check"><span class="box" aria-hidden="true"></span>Every slide title is an action title (a claim), not a topic label</li><li class="check"><span class="box" aria-hidden="true"></span>Every slide carries exactly one message</li><li class="check"><span class="box" aria-hidden="true"></span>Reading all action titles in sequence tells the full story on its own</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Common act structures</h3>
+<p>Pick whichever fits the content — don't force one that doesn't match what the deck is actually arguing.</p>
+<p>## Situation-Complication-Question-Answer (SCQA) Best for: decks that need to bring the reader along a reasoning path, especially when the recommendation might be surprising or contested. 1. <strong>Situation</strong> — the stable context the reader already agrees with 2. <strong>Complication</strong> — what changed or what's the tension/problem 3. <strong>Question</strong> — the question this raises, made explicit 4. <strong>Answer</strong> — the recommendation, and the rest of the deck defends it</p>
+<p>## Context-Problem-Options-Recommendation-Next steps Best for: decision decks where multiple options were genuinely considered and the reader needs to see the comparison, not just the pick. 1. <strong>Context</strong> — brief background 2. <strong>Problem</strong> — what needs deciding 3. <strong>Options considered</strong> — 2-4 real options, with tradeoffs shown 4. <strong>Recommendation</strong> — the pick, and why it beats the alternatives 5. <strong>Next steps</strong> — what happens after this deck is approved</p>
+<p>## Findings-first (for research/analysis readouts) Best for: sharing research or analysis results where there isn't yet a single decision to make. 1. <strong>Headline finding</strong> — the single most important takeaway, up front 2. <strong>Supporting findings</strong> — 3-5 grouped findings, each with its own action-titled slide 3. <strong>Implications</strong> — what this means for the business 4. <strong>Open questions</strong> — what's still unknown, if relevant</p>
+<h4>Worked example — one slide, done well</h4>
+<p>Bad: "Slide 4: Competitive Landscape" (topic label, no message)</p>
+<p>Good: "Slide 4: Two competitors now offer multi-day packages, closing our main differentiation gap" (action title — states the actual finding, tells the reader what to take away without needing to read the chart) Evidence needed: a simple comparison table (from <code>competitive-landscape-mapper</code>) showing offering type across 3-4 named competitors and GIC, dated.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="board investor memo drafts a structured board or investor update memo covering progress, key metrics, risks, and specific asks. use when the user needs to write a board update, investor update, or periodic (monthly/quarterly) stakeholder memo.">
+        <summary>
+          <span class="skill-name">Board Investor Memo</span>
+          <span class="skill-desc">Drafts a structured board or investor update memo covering progress, key metrics, risks, and specific asks. Use when the user needs to write a board update, investor update, or periodic (monthly/quarterly) stakeholder memo.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Board / Investor Memo</h1>
+<h2>When to use this</h2>
+<p>The user needs to write a periodic update to people with oversight or financial stake in the business (a board, investors, or key partners) — distinct from an internal team report (<code>weekly-ops-report</code>) or a client-facing summary of analysis (<code>executive-summary-writer</code>).</p>
+<h2>When NOT to use this</h2>
+<ul><li>The audience is internal team members, not board/investor-level stakeholders — use <code>weekly-ops-report</code>.</li><li>There's no real update since the last one — say that plainly rather than padding a memo with filler.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm the reporting period and cadence</strong> (monthly, quarterly, ad-hoc) — this sets how much ground the memo needs to cover.</li><li><strong>Lead with a short headline summary</strong> — 2-3 sentences on the overall state of the business this period, before any detail.</li><li><strong>Report the key metrics that actually matter to this business</strong>, not a generic list — for a charter business, likely bookings, revenue, occupancy/utilization, and customer satisfaction; for other businesses, adapt. Show period-over-period comparison, not just the current number.</li><li><strong>Cover progress against previously stated goals or asks.</strong> If a previous memo said "we will do X by this quarter," report on it explicitly — don't let commitments quietly disappear.</li><li><strong>State risks and challenges honestly</strong>, not just wins. A memo that only reports good news loses credibility and hides problems until they're bigger. Pair each risk with what's being done about it.</li><li><strong>End with specific asks, if any</strong> — what does the board/investor need to decide, approve, or help with? If there's no ask, say "no action needed this period" explicitly rather than leaving it ambiguous.</li></ol>
+<h2>Output format</h2>
+<pre><code>## [Business name] — [Period] Update</code></pre>
+<p><strong>Headline</strong>: [2-3 sentence overall state]</p>
+<p>### Key metrics | Metric | This period | Last period | Change | |---|---|---|---| | ... | ... | ... | ... |</p>
+<p>### Progress on prior commitments - [Prior commitment] — [status: done / on track / delayed, and why]</p>
+<p>### Risks &amp; challenges - [Risk] — [what's being done about it]</p>
+<p>### Asks - [Specific ask, or "no action needed this period"] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Only reporting good news — erodes trust once a real problem surfaces without warning.</li><li>Vague metrics without period-over-period comparison, making it impossible to tell if things are improving or not.</li><li>Letting previous commitments go unmentioned instead of explicitly tracking them.</li><li>A vague or missing ask, leaving the reader unsure if they need to do anything.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Headline states the overall picture in 2-3 sentences</li><li class="check"><span class="box" aria-hidden="true"></span>Metrics show period-over-period comparison, not just current state</li><li class="check"><span class="box" aria-hidden="true"></span>Prior commitments are explicitly tracked, not dropped</li><li class="check"><span class="box" aria-hidden="true"></span>Risks are included, each with a stated mitigation</li><li class="check"><span class="box" aria-hidden="true"></span>Ends with a clear, specific ask (or explicit "none")</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Metric menus by business type</h3>
+<p>Choose metrics that actually matter to the specific business — a generic metric list is a sign the memo wasn't tailored.</p>
+<p>## Charter / tourism / hospitality Bookings (count and revenue), occupancy/utilization rate, average booking value, cancellation rate, review rating and volume, repeat-customer rate, lead time (booking to trip date).</p>
+<p>## Professional services / consulting Active engagements, revenue (billed and pipeline), utilization rate (billable hours), client retention/renewal rate, new business pipeline value.</p>
+<p>## General SaaS/subscription (for reference if relevant to a client) MRR/ARR, churn rate, net revenue retention, customer acquisition cost, active user count.</p>
+<h4>Tone notes for risk sections</h4>
+<p>Investors and boards generally respond better to a risk stated plainly with a mitigation plan than to a risk buried in cautious language or omitted. Compare:</p>
+<p>Weak: "There were some challenges with staffing this quarter that we are monitoring."</p>
+<p>Better: "Inquiry response time slowed after a team member's departure in August; we're cross-training a second person on inquiry handling, targeting response time back under 2 hours by [date]."</p>
+<p>The second version names the actual problem, its cause, and a concrete fix with a timeline — that's what makes a risk section useful rather than just an acknowledgment.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="proposal sow drafter drafts a client proposal or statement of work, covering scope, deliverables, timeline, fees, and assumptions. use when the user needs to write a consulting proposal, scope an engagement, draft a sow, or respond to a client request for a project quote.">
+        <summary>
+          <span class="skill-name">Proposal SOW Drafter</span>
+          <span class="skill-desc">Drafts a client proposal or statement of work, covering scope, deliverables, timeline, fees, and assumptions. Use when the user needs to write a consulting proposal, scope an engagement, draft a SOW, or respond to a client request for a project quote.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Proposal / Statement of Work Drafter</h1>
+<h2>When to use this</h2>
+<p>The user needs a written proposal or SOW to send to a prospective or existing client, defining what work will be done, for how much, and under what terms.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The engagement scope isn't actually clear yet — clarify scope with the user (or note open questions explicitly in the draft) rather than inventing scope details that weren't discussed.</li><li>This is a legal contract requiring specific jurisdiction/liability language — draft the business content, but flag that legal review is needed before it's a binding contract, not a substitute for one.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm what's actually known vs. assumed</strong> before drafting: client name, problem being solved, deliverables discussed, timeline constraints, budget range (if known). Flag anything not yet confirmed rather than filling gaps with invented specifics.</li><li><strong>State the problem/objective first</strong>, in the client's terms — what they're trying to achieve, not a list of activities. This frames everything that follows.</li><li><strong>Define scope explicitly, including what's out of scope.</strong> Scope creep is the most common source of engagement friction — an explicit "not included" list prevents later disputes as much as the "included" list does.</li><li><strong>List deliverables as concrete artifacts</strong>, not vague activities — "a written market-entry recommendation with supporting analysis," not "strategic advisory support."</li><li><strong>Lay out a timeline with milestones</strong>, not just a single end date — makes progress checkable and sets expectations for when the client will see something.</li><li><strong>State fees and payment terms clearly</strong>, including what happens if scope changes (a change-order or re-scoping clause) — this protects both sides and should be stated up front, not discovered mid-engagement.</li><li><strong>List assumptions and dependencies</strong> — anything the engagement depends on the client providing (data access, stakeholder availability, timely feedback) that, if missing, would affect timeline or outcome.</li><li><strong>Flag that legal/contractual review is a separate step</strong> if this proposal will become a binding agreement — this skill drafts the business content, not a vetted legal contract.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Proposal: [Engagement name] — [Client name]</code></pre>
+<p>### Objective [What the client is trying to achieve, in their terms]</p>
+<p>### Scope <strong>Included</strong>: [...] <strong>Not included</strong>: [...]</p>
+<p>### Deliverables 1. [Concrete deliverable] 2. ...</p>
+<p>### Timeline | Milestone | Target date | |---|---| | ... | ... |</p>
+<p>### Fees [Fee structure, payment terms, change-order handling]</p>
+<p>### Assumptions &amp; dependencies - [What the engagement assumes/depends on from the client]</p>
+<p>### Open questions / to confirm before sending [Anything not yet confirmed with the client] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Vague deliverables that can't be checked off as done or not done.</li><li>No "not included" list, leaving scope open to drift.</li><li>No change-order/re-scoping language, making later scope changes awkward to charge for.</li><li>Inventing specifics (numbers, dates, names) that weren't actually discussed, instead of flagging them as open questions.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Objective is stated in the client's terms, not just a task list</li><li class="check"><span class="box" aria-hidden="true"></span>Scope includes both "included" and "not included"</li><li class="check"><span class="box" aria-hidden="true"></span>Deliverables are concrete, checkable artifacts</li><li class="check"><span class="box" aria-hidden="true"></span>Timeline has milestones, not just an end date</li><li class="check"><span class="box" aria-hidden="true"></span>Fees, payment terms, and change-order handling are stated</li><li class="check"><span class="box" aria-hidden="true"></span>Anything unconfirmed is flagged, not invented</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Common fee structures, and when each fits</h3>
+<ul><li><strong>Fixed fee</strong> — best when scope is well-defined and deliverables are concrete. Lowest client risk, highest provider risk if scope creeps (which is exactly why the "not included" list matters most here).</li><li><strong>Time &amp; materials (hourly/daily rate)</strong> — best when scope is exploratory or likely to evolve. Lower provider risk, requires trust and transparent time tracking to avoid client concern about runaway hours.</li><li><strong>Retainer</strong> — best for ongoing advisory relationships rather than a single project with an end date; usually paired with a defined monthly scope of availability/hours rather than specific deliverables.</li><li><strong>Value-based / success fee</strong> — tied to an outcome (e.g. % of cost savings identified). Higher potential upside, but requires a very clearly measurable outcome and trust in how it's measured — riskiest to set up well, and usually needs the most explicit definition of how success is measured and attributed.</li></ul>
+<h4>Change-order clause, example language</h4>
+<p>"Any request that materially changes scope, deliverables, or timeline from what's described above will be scoped and quoted separately before work begins on it. Minor clarifications within the original scope are included at no extra charge."</p>
+<p>This kind of clause protects the relationship as much as the fee — it gives a neutral, pre-agreed process for scope changes instead of an awkward renegotiation once something unexpected comes up mid-engagement.</p>
+<h4>Assumptions/dependencies — common ones worth stating explicitly</h4>
+<ul><li>Timely access to requested data or documents</li><li>Availability of key stakeholders for interviews/decisions within the proposed timeline</li><li>Feedback turnaround time on draft deliverables (state an expected window, e.g. "5 business days")</li><li>Any third-party tools/systems access needed to complete the work</li></ul></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="stakeholder influence map maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in.">
+        <summary>
+          <span class="skill-name">Stakeholder Influence Map</span>
+          <span class="skill-desc">Maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. Use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Stakeholder Influence Map</h1>
+<h2>When to use this</h2>
+<p>A decision, project, or change involves multiple people or groups with different levels of power and interest, and the user needs a plan for how to engage each of them — not just a list of who's involved.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only one or two stakeholders are relevant — a simple direct conversation plan is enough, a full grid is overkill.</li><li>The question is about internal task ownership on a project, not influence/buy-in — use <code>raci-matrix-generator</code> for that instead.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>List every stakeholder who could affect or be affected by the decision</strong> — include people who might resist as well as obvious supporters; an incomplete list is the most common failure mode here.</li><li><strong>Rate each on two dimensions:</strong> - <strong>Influence</strong> — how much power they have to help or block this (formal authority, informal sway, control of resources) - <strong>Interest</strong> — how much this actually matters to them personally or to their goals</li><li><strong>Plot into the four quadrants</strong> and use the standard engagement approach for each (see <code>references/quadrant-strategies.md</code> for detail): - High influence, high interest → <strong>Manage closely</strong> (actively involve) - High influence, low interest → <strong>Keep satisfied</strong> (don't overwhelm, but don't neglect) - Low influence, high interest → <strong>Keep informed</strong> (they care, give them visibility even without needing their active buy-in) - Low influence, low interest → <strong>Monitor</strong> (minimal effort, watch for change)</li><li><strong>For each stakeholder, note what they likely care about</strong> — their actual motivation, not an assumption — since the engagement approach only works if it's aimed at what they actually value.</li><li><strong>Flag any stakeholder whose position might change</strong> (e.g. someone gaining influence soon, or someone whose interest will spike once the decision becomes visible) — a static map misses this.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Stakeholder map: [decision/project]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Stakeholder</th><th>Influence</th><th>Interest</th><th>Quadrant</th><th>What they likely care about</th><th>Engagement approach</th></tr></thead><tbody><tr><td>...</td><td>High/Low</td><td>High/Low</td><td>...</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Notes - [Any stakeholder whose position is likely to shift, and when] - [Any stakeholder missing from initial brainstorm that should be double-checked] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>An incomplete stakeholder list — missing a quiet-but-high-influence person is the most common and costly mistake here.</li><li>Guessing at what a stakeholder cares about instead of noting it as an assumption to verify (or actually asking them).</li><li>Treating the map as static when a reorg, promotion, or upcoming visibility of the decision will change someone's influence or interest.</li><li>Using the same engagement approach for everyone regardless of quadrant — the point of the grid is that different stakeholders need different handling.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Stakeholder list is genuinely comprehensive, including likely resistors</li><li class="check"><span class="box" aria-hidden="true"></span>Influence and interest are rated with a stated reason, not just guessed</li><li class="check"><span class="box" aria-hidden="true"></span>Each stakeholder has a specific engagement approach, not a generic one</li><li class="check"><span class="box" aria-hidden="true"></span>Any likely change in someone's position is flagged</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Quadrant strategies in detail</h3>
+<p>## High influence, high interest — Manage closely Actively involve in decisions, not just updates. Give them a genuine voice, seek their input before major moves, and address concerns directly. These are the people who can single-handedly make or break the initiative — under-investing here is the highest-risk mistake on the grid.</p>
+<p>## High influence, low interest — Keep satisfied They could block or slow things if annoyed, but don't need or want detailed involvement. Give periodic, high-level updates; avoid over-communicating (which can itself create unwanted interest/scrutiny); make sure they're not surprised by major changes even if they're not actively engaged day to day.</p>
+<p>## Low influence, high interest — Keep informed They care and may have useful input or be affected directly, but can't block or significantly accelerate the initiative on their own. Give them real visibility — regular updates, a way to ask questions — since their goodwill matters even without formal power, and disengaging them entirely can create resentment or lost insight.</p>
+<p>## Low influence, low interest — Monitor Minimal proactive effort. Include in broad communications but don't invest special engagement time. Re-check periodically in case their influence or interest changes (e.g. a promotion, or the initiative becoming more visible to their area).</p>
+<h4>Worked example: introducing a new booking system at GIC</h4>
+<ul><li><strong>Owner/decision-maker (you)</strong> — High influence, high interest → Manage closely (this is the driving stakeholder, not one being "managed" in the traditional sense, but still worth mapping to keep the plan honest about where the decision authority sits)</li><li><strong>Booking/inquiry team member</strong> — High influence (day-to-day system user, adoption depends on them), high interest (directly affects their daily work) → Manage closely — involve them in choosing/testing the system, not just informing them once decided</li><li><strong>Boat captains/crew leads</strong> — Medium-low influence, medium interest (affects scheduling visibility but not their core job) → Keep informed</li><li><strong>Existing booking platform/agent partners</strong> — Variable influence depending on how much business they route, likely low-medium interest unless the change affects how they submit bookings → Keep satisfied or informed depending on actual integration impact — worth confirming directly rather than assuming</li></ul></div>
+        </div>
+      </details>
+      </div>
+    </section>
+
+    <section class="category" id="research-intelligence">
+      <h2 class="category-title">Research & intelligence</h2>
+      <div class="skill-list">
+      <details class="skill" data-search="competitor research brief produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. use when the user wants deep research on one specific competitor, asks &quot;what do we know about [company],&quot; or needs a research brief before a strategic decision.">
+        <summary>
+          <span class="skill-name">Competitor Research Brief</span>
+          <span class="skill-desc">Produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. Use when the user wants deep research on one specific competitor, asks "what do we know about [company]," or needs a research brief before a strategic decision.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Competitor Research Brief</h1>
+<h2>When to use this</h2>
+<p>The user wants depth on one specific, named competitor — not a comparison across several (use <code>competitive-landscape-mapper</code> for that).</p>
+<h2>When NOT to use this</h2>
+<ul><li>Multiple competitors need comparing side by side — use <code>competitive-landscape-mapper</code>.</li><li>The research would require private/confidential data not publicly available — this skill is for secondary (publicly available) research; say so if the ask requires information that can't legitimately be obtained this way.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm exactly which entity is being researched</strong>, including checking it isn't the user's own brand or a partner under a different name — verify this before treating anything as a competitor finding.</li><li><strong>Structure the brief around fixed sections</strong> so it's comparable across different competitor briefs done at different times: - Overview (what they do, since when, scale if known) - Offering (products/services, how they're positioned) - Pricing (if publicly available — note if it isn't) - Target customer / positioning - Strengths (from the user's business's perspective — what makes them a real threat) - Weaknesses / vulnerabilities (if any are actually evident) - Recent moves (anything notably new: launches, pricing changes, expansion)</li><li><strong>Label every claim fact / estimate / assumption</strong>, with a source noted for facts. If something can't be verified, say so rather than filling the gap with a plausible-sounding guess.</li><li><strong>Note the date the research was done</strong> — competitor information ages quickly, and a brief without a date invites false confidence later.</li><li><strong>End with implications for the user's business</strong>, not just a description of the competitor — the brief should answer "so what does this mean for us," not just "here's what they do."</li></ol>
+<h2>Output format</h2>
+<pre><code>## Competitor brief: [Name], as of [date]</code></pre>
+<p><strong>Overview</strong>: ... <strong>Offering</strong>: ... <strong>Pricing</strong>: ... (or "not publicly available") <strong>Target customer / positioning</strong>: ... <strong>Strengths</strong>: ... <strong>Weaknesses / vulnerabilities</strong>: ... (only if genuinely evident, not invented for balance) <strong>Recent moves</strong>: ...</p>
+<p><strong>Sources</strong>: [list] <strong>Facts vs. assumptions</strong>: [flag anything not directly sourced]</p>
+<p>### So what for us [Implications for the user's own strategy/positioning] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Mistaking the user's own brand, sub-brand, or a partner for a competitor — always verify identity/ownership first.</li><li>Inventing a "weaknesses" section for balance when none are actually evident — an honest "no clear weaknesses observed" is better than a fabricated one.</li><li>Presenting outdated or unsourced pricing as current fact.</li><li>Stopping at description without the "so what" for the user's own business.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Competitor identity/ownership verified, not assumed</li><li class="check"><span class="box" aria-hidden="true"></span>Every claim is labeled fact/estimate/assumption with sources for facts</li><li class="check"><span class="box" aria-hidden="true"></span>Research date is stated</li><li class="check"><span class="box" aria-hidden="true"></span>Brief ends with implications for the user's own strategy</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Sourcing discipline for competitor research</h3>
+<p>## Good public sources, roughly in order of reliability for factual claims 1. The competitor's own website/booking platform (offering, stated pricing, stated positioning) 2. Business registries or tourism board listings (existence, scale, licensing where public) 3. Review platforms (TripAdvisor, Google Reviews) — good for volume/rating and recurring themes in feedback, less reliable for exact current pricing or offering details, which change faster than reviews update 4. News coverage or press releases (recent moves, expansion, notable changes) 5. Social media presence (positioning signals, recent activity level) — treat as directional, not authoritative</p>
+<h4>What counts as "fact" vs. "estimate" vs. "assumption"</h4>
+<ul><li><strong>Fact</strong>: directly observed from a named, current source (e.g. "Their website lists a 3-day package at $X as of [date], source: [URL]").</li><li><strong>Estimate</strong>: a calculated or inferred number based on stated facts (e.g. "Based on their listed fleet size of 3 boats and typical occupancy patterns, estimated monthly capacity is roughly Y trips").</li><li><strong>Assumption</strong>: a judgment call without direct backing (e.g. "Likely targeting a younger, budget-conscious segment based on pricing and marketing tone" — reasonable, but not confirmed).</li></ul>
+<h4>A note on verifying identity before starting</h4>
+<p>Before writing anything about an entity as a "competitor," check: - Is this actually the user's own business or a sub-brand of it? - Is this a booking agent/reseller rather than an operator — i.e. do they actually own/run the boats or service, or just sell someone else's? - Could two differently-named listings be the same underlying operator?</p>
+<p>Getting this wrong (researching your own business as a rival, or double- counting one operator as two) undermines the whole brief, so it's worth the extra minute up front.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="discovery interview kit generates a discovery interview guide (for customers, clients, or stakeholders) before interviews happen, and synthesizes raw notes or transcripts into themes afterward. use when the user needs an interview guide, customer/client discovery questions, or wants to synthesize interview notes into findings.">
+        <summary>
+          <span class="skill-name">Discovery Interview Kit</span>
+          <span class="skill-desc">Generates a discovery interview guide (for customers, clients, or stakeholders) before interviews happen, and synthesizes raw notes or transcripts into themes afterward. Use when the user needs an interview guide, customer/client discovery questions, or wants to synthesize interview notes into findings.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Discovery Interview Kit</h1>
+<h2>When to use this</h2>
+<p>Two related situations trigger this skill: 1. <strong>Before interviews</strong>: the user needs a guide of questions to ask customers, clients, or internal stakeholders to learn something specific. 2. <strong>After interviews</strong>: the user has raw notes or transcripts from several interviews and needs them synthesized into themes/findings.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The user already knows the answer and just needs to confirm it with one person — a full discovery guide is overkill for a single confirmatory question.</li><li>Synthesizing a single interview (not multiple) — that's closer to straightforward notes summarization than theme synthesis across sources.</li></ul>
+<h2>Workflow — building the guide</h2>
+<ol><li><strong>Start from the learning objective, not the questions.</strong> What decision will this interview inform? If that's unclear, the guide will wander.</li><li><strong>Write open-ended questions, not leading or yes/no ones.</strong> "What made you choose us over other options?" not "Did you choose us because of our pricing?" — leading questions bias the answer before it's given.</li><li><strong>Order questions broad-to-narrow.</strong> Start with open context ("Walk me through how you typically...") before narrowing to specific topics — narrow questions asked first anchor the interviewee and lose the broader context.</li><li><strong>Include a few "why" follow-ups</strong> built into the guide itself, not just the top-level questions — the follow-up is often where the real insight comes from.</li><li><strong>Keep the guide to 8-12 core questions</strong> for a ~30-45 minute interview — more than that and interviews run long or get shallow.</li></ol>
+<h2>Workflow — synthesizing notes afterward</h2>
+<ol><li><strong>Read across all interviews before grouping anything</strong> — don't theme-code the first interview in isolation, since patterns only emerge in comparison.</li><li><strong>Group into themes by what was actually said</strong>, not by the original question order — a theme might span answers to several different questions.</li><li><strong>Note how many of the interviews support each theme</strong> (e.g. "4 of 6 interviewees mentioned...") — this shows strength of signal rather than treating one strong quote as representative of everyone.</li><li><strong>Distinguish a strong pattern from a single outlier.</strong> One person saying something interesting is a data point, not a finding — say so explicitly rather than overstating a single mention.</li><li><strong>Pull representative quotes</strong>, not paraphrases, for the strongest themes — a direct quote carries more weight and nuance than a paraphrase.</li></ol>
+<h2>Output format</h2>
+<p><strong>Guide</strong>: ``` ## Discovery interview guide: [objective]</p>
+<ol><li>[Broad opening question]</li><li>[Broad opening question] ... [narrowing toward specific topics] ...</li></ol>
+<p>Follow-up prompts to have ready: "Why is that?" / "Can you say more about that?" / "What would have to be true for [X]?" ```</p>
+<p><strong>Synthesis</strong>: ``` ## Interview synthesis: [topic], [N] interviews</p>
+<p>### Theme 1: [name] (mentioned by X of N) [Description] Representative quote: "..."</p>
+<h3>Theme 2: ...</h3>
+<p>### Notable outliers (not a pattern, but worth flagging) [Single mentions that were interesting but not repeated] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Leading questions that bias the answer.</li><li>Building the guide question-by-question without a clear learning objective driving the whole thing.</li><li>Synthesizing one interview at a time instead of reading across all of them before theming.</li><li>Treating a single striking quote as a broad finding without noting how many people actually said something similar.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Guide questions are open-ended, not leading</li><li class="check"><span class="box" aria-hidden="true"></span>Guide is ordered broad-to-narrow</li><li class="check"><span class="box" aria-hidden="true"></span>Synthesis themes are grounded in patterns across multiple interviews, with counts shown</li><li class="check"><span class="box" aria-hidden="true"></span>Outliers are labeled as such, not inflated into findings</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Question bank by objective</h3>
+<p>## Understanding why customers chose you (or didn't) - Walk me through how you first found out about [business/offering]. - What were you trying to accomplish when you started looking? - What other options did you consider? - What tipped the decision toward [us]? (or, for lost prospects: what tipped it away?) - Was there anything that almost made you not choose us?</p>
+<p>## Understanding satisfaction / experience - Walk me through your experience from booking to [end of experience]. - What stood out as better than expected? Worse than expected? - If a friend asked you about this, what would you tell them? - Was there a moment where you felt frustrated or unsure what to do?</p>
+<p>## Understanding unmet needs / new offering validation - Tell me about the last time you [relevant activity/need]. - What's the hardest part of that, currently? - If you could wave a wand and fix one thing about [current approach], what would it be? - (After describing a potential new offering) What's your honest reaction? What would need to be true for you to actually use this?</p>
+<h4>A note on the last question above</h4>
+<p>Describing a new idea and asking "would you use this?" tends to get overly polite, optimistic answers. Asking "what would need to be true for you to actually use this" gets more honest, specific, actionable information — people are better at stating real conditions than predicting their own future behavior.</p>
+<h4>Synthesis worked example</h4>
+<p>Say 6 customer interviews were done about a potential new multi-day Gili route. Raw notes mention price concerns (4 of 6), worry about seasickness/ comfort on longer trips (3 of 6), and one mention of wanting a kid-friendly option (1 of 6).</p>
+<p>Theme 1: Price sensitivity for multi-day trips (4 of 6) — the dominant theme, worth prioritizing in the business case. Theme 2: Comfort/seasickness concern for longer trips (3 of 6) — a real secondary theme, possibly addressable through marketing (route choice, boat stability messaging) rather than requiring a product change. Outlier: kid-friendly option interest (1 of 6) — noted, not yet a pattern; worth watching in future interviews rather than acting on now.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="benchmark comparator compares a business&#x27;s own metrics or offering against named, cited benchmarks instead of vague &quot;industry standard&quot; claims. use when the user asks how they compare to industry, whether a number is normal, or wants to benchmark performance/pricing against known reference points.">
+        <summary>
+          <span class="skill-name">Benchmark Comparator</span>
+          <span class="skill-desc">Compares a business's own metrics or offering against named, cited benchmarks instead of vague "industry standard" claims. Use when the user asks how they compare to industry, whether a number is normal, or wants to benchmark performance/pricing against known reference points.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Benchmark Comparator</h1>
+<h2>When to use this</h2>
+<p>The user has a specific metric or practice (a price, a conversion rate, a response time, a margin) and wants to know if it's good, bad, or normal relative to something real — not a vague sense of "the industry."</p>
+<h2>When NOT to use this</h2>
+<ul><li>No real benchmark data exists or is accessible, and none can be found — say so plainly rather than inventing an "industry standard" figure. A benchmark comparator without an actual benchmark isn't useful; it's guessing dressed up as analysis.</li><li>The comparison being asked for is really a competitor comparison (one specific competitor) — use <code>competitive-landscape-mapper</code> or <code>competitor-research-brief</code> instead.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>State exactly what's being benchmarked and why it matters.</strong> "Our response time" is vague; "average time from inquiry to first response" is benchmarkable.</li><li><strong>Find or ask for a real reference point.</strong> Options, roughly in order of reliability: - A cited industry report or association statistic - A named comparable business's publicly disclosed number (rare, but sometimes available) - Multiple data points averaged from public sources (e.g. several competitors' listed response commitments) to construct a rough range - If none of the above is available, say explicitly that no reliable benchmark exists, rather than presenting a guess as one.</li><li><strong>Compare like-for-like.</strong> Check that definitions match — "response time" measured differently by two sources isn't a fair comparison; flag any definitional mismatch rather than comparing anyway.</li><li><strong>State the comparison, then the "so what."</strong> A number sitting next to another number isn't insight until it's connected to whether that gap matters and what (if anything) to do about it.</li><li><strong>Avoid false precision.</strong> If the benchmark itself is a rough estimate (built from a few public data points), say the comparison is directional, not exact — don't present "we're 23% below industry average" when the underlying data doesn't support that precision.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Benchmark: [metric], [business] vs. [reference point]</code></pre>
+<p><strong>Our number</strong>: [value] (source/method) <strong>Benchmark</strong>: [value] (source/method, or "no reliable benchmark found") <strong>Comparison</strong>: [above/below/in line, with actual magnitude] <strong>Confidence</strong>: [high — cited source / moderate — constructed estimate / low — directional only]</p>
+<p>### So what [What this comparison implies, if anything actionable] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Citing a vague "industry standard" with no actual source — the single most common way benchmarking becomes fake rigor.</li><li>Comparing two numbers measured differently without flagging the mismatch.</li><li>Overstating precision from a rough, self-constructed benchmark.</li><li>Producing a comparison with no "so what" — a number next to another number isn't yet an insight.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>The benchmark has a real, stated source or is explicitly labeled as unavailable</li><li class="check"><span class="box" aria-hidden="true"></span>Definitions are checked to be comparable, mismatches flagged</li><li class="check"><span class="box" aria-hidden="true"></span>Confidence level in the benchmark is stated</li><li class="check"><span class="box" aria-hidden="true"></span>Comparison ends with a "so what," not just the numbers</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Finding real benchmarks, practically</h3>
+<p>## When a formal industry report exists Tourism boards, hospitality associations, and market research firms sometimes publish aggregate statistics (average booking values, occupancy rates, review score distributions). Cite the specific report and date — these figures also age, so note how current the source is.</p>
+<p>## When no formal report exists (common for niche categories like multi-day boat charters in a specific region)</p>
+<p>Construct a rough range from multiple public data points rather than inventing a single number: - Pull the same metric (e.g. listed response-time commitment, if stated) from 3-5 comparable operators' public information - Present it as a range, not a false-precision average ("comparable operators publicly commit to response times of roughly 1-24 hours, with most around same-day" — not "industry average is 6.2 hours") - Label this clearly as a constructed, directional estimate — moderate or low confidence, not a cited fact</p>
+<h4>When genuinely nothing usable is found</h4>
+<p>Say so directly: "I couldn't find a reliable benchmark for this — here's what I'd need to construct one (e.g. named comparable businesses willing to share numbers, or a paid industry report), or here's a reasonable internal target to set instead, based on [some other logic, e.g. what would meaningfully improve conversion]." Setting an internal target instead of a fake external benchmark is often more useful than pretending a benchmark exists when it doesn't.</p>
+<h4>Worked example: inquiry response time</h4>
+<p>Our number: average 6 hours (from internal booking system logs — high confidence, directly measured).</p>
+<p>Benchmark: checked 4 comparable Lombok-area charter operators' publicly stated response commitments (where listed) — commitments ranged from "within 1 hour" to "within 24 hours," with 3 of 4 stating same-day response. Constructed estimate, moderate confidence (based on stated commitments, not verified actual performance).</p>
+<p>Comparison: our actual average (6 hours) is within the same-day range most competitors commit to, though on the slower end of it.</p>
+<p>So what: not an urgent gap versus competitors as stated, but worth noting this compares to competitors' *stated commitments*, not their *actual* performance, which is unverifiable — so this benchmark is directional, not a precise ranking.</p></div>
+        </div>
+      </details>
+      </div>
+    </section>
+
+    <section class="category" id="financial-operational">
+      <h2 class="category-title">Financial & operational</h2>
+      <div class="skill-list">
+      <details class="skill" data-search="unit economics breakdown breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what&#x27;s actually profitable, separating fixed from variable costs. use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings.">
+        <summary>
+          <span class="skill-name">Unit Economics Breakdown</span>
+          <span class="skill-desc">Breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what's actually profitable, separating fixed from variable costs. Use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Unit Economics Breakdown</h1>
+<h2>When to use this</h2>
+<p>The user wants to know whether a specific thing they sell is actually profitable on its own — not overall company profitability (that's a broader P&amp;L question), but the economics of one unit: one trip, one guest, one customer, one order.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The question is about overall company financial health, not one offering — use <code>financial-ratio-reviewer</code>.</li><li>Cost data isn't actually available — flag what's needed rather than guessing at cost figures.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Define the unit precisely.</strong> "Per trip," "per guest," "per booking" — pick one and stay consistent, since mixing units (e.g. some costs allocated per trip, others per guest) produces a misleading result.</li><li><strong>Separate variable costs from fixed costs, explicitly.</strong> - <strong>Variable costs</strong>: scale directly with each unit (fuel per trip, food/provisioning per guest, per-booking platform fees). - <strong>Fixed costs</strong>: don't change with volume in the short term (boat maintenance, crew base salary, insurance, dock fees) — these should be allocated across expected volume, not charged to a single unit as if they were variable.</li><li><strong>Calculate contribution margin first</strong>: revenue per unit minus variable cost per unit. This shows what each additional unit actually contributes toward covering fixed costs and profit — the single most useful number for "should we sell more of this."</li><li><strong>Then allocate fixed costs</strong> across expected volume to get a fully- loaded per-unit cost and true profit per unit — useful for "is this offering worth keeping at all," a different question from contribution margin.</li><li><strong>Show both numbers, and be clear about what each answers:</strong> - Contribution margin → "is it worth selling one more?" - Fully-loaded profit per unit → "is this offering worth running at all, given the fixed costs it must help cover?"</li><li><strong>Flag if any cost input is an estimate rather than an actual figure.</strong></li></ol>
+<h2>Output format</h2>
+<pre><code>## Unit economics: [offering], per [unit]</code></pre>
+<p><strong>Revenue per unit</strong>: [amount]</p>
+<p><strong>Variable costs per unit</strong>: - [Cost item]: [amount] - ... Total variable cost: [amount]</p>
+<p><strong>Contribution margin per unit</strong>: [revenue - variable cost] ([%] margin)</p>
+<p><strong>Fixed costs allocated</strong> (based on [expected volume] units/period): - [Cost item]: [amount allocated per unit] - ... Total fixed cost per unit: [amount]</p>
+<p><strong>Fully-loaded profit per unit</strong>: [contribution margin - fixed cost allocation]</p>
+<p>### So what [Whether this is worth selling more of, keeping, or reconsidering, and why] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Mixing fixed and variable costs together without distinction — hides whether the real problem is per-unit economics or overall volume/scale.</li><li>Charging a fixed cost as if it were variable (e.g. dividing annual insurance by trips-so-far instead of expected annual volume) — distorts the picture, especially early in a season.</li><li>Confusing contribution margin with true profit — a positive contribution margin can still mean the offering loses money overall if fixed costs aren't covered by volume.</li><li>Using invented cost figures instead of flagging what real data is needed.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Unit is defined precisely and used consistently throughout</li><li class="check"><span class="box" aria-hidden="true"></span>Fixed and variable costs are clearly separated</li><li class="check"><span class="box" aria-hidden="true"></span>Both contribution margin and fully-loaded profit are shown, labeled for what each answers</li><li class="check"><span class="box" aria-hidden="true"></span>Any estimated (vs. actual) cost input is flagged</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: day-trip vs. multi-day charter, per guest</h3>
+<p>Illustrative figures only — replace with real numbers for actual use.</p>
+<p>## Day-trip product (per guest) - Revenue per guest: $100 - Variable costs per guest: fuel share $15, food/provisioning $10, booking platform fee (8%) $8 → total variable $33 - <strong>Contribution margin per guest: $67 (67%)</strong> - Fixed costs allocated per guest (crew base salary, boat maintenance, insurance, divided across expected annual guest volume): $25 - <strong>Fully-loaded profit per guest: $42</strong></p>
+<p>## Multi-day charter product (per guest) - Revenue per guest: $600 (3-day package) - Variable costs per guest: fuel share $60, food/provisioning $80, booking platform fee (8%) $48 → total variable $188 - <strong>Contribution margin per guest: $412 (69%)</strong> - Fixed costs allocated per guest (same cost categories, but multi-day trips use more crew-days and boat-days per guest, so fixed allocation is proportionally higher): $150 - <strong>Fully-loaded profit per guest: $262</strong></p>
+<h4>So what, illustrative</h4>
+<p>Both products show similar contribution margin percentage (~67-69%), so neither is more "efficient" per revenue dollar in variable-cost terms. But the multi-day product generates far more fully-loaded profit per guest in absolute terms ($262 vs $42) — which matters most when boat/crew capacity, not guest count, is the actual constraint (i.e. each available boat-day should ideally go to the higher-profit-per-day use, if demand allows).</p>
+<p>This is the kind of insight unit economics is built to surface: not just "which is more profitable per guest" but "which use of a scarce resource (boat-days) generates more profit," which sometimes points to a different answer than the raw margin percentage would suggest on its own.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="financial ratio reviewer sanity-checks basic financial statements and calculates/explains key ratios (liquidity, profitability, efficiency) in plain english, flagging anything that looks off. use when the user wants a financial statement reviewed, asks if their numbers look healthy, or wants financial ratios calculated and explained.">
+        <summary>
+          <span class="skill-name">Financial Ratio Reviewer</span>
+          <span class="skill-desc">Sanity-checks basic financial statements and calculates/explains key ratios (liquidity, profitability, efficiency) in plain English, flagging anything that looks off. Use when the user wants a financial statement reviewed, asks if their numbers look healthy, or wants financial ratios calculated and explained.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Financial Ratio Reviewer</h1>
+<h2>When to use this</h2>
+<p>The user has financial statements (P&amp;L, balance sheet) or key figures and wants to know what they indicate about the business's health — not a full audit or formal accounting review, but a plain-English sanity check and interpretation.</p>
+<h2>When NOT to use this</h2>
+<ul><li>This isn't a substitute for a qualified accountant or auditor for formal filings, tax, or compliance purposes — say so if the request is actually for that kind of formal work.</li><li>No real figures are available — don't fabricate financial statements to analyze; ask for the actual numbers or flag what's needed.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm what statements/figures are actually available.</strong> Ratios need real inputs — revenue, costs, assets, liabilities, cash. Work with what's provided; flag which ratios can't be calculated if inputs are missing, rather than estimating financial figures.</li><li><strong>Calculate ratios grouped by what they measure</strong> (see <code>references/ratio-definitions.md</code> for formulas): - <strong>Profitability</strong> — gross margin, net margin: is the business making money on what it sells? - <strong>Liquidity</strong> — current ratio, quick ratio: can short-term obligations be covered? - <strong>Efficiency</strong> — inventory/receivables turnover if relevant: how well are assets being used?</li><li><strong>Explain every ratio in plain English, not just the number.</strong> "Current ratio of 1.8" means little on its own — say what it means: "for every $1 of short-term obligation, there's $1.80 of short-term assets to cover it, which is generally considered healthy."</li><li><strong>Compare to a sensible reference point</strong> where possible — prior period (is it improving or declining), or a stated general benchmark range (with the caveat that "healthy" varies significantly by industry).</li><li><strong>Flag anything that looks unusual or inconsistent</strong>, not just report numbers neutrally — a negative or wildly outlying ratio is worth calling out explicitly rather than stating flatly alongside normal ones.</li><li><strong>Don't give definitive medical-style diagnoses</strong> ("the business is failing") — flag concerns clearly, but frame this as informed observation, not a certified financial assessment, and suggest a professional review for anything serious.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Financial review: [business/period]</code></pre>
+<p>### Profitability | Ratio | Value | What it means | |---|---|---| | Gross margin | ...% | ... | | Net margin | ...% | ... |</p>
+<p>### Liquidity | Ratio | Value | What it means | |---|---|---| | Current ratio | ... | ... |</p>
+<p>### Efficiency [if applicable]</p>
+<p>### Flags [Anything unusual, inconsistent, or concerning, stated plainly]</p>
+<p>### Trend (if prior period available) [Improving / declining / stable, and on what]</p>
+<p>Note: this is a plain-English sanity check, not a substitute for review by a qualified accountant, especially for anything used in formal filings or major decisions. ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Reporting a ratio number without explaining what it actually means in plain terms.</li><li>Comparing to a generic benchmark without noting that "healthy" varies a lot by industry and business stage.</li><li>Overstating confidence — presenting an informal review as a certified financial assessment.</li><li>Calculating a ratio from incomplete or inconsistent inputs without flagging the limitation.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every ratio has a plain-English explanation, not just a number</li><li class="check"><span class="box" aria-hidden="true"></span>Missing inputs are flagged, not estimated</li><li class="check"><span class="box" aria-hidden="true"></span>Unusual findings are explicitly called out as flags</li><li class="check"><span class="box" aria-hidden="true"></span>The review is framed as a sanity check, with a note to involve a professional for formal/serious matters</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Ratio definitions and plain-English framing</h3>
+<h4>Profitability</h4>
+<p><strong>Gross margin</strong> = (Revenue − Cost of Goods Sold) / Revenue Plain English: "Of every dollar in revenue, how much is left after the direct cost of delivering it, before overhead." For a charter business, COGS is roughly the direct trip costs (fuel, provisioning, per-trip crew if variable).</p>
+<p><strong>Net margin</strong> = Net Profit / Revenue Plain English: "Of every dollar in revenue, how much is actually kept as profit after everything — direct costs, overhead, and other expenses."</p>
+<h4>Liquidity</h4>
+<p><strong>Current ratio</strong> = Current Assets / Current Liabilities Plain English: "Can short-term obligations (due within a year) be covered by short-term assets (cash, receivables, etc.)?" Above 1 generally means yes on paper; well below 1 is a flag worth naming plainly.</p>
+<p><strong>Quick ratio</strong> = (Current Assets − Inventory) / Current Liabilities Plain English: like current ratio but excludes inventory (which can be slow to convert to cash) — a stricter test of near-term coverage. Less relevant for a service business with little inventory, more relevant for retail/product businesses.</p>
+<h4>Efficiency (use only if relevant to the business type)</h4>
+<p><strong>Receivables turnover</strong> = Revenue / Average Accounts Receivable Plain English: "How quickly customers actually pay what they owe" — low turnover can signal collection problems even if revenue looks fine on paper.</p>
+<h4>General framing notes</h4>
+<ul><li>"Healthy" ranges vary a lot by industry — a service/charter business with little inventory naturally looks different from a retail business. State the caveat rather than applying a one-size-fits-all bar.</li><li>A single period's ratios are less informative than a trend — always ask for or note whether a prior period is available for comparison.</li><li>A ratio that's *too* high can also be worth flagging (e.g. an extremely high current ratio might mean cash is sitting idle rather than being reinvested) — don't assume higher is always better without context.</li></ul></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="risk register builder builds a structured risk register — risk, likelihood, impact, mitigation, and owner — for a project, decision, or ongoing operation. use when the user asks what could go wrong, wants a risk assessment, or needs to document risks before a decision or launch.">
+        <summary>
+          <span class="skill-name">Risk Register Builder</span>
+          <span class="skill-desc">Builds a structured risk register — risk, likelihood, impact, mitigation, and owner — for a project, decision, or ongoing operation. Use when the user asks what could go wrong, wants a risk assessment, or needs to document risks before a decision or launch.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Risk Register Builder</h1>
+<h2>When to use this</h2>
+<p>The user needs a structured, documented view of what could go wrong with a project, decision, launch, or ongoing operation — more formal and ongoing than a one-time <code>pre-mortem-facilitator</code> session (which is specifically framed around a single upcoming decision).</p>
+<h2>When NOT to use this</h2>
+<ul><li>A single upcoming decision needs a quick pressure-test, not an ongoing document — <code>pre-mortem-facilitator</code> is a better fit for that framing.</li><li>Risks are already well understood and documented — update the existing register rather than rebuilding from scratch.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Scope the register clearly</strong> — one project, one decision, or one operating area. A register that tries to cover everything becomes unusable.</li><li><strong>Brainstorm risks broadly before scoring anything</strong> — pulling from multiple categories (operational, financial, reputational, regulatory/ legal, market/external) so nothing obvious gets missed by only thinking from one angle.</li><li><strong>For each risk, rate likelihood and impact</strong> — a simple High/Medium/ Low scale is usually sufficient; avoid false precision with numeric scores unless the user specifically wants a scoring model.</li><li><strong>Prioritize by the combination</strong>, not either dimension alone — a high-likelihood, low-impact risk and a low-likelihood, high-impact risk need very different handling, and both differ from a risk that's low on both (worth noting, not worth much effort).</li><li><strong>Write a specific mitigation for each risk that's Medium or High on either dimension</strong> — a mitigation should be an actual action, not a restatement of the risk ("monitor closely" is weak; "set a trigger threshold and a named backup plan" is specific).</li><li><strong>Assign an owner to each risk with a mitigation</strong> — an unowned risk tends not to get managed.</li><li><strong>Note which risks are worth actively managing vs. simply accepting</strong> — not every risk needs a mitigation plan; low-likelihood, low-impact risks can often just be accepted and monitored.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Risk register: [project/decision/area]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Risk</th><th>Category</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th><th>Owner</th></tr></thead><tbody><tr><td>...</td><td>Operational/Financial/Reputational/Regulatory/Market</td><td>H/M/L</td><td>H/M/L</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Top priorities [The 2-3 risks that combine highest likelihood and impact — call these out explicitly, don't leave them buried in the table]</p>
+<p>### Accepted risks (monitored, not actively mitigated) [Low/low risks worth naming but not over-investing in] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Brainstorming risks from only one angle (e.g. only operational), missing reputational or regulatory risks entirely.</li><li>Vague mitigations that don't describe an actual action.</li><li>No owner assigned, so nothing actually gets managed.</li><li>Treating every risk as equally worth mitigation effort instead of prioritizing by likelihood × impact.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Risks brainstormed across multiple categories, not just one</li><li class="check"><span class="box" aria-hidden="true"></span>Likelihood and impact both rated, with combination used to prioritize</li><li class="check"><span class="box" aria-hidden="true"></span>Each Medium/High risk has a specific, actionable mitigation and a named owner</li><li class="check"><span class="box" aria-hidden="true"></span>Low-priority risks are explicitly marked as accepted/monitored, not left ambiguous</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Risk category checklist</h3>
+<p>Use this to brainstorm broadly before scoring anything.</p>
+<ul><li><strong>Operational</strong> — staffing, equipment/maintenance, capacity, supply chain, process failure points</li><li><strong>Financial</strong> — cash flow, cost overruns, currency exposure, payment/ collection risk</li><li><strong>Reputational</strong> — customer experience failures, negative reviews, public incidents, social media exposure</li><li><strong>Regulatory/legal</strong> — licensing, permits, contract disputes, compliance changes</li><li><strong>Market/external</strong> — competitor moves, demand shifts, seasonality, weather, macroeconomic factors</li></ul>
+<p>## Worked example: launching a new multi-day Gili route (risk register excerpt)</p>
+<div class="table-wrap"><table><thead><tr><th>Risk</th><th>Category</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th><th>Owner</th></tr></thead><tbody><tr><td>Crew unfamiliar with Gili-area navigation/mooring</td><td>Operational</td><td>Medium</td><td>High</td><td>Scouting trip + crew training before first paying guests</td><td>Ops lead</td></tr><tr><td>Weather/monsoon disrupts scheduled crossings</td><td>Market/external</td><td>Medium</td><td>Medium</td><td>Build flexible rebooking policy, communicate seasonality clearly upfront</td><td>Booking lead</td></tr><tr><td>No established local dock relationship</td><td>Operational</td><td>High</td><td>Medium</td><td>Secure at least one confirmed dock partnership before public launch</td><td>Owner</td></tr><tr><td>Negative first-guest reviews during early operational learning curve</td><td>Reputational</td><td>Medium</td><td>High</td><td>Soft-launch with a small number of trips before full public marketing</td><td>Owner</td></tr></tbody></table></div>
+<p>### Top priorities Crew navigation familiarity and lack of dock relationships are the two highest-priority items — both are high-likelihood-or-impact and both are addressable before public launch, unlike weather (which is accepted and managed via policy rather than eliminated).</p>
+<p>### Accepted risks (example) General weather variability is accepted as an ongoing operational reality of the route, managed through flexible rebooking rather than an attempt to eliminate it.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="raci matrix generator generates a raci (responsible, accountable, consulted, informed) matrix for a project or initiative, clarifying who does the work, who owns the outcome, who must be consulted, and who just needs to be kept informed. use when the user needs to clarify roles and responsibilities, asks &quot;who owns what,&quot; or a project has role confusion or duplicated/dropped work.">
+        <summary>
+          <span class="skill-name">RACI Matrix Generator</span>
+          <span class="skill-desc">Generates a RACI (Responsible, Accountable, Consulted, Informed) matrix for a project or initiative, clarifying who does the work, who owns the outcome, who must be consulted, and who just needs to be kept informed. Use when the user needs to clarify roles and responsibilities, asks "who owns what," or a project has role confusion or duplicated/dropped work.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>RACI Matrix Generator</h1>
+<h2>When to use this</h2>
+<p>A project or initiative has multiple people/roles involved and there's confusion (or risk of confusion) about who actually does what, who decides, and who just needs visibility.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only one person is doing the work — a RACI matrix adds no value.</li><li>The question is about external stakeholder buy-in/influence rather than internal task ownership — use <code>stakeholder-influence-map</code> instead.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>List the actual tasks/decisions</strong>, not vague activity areas — "draft the proposal," "approve the final proposal," and "send it to the client" are three distinct RACI rows; "handle the proposal" is too vague to assign roles to meaningfully.</li><li><strong>For each task, assign exactly one Accountable person.</strong> This is the single most important RACI rule: Accountable means the buck stops with them — there must be exactly one, never zero, never more than one, or the whole point of the matrix (clear ownership) breaks down.</li><li><strong>Assign Responsible to whoever actually does the work</strong> — can be more than one person, but keep it to who's hands-on, not everyone tangential to the task.</li><li><strong>Assign Consulted sparingly</strong> — people whose input is needed before the task is done (two-way communication). Over-listing Consulted people slows everything down; only include those whose input genuinely changes the outcome.</li><li><strong>Assign Informed to those who need to know the outcome but have no input role</strong> (one-way communication) — keep this list light too; informing everyone about everything defeats the purpose.</li><li><strong>Check every row has exactly one Accountable</strong>, and that no single person is Accountable for so many rows it's unrealistic.</li></ol>
+<h2>Output format</h2>
+<pre><code>## RACI matrix: [project/initiative]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Task/Decision</th><th>Responsible</th><th>Accountable</th><th>Consulted</th><th>Informed</th></tr></thead><tbody><tr><td>...</td><td>[name(s)]</td><td>[exactly one name]</td><td>[name(s), if any]</td><td>[name(s), if any]</td></tr></tbody></table></div>
+<p>### Flags [Any row missing a clear Accountable owner, or any person overloaded across too many Accountable rows] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>More than one Accountable person on a task — reintroduces the exact ambiguity RACI is meant to remove.</li><li>No Accountable person at all — same problem, opposite cause.</li><li>Over-listing Consulted or Informed roles, which slows decisions down and defeats the purpose of clarifying who's actually needed.</li><li>Vague task rows that can't be meaningfully assigned to specific people.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Tasks are specific and assignable, not vague activity areas</li><li class="check"><span class="box" aria-hidden="true"></span>Every row has exactly one Accountable person</li><li class="check"><span class="box" aria-hidden="true"></span>Consulted and Informed lists are kept lean, not padded</li><li class="check"><span class="box" aria-hidden="true"></span>Any overloaded person (Accountable on too many rows) is flagged</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: launching a new client proposal process</h3>
+<div class="table-wrap"><table><thead><tr><th>Task/Decision</th><th>Responsible</th><th>Accountable</th><th>Consulted</th><th>Informed</th></tr></thead><tbody><tr><td>Draft proposal content</td><td>Consultant</td><td>Consultant</td><td>Practice lead (on scope/pricing)</td><td>—</td></tr><tr><td>Approve final pricing</td><td>Practice lead</td><td>Practice lead</td><td>—</td><td>Consultant</td></tr><tr><td>Legal review of contract terms</td><td>External counsel</td><td>Practice lead</td><td>—</td><td>Consultant</td></tr><tr><td>Send proposal to client</td><td>Consultant</td><td>Consultant</td><td>—</td><td>Practice lead</td></tr><tr><td>Track proposal status/follow-up</td><td>Consultant</td><td>Consultant</td><td>—</td><td>Practice lead</td></tr></tbody></table></div>
+<p>### Why this works - Every row has exactly one Accountable person — even "Draft proposal content," where the consultant is both Responsible and Accountable, since it's their task end to end with no separate approver needed at the draft stage. - "Approve final pricing" separates Responsible/Accountable (practice lead) from who did the drafting (consultant) — a deliberate check before anything goes to a client. - Consulted is used sparingly — only where input genuinely changes the outcome (scope/pricing guidance, legal terms), not for every task. - Informed is used to keep the practice lead aware of client-facing actions (sending, follow-up) without requiring their active involvement in each one.</p>
+<p>### A common mistake this avoids A weaker version might list "Practice lead" as Accountable for every single row "to be safe" — this looks careful but actually creates a bottleneck and blurs who's really doing and deciding what. RACI's value comes from precision, not from defaulting to the most senior person everywhere.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="process map simplifier documents a current operational process step by step, then proposes a simplified version by identifying redundant, delayed, or unnecessary steps. use when the user wants to map out how a process currently works, says a workflow is too slow or complicated, or wants to simplify an existing process.">
+        <summary>
+          <span class="skill-name">Process Map Simplifier</span>
+          <span class="skill-desc">Documents a current operational process step by step, then proposes a simplified version by identifying redundant, delayed, or unnecessary steps. Use when the user wants to map out how a process currently works, says a workflow is too slow or complicated, or wants to simplify an existing process.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Process Map Simplifier</h1>
+<h2>When to use this</h2>
+<p>There's an existing, repeated operational process (booking handling, onboarding a new client, trip preparation, invoicing) that the user wants documented and/or improved.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The process doesn't exist yet (it's being designed from scratch) — this skill is for mapping and simplifying an existing process, not designing a new one from nothing.</li><li>The issue is really about one specific tool/system being broken, not the overall process flow — a narrower technical fix may be more direct.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Map the process exactly as it currently happens</strong>, not as it's supposed to happen on paper — ask what actually occurs at each step, including workarounds, since the gap between the documented and actual process is often where the real problem lives.</li><li><strong>Break it into discrete steps</strong>, each with: what happens, who does it, how long it typically takes, and what triggers the next step.</li><li><strong>Look for these specific improvement opportunities</strong> at each step: - <strong>Redundant steps</strong> — is this step duplicated elsewhere, or does it re-verify something already confirmed? - <strong>Unnecessary handoffs</strong> — does this step require passing to another person/system where it could stay with one owner? - <strong>Waiting/delay points</strong> — where does work sit idle waiting on something (approval, response, a batch process)? - <strong>Manual steps that could be simpler</strong> — not necessarily automated with new tools, but is there a manual step doing more than it needs to (e.g. re-entering the same information twice)?</li><li><strong>Propose a simplified version</strong>, keeping the essential checks/steps and removing or merging the rest — explicitly note what's being removed and why it's safe to remove (or flag if removing it introduces a new risk worth accepting consciously).</li><li><strong>Note what would need to change to implement the simplified version</strong> (a new habit, a shared document, a small tool change) — a proposal without an implementation note tends to stay theoretical.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Process map: [process name]</code></pre>
+<p>### Current process 1. [Step] — who: [...] — time: [...] — triggers: [...] 2. ...</p>
+<p>### Issues found - [Redundant/delayed/unnecessary step] — why it's a problem</p>
+<p>### Simplified process 1. [Step] — who: [...] — time: [...] 2. ...</p>
+<p>### What changed and why [Each removed/merged step, and why it's safe to remove]</p>
+<p>### To implement this [What would actually need to change] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Mapping the process as it's supposed to work rather than how it actually works, missing the real friction points.</li><li>Removing a step without checking why it existed in the first place — some "redundant-looking" steps exist because of a past incident; ask before assuming it's safe to cut.</li><li>Proposing a simplified process with no note on how to actually implement the change.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Current process reflects actual practice, not just the documented ideal</li><li class="check"><span class="box" aria-hidden="true"></span>Each issue found is tied to a specific step, not a vague complaint</li><li class="check"><span class="box" aria-hidden="true"></span>Removed/merged steps have a stated reason they're safe to remove</li><li class="check"><span class="box" aria-hidden="true"></span>Simplified process includes an implementation note</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: booking-to-departure process</h3>
+<p>### Current process 1. Inquiry received (email/platform) — who: booking staff — time: immediate — triggers: manual reply drafted 2. Availability checked manually against a shared calendar — who: booking staff — time: up to a few hours if staff is busy — triggers: quote sent 3. Quote sent, customer confirms — who: booking staff / customer — time: varies (customer-side) — triggers: deposit requested 4. Deposit received, booking manually re-entered into a second system (accounting) — who: booking staff — time: often delayed to end of day — triggers: confirmation sent 5. Trip details re-confirmed with crew closer to departure date — who: ops lead — time: day before — triggers: trip proceeds</p>
+<p>### Issues found - Step 4 is a <strong>redundant re-entry</strong>: the same booking is entered twice (booking system, then accounting) — a manual duplication that's also a source of data-entry errors. - Step 4's "often delayed to end of day" is a <strong>waiting/delay point</strong> with no clear reason it needs to wait — it delays when accounting records actually reflect real bookings. - Step 2's manual calendar check is a <strong>manual step that could be simpler</strong> if availability were checked directly in the booking system rather than cross-referenced against a separate shared calendar.</p>
+<p>### Simplified process 1. Inquiry received — same as before 2. Availability checked directly in the booking system (no separate calendar cross-reference) — who: booking staff — time: immediate 3. Quote sent, customer confirms — same as before 4. Deposit received, booking auto-reflected in accounting (single entry point, not re-entered) — who: booking staff — time: immediate 5. Trip details re-confirmed with crew closer to departure — same as before (this step stays: it's a genuine safety/readiness check, not redundant)</p>
+<p>### What changed and why Removed the separate shared calendar (step 2) — safe to remove once availability lives in the booking system as the single source of truth. Removed the manual re-entry into accounting (step 4) — safe to remove if the booking system and accounting can share data directly; if they can't today, this becomes the implementation dependency to solve first, not an immediate change. Kept the crew reconfirmation step — this isn't redundant, it's a genuine last check before departure and removing it would introduce real safety risk.</p>
+<p>### To implement this Requires confirming whether the booking system and accounting tool can share data directly (a real technical dependency to check first) — if not, the calendar-consolidation change alone (removing step 2's separate calendar) can still be done immediately as a smaller, standalone win.</p></div>
+        </div>
+      </details>
+      </div>
+    </section>
+
+    <section class="category" id="business-owner-day-to-day">
+      <h2 class="category-title">Business-owner day-to-day</h2>
+      <div class="skill-list">
+      <details class="skill" data-search="meeting notes to actions turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation.">
+        <summary>
+          <span class="skill-name">Meeting Notes To Actions</span>
+          <span class="skill-desc">Turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. Use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Meeting Notes to Actions</h1>
+<h2>When to use this</h2>
+<p>There's raw, messy meeting content (notes or a transcript) and the user needs it turned into something usable afterward: what was decided, and what needs to happen next.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The user wants a full narrative summary of the discussion, not action extraction — this skill optimizes for decisions/actions, not a blow-by-blow account (though a short context section is included).</li><li>There's no actual content yet (the meeting hasn't happened) — this processes existing notes, it doesn't generate an agenda (that's a simpler, separate task).</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Read through fully before extracting anything</strong> — decisions and action items are often stated informally or revisited later in the conversation, so pulling from the first mention alone can miss a later correction or change of plan.</li><li><strong>Separate three distinct things</strong>, since they get conflated easily: - <strong>Decisions made</strong> — something was actually settled, not just discussed - <strong>Action items</strong> — someone needs to do something specific - <strong>Open questions</strong> — raised but not resolved, still needs follow-up</li><li><strong>Every action item needs an owner and, if stated or inferable, a date.</strong> If a task was mentioned with no clear owner, flag it as "owner not assigned" rather than guessing who's responsible.</li><li><strong>Write action items as concrete tasks, not topics</strong> — "follow up with the Gili dock contact by Friday" not "Gili route logistics."</li><li><strong>Don't invent a decision that wasn't actually made.</strong> If something was discussed but left open, it belongs in Open Questions, not Decisions — conflating "discussed" with "decided" causes real confusion later.</li><li><strong>Keep a brief context line</strong> (1-2 sentences) so the output makes sense without needing the original notes, but don't reproduce the whole conversation.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Meeting summary: [topic/date]</code></pre>
+<p><strong>Context</strong>: [1-2 sentence summary of what the meeting was about]</p>
+<p>### Decisions made - [Decision, stated as settled fact]</p>
+<p>### Action items - [ ] [Task] — Owner: [name or "not assigned"] — Due: [date or "not set"]</p>
+<p>### Open questions - [Question still unresolved, needs follow-up] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating something discussed-but-unresolved as a decision.</li><li>Action items with no owner, left unassigned instead of flagged.</li><li>Vague action items that can't actually be checked off as done.</li><li>Missing a decision or task mentioned only once, mid-conversation, because extraction stopped after a first pass.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Decisions, actions, and open questions are kept clearly separate</li><li class="check"><span class="box" aria-hidden="true"></span>Every action item has an owner (or is flagged as unassigned) and a due date (or flagged as not set)</li><li class="check"><span class="box" aria-hidden="true"></span>Action items are concrete, checkable tasks, not topic labels</li><li class="check"><span class="box" aria-hidden="true"></span>Nothing is stated as decided that was actually left open</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example</h3>
+<p>Raw notes (illustrative): "Talked about the Gili route again. Jozsua thinks we should go ahead with a scouting trip, maybe next month. Need to find a dock contact there — nobody's done that yet. Also discussed whether to price it same as current multi-day trips or higher, no agreement yet, need to look at the unit economics first. Ops team should also check crew availability for a scouting trip once we have a date."</p>
+<h5>Output</h5>
+<p><strong>Context</strong>: Discussion about next steps for the potential new Gili multi-day route.</p>
+<p><strong>Decisions made</strong> - Proceed with a scouting trip for the Gili route (timing not yet fixed beyond "next month" as a rough target).</p>
+<p><strong>Action items</strong> - [ ] Find and confirm a local dock contact near the Gilis — Owner: not assigned — Due: not set (needed before scouting trip can be scheduled) - [ ] Run unit economics on Gili route pricing (same vs. higher than current multi-day trips) — Owner: not assigned — Due: not set - [ ] Check crew availability for a scouting trip — Owner: Ops team — Due: once a scouting trip date is set (dependent on the two items above)</p>
+<p><strong>Open questions</strong> - Should the Gili route be priced the same as current multi-day trips or higher? (needs the unit economics work above before deciding) - What's the actual target date for the scouting trip? ("next month" was mentioned but not confirmed)</p>
+<p>Note how "proceed with a scouting trip" is a real decision (something was settled), while pricing is correctly left as an open question rather than forced into a decision that wasn't actually made — and two action items have no assigned owner, which is flagged rather than guessed.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="weekly ops report turns scattered updates, notes, or raw information into a structured weekly business operations report. use when the user wants to summarize the week, write an ops update, or turn loose notes into a regular team report.">
+        <summary>
+          <span class="skill-name">Weekly Ops Report</span>
+          <span class="skill-desc">Turns scattered updates, notes, or raw information into a structured weekly business operations report. Use when the user wants to summarize the week, write an ops update, or turn loose notes into a regular team report.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Weekly Ops Report</h1>
+<h2>When to use this</h2>
+<p>The user has a week's worth of scattered information (notes, numbers, things that happened) and needs it turned into a structured internal report — for themselves, a team, or record-keeping. This is internal/ operational, distinct from <code>board-investor-memo</code> which is for external oversight stakeholders.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The audience is a board or investor, not an internal team — use <code>board-investor-memo</code> instead, which has different framing (asks, formal metrics) appropriate to that audience.</li><li>There's genuinely nothing to report — a short "quiet week, nothing notable" is more honest and useful than padding a report with filler.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Gather what actually happened this week</strong> from whatever raw input exists (notes, memory, numbers provided) — don't invent activity that wasn't mentioned.</li><li><strong>Organize into consistent sections</strong> so reports stay comparable week to week: - Headline (1-2 sentences on the overall week) - Key numbers (whatever metrics matter to this business, with a comparison to last week if available) - What happened (brief, bulleted — not a narrative essay) - Issues/blockers (anything that needs attention) - Coming up next week</li><li><strong>Keep it scannable.</strong> A weekly report that takes 10 minutes to read won't get read regularly — bullets over paragraphs, numbers over descriptions where possible.</li><li><strong>Be honest about a quiet week.</strong> Padding a slow week to look busier than it was undermines trust in every future report.</li><li><strong>Flag blockers clearly, not buried in a bullet list</strong> — anything that needs someone else's attention or decision should stand out.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Weekly ops report: [week of / date range]</code></pre>
+<p><strong>Headline</strong>: [1-2 sentences]</p>
+<p>### Key numbers | Metric | This week | Last week | Change | |---|---|---|---| | ... | ... | ... | ... |</p>
+<p>### What happened - [bullet] - [bullet]</p>
+<p>### Issues / blockers - [anything needing attention, or "none this week"]</p>
+<p>### Coming up next week - [bullet] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Inventing detail not actually provided, to make the report feel more complete.</li><li>Padding a quiet week instead of just saying it was quiet.</li><li>Burying a real blocker inside a generic bullet list instead of calling it out.</li><li>Inconsistent format week to week, making it hard to compare trends over time.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Based only on information actually provided, nothing invented</li><li class="check"><span class="box" aria-hidden="true"></span>Key numbers include a week-over-week comparison where available</li><li class="check"><span class="box" aria-hidden="true"></span>Blockers are called out clearly, not buried</li><li class="check"><span class="box" aria-hidden="true"></span>Format is consistent with prior reports (for comparability)</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example</h3>
+<p>Raw input (illustrative): "This week we had 8 bookings, up from 5 last week. One cancellation due to weather. Crew training day happened Tuesday. Still waiting on the dock contact reply from last week. Nothing major broke. Next week planning to finalize the scouting trip date."</p>
+<h5>Output</h5>
+<p><strong>Headline</strong>: A solid week — bookings picked up and crew training happened as planned, though the Gili dock contact is still an open follow-up.</p>
+<p>### Key numbers | Metric | This week | Last week | Change | |---|---|---|---| | Bookings | 8 | 5 | +3 | | Cancellations | 1 (weather) | — | — |</p>
+<p>### What happened - Crew training day held Tuesday - One weather-related cancellation</p>
+<p>### Issues / blockers - Still waiting on reply from the Gili dock contact (outstanding since last week — worth a follow-up nudge)</p>
+<p>### Coming up next week - Finalize scouting trip date</p>
+<p>Note what this version does *not* do: it doesn't invent extra detail about the crew training content (not provided), and it explicitly surfaces the outstanding dock contact as a blocker rather than letting it sit inside a generic bullet.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="pre mortem facilitator runs a pre-mortem before a big decision, launch, or commitment — imagines it already failed, then works backward to surface risks while there&#x27;s still time to act on them. use when the user is about to make a significant decision or launch and wants to pressure-test it, or explicitly asks for a pre-mortem.">
+        <summary>
+          <span class="skill-name">Pre Mortem Facilitator</span>
+          <span class="skill-desc">Runs a pre-mortem before a big decision, launch, or commitment — imagines it already failed, then works backward to surface risks while there's still time to act on them. Use when the user is about to make a significant decision or launch and wants to pressure-test it, or explicitly asks for a pre-mortem.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Pre-Mortem Facilitator</h1>
+<h2>When to use this</h2>
+<p>There's a significant, not-yet-final decision or upcoming launch, and the user wants to surface risks and blind spots before committing — this is specifically framed around one upcoming decision, run once, rather than an ongoing risk document (use <code>risk-register-builder</code> for that broader, ongoing case).</p>
+<h2>When NOT to use this</h2>
+<ul><li>The decision is small/reversible enough that a full pre-mortem is more process than the stakes warrant.</li><li>The decision has already been made and executed — a pre-mortem is a pre-decision tool; after the fact, this becomes a post-mortem instead (a different, retrospective exercise, not what this skill does).</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>State the decision/plan precisely.</strong> What exactly is being decided or launched, and when? A vague framing produces a vague pre-mortem.</li><li><strong>Jump forward in imagination: it's [time period] later, and this failed.</strong> Not "might fail" — assume it definitively failed, then work backward. This framing (borrowed from Gary Klein's prospective hindsight technique) surfaces more and more specific risks than asking "what could go wrong" directly, because it removes the social awkwardness of predicting failure and instead treats failure as an already-established fact to explain.</li><li><strong>Generate specific reasons it failed</strong> — not vague ("bad luck") but concrete and plausible ("the scouting trip revealed the dock wasn't viable, but we'd already started marketing the route"). Push for several distinct reasons, not just the first one that comes to mind.</li><li><strong>For each reason, ask: was this foreseeable now?</strong> Most pre-mortem value comes from reasons that, once said out loud, were clearly foreseeable — those are the ones worth acting on before committing.</li><li><strong>For each foreseeable reason, define a concrete pre-commitment safeguard</strong> — a specific check, threshold, or sequencing change made now, before the decision is executed, not a vague "we'll be careful."</li><li><strong>Note what's genuinely unforeseeable or low-probability</strong> too — not every imagined failure needs a safeguard; separating "worth acting on now" from "acceptable risk" keeps the exercise useful rather than paralyzing.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Pre-mortem: [decision/plan]</code></pre>
+<p><strong>The scenario</strong>: It's [time period] later. [Decision] has failed.</p>
+<p>### Reasons it failed 1. [Specific, concrete reason] — Foreseeable now: Yes/No 2. [Specific, concrete reason] — Foreseeable now: Yes/No ...</p>
+<p>### Safeguards to put in place now - [For each "Yes" reason] [Specific pre-commitment action]</p>
+<p>### Accepted risks (foreseeable but not acted on, or genuinely unforeseeable) - [Reason] — [why it's being accepted as-is] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Staying vague ("it could fail if things go wrong") instead of forcing specific, plausible failure stories.</li><li>Treating every imagined failure as equally worth a safeguard, instead of separating foreseeable-and-actionable from genuinely low-probability or unforeseeable.</li><li>Vague safeguards ("we'll monitor closely") instead of a specific pre-commitment action taken before execution.</li><li>Running this after the decision is already committed, when it can no longer change the plan.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>The failure scenario is stated as a definite past event, not a hedge ("might fail")</li><li class="check"><span class="box" aria-hidden="true"></span>Reasons are specific and plausible, not vague</li><li class="check"><span class="box" aria-hidden="true"></span>Each reason is marked foreseeable or not</li><li class="check"><span class="box" aria-hidden="true"></span>Foreseeable reasons get a specific, concrete safeguard — not a vague intention</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Background: prospective hindsight</h3>
+<p>The pre-mortem technique comes from psychologist Gary Klein. The core mechanism: asking "what could go wrong?" invites hedged, generic answers, because predicting failure feels like betting against the plan (socially uncomfortable, especially in a group). Asking people to imagine failure has *already happened* and explain *why* removes that social friction — it becomes a storytelling/explaining exercise rather than a prediction, and people are much more willing (and specific) when explaining an assumed fact than when speculating about a possibility.</p>
+<h4>Worked example: launching the new Gili multi-day route</h4>
+<p><strong>The scenario</strong>: It's six months from now. The Gili route launch has failed — bookings never took off and it's being quietly discontinued.</p>
+<p>### Reasons it failed 1. The scouting trip revealed mooring/logistics issues that weren't resolved before the route was publicly marketed. — Foreseeable now: Yes 2. Pricing was set without checking unit economics, and margin was too thin to sustain marketing spend. — Foreseeable now: Yes 3. A well-funded competitor launched a similar route first and captured early demand. — Foreseeable now: Partially (competitor timing itself isn't controllable, but being slow to market after knowing a competitor might move is) 4. A major regional event (e.g. unusual weather pattern) disrupted the whole first season. — Foreseeable now: No — genuinely low-probability and not specifically foreseeable</p>
+<p>### Safeguards to put in place now - Don't begin public marketing until the scouting trip is complete and any logistics issues are resolved (sequencing safeguard, directly prevents reason 1). - Run <code>unit-economics-breakdown</code> on proposed pricing before it's finalized, not after (directly prevents reason 2). - Set an internal target date for going to market and treat schedule slippage past it as a flag to reassess, given competitive timing risk (partial mitigation for reason 3).</p>
+<p>### Accepted risks - Regional weather/event disruption (reason 4) is accepted as a general business risk, not specifically addressed by this launch's safeguards — it's the kind of risk better handled by overall business resilience (e.g. not over-relying on any single route) than a launch-specific fix.</p>
+<p>Notice the pattern: two of the four reasons turned into concrete, immediate actions; one turned into a partial timing safeguard; one was consciously accepted rather than forced into an unnecessary mitigation.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="okr drafter turns a broad goal into okrs (objectives and key results) with measurable, falsifiable key results instead of vague aspirations. use when the user wants to set quarterly/periodic goals, turn a goal into targets, or explicitly asks for okrs.">
+        <summary>
+          <span class="skill-name">OKR Drafter</span>
+          <span class="skill-desc">Turns a broad goal into OKRs (Objectives and Key Results) with measurable, falsifiable key results instead of vague aspirations. Use when the user wants to set quarterly/periodic goals, turn a goal into targets, or explicitly asks for OKRs.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>OKR Drafter</h1>
+<h2>When to use this</h2>
+<p>The user has a goal (for the business, a team, or themselves) and wants it turned into a structured objective with measurable key results for a defined period.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The goal is really a single task with a deadline, not a broader objective needing multiple measures of progress — a simple task doesn't need the OKR structure.</li><li>There's no way to measure progress at all, even roughly — flag that the goal needs to be made more concrete before OKRs can be written for it, rather than forcing vague key results.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Write the Objective as qualitative and motivating</strong>, not a number itself — it should answer "what do we want to achieve and why does it matter," in language that would still make sense to explain to someone without the underlying data.</li><li><strong>Write 2-4 Key Results per Objective</strong>, and for each, apply this test: <strong>could this key result be objectively marked done or not done, with a number, by the end of the period?</strong> If the answer is unclear, it's not a real key result yet — push for a measurable version.</li><li><strong>Distinguish key results from tasks.</strong> "Launch the new booking page" is a task (binary, no measure of degree); "Increase booking conversion rate from X% to Y%" is a key result (measurable, shows degree of progress). If every "key result" is really a task list, the Objective probably needs reframing around an actual outcome.</li><li><strong>Set an ambitious-but-real target for each key result</strong> — not a guaranteed layup, and not a fantasy number with no basis; if a reasonable target isn't known yet, say so and suggest starting the period by establishing a baseline first.</li><li><strong>Limit to 2-3 Objectives per period</strong> for a small business/team — more than that usually means nothing is actually prioritized.</li></ol>
+<h2>Output format</h2>
+<pre><code>## OKRs: [period, e.g. Q4 2026]</code></pre>
+<p>### Objective 1: [qualitative, motivating statement] - KR1: [Measurable target, from baseline to target] - KR2: [Measurable target] - KR3: [Measurable target]</p>
+<p>### Objective 2: ... ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Key results that are really just a to-do list ("redesign the website") with no actual measure of degree or success.</li><li>Vague, unmeasurable key results ("improve customer satisfaction") without a number or method to track it.</li><li>Setting either sandbagged (guaranteed) or fantasy (baseless) targets instead of grounded, ambitious-but-real ones.</li><li>Too many Objectives, diluting focus rather than prioritizing.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Each Objective is qualitative and motivating, not itself a number</li><li class="check"><span class="box" aria-hidden="true"></span>Every Key Result is genuinely measurable (a number, from baseline to target)</li><li class="check"><span class="box" aria-hidden="true"></span>No key result is secretly just a task with no measure of degree</li><li class="check"><span class="box" aria-hidden="true"></span>2-3 Objectives max, each with 2-4 Key Results</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: Q1 goal for Golden Island Cruises</h3>
+<p>Starting goal (as given, vague): "We want to grow the business and improve customer experience next quarter."</p>
+<h5>Turning it into OKRs</h5>
+<p><strong>Objective 1: Grow bookings sustainably without sacrificing service quality</strong> - KR1: Increase monthly bookings from a baseline of [X] to [Y] by end of quarter - KR2: Maintain average review rating at [current level] or above throughout the growth period (a guardrail key result — ensures growth isn't pursued at the cost of quality) - KR3: Reduce average inquiry response time from [current] to [target]</p>
+<p><strong>Objective 2: Validate the Gili route opportunity before committing further investment</strong> - KR1: Complete the scouting trip and resolve any identified logistics issues - KR2: Run and finalize unit economics for the route, with a clear go/no-go recommendation - KR3: Conduct at least [N] discovery interviews with past multi-day customers about interest in the new route</p>
+<h5>Why this is better than the original goal statement</h5>
+<p>"Grow the business" has no way to be marked done or not done. The rewritten version: - Splits into two Objectives so growth and the Gili route decision aren't conflated into one unmeasurable blob - Each Key Result is a number with a clear before/after - KR2 under Objective 1 is a <strong>guardrail</strong> — a deliberate check to ensure the push for growth (KR1) doesn't come at the cost of something equally important (service quality) — a useful pattern anytime one KR could be gamed at the expense of another</p>
+<p>Note KR1-KR3 under Objective 2 are a mix of milestone-style key results (complete the scouting trip) — acceptable when the Objective is genuinely about *validating* something rather than a raw growth number, since "validated with a clear answer" is itself a measurable, falsifiable outcome even though it isn't a percentage.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="impact effort prioritizer scores a list of initiatives, ideas, or fixes on impact versus effort and recommends what to tackle first. use when the user has more ideas or possible initiatives than time to do them all and needs help deciding what to prioritize.">
+        <summary>
+          <span class="skill-name">Impact Effort Prioritizer</span>
+          <span class="skill-desc">Scores a list of initiatives, ideas, or fixes on impact versus effort and recommends what to tackle first. Use when the user has more ideas or possible initiatives than time to do them all and needs help deciding what to prioritize.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Impact/Effort Prioritizer</h1>
+<h2>When to use this</h2>
+<p>There's a list of possible initiatives, fixes, or ideas — more than can realistically all be done at once — and the user needs a structured way to decide what to do first.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only one or two options exist — a full matrix is unnecessary ceremony for a two-way choice; just reason through it directly.</li><li>The items aren't actually comparable (wildly different time horizons or categories) — group into comparable sets first, or the ranking will be misleading.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>List every candidate initiative clearly</strong> — specific enough to actually estimate impact and effort for (not "improve marketing" but "run a targeted ad campaign for the low season").</li><li><strong>Rate Impact</strong>: what real difference would this make if done well? Consider magnitude (how big) and confidence (how sure is this estimate) separately if impact estimates are especially uncertain — a high-magnitude but low-confidence item shouldn't be treated the same as a high-magnitude, high-confidence one.</li><li><strong>Rate Effort</strong>: how much time, money, or organizational complexity does this actually take? Include ramp-up/coordination effort, not just raw hours of work.</li><li><strong>Plot into the four quadrants:</strong> - High impact, low effort → <strong>Do first</strong> (quick wins) - High impact, high effort → <strong>Plan carefully</strong> (worth doing, needs a real plan and likely staged execution) - Low impact, low effort → <strong>Do if there's slack time</strong> (fine to do, not a priority) - Low impact, high effort → <strong>Don't do</strong> (or deprioritize explicitly, rather than leaving it ambiguously on the list forever)</li><li><strong>Recommend a sequence, not just a quadrant placement</strong> — quick wins first (builds momentum and frees capacity), then the highest-value high-effort item, staged appropriately.</li><li><strong>Flag any item where impact is highly uncertain</strong> — recommend a small, low-cost validation step before committing full effort, rather than guessing at impact and going straight to a big investment.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Prioritization: [list/context]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Initiative</th><th>Impact</th><th>Effort</th><th>Quadrant</th><th>Notes</th></tr></thead><tbody><tr><td>...</td><td>High/Low</td><td>High/Low</td><td>...</td><td>...</td></tr></tbody></table></div>
+<p>### Recommended sequence 1. [Quick win first] 2. [Next highest-value item] ...</p>
+<p>### Deprioritized (low impact, high effort) [Items explicitly set aside, so they don't linger ambiguously] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Vague initiatives that can't actually be rated for impact or effort.</li><li>Treating impact estimates as equally certain when some are well-grounded and others are pure guesses.</li><li>Listing everything in a quadrant without a recommended sequence — the matrix alone doesn't tell someone what to actually do Monday morning.</li><li>Leaving low-impact/high-effort items on the list indefinitely instead of explicitly deprioritizing them.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Each initiative is specific enough to rate meaningfully</li><li class="check"><span class="box" aria-hidden="true"></span>Impact and effort ratings have a stated reason, not just a gut call</li><li class="check"><span class="box" aria-hidden="true"></span>Output includes a recommended sequence, not just a static matrix</li><li class="check"><span class="box" aria-hidden="true"></span>Low-priority items are explicitly set aside, not left ambiguous</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example</h3>
+<p>Candidate initiatives for GIC (illustrative): 1. Fix the shared-calendar/booking-system redundancy (from the process map example) 2. Launch the Gili multi-day route 3. Redesign the website 4. Cross-train a second person on inquiry handling 5. Add a loyalty/repeat-customer discount program</p>
+<div class="table-wrap"><table><thead><tr><th>Initiative</th><th>Impact</th><th>Effort</th><th>Quadrant</th><th>Notes</th></tr></thead><tbody><tr><td>Fix booking/accounting redundancy</td><td>Medium</td><td>Low</td><td>Do first</td><td>Removes ongoing error risk and delay, quick to implement</td></tr><tr><td>Cross-train inquiry backup</td><td>High</td><td>Low</td><td>Do first</td><td>Directly addresses a known response-time weakness (see root-cause example) cheaply</td></tr><tr><td>Loyalty/repeat-customer program</td><td>Medium</td><td>Medium</td><td>Plan carefully</td><td>Real upside, but needs design and tracking to do well</td></tr><tr><td>Gili route launch</td><td>High (uncertain — not yet validated)</td><td>High</td><td>Plan carefully, but validate first</td><td>Impact confidence is low until scouting trip + unit economics are done</td></tr><tr><td>Website redesign</td><td>Low-Medium</td><td>High</td><td>Don't do (for now)</td><td>No specific evidence current site is losing bookings; effort is high relative to unclear upside</td></tr></tbody></table></div>
+<p>### Recommended sequence 1. Cross-train inquiry backup (quick win, addresses a known weakness) 2. Fix booking/accounting redundancy (quick win, low risk) 3. Validate the Gili route (small-cost scouting + unit economics, before committing to the full high-effort launch) 4. Design the loyalty program (worth planning properly, not urgent)</p>
+<p>### Deprioritized Website redesign — not ruled out forever, but deprioritized until there's actual evidence (e.g. from unit economics, conversion data, or customer interviews) that it's a real bottleneck rather than a guessed one.</p>
+<p>This shows the key move: the Gili route isn't dismissed for being high-effort, but its impact rating is flagged as uncertain, which changes the recommendation from "do it big" to "validate cheaply first" — a different action than either "do first" or "don't do."</p></div>
+        </div>
+      </details>
+
+      <details class="skill" data-search="positioning pitch crafter sharpens a positioning statement or elevator pitch for a business, product, or consulting offering, making clear who it&#x27;s for, what it does, and why it beats the alternative. use when the user wants to refine how they describe what they do, needs an elevator pitch, or is working on positioning for a business or offering.">
+        <summary>
+          <span class="skill-name">Positioning Pitch Crafter</span>
+          <span class="skill-desc">Sharpens a positioning statement or elevator pitch for a business, product, or consulting offering, making clear who it's for, what it does, and why it beats the alternative. Use when the user wants to refine how they describe what they do, needs an elevator pitch, or is working on positioning for a business or offering.</span>
+        </summary>
+        <div class="skill-body">
+          <h1>Positioning &amp; Pitch Crafter</h1>
+<h2>When to use this</h2>
+<p>The user needs a clear, sharp way to describe a business, product, or offering — for a pitch, a website, an introduction, or just to clarify their own thinking about what they actually offer and to whom.</p>
+<h2>When NOT to use this</h2>
+<ul><li>What's being offered isn't actually decided yet — positioning describes something that exists or is concretely planned; if the offering itself is still undefined, that's a different (earlier) conversation.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Use the standard positioning statement structure</strong> as a forcing function, even if the final pitch doesn't use this exact template: *"For [specific target customer], who [need/problem], [offering] is a [category] that [key benefit]. Unlike [main alternative], we [key differentiator]."*</li><li><strong>Make the target customer genuinely specific</strong>, not "everyone" or "people who like boats" — a positioning statement that could describe any customer doesn't actually position anything.</li><li><strong>Name the real alternative</strong>, not a strawman. The alternative to a Lombok boat charter might be a resort stay, a different destination entirely, or a competitor — pick the one actually being chosen against most often, since the differentiator only means something relative to a real alternative.</li><li><strong>State the differentiator as a genuine reason to choose this over that alternative</strong> — not a generic claim ("quality service") that any competitor could also claim. If the only real differentiator is price, say so plainly rather than dressing it up as something else.</li><li><strong>Once the structured statement is solid, adapt it into pitch length</strong> — a natural-sounding 15-30 second spoken version loses the template scaffolding but keeps the same core content (who, what, why better).</li><li><strong>Check it against a simple test</strong>: would a competitor's positioning statement, with the names swapped, sound just as true? If yes, the differentiator isn't sharp enough yet.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Positioning: [business/offering]</code></pre>
+<p><strong>Structured statement</strong>: For [target customer], who [need], [offering] is a [category] that [benefit]. Unlike [alternative], we [differentiator].</p>
+<p><strong>Elevator pitch (spoken version, ~20-30 seconds)</strong>: [natural-sounding paragraph version]</p>
+<p>### Differentiation check Would this sound just as true with a competitor's name swapped in? [Yes/No, and if yes, what needs to get sharper] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>A target customer so broad it doesn't actually narrow anything ("for travelers").</li><li>A strawman alternative instead of the real thing being chosen against.</li><li>A differentiator so generic it could apply to any competitor ("quality and great service").</li><li>Skipping the swap-test, so a weak differentiator goes unnoticed.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Target customer is genuinely specific</li><li class="check"><span class="box" aria-hidden="true"></span>The named alternative is the real one, not a strawman</li><li class="check"><span class="box" aria-hidden="true"></span>The differentiator is a real reason to choose this over that specific alternative</li><li class="check"><span class="box" aria-hidden="true"></span>Passes the "swap the competitor's name in" test</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: Golden Island Cruises</h3>
+<p>Weak starting version (illustrative): "We offer amazing boat trips in Lombok with great service and beautiful boats."</p>
+<p>Problem: could describe almost any charter operator in the region — fails the swap test immediately.</p>
+<h5>Sharpened version</h5>
+<p><strong>Structured statement</strong>: For travelers who want an authentic, uncrowded island experience without giving up comfort, Golden Island Cruises is a phinisi boat charter operator that combines traditional Indonesian craftsmanship with a genuinely experienced local crew. Unlike large-group day-trip operators, we run smaller, owner-operated charters where the crew's local knowledge shapes the actual route, not just a fixed itinerary.</p>
+<p><strong>Elevator pitch (spoken)</strong>: "We run phinisi boat charters out of Lombok — traditional wooden boats, but with real comfort. What makes us different from the big day-trip operators is that we're small and owner-run, so the crew's actual local knowledge shapes where you go, instead of everyone getting the same fixed stops."</p>
+<p>### Differentiation check Would a large day-trip operator's positioning sound just as true with "Golden Island Cruises" swapped in? No — "large-group," "fixed itinerary," and "owner-operated, crew-shaped route" are specific claims that wouldn't fit a big-fleet operator's actual model. That's what makes this differentiator real rather than generic marketing language.</p>
+<p>Note what changed from the weak version: "great service" (unfalsifiable, generic) became "owner-operated, crew's local knowledge shapes the route" (specific, checkable, genuinely differentiating from a named alternative type of competitor).</p></div>
+        </div>
+      </details>
+      </div>
+    </section>
+    <!-- CONTENT:END -->
+
+    <footer class="foot">
+      <p>Built for a management-consulting &amp; small-business workflow.
+        Each entry here is a real <code>SKILL.md</code> &mdash; open a category,
+        expand a skill, and you're reading the exact instructions Claude
+        follows when it triggers.</p>
+    </footer>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

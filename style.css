@@ -1007,6 +1007,48 @@ body {
   transition: opacity 0.2s ease;
 }
 
+/* --- theme: the playbook — a whiteboard/graph-paper card (the only
+   light, gridded tile in the grid), a small hand-drawn strategy-diagram
+   doodle (circles + dashed connector arrows, echoing an issue tree /
+   play diagram), and the name in a handwriting face — reads as
+   "someone's planning session," distinct from every other tile's clean
+   gradient or collage treatment. */
+
+.tile[data-theme="playbook"] .art {
+  background-color: #fbf8f1;
+  background-image:
+    linear-gradient(rgba(31, 111, 92, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 111, 92, 0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border-bottom: 3px solid #1f6f5c;
+}
+.tile[data-theme="playbook"] .playbook-diagram {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+.tile[data-theme="playbook"] .art-title {
+  bottom: 10px;
+  left: 16px;
+  font-family: "Caveat", cursive;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 0.95;
+  color: #1f6f5c;
+  transform: rotate(-2deg);
+}
+.tile[data-theme="playbook"] .go { color: #c1502e; background: rgba(251, 248, 241, 0.85); }
+.tile[data-theme="playbook"] {
+  border-color: rgba(31, 111, 92, 0.25);
+}
+.tile[data-theme="playbook"]:hover {
+  border-color: #1f6f5c;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(31, 111, 92, 0.3);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
@@ -1205,3 +1247,16 @@ body {
   transform-origin: center;
   animation: knotify-needle-wobble 4.8s ease-in-out infinite;
 }
+
+/* The Playbook: the three connector lines draw themselves in sequence,
+   like someone sketching the diagram live, then reset and repeat. */
+@keyframes pb-draw {
+  0%, 8% { stroke-dashoffset: 20; opacity: 0.4; }
+  38%, 100% { stroke-dashoffset: 0; opacity: 0.9; }
+}
+.tile[data-theme="playbook"] .pb-line {
+  stroke-dashoffset: 20;
+  animation: pb-draw 4.2s ease-in-out infinite;
+}
+.tile[data-theme="playbook"] .pb-line-b { animation-delay: 0.5s; }
+.tile[data-theme="playbook"] .pb-line-c { animation-delay: 1s; }
