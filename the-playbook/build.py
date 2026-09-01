@@ -192,7 +192,7 @@ def build():
         cat_id = re.sub(r"[^a-z0-9]+", "-", cat_name.lower()).strip("-")
         skills_html = "\n".join(build_skill(s) for s in slugs)
         sections.append(f'''
-    <details class="category" id="{cat_id}" open>
+    <details class="category" id="{cat_id}">
       <summary class="category-title">{cat_name}<span class="category-count">{len(slugs)}</span></summary>
       <div class="skill-list">{skills_html}
       </div>
