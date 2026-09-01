@@ -25,4 +25,11 @@
   }
 
   input.addEventListener("input", filter);
+
+  document.getElementById("expand-all").addEventListener("click", function () {
+    document.querySelectorAll(".skill").forEach(function (d) { d.open = true; });
+  });
+  document.getElementById("collapse-all").addEventListener("click", function () {
+    document.querySelectorAll(".skill").forEach(function (d) { d.open = false; });
+  });
 })();

@@ -1023,19 +1023,19 @@ body {
   border-bottom: 3px solid #1f6f5c;
 }
 .tile[data-theme="playbook"] .playbook-diagram {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 6%;
+  right: 3%;
+  width: 42%;
+  height: 88%;
   opacity: 0.9;
 }
 .tile[data-theme="playbook"] .art-title {
-  bottom: 10px;
+  top: 16px;
   left: 16px;
   font-family: "Caveat", cursive;
   font-weight: 700;
-  font-size: 26px;
-  line-height: 0.95;
+  font-size: 24px;
+  line-height: 1;
   color: #1f6f5c;
   transform: rotate(-2deg);
 }
