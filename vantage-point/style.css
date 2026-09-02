@@ -47,6 +47,15 @@ body {
   padding: 28px clamp(20px, 4.5vw, 64px) 100px;
 }
 
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
 .back-link {
   display: inline-block;
   color: var(--muted);
@@ -56,6 +65,30 @@ body {
   padding: 4px 2px;
 }
 .back-link:hover { color: var(--accent); }
+
+.theme-toggle {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 0;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
+}
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
 
 .wrap {
   max-width: 1680px;
@@ -91,6 +124,11 @@ body {
 @media (max-width: 900px) {
   .hero-bottom { flex-direction: column; align-items: stretch; }
   .hero-controls { flex: none; max-width: none; }
+}
+
+@media (max-width: 420px) {
+  .hero-controls { min-width: 0; }
+  .btn-row .ctrl-btn { min-width: 0; flex: 1 1 90px; padding: 0 10px; }
 }
 
 .eyebrow {
@@ -192,8 +230,8 @@ body {
 }
 .mm-canvas {
   width: 100%;
-  height: min(88vh, 1000px);
-  min-height: 560px;
+  height: min(94vh, 1500px);
+  min-height: 640px;
   overflow: hidden;
   border-radius: 10px;
   cursor: grab;
@@ -240,6 +278,11 @@ body {
 }
 .mm-zoom-controls button:hover { border-color: var(--accent); color: var(--accent); }
 #mm-zoom-reset { font-size: 14px; }
+
+/* Applied only for the duration of a click-to-zoom-into-category jump
+   (added/removed by app.js) — a permanent transition here would fight
+   drag-to-pan, which sets the transform on every mousemove. */
+#mm-viewport.mm-anim { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
 
 .mm-leaf, .mm-node { cursor: pointer; }
 .mm-leaf text, .mm-node text { transition: font-weight 0.1s ease; }
@@ -358,6 +401,11 @@ body {
 .dl-link:hover { color: var(--cat-color, var(--accent)); border-color: var(--cat-color, var(--accent)); }
 .dl-link-cat { margin-left: auto; font-size: 12px; }
 .category-title::after { margin-left: 10px; }
+
+@media (max-width: 480px) {
+  .category-title { flex-wrap: wrap; row-gap: 8px; font-size: 19px; }
+  .category-title::after { margin-left: auto; }
+}
 
 .skill-list {
   columns: 380px;

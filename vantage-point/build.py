@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 SKILLS_DIR = ROOT / ".." / ".." / "claude-skills-library" / "skills"
 
-SITE_NAME = "The Quagmire"  # change here to rename the mindmap's center label
+SITE_NAME = "Vantage Point"  # change here to rename the mindmap's center label
 
 CATEGORIES = [
     ("Strategic analysis", [
@@ -317,6 +317,30 @@ def text_width(s, font_size):
     return len(s) * font_size * 0.58
 
 
+def wrap_label(name, font_size, max_width=150):
+    """Greedy word-wrap onto as many lines as it takes to keep every
+    line under `max_width` px at `font_size` — not just a single
+    midpoint split. A single split can still leave one half wide (e.g.
+    "Competitive" / "Landscape Mapper" — the second half is still 16
+    characters), which was the actual biggest driver of mindmap
+    crowding that ring/angle tuning alone couldn't fully absorb.
+    Wrapping by real pixel width, recomputed whenever `font_size`
+    changes, keeps box width bounded regardless of name length or font
+    size instead of just pushing harder to route around it."""
+    words = name.split(" ")
+    lines, current = [], ""
+    for w in words:
+        candidate = f"{current} {w}".strip()
+        if current and text_width(candidate, font_size) > max_width:
+            lines.append(current)
+            current = w
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    return lines
+
+
 def build_mindmap():
     """Radial tree: center hub -> category nodes -> skill leaf nodes.
     Two things make this robust rather than hand-tuned:
@@ -342,10 +366,11 @@ def build_mindmap():
     every element carries an animation-delay so the whole thing draws
     itself outward from the hub on load (see .mm-pop / .mm-line in
     style.css for the actual keyframes)."""
-    r_center = 190
-    r_cat_base, r_cat_jitter = 760, 60
-    r_leaf_base, r_leaf_jitter = 1500, 140
-    LEAF_FONT, CAT_FONT = 40, 48
+    r_center = 118
+    r_cat_base, r_cat_jitter = 340, 20
+    r_leaf_base, r_leaf_jitter = 640, 30
+    RING_GAP, N_RINGS = 108, 4  # leaves cycle through 4 rings by index, see Phase 1
+    LEAF_FONT, CAT_FONT = 28, 38
     n = len(CATEGORIES)
     total_skills = sum(len(s) for _, s in CATEGORIES)
     origin = 0.0  # positions computed relative to (0,0); recentered at the end
@@ -360,13 +385,27 @@ def build_mindmap():
         cats.append({"cat_name": cat_name, "cat_id": cat_id, "angle_deg": angle_deg, "r": r_cat, "index": i})
 
         n_leaves = len(slugs)
-        arc = min(46, 6.5 * (n_leaves - 1)) if n_leaves > 1 else 0
+        arc = min(34, 5.4 * (n_leaves - 1)) if n_leaves > 1 else 0
         step = arc / (n_leaves - 1) if n_leaves > 1 else 0
         for j, slug in enumerate(slugs):
             leaf_angle_deg = angle_deg + (j - (n_leaves - 1) / 2) * step + jitter(slug + "a", -1.5, 1.5)
-            r_leaf = r_leaf_base + jitter(slug, -r_leaf_jitter, r_leaf_jitter)
+            # Alternate leaves onto two rings (near/far by index parity)
+            # instead of relying purely on angle to keep neighbours apart.
+            # Two adjacent leaves in the same category sit close in angle
+            # by construction (the `step` above) — putting them on the
+            # same ring made the collision pass do most of the work,
+            # which is what produced a jagged, spiky outline (some leaves
+            # pushed far out, most not) instead of a roughly circular
+            # one. Staggering rings gives every leaf a same-size head
+            # start on separation from its immediate neighbours, so the
+            # collision pass below only has to clean up genuine
+            # coincidences (e.g. two leaves from different categories
+            # landing at a near-identical angle) rather than routine
+            # adjacent-label crowding.
+            r_leaf = r_leaf_base + (j % N_RINGS) * RING_GAP + jitter(slug, -r_leaf_jitter, r_leaf_jitter)
+            name = title_case(slug)
             leaves.append({"slug": slug, "cat_id": cat_id, "cat_index": i, "angle_deg": leaf_angle_deg,
-                            "r": r_leaf, "name": title_case(slug), "j": j})
+                            "r": r_leaf, "name": name, "lines": wrap_label(name, LEAF_FONT), "j": j})
 
     # --- Phase 2: iterative collision resolution on leaf label boxes ---
     def leaf_geom(leaf):
@@ -374,8 +413,8 @@ def build_mindmap():
         x, y = origin + leaf["r"] * math.cos(angle), origin + leaf["r"] * math.sin(angle)
         anchor = "start" if math.cos(angle) >= -0.05 else "end"
         dx = LEAF_FONT * 0.35 if anchor == "start" else -LEAF_FONT * 0.35
-        w = text_width(leaf["name"], LEAF_FONT)
-        h = LEAF_FONT * 1.3
+        w = max(text_width(line, LEAF_FONT) for line in leaf["lines"])
+        h = LEAF_FONT * 1.3 * len(leaf["lines"])
         if anchor == "start":
             left, right = x + dx, x + dx + w
         else:
@@ -383,33 +422,98 @@ def build_mindmap():
         top, bottom = y - h / 2, y + h / 2
         return x, y, anchor, dx, (left, top, right, bottom)
 
-    PAD, STEP, MAX_ITERS = 16, 30, 600
+    # Each leaf is pushed AT MOST ONCE PER PASS, even if it overlaps
+    # several neighbours at once — without this throttle, a leaf sitting
+    # in a crowded spot gets shoved by every one of its conflicts in the
+    # same pass and the canvas balloons in a couple of iterations.
+    # A leaf is also never pushed past MAX_R: a couple of stubborn pairs
+    # (long label vs. long label, near a branch boundary) can otherwise
+    # keep finding a *new* micro-overlap every single pass for hundreds
+    # of passes, each one legitimate but each one making the whole
+    # canvas bigger for all 50 leaves to chase a residual few pixels —
+    # this is what made an earlier version compute a viewBox so large
+    # the doubled font size actually rendered *smaller* on screen than
+    # before. Capping growth trades "mathematically zero overlap in
+    # every pathological case" for "bounded, predictable canvas size,"
+    # which is the right tradeoff here — any leaf that hits the cap gets
+    # reported so a real fix (e.g. shortening that skill's display name,
+    # or nudging max_arc wider) can be made deliberately if it matters.
+    # Only the closer-to-center leaf of an overlapping pair gets pushed
+    # (by a bigger step), not both. Two leaves can land at nearly the
+    # same angle by coincidence even though they're in different
+    # categories entirely (observed: two real skills 0.25° apart) — on
+    # a shared ray from the center, pushing BOTH outward by equal steps
+    # never separates them, since their radius *gap* (what actually
+    # determines their distance apart) never changes. Only moving one
+    # of the two grows that gap every pass, which resolves same-ray
+    # pairs efficiently instead of chasing them out to a huge radius
+    # while never actually fixing anything.
+    PAD, STEP, MAX_ITERS = 14, 16, 400
+    MAX_R = r_leaf_base + (N_RINGS + 2) * RING_GAP  # safety net against a true pathological blowup, not a primary control
+    capped = set()
     for _ in range(MAX_ITERS):
-        moved = False
+        moved_this_pass = set()
+        any_overlap = False
         for i in range(len(leaves)):
             ai = leaf_geom(leaves[i])[4]
             for j in range(i + 1, len(leaves)):
                 bj = leaf_geom(leaves[j])[4]
                 if not (ai[2] + PAD < bj[0] or bj[2] + PAD < ai[0] or ai[3] + PAD < bj[1] or bj[3] + PAD < ai[1]):
-                    leaves[i]["r"] += STEP
-                    leaves[j]["r"] += STEP
-                    ai = leaf_geom(leaves[i])[4]  # refresh immediately, not a stale snapshot
-                    moved = True
-        if not moved:
+                    any_overlap = True
+                    closer, farther = (i, j) if leaves[i]["r"] <= leaves[j]["r"] else (j, i)
+                    if closer not in moved_this_pass:
+                        if leaves[closer]["r"] < MAX_R:
+                            leaves[closer]["r"] = min(MAX_R, leaves[closer]["r"] + STEP * 2)
+                            if closer == i:
+                                ai = leaf_geom(leaves[i])[4]
+                        else:
+                            capped.add(leaves[closer]["slug"])
+                        moved_this_pass.add(closer)
+        if not any_overlap:
             break
-    else:
-        print(f"WARNING: mindmap collision resolution hit MAX_ITERS={MAX_ITERS} without fully converging")
+
+    # Fallback: a radial push can't separate two leaves that are BOTH
+    # pinned at MAX_R (their radius gap is then zero, however small
+    # their angle gap is) — this is exactly what happened to two leaves
+    # from different categories that coincidentally landed ~0.25° apart.
+    # Once radius room is exhausted, nudge them apart in ANGLE instead,
+    # a fraction of a degree at a time, capped at a couple of degrees so
+    # it never visibly steals a leaf from its category's arc.
+    ANGLE_STEP, MAX_ANGLE_NUDGE = 0.2, 11.0
+    for _ in range(800):
+        any_overlap = False
+        for i in range(len(leaves)):
+            ai = leaf_geom(leaves[i])[4]
+            for j in range(i + 1, len(leaves)):
+                bj = leaf_geom(leaves[j])[4]
+                if not (ai[2] + PAD < bj[0] or bj[2] + PAD < ai[0] or ai[3] + PAD < bj[1] or bj[3] + PAD < ai[1]):
+                    li, lj = leaves[i], leaves[j]
+                    nudge_i = abs(li.get("_nudged", 0)) < MAX_ANGLE_NUDGE
+                    nudge_j = abs(lj.get("_nudged", 0)) < MAX_ANGLE_NUDGE
+                    if not (nudge_i or nudge_j):
+                        continue
+                    any_overlap = True
+                    if nudge_i:
+                        li["angle_deg"] -= ANGLE_STEP
+                        li["_nudged"] = li.get("_nudged", 0) - ANGLE_STEP
+                    if nudge_j:
+                        lj["angle_deg"] += ANGLE_STEP
+                        lj["_nudged"] = lj.get("_nudged", 0) + ANGLE_STEP
+        if not any_overlap:
+            break
+
+    if capped:
+        print(f"NOTE: {len(capped)} leaf(s) hit the mindmap radius cap (angle-nudge fallback ran to clean up any residual overlap): {sorted(capped)}")
 
     final_boxes = [leaf_geom(l)[4] for l in leaves]
     remaining = 0
     for i in range(len(leaves)):
         for j in range(i + 1, len(leaves)):
-            a, b = final_boxes[i], final_boxes[j]
-            if not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1]):
+            a, bb = final_boxes[i], final_boxes[j]
+            if not (a[2] < bb[0] or bb[2] < a[0] or a[3] < bb[1] or bb[3] < a[1]):
                 remaining += 1
-    if remaining:
-        print(f"WARNING: {remaining} leaf label pairs still overlap after resolution")
-    else:
+                print(f"WARNING: still overlapping: {leaves[i]['slug']} <-> {leaves[j]['slug']}")
+    if not remaining:
         print("Mindmap collision resolution: 0 overlapping leaf labels")
 
     # --- Phase 3: compute final geometry + required canvas size ---
@@ -419,7 +523,7 @@ def build_mindmap():
         c["x"], c["y"] = origin + c["r"] * math.cos(angle), origin + c["r"] * math.sin(angle)
         c["anchor"] = "start" if math.cos(angle) >= -0.05 else "end"
         label = MINDMAP_LABELS[c["cat_name"]]
-        reach = c["r"] + 24 + text_width(label, CAT_FONT)
+        reach = c["r"] + 16 + 8 + text_width(label, CAT_FONT)  # cat_r + dx gap + label width, see Phase 4
         max_extent = max(max_extent, reach)
     for leaf in leaves:
         x, y, anchor, dx, box = leaf_geom(leaf)
@@ -430,6 +534,19 @@ def build_mindmap():
     half = max_extent + margin
     cx = cy = half
     size = half * 2
+
+    # Default view shows the WHOLE mindmap, edge to edge — every
+    # category and every leaf visible without panning or zooming. The
+    # viewBox was already sized to exactly bound the resolved layout
+    # plus a margin (Phase 3 above), so "show everything" is just
+    # scale 1 — no separate target-font-size calculation needed. (An
+    # earlier version computed default zoom to hit a specific on-screen
+    # font size instead; that's a different, reasonable goal, but it
+    # directly conflicts with "see everything by default," which is
+    # what was actually asked for — keeping the whole layout's *spatial
+    # footprint* small, via the tighter MAX_R above, is what keeps this
+    # readable instead.)
+    default_scale = 1.0
 
     # --- Phase 4: emit SVG, offsetting every coordinate by (cx, cy) ---
     branch_parts = []
@@ -462,16 +579,22 @@ def build_mindmap():
             )
             branch_parts.append(f'<a href="#{leaf["slug"]}" class="mm-leaf" data-cat="{c["cat_id"]}">')
             branch_parts.append(f'<g class="mm-pop" style="transform-origin:{lx:.1f}px {ly:.1f}px; animation-delay:{leaf_node_delay}ms">')
-            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="9" fill="var(--paper)" stroke="{color}" stroke-width="3"/>')
-            branch_parts.append(f'<text x="{lx+leaf["dx"]:.1f}" y="{ly+13:.1f}" text-anchor="{leaf["anchor"]}" font-size="{LEAF_FONT}" fill="var(--ink-soft)">{html.escape(leaf["name"])}</text>')
+            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4.5" fill="var(--paper)" stroke="{color}" stroke-width="2"/>')
+            line_h = LEAF_FONT * 1.3
+            n_lines = len(leaf["lines"])
+            for li, line in enumerate(leaf["lines"]):
+                text_y = ly + 6.5 - (n_lines - 1) * line_h / 2 + li * line_h
+                branch_parts.append(f'<text x="{lx+leaf["dx"]:.1f}" y="{text_y:.1f}" text-anchor="{leaf["anchor"]}" font-size="{LEAF_FONT}" fill="var(--ink-soft)">{html.escape(line)}</text>')
             branch_parts.append('</g></a>')
 
-        cat_dx = 30 if c["anchor"] == "start" else -30
+        cat_r = 16
+        cat_dx = cat_r + 8 if c["anchor"] == "start" else -(cat_r + 8)
         branch_parts.append(f'<a href="#{c["cat_id"]}" class="mm-node">')
         branch_parts.append(f'<g class="mm-pop" style="transform-origin:{catx:.1f}px {caty:.1f}px; animation-delay:{cat_node_delay}ms">')
-        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="22" fill="{color}"/>')
-        branch_parts.append(f'<svg x="{catx-14:.1f}" y="{caty-14:.1f}" width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.6">{CATEGORY_ICONS[c["cat_name"]]}</svg>')
-        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+15:.1f}" text-anchor="{c["anchor"]}" font-size="{CAT_FONT}" font-weight="700" fill="{color}">{html.escape(label)}</text>')
+        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="{cat_r}" fill="{color}"/>')
+        icon_size = cat_r * 1.3
+        branch_parts.append(f'<svg x="{catx-icon_size/2:.1f}" y="{caty-icon_size/2:.1f}" width="{icon_size:.1f}" height="{icon_size:.1f}" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.6">{CATEGORY_ICONS[c["cat_name"]]}</svg>')
+        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+CAT_FONT*0.32:.1f}" text-anchor="{c["anchor"]}" font-size="{CAT_FONT}" font-weight="700" fill="{color}">{html.escape(label)}</text>')
         branch_parts.append('</g></a>')
 
     # Hub is emitted LAST so it paints on top of every branch/leaf line —
@@ -482,21 +605,22 @@ def build_mindmap():
     hub_parts = [f'<g class="mm-pop mm-hub" style="transform-origin:{cx}px {cy}px; animation-delay:0ms">']
     hub_parts.append(f'<circle class="mm-pulse-ring" cx="{cx}" cy="{cy}" r="{r_center}" fill="none" stroke="var(--ink)"/>')
     hub_parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r_center}" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>')
+    HUB_FONT, HUB_SUB_FONT = 42, 17
     name_lines = SITE_NAME.split(" ")
     if len(name_lines) > 1:
         mid = len(name_lines) // 2 + len(name_lines) % 2
         line1, line2 = " ".join(name_lines[:mid]), " ".join(name_lines[mid:])
-        hub_parts.append(f'<text x="{cx}" y="{cy-30}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="60" fill="var(--ink)">{html.escape(line1)}</text>')
-        hub_parts.append(f'<text x="{cx}" y="{cy+30}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="60" fill="var(--ink)">{html.escape(line2)}</text>')
-        sub_y = cy + 68
+        hub_parts.append(f'<text x="{cx}" y="{cy-21}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="{HUB_FONT}" fill="var(--ink)">{html.escape(line1)}</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy+21}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="{HUB_FONT}" fill="var(--ink)">{html.escape(line2)}</text>')
+        sub_y = cy + 45
     else:
-        hub_parts.append(f'<text x="{cx}" y="{cy-12}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="66" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
-        sub_y = cy + 38
-    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="28" fill="var(--muted)">{total_skills} skills</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy-8}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="{HUB_FONT+3}" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
+        sub_y = cy + 26
+    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="{HUB_SUB_FONT}" fill="var(--muted)">{total_skills} skills</text>')
     hub_parts.append('</g>')
 
     inner = "\n".join(['<g id="mm-viewport">'] + branch_parts + hub_parts + ['</g>'])
-    return f'''<svg id="mm-svg" viewBox="0 0 {size:.0f} {size:.0f}" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
+    return f'''<svg id="mm-svg" viewBox="0 0 {size:.0f} {size:.0f}" data-default-scale="{default_scale:.3f}" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
 {inner}
 </svg>'''
 

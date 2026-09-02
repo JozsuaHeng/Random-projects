@@ -1,4 +1,27 @@
 (function () {
+  // --- Theme toggle: explicit light/dark choice persisted per-visitor.
+  // The <head> inline script (see index.html) already applied any
+  // stored choice before first paint; this just wires up the button and
+  // keeps the icon + aria-label in sync with the current state.
+  var themeBtn = document.getElementById("theme-toggle");
+  function currentTheme() {
+    var stored = document.documentElement.getAttribute("data-theme");
+    if (stored === "light" || stored === "dark") return stored;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function syncThemeButton() {
+    var isDark = currentTheme() === "dark";
+    themeBtn.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+    themeBtn.title = isDark ? "Switch to light theme" : "Switch to dark theme";
+  }
+  themeBtn.addEventListener("click", function () {
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("vantage-point-theme", next); } catch (e) {}
+    syncThemeButton();
+  });
+  syncThemeButton();
+
   var input = document.getElementById("search");
   var empty = document.getElementById("empty-state");
   var emptyQuery = document.getElementById("empty-query");
@@ -75,9 +98,17 @@
   // fixed constant here would drift out of sync with it.
   var vbParts = svg.getAttribute("viewBox").split(" ").map(Number);
   var CX = vbParts[2] / 2, CY = vbParts[3] / 2, VB = vbParts[2];
-  var DEFAULT_SCALE = 1.3;
+  // build.py computes this from the actual resolved canvas size, so
+  // default zoom stays at a legible on-screen text size regardless of
+  // how big/small the canvas ends up (a fixed multiplier here looked
+  // right once and then silently went tiny the next time canvas size
+  // changed for any reason).
+  var DEFAULT_SCALE = parseFloat(svg.getAttribute("data-default-scale")) || 1.0;
   var scale = DEFAULT_SCALE, tx = CX * (1 - scale), ty = CY * (1 - scale);
-  var MIN_SCALE = 0.5, MAX_SCALE = 4;
+  // Default (1.0) already shows the whole mindmap, so the useful zoom
+  // range is entirely "zoom in further to read one area closely" —
+  // little value in zooming out past the point everything's visible.
+  var MIN_SCALE = 0.8, MAX_SCALE = 6;
 
   function applyTransform() {
     viewport.setAttribute("transform", "translate(" + tx.toFixed(1) + "," + ty.toFixed(1) + ") scale(" + scale.toFixed(3) + ")");
@@ -140,27 +171,87 @@
     if (dragging) { dragging = null; canvas.classList.remove("dragging"); }
   });
 
-  // Basic touch support: single-finger pan.
+  // Touch support: single-finger pan, two-finger pinch to zoom. The
+  // fixed +/-/reset buttons are the only zoom controls on desktop (mouse
+  // wheel was tried and removed, see above) but on a phone the mindmap
+  // needs to fit 50 labels on a much smaller screen, so pinch is a real
+  // gap rather than a nice-to-have there.
+  var pinch = null;
+  function touchDist(touches) {
+    var dx = touches[0].clientX - touches[1].clientX, dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  }
   canvas.addEventListener("touchstart", function (e) {
+    if (e.touches.length === 2) {
+      dragging = null;
+      pinch = { dist: touchDist(e.touches) };
+      return;
+    }
     if (e.touches.length !== 1) return;
+    pinch = null;
     dragging = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: tx, ty: ty };
     didDrag = false;
   }, { passive: true });
   canvas.addEventListener("touchmove", function (e) {
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var newDist = touchDist(e.touches);
+      var midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      var midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      zoomAtPoint(midX, midY, newDist / pinch.dist);
+      pinch.dist = newDist;
+      return;
+    }
     if (!dragging || e.touches.length !== 1) return;
+    e.preventDefault(); // stop the page scrolling under a finger that's panning the mindmap
     var dx = e.touches[0].clientX - dragging.x, dy = e.touches[0].clientY - dragging.y;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) didDrag = true;
     var rect = svg.getBoundingClientRect();
     tx = dragging.tx + dx * (VB / rect.width);
     ty = dragging.ty + dy * (VB / rect.height);
     applyTransform();
-  }, { passive: true });
-  canvas.addEventListener("touchend", function () { dragging = null; });
+  }, { passive: false });
+  canvas.addEventListener("touchend", function (e) {
+    if (e.touches.length < 2) pinch = null;
+    if (e.touches.length === 0) dragging = null;
+  });
+
+  // Zooms/pans the mindmap itself to frame one category's hub node plus
+  // every one of its leaves, rather than leaving the whole map at its
+  // current zoom. getBBox() on each element returns its box in the
+  // *untransformed* viewBox coordinate system (the pan/zoom transform
+  // lives on the #mm-viewport <g> that wraps all of this, so it isn't
+  // included) — exactly the same space CX/CY/VB and tx/ty already work
+  // in, so no separate pixel<->viewBox conversion is needed here.
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function zoomToCategory(catId) {
+    var els = svg.querySelectorAll('.mm-leaf[data-cat="' + catId + '"], .mm-node[href="#' + catId + '"]');
+    if (!els.length) return;
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    els.forEach(function (el) {
+      var b = el.getBBox();
+      minX = Math.min(minX, b.x); minY = Math.min(minY, b.y);
+      maxX = Math.max(maxX, b.x + b.width); maxY = Math.max(maxY, b.y + b.height);
+    });
+    var pad = 70;
+    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+    var newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, VB / Math.max(maxX - minX, maxY - minY)));
+    var ccx = (minX + maxX) / 2, ccy = (minY + maxY) / 2;
+    if (!reduceMotion) viewport.classList.add("mm-anim");
+    scale = newScale;
+    tx = CX - ccx * scale;
+    ty = CY - ccy * scale;
+    applyTransform();
+    window.setTimeout(function () { viewport.classList.remove("mm-anim"); }, 600);
+  }
 
   // Mindmap: clicking a leaf opens that skill's popup directly (it's the
   // same "Read more" destination as clicking its card below). Clicking a
-  // category node instead opens and scrolls to that category section,
-  // since categories still expand inline. Suppressed if the click was
+  // category node zooms the mindmap in on that category's whole cluster
+  // of leaves instead — it also still expands that category's section
+  // below (so it's ready when the reader scrolls down) but no longer
+  // jumps the page there, since that would immediately scroll away from
+  // the zoom this click just performed. Suppressed if the click was
   // actually the end of a pan drag.
   document.querySelectorAll(".mm-leaf").forEach(function (link) {
     link.addEventListener("click", function (e) {
@@ -173,10 +264,10 @@
     link.addEventListener("click", function (e) {
       e.preventDefault();
       if (didDrag) return;
-      var target = document.getElementById(link.getAttribute("href").slice(1));
-      if (!target) return;
-      target.open = true;
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      var catId = link.getAttribute("href").slice(1);
+      var target = document.getElementById(catId);
+      if (target) target.open = true;
+      zoomToCategory(catId);
     });
   });
 

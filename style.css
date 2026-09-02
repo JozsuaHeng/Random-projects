@@ -1023,11 +1023,18 @@ body {
   border-bottom: 3px solid #1f6f5c;
 }
 .tile[data-theme="playbook"] .playbook-diagram {
-  top: 6%;
-  right: 3%;
-  width: 42%;
-  height: 88%;
+  top: 24%;
+  left: 32%;
+  width: 64%;
+  height: 70%;
   opacity: 0.9;
+}
+.tile[data-theme="playbook"] .playbook-notes {
+  bottom: 8%;
+  left: 6%;
+  width: 24%;
+  height: 34%;
+  opacity: 0.45;
 }
 .tile[data-theme="playbook"] .art-title {
   top: 12px;
