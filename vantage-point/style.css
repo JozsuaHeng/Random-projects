@@ -78,13 +78,15 @@ body {
 }
 .hero-bottom .tagline { flex: 1 1 600px; min-width: 0; margin: 0; }
 .hero-controls {
-  flex: 0 1 380px;
+  flex: 0 1 400px;
   min-width: 280px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.btn-row { display: flex; gap: 10px; }
+.search-row, .btn-row { max-width: 100%; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
 @media (max-width: 900px) {
   .hero-bottom { flex-direction: column; align-items: stretch; }
@@ -172,7 +174,7 @@ body {
   color: var(--paper);
   opacity: 0.88;
 }
-.btn-row .ctrl-btn { flex: 1; }
+.btn-row .ctrl-btn { flex: 1 1 auto; min-width: 108px; }
 
 @media (max-width: 640px) {
   .search-row { flex-wrap: wrap; }
@@ -208,6 +210,12 @@ body {
   font-size: 12.5px;
   color: var(--muted);
   font-style: italic;
+}
+
+.dl-all-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 14px 0 32px;
 }
 
 .mm-zoom-controls {
@@ -338,6 +346,7 @@ body {
 }
 
 .skill {
+  position: relative;
   background: var(--paper);
   border: 1px solid var(--border);
   border-left: 3px solid var(--cat-color, var(--border));
@@ -345,32 +354,26 @@ body {
   overflow: hidden;
   break-inside: avoid;
   margin-bottom: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.skill[open] { border-color: var(--cat-color, var(--accent)); border-left-width: 3px; }
+.skill:hover {
+  border-color: var(--cat-color, var(--accent));
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.25);
+}
 
-.skill summary {
+.skill-summary {
   position: relative;
-  list-style: none;
   cursor: pointer;
-  padding: 16px 76px 16px 20px;
+  padding: 16px 76px 12px 20px;
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
-.skill summary .dl-link {
+.skill-summary .dl-link {
   position: absolute;
   top: 15px;
   right: 20px;
 }
-.skill summary::-webkit-details-marker { display: none; }
-.skill summary::before {
-  content: "+";
-  float: right;
-  font-family: ui-monospace, monospace;
-  color: var(--muted);
-  font-size: 16px;
-}
-.skill[open] summary::before { content: "\2212"; color: var(--cat-color, var(--accent)); }
 
 .skill-name {
   font-family: "Source Serif 4", Georgia, serif;
@@ -382,6 +385,20 @@ body {
   color: var(--ink-soft);
   padding-right: 20px;
 }
+
+.read-more {
+  display: block;
+  margin: 0 16px 14px auto;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cat-color, var(--accent));
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.read-more:hover { text-decoration: underline; }
 
 .skill-body {
   padding: 4px 20px 26px;
@@ -506,6 +523,42 @@ body {
   border-radius: 4px;
 }
 
+/* --- skill modal (opened by "Read more" / clicking a card / a mindmap leaf) --- */
+
+.skill-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: min(86vh, 820px);
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: 18px;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.4);
+  padding: 44px 40px 32px;
+}
+.skill-modal-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.skill-modal-header h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0;
+  color: var(--ink);
+  flex: 1;
+}
+.skill-modal-body { padding: 0; border-top: none; }
+.skill-modal-body h2:first-child { margin-top: 0; }
+
+@media (max-width: 560px) {
+  .skill-modal-box { padding: 34px 22px 24px; }
+}
+
 /* --- flipchart modal --- */
 
 .modal {
@@ -610,15 +663,29 @@ body {
 .flip-btn {
   width: 36px;
   height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--paper);
   color: var(--ink);
   font-size: 16px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .flip-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .flip-btn:disabled { opacity: 0.35; cursor: default; }
+.flip-btn-done {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 700;
+}
+.flip-btn-done:hover { color: var(--paper) !important; opacity: 0.88; }
 
 .flip-dots { display: flex; gap: 7px; }
 .flip-dot {

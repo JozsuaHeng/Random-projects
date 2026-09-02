@@ -28,17 +28,49 @@
   input.addEventListener("input", filter);
 
   document.getElementById("expand-all").addEventListener("click", function () {
-    document.querySelectorAll(".category, .skill").forEach(function (d) { d.open = true; });
+    document.querySelectorAll(".category").forEach(function (d) { d.open = true; });
   });
   document.getElementById("collapse-all").addEventListener("click", function () {
-    document.querySelectorAll(".skill").forEach(function (d) { d.open = false; });
+    document.querySelectorAll(".category").forEach(function (d) { d.open = false; });
+  });
+
+  // --- Skill modal: "Read more" (or clicking a skill card) opens the
+  // full SKILL.md content in a centered popup instead of expanding
+  // inline, since 50 cards expanding in place made the page unwieldy.
+  var skillModal = document.getElementById("skill-modal");
+  var skillModalTitle = document.getElementById("skill-modal-title");
+  var skillModalBody = document.getElementById("skill-modal-body");
+  var skillModalDl = document.getElementById("skill-modal-dl");
+
+  function openSkillModal(slug) {
+    var el = document.getElementById(slug);
+    if (!el || !el.classList.contains("skill")) return;
+    skillModalTitle.textContent = el.getAttribute("data-skill-name") || slug;
+    skillModalBody.innerHTML = el.querySelector(".skill-body").innerHTML;
+    skillModalDl.href = "dl/" + slug + ".zip";
+    skillModal.hidden = false;
+  }
+  function closeSkillModal() { skillModal.hidden = true; }
+
+  document.querySelectorAll(".skill").forEach(function (card) {
+    var summary = card.querySelector(".skill-summary");
+    var readMore = card.querySelector(".read-more");
+    var slug = card.id;
+    summary.addEventListener("click", function () { openSkillModal(slug); });
+    readMore.addEventListener("click", function () { openSkillModal(slug); });
+  });
+  skillModal.querySelectorAll("[data-close]").forEach(function (el) {
+    el.addEventListener("click", closeSkillModal);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !skillModal.hidden) closeSkillModal();
   });
 
   // --- Mindmap: pan + zoom ---
   var canvas = document.getElementById("mm-canvas");
   var svg = document.getElementById("mm-svg");
   var viewport = document.getElementById("mm-viewport");
-  var CX = 1000, CY = 1000, VB = 2000;
+  var CX = 1500, CY = 1500, VB = 3000;
   var DEFAULT_SCALE = 1.3;
   var scale = DEFAULT_SCALE, tx = CX * (1 - scale), ty = CY * (1 - scale);
   var MIN_SCALE = 0.5, MAX_SCALE = 4;
@@ -121,19 +153,25 @@
   }, { passive: true });
   canvas.addEventListener("touchend", function () { dragging = null; });
 
-  // Mindmap: clicking a leaf/node opens its ancestors then scrolls to it,
-  // instead of jumping to a collapsed, invisible target. Suppressed if
-  // the click was actually the end of a pan drag.
-  document.querySelectorAll(".mm-leaf, .mm-node").forEach(function (link) {
+  // Mindmap: clicking a leaf opens that skill's popup directly (it's the
+  // same "Read more" destination as clicking its card below). Clicking a
+  // category node instead opens and scrolls to that category section,
+  // since categories still expand inline. Suppressed if the click was
+  // actually the end of a pan drag.
+  document.querySelectorAll(".mm-leaf").forEach(function (link) {
     link.addEventListener("click", function (e) {
       e.preventDefault();
       if (didDrag) return;
-      var id = link.getAttribute("href").slice(1);
-      var target = document.getElementById(id);
+      openSkillModal(link.getAttribute("href").slice(1));
+    });
+  });
+  document.querySelectorAll(".mm-node").forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (didDrag) return;
+      var target = document.getElementById(link.getAttribute("href").slice(1));
       if (!target) return;
-      var category = target.closest(".category");
-      if (category) category.open = true;
-      if (target.tagName === "DETAILS") target.open = true;
+      target.open = true;
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -151,7 +189,9 @@
     cards.forEach(function (c, idx) { c.hidden = idx !== i; });
     dots.forEach(function (d, idx) { d.classList.toggle("active", idx === i); });
     prevBtn.disabled = i === 0;
-    nextBtn.textContent = i === cards.length - 1 ? "Done" : "→";
+    nextBtn.textContent = i === cards.length - 1 ? "✓" : "→";
+    nextBtn.classList.toggle("flip-btn-done", i === cards.length - 1);
+    nextBtn.setAttribute("aria-label", i === cards.length - 1 ? "Done" : "Next");
   }
 
   function openModal() {

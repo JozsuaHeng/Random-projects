@@ -225,17 +225,18 @@ def build_skill(slug, color):
     search_blob = html.escape(f"{display_name} {desc}".lower(), quote=True)
 
     return f'''
-      <details class="skill" id="{slug}" data-search="{search_blob}" style="--cat-color:{color}">
-        <summary>
+      <div class="skill" id="{slug}" data-search="{search_blob}" data-skill-name="{html.escape(display_name)}" style="--cat-color:{color}">
+        <div class="skill-summary">
           <span class="skill-name">{display_name}</span>
           <span class="skill-desc">{inline(desc)}</span>
           <a class="dl-link" href="dl/{slug}.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
-        </summary>
-        <div class="skill-body">
+        </div>
+        <button type="button" class="read-more" data-skill="{slug}">Read more &rarr;</button>
+        <div class="skill-body" hidden>
           {body_html}
           {f'<h3 class="ref-heading">Deeper methodology &amp; worked examples</h3>{refs_html}' if refs_html else ''}
         </div>
-      </details>'''
+      </div>'''
 
 
 def build_content():
@@ -322,12 +323,12 @@ def build_mindmap():
     every element carries an animation-delay so the whole thing draws
     itself outward from the hub on load (see .mm-pop / .mm-line in
     style.css for the actual keyframes)."""
-    cx, cy = 1000, 1000
-    r_center = 86
-    r_cat_base, r_cat_jitter = 320, 28
-    r_leaf_base, r_leaf_jitter = 600, 60
-    min_leaf_gap_px = 62  # minimum straight-line distance between adjacent leaves
-    max_arc_cap = 40  # never let one branch's leaves spread wider than this
+    cx, cy = 1500, 1500
+    r_center = 108
+    r_cat_base, r_cat_jitter = 420, 36
+    r_leaf_base, r_leaf_jitter = 900, 75
+    min_leaf_gap_px = 88  # minimum straight-line distance between adjacent leaves
+    max_arc_cap = 42  # never let one branch's leaves spread wider than this
     n = len(CATEGORIES)
     total_skills = sum(len(s) for _, s in CATEGORIES)
 
@@ -379,21 +380,21 @@ def build_mindmap():
                 f'style="--len:{leaf_line_len:.1f}px; animation-delay:{leaf_line_delay}ms"/>'
             )
             anchor = "start" if math.cos(leaf_angle) >= -0.05 else "end"
-            dx = 10 if anchor == "start" else -10
+            dx = 14 if anchor == "start" else -14
             display_name = title_case(slug)
             branch_parts.append(f'<a href="#{slug}" class="mm-leaf" data-cat="{cat_id}">')
             branch_parts.append(f'<g class="mm-pop" style="transform-origin:{lx:.1f}px {ly:.1f}px; animation-delay:{leaf_node_delay}ms">')
-            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4.5" fill="var(--paper)" stroke="{color}" stroke-width="1.8"/>')
-            branch_parts.append(f'<text x="{lx+dx:.1f}" y="{ly+4.5:.1f}" text-anchor="{anchor}" font-size="14" fill="var(--ink-soft)">{html.escape(display_name)}</text>')
+            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="6" fill="var(--paper)" stroke="{color}" stroke-width="2.2"/>')
+            branch_parts.append(f'<text x="{lx+dx:.1f}" y="{ly+6.5:.1f}" text-anchor="{anchor}" font-size="20" fill="var(--ink-soft)">{html.escape(display_name)}</text>')
             branch_parts.append('</g></a>')
 
         cat_anchor = "start" if math.cos(angle) >= -0.05 else "end"
-        cat_dx = 18 if cat_anchor == "start" else -18
+        cat_dx = 24 if cat_anchor == "start" else -24
         branch_parts.append(f'<a href="#{cat_id}" class="mm-node">')
         branch_parts.append(f'<g class="mm-pop" style="transform-origin:{catx:.1f}px {caty:.1f}px; animation-delay:{cat_node_delay}ms">')
-        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="13" fill="{color}"/>')
-        branch_parts.append(f'<svg x="{catx-8:.1f}" y="{caty-8:.1f}" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8">{CATEGORY_ICONS[cat_name]}</svg>')
-        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+5.5:.1f}" text-anchor="{cat_anchor}" font-size="18" font-weight="700" fill="{color}">{html.escape(label)}</text>')
+        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="17" fill="{color}"/>')
+        branch_parts.append(f'<svg x="{catx-11:.1f}" y="{caty-11:.1f}" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8">{CATEGORY_ICONS[cat_name]}</svg>')
+        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+7.5:.1f}" text-anchor="{cat_anchor}" font-size="24" font-weight="700" fill="{color}">{html.escape(label)}</text>')
         branch_parts.append('</g></a>')
 
     # Hub is emitted LAST so it paints on top of every branch/leaf line —
@@ -405,17 +406,17 @@ def build_mindmap():
     if len(name_lines) > 1:
         mid = len(name_lines) // 2 + len(name_lines) % 2
         line1, line2 = " ".join(name_lines[:mid]), " ".join(name_lines[mid:])
-        hub_parts.append(f'<text x="{cx}" y="{cy-16}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="25" fill="var(--ink)">{html.escape(line1)}</text>')
-        hub_parts.append(f'<text x="{cx}" y="{cy+13}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="25" fill="var(--ink)">{html.escape(line2)}</text>')
-        sub_y = cy + 36
+        hub_parts.append(f'<text x="{cx}" y="{cy-20}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="34" fill="var(--ink)">{html.escape(line1)}</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy+18}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="34" fill="var(--ink)">{html.escape(line2)}</text>')
+        sub_y = cy + 46
     else:
-        hub_parts.append(f'<text x="{cx}" y="{cy-6}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="28" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
-        sub_y = cy + 18
-    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" fill="var(--muted)">{total_skills} skills</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy-8}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="38" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
+        sub_y = cy + 24
+    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="18" fill="var(--muted)">{total_skills} skills</text>')
     hub_parts.append('</g>')
 
     inner = "\n".join(['<g id="mm-viewport">'] + branch_parts + hub_parts + ['</g>'])
-    return f'''<svg id="mm-svg" viewBox="0 0 2000 2000" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
+    return f'''<svg id="mm-svg" viewBox="0 0 3000 3000" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
 {inner}
 </svg>'''
 
