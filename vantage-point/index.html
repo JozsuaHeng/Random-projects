@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Playbook</title>
-<meta name="description" content="26 frameworks from real consulting practice, packaged as Claude Skills you install and run.">
+<title>Vantage Point</title>
+<meta name="description" content="44 frameworks from real consulting practice, packaged as Claude Skills you install and run.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,39 +19,415 @@
 
     <header class="hero">
       <p class="eyebrow">a Claude Skills library</p>
-      <h1>The Playbook</h1>
-      <p class="tagline">26 frameworks pulled from real consulting practice
-        &mdash; issue trees, the Pyramid Principle, unit economics, RACI
-        &mdash; packaged as Claude Skills you actually install and run,
-        not slides that sit in a folder.</p>
+      <h1>Vantage Point</h1>
 
-      <div class="search-row">
-        <input type="search" id="search" placeholder="Search skills&hellip; (e.g. &ldquo;pricing&rdquo;, &ldquo;SWOT&rdquo;, &ldquo;meeting notes&rdquo;)" aria-label="Search skills">
-        <button type="button" id="expand-all" class="ctrl-btn">Expand all</button>
-        <button type="button" id="collapse-all" class="ctrl-btn">Collapse all</button>
+      <div class="hero-bottom">
+        <p class="tagline">44 frameworks pulled from real consulting practice
+          &mdash; issue trees, ADKAR change management, PRINCE2, the Pyramid
+          Principle &mdash; packaged as Claude Skills you actually install
+          and run, not slides that sit in a folder.</p>
+
+        <div class="hero-controls">
+          <div class="search-row">
+            <input type="search" id="search" placeholder="Search skills&hellip;" aria-label="Search skills">
+          </div>
+          <div class="btn-row">
+            <button type="button" id="expand-all" class="ctrl-btn">Expand all</button>
+            <button type="button" id="collapse-all" class="ctrl-btn">Collapse all</button>
+            <a href="dl/all-skills.zip" download class="ctrl-btn">&#8681; Download all 50</a>
+            <button type="button" id="open-guide" class="ctrl-btn ctrl-btn-accent">How to use this</button>
+          </div>
+        </div>
       </div>
-
-      <nav class="cat-nav" aria-label="Categories">
-        <a href="#strategic-analysis">Strategic analysis</a>
-        <a href="#client-stakeholder-deliverables">Client deliverables</a>
-        <a href="#change-program-management">Change &amp; program</a>
-        <a href="#research-intelligence">Research</a>
-        <a href="#financial-operational">Financial &amp; ops</a>
-        <a href="#business-owner-day-to-day">Day-to-day</a>
-        <a href="guide.html" class="cat-nav-guide">How to use this &rarr;</a>
-      </nav>
     </header>
+
+    <figure class="mindmap-figure">
+      <div class="mm-zoom-controls">
+        <button type="button" id="mm-zoom-in" aria-label="Zoom in">+</button>
+        <button type="button" id="mm-zoom-out" aria-label="Zoom out">&minus;</button>
+        <button type="button" id="mm-zoom-reset" aria-label="Reset zoom">&#8634;</button>
+      </div>
+      <div class="mm-canvas" id="mm-canvas">
+      <!-- MINDMAP:START -->
+<svg id="mm-svg" viewBox="0 0 2000 2000" role="img" aria-label="Mindmap of Vantage Point: 50 skills across 7 categories, radiating from a central hub. Click any category or skill to jump to it below.">
+<g id="mm-viewport">
+<line x1="1006.0" y1="914.2" x2="1024.1" y2="653.0" stroke="#1f6f5c" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:261.8px; animation-delay:200ms"/>
+<line x1="1024.1" y1="653.0" x2="822.7" y2="418.7" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:309.0px; animation-delay:720ms"/>
+<a href="#mece-problem-structuring" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:822.7px 418.7px; animation-delay:920ms">
+<circle cx="822.7" cy="418.7" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="812.7" y="423.2" text-anchor="end" font-size="14" fill="var(--ink-soft)">MECE Problem Structuring</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="887.7" y2="421.1" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:269.1px; animation-delay:750ms"/>
+<a href="#swot-strategic-review" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:887.7px 421.1px; animation-delay:950ms">
+<circle cx="887.7" cy="421.1" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="877.7" y="425.6" text-anchor="end" font-size="14" fill="var(--ink-soft)">SWOT Strategic Review</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="961.9" y2="397.7" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:262.7px; animation-delay:780ms"/>
+<a href="#porters-five-forces" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:961.9px 397.7px; animation-delay:980ms">
+<circle cx="961.9" cy="397.7" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="951.9" y="402.2" text-anchor="end" font-size="14" fill="var(--ink-soft)">Porters Five Forces</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="1008.1" y2="414.9" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:238.7px; animation-delay:810ms"/>
+<a href="#business-model-canvas" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:1008.1px 414.9px; animation-delay:1010ms">
+<circle cx="1008.1" cy="414.9" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="1018.1" y="419.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">Business Model Canvas</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="1067.9" y2="361.9" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:294.4px; animation-delay:840ms"/>
+<a href="#market-sizing-tam-sam-som" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:1067.9px 361.9px; animation-delay:1040ms">
+<circle cx="1067.9" cy="361.9" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="1077.9" y="366.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">Market Sizing TAM SAM SOM</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="1131.0" y2="396.0" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:278.3px; animation-delay:870ms"/>
+<a href="#competitive-landscape-mapper" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:1131.0px 396.0px; animation-delay:1070ms">
+<circle cx="1131.0" cy="396.0" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="1141.0" y="400.5" text-anchor="start" font-size="14" fill="var(--ink-soft)">Competitive Landscape Mapper</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="1189.9" y2="434.5" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:274.3px; animation-delay:900ms"/>
+<a href="#root-cause-five-whys" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:1189.9px 434.5px; animation-delay:1100ms">
+<circle cx="1189.9" cy="434.5" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="1199.9" y="439.0" text-anchor="start" font-size="14" fill="var(--ink-soft)">Root Cause Five Whys</text>
+</g></a>
+<line x1="1024.1" y1="653.0" x2="1244.8" y2="464.6" stroke="#1f6f5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:290.2px; animation-delay:930ms"/>
+<a href="#plan-on-a-page" class="mm-leaf" data-cat="strategic-analysis">
+<g class="mm-pop" style="transform-origin:1244.8px 464.6px; animation-delay:1130ms">
+<circle cx="1244.8" cy="464.6" r="4.5" fill="var(--paper)" stroke="#1f6f5c" stroke-width="1.8"/>
+<text x="1254.8" y="469.1" text-anchor="start" font-size="14" fill="var(--ink-soft)">Plan On A Page</text>
+</g></a>
+<a href="#strategic-analysis" class="mm-node">
+<g class="mm-pop" style="transform-origin:1024.1px 653.0px; animation-delay:520ms">
+<circle cx="1024.1" cy="653.0" r="13" fill="#1f6f5c"/>
+<svg x="1016.1" y="645.0" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3.6"/><circle cx="10" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg>
+<text x="1042.1" y="658.5" text-anchor="start" font-size="18" font-weight="700" fill="#1f6f5c">Strategic Analysis</text>
+</g></a>
+<line x1="1070.7" y1="951.0" x2="1284.9" y2="802.4" stroke="#3a5a78" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:260.8px; animation-delay:270ms"/>
+<line x1="1284.9" y1="802.4" x2="1347.2" y2="521.6" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:287.5px; animation-delay:790ms"/>
+<a href="#executive-summary-writer" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1347.2px 521.6px; animation-delay:990ms">
+<circle cx="1347.2" cy="521.6" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1357.2" y="526.1" text-anchor="start" font-size="14" fill="var(--ink-soft)">Executive Summary Writer</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1386.3" y2="569.9" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:253.6px; animation-delay:820ms"/>
+<a href="#consulting-deck-storyliner" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1386.3px 569.9px; animation-delay:1020ms">
+<circle cx="1386.3" cy="569.9" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1396.3" y="574.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">Consulting Deck Storyliner</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1489.2" y2="557.6" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:318.8px; animation-delay:850ms"/>
+<a href="#board-investor-memo" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1489.2px 557.6px; animation-delay:1050ms">
+<circle cx="1489.2" cy="557.6" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1499.2" y="562.1" text-anchor="start" font-size="14" fill="var(--ink-soft)">Board Investor Memo</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1461.8" y2="650.1" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:233.4px; animation-delay:880ms"/>
+<a href="#proposal-sow-drafter" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1461.8px 650.1px; animation-delay:1080ms">
+<circle cx="1461.8" cy="650.1" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1471.8" y="654.6" text-anchor="start" font-size="14" fill="var(--ink-soft)">Proposal SOW Drafter</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1561.5" y2="653.9" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:313.9px; animation-delay:910ms"/>
+<a href="#government-tender-response" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1561.5px 653.9px; animation-delay:1110ms">
+<circle cx="1561.5" cy="653.9" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1571.5" y="658.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">Government Tender Response</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1501.3" y2="764.4" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:219.6px; animation-delay:940ms"/>
+<a href="#workshop-agenda-designer" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1501.3px 764.4px; animation-delay:1140ms">
+<circle cx="1501.3" cy="764.4" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1511.3" y="768.9" text-anchor="start" font-size="14" fill="var(--ink-soft)">Workshop Agenda Designer</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1561.0" y2="783.2" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:276.7px; animation-delay:970ms"/>
+<a href="#stakeholder-influence-map" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1561.0px 783.2px; animation-delay:1170ms">
+<circle cx="1561.0" cy="783.2" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1571.0" y="787.7" text-anchor="start" font-size="14" fill="var(--ink-soft)">Stakeholder Influence Map</text>
+</g></a>
+<line x1="1284.9" y1="802.4" x2="1630.5" y2="823.4" stroke="#3a5a78" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:346.3px; animation-delay:1000ms"/>
+<a href="#stakeholder-engagement-log" class="mm-leaf" data-cat="client-stakeholder-deliverables">
+<g class="mm-pop" style="transform-origin:1630.5px 823.4px; animation-delay:1200ms">
+<circle cx="1630.5" cy="823.4" r="4.5" fill="var(--paper)" stroke="#3a5a78" stroke-width="1.8"/>
+<text x="1640.5" y="827.9" text-anchor="start" font-size="14" fill="var(--ink-soft)">Stakeholder Engagement Log</text>
+</g></a>
+<a href="#client-stakeholder-deliverables" class="mm-node">
+<g class="mm-pop" style="transform-origin:1284.9px 802.4px; animation-delay:590ms">
+<circle cx="1284.9" cy="802.4" r="13" fill="#3a5a78"/>
+<svg x="1276.9" y="794.4" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><rect x="3" y="7.5" width="14" height="9" rx="1.5"/><path d="M7.2 7.5V5.8a1.8 1.8 0 011.8-1.8h2a1.8 1.8 0 011.8 1.8v1.7"/></svg>
+<text x="1302.9" y="807.9" text-anchor="start" font-size="18" font-weight="700" fill="#3a5a78">Client Deliverables</text>
+</g></a>
+<line x1="1084.6" y1="1015.6" x2="1298.3" y2="1055.1" stroke="#c1502e" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:217.3px; animation-delay:340ms"/>
+<line x1="1298.3" y1="1055.1" x2="1641.1" y2="884.6" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:382.9px; animation-delay:860ms"/>
+<a href="#change-impact-assessment" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1641.1px 884.6px; animation-delay:1060ms">
+<circle cx="1641.1" cy="884.6" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1651.1" y="889.1" text-anchor="start" font-size="14" fill="var(--ink-soft)">Change Impact Assessment</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1615.1" y2="950.1" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:333.8px; animation-delay:890ms"/>
+<a href="#change-management-roadmap" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1615.1px 950.1px; animation-delay:1090ms">
+<circle cx="1615.1" cy="950.1" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1625.1" y="954.6" text-anchor="start" font-size="14" fill="var(--ink-soft)">Change Management Roadmap</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1565.9" y2="1010.1" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:271.4px; animation-delay:920ms"/>
+<a href="#change-readiness-assessment" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1565.9px 1010.1px; animation-delay:1120ms">
+<circle cx="1565.9" cy="1010.1" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1575.9" y="1014.6" text-anchor="start" font-size="14" fill="var(--ink-soft)">Change Readiness Assessment</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1604.3" y2="1061.1" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:306.1px; animation-delay:950ms"/>
+<a href="#communication-engagement-plan" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1604.3px 1061.1px; animation-delay:1150ms">
+<circle cx="1604.3" cy="1061.1" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1614.3" y="1065.6" text-anchor="start" font-size="14" fill="var(--ink-soft)">Communication Engagement Plan</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1533.6" y2="1109.9" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:241.7px; animation-delay:980ms"/>
+<a href="#raid-log-builder" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1533.6px 1109.9px; animation-delay:1180ms">
+<circle cx="1533.6" cy="1109.9" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1543.6" y="1114.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">RAID Log Builder</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1539.7" y2="1147.9" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:258.6px; animation-delay:1010ms"/>
+<a href="#program-governance-structure" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1539.7px 1147.9px; animation-delay:1210ms">
+<circle cx="1539.7" cy="1147.9" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1549.7" y="1152.4" text-anchor="start" font-size="14" fill="var(--ink-soft)">Program Governance Structure</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1516.2" y2="1183.0" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:252.7px; animation-delay:1040ms"/>
+<a href="#project-retrospective" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1516.2px 1183.0px; animation-delay:1240ms">
+<circle cx="1516.2" cy="1183.0" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1526.2" y="1187.5" text-anchor="start" font-size="14" fill="var(--ink-soft)">Project Retrospective</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1512.6" y2="1246.0" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:287.0px; animation-delay:1070ms"/>
+<a href="#rapid-decision-framework" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1512.6px 1246.0px; animation-delay:1270ms">
+<circle cx="1512.6" cy="1246.0" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1522.6" y="1250.5" text-anchor="start" font-size="14" fill="var(--ink-soft)">Rapid Decision Framework</text>
+</g></a>
+<line x1="1298.3" y1="1055.1" x2="1473.8" y2="1275.4" stroke="#c1502e" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:281.6px; animation-delay:1100ms"/>
+<a href="#benefits-realization-review" class="mm-leaf" data-cat="change-program-management">
+<g class="mm-pop" style="transform-origin:1473.8px 1275.4px; animation-delay:1300ms">
+<circle cx="1473.8" cy="1275.4" r="4.5" fill="var(--paper)" stroke="#c1502e" stroke-width="1.8"/>
+<text x="1483.8" y="1279.9" text-anchor="start" font-size="14" fill="var(--ink-soft)">Benefits Realization Review</text>
+</g></a>
+<a href="#change-program-management" class="mm-node">
+<g class="mm-pop" style="transform-origin:1298.3px 1055.1px; animation-delay:660ms">
+<circle cx="1298.3" cy="1055.1" r="13" fill="#c1502e"/>
+<svg x="1290.3" y="1047.1" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><path d="M16 9.5A6 6 0 106 13.2"/><path d="M16 5.5v4h-4"/></svg>
+<text x="1316.3" y="1060.6" text-anchor="start" font-size="18" font-weight="700" fill="#c1502e">Change &amp; Program</text>
+</g></a>
+<line x1="1034.0" y1="1079.0" x2="1133.3" y2="1309.3" stroke="#a6790f" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:250.8px; animation-delay:410ms"/>
+<line x1="1133.3" y1="1309.3" x2="1329.6" y2="1438.0" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:234.7px; animation-delay:930ms"/>
+<a href="#project-methodology-selector" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1329.6px 1438.0px; animation-delay:1130ms">
+<circle cx="1329.6" cy="1438.0" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1339.6" y="1442.5" text-anchor="start" font-size="14" fill="var(--ink-soft)">Project Methodology Selector</text>
+</g></a>
+<line x1="1133.3" y1="1309.3" x2="1331.2" y2="1517.5" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:287.2px; animation-delay:960ms"/>
+<a href="#prince2-project-structuring" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1331.2px 1517.5px; animation-delay:1160ms">
+<circle cx="1331.2" cy="1517.5" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1341.2" y="1522.0" text-anchor="start" font-size="14" fill="var(--ink-soft)">PRINCE2 Project Structuring</text>
+</g></a>
+<line x1="1133.3" y1="1309.3" x2="1229.4" y2="1490.3" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:204.9px; animation-delay:990ms"/>
+<a href="#pmbok-project-planning" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1229.4px 1490.3px; animation-delay:1190ms">
+<circle cx="1229.4" cy="1490.3" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1239.4" y="1494.8" text-anchor="start" font-size="14" fill="var(--ink-soft)">PMBOK Project Planning</text>
+</g></a>
+<line x1="1133.3" y1="1309.3" x2="1203.5" y2="1568.6" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:268.6px; animation-delay:1020ms"/>
+<a href="#agile-delivery-setup" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1203.5px 1568.6px; animation-delay:1220ms">
+<circle cx="1203.5" cy="1568.6" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1213.5" y="1573.1" text-anchor="start" font-size="14" fill="var(--ink-soft)">Agile Delivery Setup</text>
+</g></a>
+<line x1="1133.3" y1="1309.3" x2="1148.8" y2="1585.0" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:276.1px; animation-delay:1050ms"/>
+<a href="#waterfall-project-plan" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1148.8px 1585.0px; animation-delay:1250ms">
+<circle cx="1148.8" cy="1585.0" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1158.8" y="1589.5" text-anchor="start" font-size="14" fill="var(--ink-soft)">Waterfall Project Plan</text>
+</g></a>
+<line x1="1133.3" y1="1309.3" x2="1076.4" y2="1563.4" stroke="#a6790f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:260.4px; animation-delay:1080ms"/>
+<a href="#babok-requirements-elicitation" class="mm-leaf" data-cat="project-methodologies">
+<g class="mm-pop" style="transform-origin:1076.4px 1563.4px; animation-delay:1280ms">
+<circle cx="1076.4" cy="1563.4" r="4.5" fill="var(--paper)" stroke="#a6790f" stroke-width="1.8"/>
+<text x="1086.4" y="1567.9" text-anchor="start" font-size="14" fill="var(--ink-soft)">BABOK Requirements Elicitation</text>
+</g></a>
+<a href="#project-methodologies" class="mm-node">
+<g class="mm-pop" style="transform-origin:1133.3px 1309.3px; animation-delay:730ms">
+<circle cx="1133.3" cy="1309.3" r="13" fill="#a6790f"/>
+<svg x="1125.3" y="1301.3" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><circle cx="4.5" cy="5" r="2"/><circle cx="15.5" cy="5" r="2"/><circle cx="10" cy="15.5" r="2"/><path d="M6.3 6.4l2.8 6.6M13.7 6.4l-2.8 6.6"/></svg>
+<text x="1151.3" y="1314.8" text-anchor="start" font-size="18" font-weight="700" fill="#a6790f">Project Methods</text>
+</g></a>
+<line x1="965.4" y1="1078.7" x2="876.9" y2="1280.2" stroke="#6b4a8a" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:220.1px; animation-delay:480ms"/>
+<line x1="876.9" y1="1280.2" x2="871.7" y2="1598.1" stroke="#6b4a8a" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:317.9px; animation-delay:1000ms"/>
+<a href="#competitor-research-brief" class="mm-leaf" data-cat="research-intelligence">
+<g class="mm-pop" style="transform-origin:871.7px 1598.1px; animation-delay:1200ms">
+<circle cx="871.7" cy="1598.1" r="4.5" fill="var(--paper)" stroke="#6b4a8a" stroke-width="1.8"/>
+<text x="861.7" y="1602.6" text-anchor="end" font-size="14" fill="var(--ink-soft)">Competitor Research Brief</text>
+</g></a>
+<line x1="876.9" y1="1280.2" x2="805.7" y2="1596.8" stroke="#6b4a8a" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:324.5px; animation-delay:1030ms"/>
+<a href="#discovery-interview-kit" class="mm-leaf" data-cat="research-intelligence">
+<g class="mm-pop" style="transform-origin:805.7px 1596.8px; animation-delay:1230ms">
+<circle cx="805.7" cy="1596.8" r="4.5" fill="var(--paper)" stroke="#6b4a8a" stroke-width="1.8"/>
+<text x="795.7" y="1601.3" text-anchor="end" font-size="14" fill="var(--ink-soft)">Discovery Interview Kit</text>
+</g></a>
+<line x1="876.9" y1="1280.2" x2="738.2" y2="1578.8" stroke="#6b4a8a" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:329.2px; animation-delay:1060ms"/>
+<a href="#benchmark-comparator" class="mm-leaf" data-cat="research-intelligence">
+<g class="mm-pop" style="transform-origin:738.2px 1578.8px; animation-delay:1260ms">
+<circle cx="738.2" cy="1578.8" r="4.5" fill="var(--paper)" stroke="#6b4a8a" stroke-width="1.8"/>
+<text x="728.2" y="1583.3" text-anchor="end" font-size="14" fill="var(--ink-soft)">Benchmark Comparator</text>
+</g></a>
+<line x1="876.9" y1="1280.2" x2="696.9" y2="1548.2" stroke="#6b4a8a" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:322.9px; animation-delay:1090ms"/>
+<a href="#vendor-evaluation-scorecard" class="mm-leaf" data-cat="research-intelligence">
+<g class="mm-pop" style="transform-origin:696.9px 1548.2px; animation-delay:1290ms">
+<circle cx="696.9" cy="1548.2" r="4.5" fill="var(--paper)" stroke="#6b4a8a" stroke-width="1.8"/>
+<text x="686.9" y="1552.7" text-anchor="end" font-size="14" fill="var(--ink-soft)">Vendor Evaluation Scorecard</text>
+</g></a>
+<line x1="876.9" y1="1280.2" x2="682.2" y2="1442.8" stroke="#6b4a8a" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:253.6px; animation-delay:1120ms"/>
+<a href="#data-insights-summarizer" class="mm-leaf" data-cat="research-intelligence">
+<g class="mm-pop" style="transform-origin:682.2px 1442.8px; animation-delay:1320ms">
+<circle cx="682.2" cy="1442.8" r="4.5" fill="var(--paper)" stroke="#6b4a8a" stroke-width="1.8"/>
+<text x="672.2" y="1447.3" text-anchor="end" font-size="14" fill="var(--ink-soft)">Data Insights Summarizer</text>
+</g></a>
+<a href="#research-intelligence" class="mm-node">
+<g class="mm-pop" style="transform-origin:876.9px 1280.2px; animation-delay:800ms">
+<circle cx="876.9" cy="1280.2" r="13" fill="#6b4a8a"/>
+<svg x="868.9" y="1272.2" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><circle cx="8.3" cy="8.3" r="5.3"/><path d="M16.2 16.2l-3.7-3.7"/></svg>
+<text x="858.9" y="1285.7" text-anchor="end" font-size="18" font-weight="700" fill="#6b4a8a">Research</text>
+</g></a>
+<line x1="916.5" y1="1020.7" x2="696.7" y2="1075.2" stroke="#2c3e5c" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:226.5px; animation-delay:550ms"/>
+<line x1="696.7" y1="1075.2" x2="484.8" y2="1292.3" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:303.4px; animation-delay:1070ms"/>
+<a href="#unit-economics-breakdown" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:484.8px 1292.3px; animation-delay:1270ms">
+<circle cx="484.8" cy="1292.3" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="474.8" y="1296.8" text-anchor="end" font-size="14" fill="var(--ink-soft)">Unit Economics Breakdown</text>
+</g></a>
+<line x1="696.7" y1="1075.2" x2="441.4" y2="1233.5" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:300.4px; animation-delay:1100ms"/>
+<a href="#financial-ratio-reviewer" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:441.4px 1233.5px; animation-delay:1300ms">
+<circle cx="441.4" cy="1233.5" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="431.4" y="1238.0" text-anchor="end" font-size="14" fill="var(--ink-soft)">Financial Ratio Reviewer</text>
+</g></a>
+<line x1="696.7" y1="1075.2" x2="405.9" y2="1180.9" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:309.4px; animation-delay:1130ms"/>
+<a href="#risk-register-builder" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:405.9px 1180.9px; animation-delay:1330ms">
+<circle cx="405.9" cy="1180.9" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="395.9" y="1185.4" text-anchor="end" font-size="14" fill="var(--ink-soft)">Risk Register Builder</text>
+</g></a>
+<line x1="696.7" y1="1075.2" x2="377.0" y2="1132.8" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:324.8px; animation-delay:1160ms"/>
+<a href="#raci-matrix-generator" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:377.0px 1132.8px; animation-delay:1360ms">
+<circle cx="377.0" cy="1132.8" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="367.0" y="1137.3" text-anchor="end" font-size="14" fill="var(--ink-soft)">RACI Matrix Generator</text>
+</g></a>
+<line x1="696.7" y1="1075.2" x2="410.9" y2="1048.8" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:287.0px; animation-delay:1190ms"/>
+<a href="#process-map-simplifier" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:410.9px 1048.8px; animation-delay:1390ms">
+<circle cx="410.9" cy="1048.8" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="400.9" y="1053.3" text-anchor="end" font-size="14" fill="var(--ink-soft)">Process Map Simplifier</text>
+</g></a>
+<line x1="696.7" y1="1075.2" x2="443.5" y2="1001.1" stroke="#2c3e5c" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:263.9px; animation-delay:1220ms"/>
+<a href="#cost-benefit-analysis" class="mm-leaf" data-cat="financial-operational">
+<g class="mm-pop" style="transform-origin:443.5px 1001.1px; animation-delay:1420ms">
+<circle cx="443.5" cy="1001.1" r="4.5" fill="var(--paper)" stroke="#2c3e5c" stroke-width="1.8"/>
+<text x="433.5" y="1005.6" text-anchor="end" font-size="14" fill="var(--ink-soft)">Cost Benefit Analysis</text>
+</g></a>
+<a href="#financial-operational" class="mm-node">
+<g class="mm-pop" style="transform-origin:696.7px 1075.2px; animation-delay:870ms">
+<circle cx="696.7" cy="1075.2" r="13" fill="#2c3e5c"/>
+<svg x="688.7" y="1067.2" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><path d="M4.5 16V9.5M10 16V4M15.5 16v-5" stroke-linecap="round"/></svg>
+<text x="678.7" y="1080.7" text-anchor="end" font-size="18" font-weight="700" fill="#2c3e5c">Financial &amp; Ops</text>
+</g></a>
+<line x1="929.5" y1="950.7" x2="758.4" y2="831.0" stroke="#8a5a2f" stroke-width="2.5" opacity="0.6" class="mm-line" style="--len:208.8px; animation-delay:620ms"/>
+<line x1="758.4" y1="831.0" x2="455.9" y2="846.7" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:303.0px; animation-delay:1140ms"/>
+<a href="#meeting-notes-to-actions" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:455.9px 846.7px; animation-delay:1340ms">
+<circle cx="455.9" cy="846.7" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="445.9" y="851.2" text-anchor="end" font-size="14" fill="var(--ink-soft)">Meeting Notes To Actions</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="479.8" y2="806.0" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:279.8px; animation-delay:1170ms"/>
+<a href="#weekly-ops-report" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:479.8px 806.0px; animation-delay:1370ms">
+<circle cx="479.8" cy="806.0" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="469.8" y="810.5" text-anchor="end" font-size="14" fill="var(--ink-soft)">Weekly Ops Report</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="491.6" y2="755.3" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:277.3px; animation-delay:1200ms"/>
+<a href="#pre-mortem-facilitator" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:491.6px 755.3px; animation-delay:1400ms">
+<circle cx="491.6" cy="755.3" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="481.6" y="759.8" text-anchor="end" font-size="14" fill="var(--ink-soft)">Pre Mortem Facilitator</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="452.1" y2="659.0" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:351.3px; animation-delay:1230ms"/>
+<a href="#okr-drafter" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:452.1px 659.0px; animation-delay:1430ms">
+<circle cx="452.1" cy="659.0" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="442.1" y="663.5" text-anchor="end" font-size="14" fill="var(--ink-soft)">OKR Drafter</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="547.7" y2="662.1" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:270.1px; animation-delay:1260ms"/>
+<a href="#impact-effort-prioritizer" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:547.7px 662.1px; animation-delay:1460ms">
+<circle cx="547.7" cy="662.1" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="537.7" y="666.6" text-anchor="end" font-size="14" fill="var(--ink-soft)">Impact Effort Prioritizer</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="603.0" y2="606.5" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:273.0px; animation-delay:1290ms"/>
+<a href="#positioning-pitch-crafter" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:603.0px 606.5px; animation-delay:1490ms">
+<circle cx="603.0" cy="606.5" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="593.0" y="611.0" text-anchor="end" font-size="14" fill="var(--ink-soft)">Positioning Pitch Crafter</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="631.4" y2="567.1" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:292.9px; animation-delay:1320ms"/>
+<a href="#negotiation-prep" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:631.4px 567.1px; animation-delay:1520ms">
+<circle cx="631.4" cy="567.1" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="621.4" y="571.6" text-anchor="end" font-size="14" fill="var(--ink-soft)">Negotiation Prep</text>
+</g></a>
+<line x1="758.4" y1="831.0" x2="639.7" y2="462.5" stroke="#8a5a2f" stroke-width="1.3" opacity="0.4" class="mm-line" style="--len:387.1px; animation-delay:1350ms"/>
+<a href="#capability-competency-matrix" class="mm-leaf" data-cat="business-owner-day-to-day">
+<g class="mm-pop" style="transform-origin:639.7px 462.5px; animation-delay:1550ms">
+<circle cx="639.7" cy="462.5" r="4.5" fill="var(--paper)" stroke="#8a5a2f" stroke-width="1.8"/>
+<text x="629.7" y="467.0" text-anchor="end" font-size="14" fill="var(--ink-soft)">Capability Competency Matrix</text>
+</g></a>
+<a href="#business-owner-day-to-day" class="mm-node">
+<g class="mm-pop" style="transform-origin:758.4px 831.0px; animation-delay:940ms">
+<circle cx="758.4" cy="831.0" r="13" fill="#8a5a2f"/>
+<svg x="750.4" y="823.0" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8"><rect x="3" y="3" width="14" height="14" rx="2.5"/><path d="M6.3 10.2l2.1 2.1 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="740.4" y="836.5" text-anchor="end" font-size="18" font-weight="700" fill="#8a5a2f">Day-to-Day</text>
+</g></a>
+<g class="mm-pop mm-hub" style="transform-origin:1000px 1000px; animation-delay:0ms">
+<circle cx="1000" cy="1000" r="86" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+<text x="1000" y="984" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="25" fill="var(--ink)">Vantage</text>
+<text x="1000" y="1013" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="25" fill="var(--ink)">Point</text>
+<text x="1000" y="1036" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" fill="var(--muted)">50 skills</text>
+</g>
+</g>
+</svg>
+    <!-- MINDMAP:END -->
+      </div>
+      <figcaption>Click any node to jump to it below. Drag to pan, use the +/&minus; buttons to zoom.</figcaption>
+    </figure>
 
     <p id="empty-state" class="empty-state" hidden>No skills match &ldquo;<span id="empty-query"></span>&rdquo;.</p>
 
     <!-- CONTENT:START -->
-    <details class="category" id="strategic-analysis">
-      <summary class="category-title">Strategic analysis<span class="category-count">8</span></summary>
+    <details class="category" id="strategic-analysis" style="--cat-color:#1f6f5c">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3.6"/><circle cx="10" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg>
+        Strategic analysis<span class="category-count">8</span>
+        <a class="dl-link dl-link-cat" href="dl/strategic-analysis.zip" download title="Download all 8 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 8</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="mece problem structuring breaks an ambiguous, open-ended business question into a mece (mutually exclusive, collectively exhaustive) issue tree so every possible cause or option is captured once and only once. use when the user asks a broad &quot;why&quot; or &quot;what should we do&quot; question, wants to structure a problem before analyzing it, or explicitly mentions mece, an issue tree, or problem structuring.">
+      <details class="skill" id="mece-problem-structuring" data-search="mece problem structuring breaks an ambiguous, open-ended business question into a mece (mutually exclusive, collectively exhaustive) issue tree so every possible cause or option is captured once and only once. use when the user asks a broad &quot;why&quot; or &quot;what should we do&quot; question, wants to structure a problem before analyzing it, or explicitly mentions mece, an issue tree, or problem structuring." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">MECE Problem Structuring</span>
           <span class="skill-desc">Breaks an ambiguous, open-ended business question into a MECE (Mutually Exclusive, Collectively Exhaustive) issue tree so every possible cause or option is captured once and only once. Use when the user asks a broad "why" or "what should we do" question, wants to structure a problem before analyzing it, or explicitly mentions MECE, an issue tree, or problem structuring.</span>
+          <a class="dl-link" href="dl/mece-problem-structuring.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>MECE Problem Structuring</h1>
@@ -117,10 +493,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="swot strategic review runs a disciplined swot (strengths, weaknesses, opportunities, threats) analysis that forces every finding to connect to a strategic implication, instead of producing four disconnected bullet lists. use when the user asks for a swot, wants to know &quot;where do we stand,&quot; or is evaluating strategic position before a decision.">
+      <details class="skill" id="swot-strategic-review" data-search="swot strategic review runs a disciplined swot (strengths, weaknesses, opportunities, threats) analysis that forces every finding to connect to a strategic implication, instead of producing four disconnected bullet lists. use when the user asks for a swot, wants to know &quot;where do we stand,&quot; or is evaluating strategic position before a decision." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">SWOT Strategic Review</span>
           <span class="skill-desc">Runs a disciplined SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis that forces every finding to connect to a strategic implication, instead of producing four disconnected bullet lists. Use when the user asks for a SWOT, wants to know "where do we stand," or is evaluating strategic position before a decision.</span>
+          <a class="dl-link" href="dl/swot-strategic-review.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>SWOT Strategic Review</h1>
@@ -152,10 +529,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="porters five forces assesses competitive intensity in a market or industry across five forces (rivalry, buyer power, supplier power, threat of new entrants, threat of substitutes) to judge whether a market is structurally attractive to enter, defend, or exit. use when evaluating market entry, industry attractiveness, or why margins in a market are compressed.">
+      <details class="skill" id="porters-five-forces" data-search="porters five forces assesses competitive intensity in a market or industry across five forces (rivalry, buyer power, supplier power, threat of new entrants, threat of substitutes) to judge whether a market is structurally attractive to enter, defend, or exit. use when evaluating market entry, industry attractiveness, or why margins in a market are compressed." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Porters Five Forces</span>
           <span class="skill-desc">Assesses competitive intensity in a market or industry across five forces (rivalry, buyer power, supplier power, threat of new entrants, threat of substitutes) to judge whether a market is structurally attractive to enter, defend, or exit. Use when evaluating market entry, industry attractiveness, or why margins in a market are compressed.</span>
+          <a class="dl-link" href="dl/porters-five-forces.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Porter's Five Forces</h1>
@@ -186,10 +564,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="business model canvas maps or redesigns a business&#x27;s value proposition, customer segments, channels, relationships, revenue streams, key resources, activities, partners, and cost structure on one page. use when the user wants to understand how a business makes money, evaluate a new business model, or redesign an existing offering.">
+      <details class="skill" id="business-model-canvas" data-search="business model canvas maps or redesigns a business&#x27;s value proposition, customer segments, channels, relationships, revenue streams, key resources, activities, partners, and cost structure on one page. use when the user wants to understand how a business makes money, evaluate a new business model, or redesign an existing offering." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Business Model Canvas</span>
           <span class="skill-desc">Maps or redesigns a business's value proposition, customer segments, channels, relationships, revenue streams, key resources, activities, partners, and cost structure on one page. Use when the user wants to understand how a business makes money, evaluate a new business model, or redesign an existing offering.</span>
+          <a class="dl-link" href="dl/business-model-canvas.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Business Model Canvas</h1>
@@ -226,10 +605,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="market sizing tam sam som builds a defensible market size estimate broken into total addressable market, serviceable addressable market, and serviceable obtainable market, with every assumption shown explicitly rather than presented as a known fact. use when the user asks how big a market or opportunity is, wants a tam/sam/som estimate, or is sizing a new offering before investing in it.">
+      <details class="skill" id="market-sizing-tam-sam-som" data-search="market sizing tam sam som builds a defensible market size estimate broken into total addressable market, serviceable addressable market, and serviceable obtainable market, with every assumption shown explicitly rather than presented as a known fact. use when the user asks how big a market or opportunity is, wants a tam/sam/som estimate, or is sizing a new offering before investing in it." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Market Sizing TAM SAM SOM</span>
           <span class="skill-desc">Builds a defensible market size estimate broken into Total Addressable Market, Serviceable Addressable Market, and Serviceable Obtainable Market, with every assumption shown explicitly rather than presented as a known fact. Use when the user asks how big a market or opportunity is, wants a TAM/SAM/SOM estimate, or is sizing a new offering before investing in it.</span>
+          <a class="dl-link" href="dl/market-sizing-tam-sam-som.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Market Sizing (TAM / SAM / SOM)</h1>
@@ -258,10 +638,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="competitive landscape mapper builds a structured side-by-side comparison of named competitors — positioning, pricing, offering, and ownership — with sourcing discipline and verification of who actually owns/operates what. use when the user wants a competitor comparison, asks &quot;who else is in this space,&quot; or wants to understand the competitive landscape before a pricing or positioning decision.">
+      <details class="skill" id="competitive-landscape-mapper" data-search="competitive landscape mapper builds a structured side-by-side comparison of named competitors — positioning, pricing, offering, and ownership — with sourcing discipline and verification of who actually owns/operates what. use when the user wants a competitor comparison, asks &quot;who else is in this space,&quot; or wants to understand the competitive landscape before a pricing or positioning decision." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Competitive Landscape Mapper</span>
           <span class="skill-desc">Builds a structured side-by-side comparison of named competitors — positioning, pricing, offering, and ownership — with sourcing discipline and verification of who actually owns/operates what. Use when the user wants a competitor comparison, asks "who else is in this space," or wants to understand the competitive landscape before a pricing or positioning decision.</span>
+          <a class="dl-link" href="dl/competitive-landscape-mapper.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Competitive Landscape Mapper</h1>
@@ -291,10 +672,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="root cause five whys drills from an observed symptom down to its root cause using the 5-whys method (and a fishbone/cause-category checklist for more complex cases), so fixes address the actual problem instead of a surface symptom. use when something is going wrong repeatedly, the user asks &quot;why did this happen,&quot; or a fix keeps not working.">
+      <details class="skill" id="root-cause-five-whys" data-search="root cause five whys drills from an observed symptom down to its root cause using the 5-whys method (and a fishbone/cause-category checklist for more complex cases), so fixes address the actual problem instead of a surface symptom. use when something is going wrong repeatedly, the user asks &quot;why did this happen,&quot; or a fix keeps not working." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Root Cause Five Whys</span>
           <span class="skill-desc">Drills from an observed symptom down to its root cause using the 5-Whys method (and a fishbone/cause-category checklist for more complex cases), so fixes address the actual problem instead of a surface symptom. Use when something is going wrong repeatedly, the user asks "why did this happen," or a fix keeps not working.</span>
+          <a class="dl-link" href="dl/root-cause-five-whys.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Root Cause Analysis (5-Whys)</h1>
@@ -324,10 +706,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="plan on a page builds a single-page strategic or program summary — vision/purpose, honest current state, a small set of priorities, and how people/process/systems support them — the condensed visual format used to align a team or brief an executive audience in one view. use when the user needs a &quot;plan on a page,&quot; a one-page strategy summary, or a condensed visual of a strategy/program for leadership.">
+      <details class="skill" id="plan-on-a-page" data-search="plan on a page builds a single-page strategic or program summary — vision/purpose, honest current state, a small set of priorities, and how people/process/systems support them — the condensed visual format used to align a team or brief an executive audience in one view. use when the user needs a &quot;plan on a page,&quot; a one-page strategy summary, or a condensed visual of a strategy/program for leadership." style="--cat-color:#1f6f5c">
         <summary>
           <span class="skill-name">Plan On A Page</span>
           <span class="skill-desc">Builds a single-page strategic or program summary — vision/purpose, honest current state, a small set of priorities, and how people/process/systems support them — the condensed visual format used to align a team or brief an executive audience in one view. Use when the user needs a "plan on a page," a one-page strategy summary, or a condensed visual of a strategy/program for leadership.</span>
+          <a class="dl-link" href="dl/plan-on-a-page.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Plan on a Page</h1>
@@ -356,13 +739,18 @@
       </div>
     </details>
 
-    <details class="category" id="client-stakeholder-deliverables">
-      <summary class="category-title">Client & stakeholder deliverables<span class="category-count">8</span></summary>
+    <details class="category" id="client-stakeholder-deliverables" style="--cat-color:#3a5a78">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7.5" width="14" height="9" rx="1.5"/><path d="M7.2 7.5V5.8a1.8 1.8 0 011.8-1.8h2a1.8 1.8 0 011.8 1.8v1.7"/></svg>
+        Client & stakeholder deliverables<span class="category-count">8</span>
+        <a class="dl-link dl-link-cat" href="dl/client-stakeholder-deliverables.zip" download title="Download all 8 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 8</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="executive summary writer converts analysis, research, or a long document into a one-page executive summary using the pyramid principle — leading with the answer/recommendation, then the supporting logic, then the detail. use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly.">
+      <details class="skill" id="executive-summary-writer" data-search="executive summary writer converts analysis, research, or a long document into a one-page executive summary using the pyramid principle — leading with the answer/recommendation, then the supporting logic, then the detail. use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Executive Summary Writer</span>
           <span class="skill-desc">Converts analysis, research, or a long document into a one-page executive summary using the Pyramid Principle — leading with the answer/recommendation, then the supporting logic, then the detail. Use when the user needs to summarize findings for leadership, write a one-pager, or condense a long analysis into something a busy reader can act on quickly.</span>
+          <a class="dl-link" href="dl/executive-summary-writer.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Executive Summary Writer</h1>
@@ -399,10 +787,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="consulting deck storyliner outlines a slide deck with a single storyline and one clear, action-titled message per slide, in the style used by strategy consulting firms. use when the user wants to structure a presentation, plan slide flow, or turn analysis into a deck outline before building actual slides.">
+      <details class="skill" id="consulting-deck-storyliner" data-search="consulting deck storyliner outlines a slide deck with a single storyline and one clear, action-titled message per slide, in the style used by strategy consulting firms. use when the user wants to structure a presentation, plan slide flow, or turn analysis into a deck outline before building actual slides." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Consulting Deck Storyliner</span>
           <span class="skill-desc">Outlines a slide deck with a single storyline and one clear, action-titled message per slide, in the style used by strategy consulting firms. Use when the user wants to structure a presentation, plan slide flow, or turn analysis into a deck outline before building actual slides.</span>
+          <a class="dl-link" href="dl/consulting-deck-storyliner.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Consulting Deck Storyliner</h1>
@@ -433,10 +822,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="board investor memo drafts a structured board or investor update memo covering progress, key metrics, risks, and specific asks. use when the user needs to write a board update, investor update, or periodic (monthly/quarterly) stakeholder memo.">
+      <details class="skill" id="board-investor-memo" data-search="board investor memo drafts a structured board or investor update memo covering progress, key metrics, risks, and specific asks. use when the user needs to write a board update, investor update, or periodic (monthly/quarterly) stakeholder memo." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Board Investor Memo</span>
           <span class="skill-desc">Drafts a structured board or investor update memo covering progress, key metrics, risks, and specific asks. Use when the user needs to write a board update, investor update, or periodic (monthly/quarterly) stakeholder memo.</span>
+          <a class="dl-link" href="dl/board-investor-memo.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Board / Investor Memo</h1>
@@ -470,10 +860,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="proposal sow drafter drafts a client proposal or statement of work, covering scope, deliverables, timeline, fees, and assumptions. use when the user needs to write a consulting proposal, scope an engagement, draft a sow, or respond to a client request for a project quote.">
+      <details class="skill" id="proposal-sow-drafter" data-search="proposal sow drafter drafts a client proposal or statement of work, covering scope, deliverables, timeline, fees, and assumptions. use when the user needs to write a consulting proposal, scope an engagement, draft a sow, or respond to a client request for a project quote." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Proposal SOW Drafter</span>
           <span class="skill-desc">Drafts a client proposal or statement of work, covering scope, deliverables, timeline, fees, and assumptions. Use when the user needs to write a consulting proposal, scope an engagement, draft a SOW, or respond to a client request for a project quote.</span>
+          <a class="dl-link" href="dl/proposal-sow-drafter.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Proposal / Statement of Work Drafter</h1>
@@ -506,10 +897,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="government tender response drafts a response to a government rfq or rft (request for quote/tender) — understanding of requirements, value proposition, capability and experience, commercial offer, and standard compliance declarations — following the structure procurement panels actually evaluate against. use when the user needs to respond to a government tender, rfq, or public-sector procurement request.">
+      <details class="skill" id="government-tender-response" data-search="government tender response drafts a response to a government rfq or rft (request for quote/tender) — understanding of requirements, value proposition, capability and experience, commercial offer, and standard compliance declarations — following the structure procurement panels actually evaluate against. use when the user needs to respond to a government tender, rfq, or public-sector procurement request." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Government Tender Response</span>
           <span class="skill-desc">Drafts a response to a government RFQ or RFT (Request for Quote/Tender) — understanding of requirements, value proposition, capability and experience, commercial offer, and standard compliance declarations — following the structure procurement panels actually evaluate against. Use when the user needs to respond to a government tender, RFQ, or public-sector procurement request.</span>
+          <a class="dl-link" href="dl/government-tender-response.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Government Tender / RFQ Response</h1>
@@ -544,10 +936,11 @@
         </div>
       </details>
 
-      <details class="skill" data-search="workshop agenda designer designs a structured workshop — clear objectives, a timed agenda, participation-driving activities, and facilitation notes — for strategic planning sessions, kickoffs, or stakeholder workshops. use when the user needs to plan or facilitate a workshop, design a workshop agenda, or run a strategic planning session.">
+      <details class="skill" id="workshop-agenda-designer" data-search="workshop agenda designer designs a structured workshop — clear objectives, a timed agenda, participation-driving activities, and facilitation notes — for strategic planning sessions, kickoffs, or stakeholder workshops. use when the user needs to plan or facilitate a workshop, design a workshop agenda, or run a strategic planning session." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Workshop Agenda Designer</span>
           <span class="skill-desc">Designs a structured workshop — clear objectives, a timed agenda, participation-driving activities, and facilitation notes — for strategic planning sessions, kickoffs, or stakeholder workshops. Use when the user needs to plan or facilitate a workshop, design a workshop agenda, or run a strategic planning session.</span>
+          <a class="dl-link" href="dl/workshop-agenda-designer.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Workshop Agenda Designer</h1>
@@ -575,10 +968,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="stakeholder influence map maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in.">
+      <details class="skill" id="stakeholder-influence-map" data-search="stakeholder influence map maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Stakeholder Influence Map</span>
           <span class="skill-desc">Maps stakeholders on an influence-vs-interest grid and recommends an engagement approach for each one. Use when the user needs to identify who needs to be on board for a decision or change, plan how to communicate with different stakeholders, or navigate organizational buy-in.</span>
+          <a class="dl-link" href="dl/stakeholder-influence-map.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Stakeholder Influence Map</h1>
@@ -606,10 +1000,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="stakeholder engagement log maintains an ongoing, chronological log of stakeholder engagement — who was contacted, when, why, what was discussed, and what follow-up resulted — as a project runs. use when the user needs to track engagement history over a project&#x27;s life, log meeting outcomes with stakeholders, or wants a record of who&#x27;s been engaged and about what, distinct from a one-time influence/interest map.">
+      <details class="skill" id="stakeholder-engagement-log" data-search="stakeholder engagement log maintains an ongoing, chronological log of stakeholder engagement — who was contacted, when, why, what was discussed, and what follow-up resulted — as a project runs. use when the user needs to track engagement history over a project&#x27;s life, log meeting outcomes with stakeholders, or wants a record of who&#x27;s been engaged and about what, distinct from a one-time influence/interest map." style="--cat-color:#3a5a78">
         <summary>
           <span class="skill-name">Stakeholder Engagement Log</span>
           <span class="skill-desc">Maintains an ongoing, chronological log of stakeholder engagement — who was contacted, when, why, what was discussed, and what follow-up resulted — as a project runs. Use when the user needs to track engagement history over a project's life, log meeting outcomes with stakeholders, or wants a record of who's been engaged and about what, distinct from a one-time influence/interest map.</span>
+          <a class="dl-link" href="dl/stakeholder-engagement-log.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Stakeholder Engagement Log</h1>
@@ -635,13 +1030,18 @@ Required output by end of session: [one sentence]</code></pre>
       </div>
     </details>
 
-    <details class="category" id="change-program-management">
-      <summary class="category-title">Change & program management<span class="category-count">7</span></summary>
+    <details class="category" id="change-program-management" style="--cat-color:#c1502e">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 9.5A6 6 0 106 13.2"/><path d="M16 5.5v4h-4"/></svg>
+        Change & program management<span class="category-count">9</span>
+        <a class="dl-link dl-link-cat" href="dl/change-program-management.zip" download title="Download all 9 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 9</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="change impact assessment assesses who and what is impacted by a planned change (people, process, systems, culture) before it&#x27;s rolled out, so change-management effort targets what actually needs it instead of guessing. use when the user is planning a system rollout, process change, reorg, or any initiative that changes how people work, and needs to understand impact before building a change plan.">
+      <details class="skill" id="change-impact-assessment" data-search="change impact assessment assesses who and what is impacted by a planned change (people, process, systems, culture) before it&#x27;s rolled out, so change-management effort targets what actually needs it instead of guessing. use when the user is planning a system rollout, process change, reorg, or any initiative that changes how people work, and needs to understand impact before building a change plan." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Change Impact Assessment</span>
           <span class="skill-desc">Assesses who and what is impacted by a planned change (people, process, systems, culture) before it's rolled out, so change-management effort targets what actually needs it instead of guessing. Use when the user is planning a system rollout, process change, reorg, or any initiative that changes how people work, and needs to understand impact before building a change plan.</span>
+          <a class="dl-link" href="dl/change-impact-assessment.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Change Impact Assessment (CIA)</h1>
@@ -668,10 +1068,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="change management roadmap builds a change management strategy and roadmap using the adkar model (awareness, desire, knowledge, ability, reinforcement) so a change actually sticks after go-live instead of just being announced. use when the user needs a change management plan or roadmap for a rollout, system implementation, or organisational change, or explicitly mentions adkar.">
+      <details class="skill" id="change-management-roadmap" data-search="change management roadmap builds a change management strategy and roadmap using the adkar model (awareness, desire, knowledge, ability, reinforcement) so a change actually sticks after go-live instead of just being announced. use when the user needs a change management plan or roadmap for a rollout, system implementation, or organisational change, or explicitly mentions adkar." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Change Management Roadmap</span>
           <span class="skill-desc">Builds a change management strategy and roadmap using the ADKAR model (Awareness, Desire, Knowledge, Ability, Reinforcement) so a change actually sticks after go-live instead of just being announced. Use when the user needs a change management plan or roadmap for a rollout, system implementation, or organisational change, or explicitly mentions ADKAR.</span>
+          <a class="dl-link" href="dl/change-management-roadmap.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Change Management Roadmap (ADKAR)</h1>
@@ -696,10 +1097,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="change readiness assessment assesses an organisation&#x27;s or team&#x27;s readiness for an upcoming change — capability gaps, sentiment, and support needs — based on real evidence rather than assumption, so the change plan addresses actual gaps. use when the user wants to check readiness before a go-live, needs a training needs analysis, or wants to gauge how prepared people are for a change.">
+      <details class="skill" id="change-readiness-assessment" data-search="change readiness assessment assesses an organisation&#x27;s or team&#x27;s readiness for an upcoming change — capability gaps, sentiment, and support needs — based on real evidence rather than assumption, so the change plan addresses actual gaps. use when the user wants to check readiness before a go-live, needs a training needs analysis, or wants to gauge how prepared people are for a change." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Change Readiness Assessment</span>
           <span class="skill-desc">Assesses an organisation's or team's readiness for an upcoming change — capability gaps, sentiment, and support needs — based on real evidence rather than assumption, so the change plan addresses actual gaps. Use when the user wants to check readiness before a go-live, needs a training needs analysis, or wants to gauge how prepared people are for a change.</span>
+          <a class="dl-link" href="dl/change-readiness-assessment.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Change Readiness Assessment</h1>
@@ -725,10 +1127,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="communication engagement plan builds a structured communication and engagement plan for a change or program — audience segments, key messages, channels, senders, and timing — so communication is targeted rather than one blanket message to everyone. use when the user needs a comms plan, engagement roadmap, or is planning how to communicate a change to different audiences.">
+      <details class="skill" id="communication-engagement-plan" data-search="communication engagement plan builds a structured communication and engagement plan for a change or program — audience segments, key messages, channels, senders, and timing — so communication is targeted rather than one blanket message to everyone. use when the user needs a comms plan, engagement roadmap, or is planning how to communicate a change to different audiences." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Communication Engagement Plan</span>
           <span class="skill-desc">Builds a structured communication and engagement plan for a change or program — audience segments, key messages, channels, senders, and timing — so communication is targeted rather than one blanket message to everyone. Use when the user needs a comms plan, engagement roadmap, or is planning how to communicate a change to different audiences.</span>
+          <a class="dl-link" href="dl/communication-engagement-plan.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Communication &amp; Engagement Plan</h1>
@@ -755,10 +1158,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="raid log builder builds and maintains a raid log (risks, assumptions, issues, dependencies) — the standard project-governance artifact tracking what could go wrong, what&#x27;s being assumed, what&#x27;s already gone wrong, and what the project depends on. use when the user needs a raid log, project governance tracking, or wants to track assumptions and dependencies alongside risks, not just risks alone.">
+      <details class="skill" id="raid-log-builder" data-search="raid log builder builds and maintains a raid log (risks, assumptions, issues, dependencies) — the standard project-governance artifact tracking what could go wrong, what&#x27;s being assumed, what&#x27;s already gone wrong, and what the project depends on. use when the user needs a raid log, project governance tracking, or wants to track assumptions and dependencies alongside risks, not just risks alone." style="--cat-color:#c1502e">
         <summary>
-          <span class="skill-name">Raid Log Builder</span>
+          <span class="skill-name">RAID Log Builder</span>
           <span class="skill-desc">Builds and maintains a RAID log (Risks, Assumptions, Issues, Dependencies) — the standard project-governance artifact tracking what could go wrong, what's being assumed, what's already gone wrong, and what the project depends on. Use when the user needs a RAID log, project governance tracking, or wants to track assumptions and dependencies alongside risks, not just risks alone.</span>
+          <a class="dl-link" href="dl/raid-log-builder.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>RAID Log Builder</h1>
@@ -787,10 +1191,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="program governance structure defines the governance structure for a program or project — decision-making forums, escalation paths, meeting cadence, and a decision log — so decisions get made at the right level without every issue escalating to the top. use when the user is setting up a new program or project and needs a governance model, decision rights, or an escalation structure.">
+      <details class="skill" id="program-governance-structure" data-search="program governance structure defines the governance structure for a program or project — decision-making forums, escalation paths, meeting cadence, and a decision log — so decisions get made at the right level without every issue escalating to the top. use when the user is setting up a new program or project and needs a governance model, decision rights, or an escalation structure." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Program Governance Structure</span>
           <span class="skill-desc">Defines the governance structure for a program or project — decision-making forums, escalation paths, meeting cadence, and a decision log — so decisions get made at the right level without every issue escalating to the top. Use when the user is setting up a new program or project and needs a governance model, decision rights, or an escalation structure.</span>
+          <a class="dl-link" href="dl/program-governance-structure.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Program Governance Structure</h1>
@@ -817,10 +1222,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="project retrospective runs a structured retrospective on a completed project, program phase, or initiative — what worked, what didn&#x27;t, root causes, and specific recommendations for next time — so lessons actually change future work instead of being filed away. use when a project or phase has just finished and the user wants a retrospective, lessons-learned review, or post-mortem (backward-looking; for a forward-looking pre-decision version, see pre-mortem-facilitator).">
+      <details class="skill" id="project-retrospective" data-search="project retrospective runs a structured retrospective on a completed project, program phase, or initiative — what worked, what didn&#x27;t, root causes, and specific recommendations for next time — so lessons actually change future work instead of being filed away. use when a project or phase has just finished and the user wants a retrospective, lessons-learned review, or post-mortem (backward-looking; for a forward-looking pre-decision version, see pre-mortem-facilitator)." style="--cat-color:#c1502e">
         <summary>
           <span class="skill-name">Project Retrospective</span>
           <span class="skill-desc">Runs a structured retrospective on a completed project, program phase, or initiative — what worked, what didn't, root causes, and specific recommendations for next time — so lessons actually change future work instead of being filed away. Use when a project or phase has just finished and the user wants a retrospective, lessons-learned review, or post-mortem (backward-looking; for a forward-looking pre-decision version, see pre-mortem-facilitator).</span>
+          <a class="dl-link" href="dl/project-retrospective.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Project Retrospective</h1>
@@ -848,16 +1254,271 @@ Required output by end of session: [one sentence]</code></pre>
 <p>Note the group-booking finding: it looked like habit-reversion at first glance, but the root cause was a genuine training gap, not backsliding — worth the extra step of checking before assuming the obvious explanation.</p></div>
         </div>
       </details>
+
+      <details class="skill" id="rapid-decision-framework" data-search="rapid decision framework clarifies decision-making roles using the rapid framework (recommend, agree, perform, input, decide) — who proposes, who must sign off, who executes, who&#x27;s consulted, and who holds final decision authority. use when a decision has stalled because ownership is unclear, or to clarify decision rights specifically — distinct from raci-matrix-generator, which covers task/work ownership, not who gets to decide." style="--cat-color:#c1502e">
+        <summary>
+          <span class="skill-name">Rapid Decision Framework</span>
+          <span class="skill-desc">Clarifies decision-making roles using the RAPID framework (Recommend, Agree, Perform, Input, Decide) — who proposes, who must sign off, who executes, who's consulted, and who holds final decision authority. Use when a decision has stalled because ownership is unclear, or to clarify decision rights specifically — distinct from raci-matrix-generator, which covers task/work ownership, not who gets to decide.</span>
+          <a class="dl-link" href="dl/rapid-decision-framework.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>RAPID Decision Framework</h1>
+<h2>When to use this</h2>
+<p>A decision (not a task) has unclear ownership — it's stalling, being re-litigated, or nobody's sure who actually gets the final call.</p>
+<h2>When NOT to use this</h2>
+<ul><li>This is about task/work ownership on a project, not a single decision — use <code>raci-matrix-generator</code> instead. The two frameworks answer different questions and are easy to conflate.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm this is genuinely about decision rights</strong>, not task execution. "Who does the analysis" is a RACI question; "who gets to decide once the analysis is done" is a RAPID question.</li><li><strong>Assign each RAPID role explicitly for this specific decision:</strong> - <strong>Recommend</strong> — who proposes an option and does the supporting analysis - <strong>Agree</strong> — who must sign off before it proceeds. Keep this list as small as possible — every additional person here is a de facto veto holder - <strong>Perform</strong> — who executes once the decision is made - <strong>Input</strong> — who is consulted but doesn't have to be agreed with - <strong>Decide</strong> — exactly one person or body with the final call. This is the single most important assignment in the whole framework</li><li><strong>Watch for the most common failure</strong>: too many people holding "Agree." This creates gridlock, since any one of them can block indefinitely — push back on this explicitly if it happens.</li><li><strong>Make the assignment visible before the decision process starts</strong>, not after it's already stalled — RAPID is most valuable as a preventive structure, not a post-mortem tool.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Decision rights: [decision]</code></pre>
+<p>| Role | Held by | Note | |---|---|---| | Recommend | ... | | | Agree | ... | keep this list minimal | | Perform | ... | | | Input | ... | | | Decide | ... | exactly one | ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Confusing this with RACI — they answer different questions (decision rights vs. task ownership).</li><li>Too many people holding "Agree," creating gridlock through de facto veto power.</li><li>No single clear "Decide" holder, leaving the decision bouncing between people indefinitely.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>This is confirmed to be about decision rights, not task ownership</li><li class="check"><span class="box" aria-hidden="true"></span>"Agree" is held by as few people as the decision genuinely requires</li><li class="check"><span class="box" aria-hidden="true"></span>Exactly one person or body holds "Decide"</li><li class="check"><span class="box" aria-hidden="true"></span>Roles are assigned before the decision process starts, not after it stalls</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: deciding whether to launch the Gili route</h3>
+<div class="table-wrap"><table><thead><tr><th>Role</th><th>Held by</th><th>Note</th></tr></thead><tbody><tr><td>Recommend</td><td>Ops lead</td><td>Brings the scouting findings and unit economics</td></tr><tr><td>Agree</td><td>— (none needed)</td><td>Business is small enough that no separate sign-off layer is needed beyond the decider</td></tr><tr><td>Perform</td><td>Ops lead + booking staff</td><td>Execute the launch once decided</td></tr><tr><td>Input</td><td>Booking staff (customer sentiment from past inquiries)</td><td>Consulted but doesn't hold sign-off</td></tr><tr><td>Decide</td><td>Owner</td><td>Sole final call</td></tr></tbody></table></div>
+<p>Note the deliberately empty "Agree" row — for a two-person operation, inventing a sign-off layer just to fill out the framework would add friction with no real governance benefit. RAPID scales down as legitimately as it scales up; the discipline that matters here is still having exactly one clear "Decide" holder, not padding out every role.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="benefits-realization-review" data-search="benefits realization review reviews whether a completed project or program actually delivered the benefits it was originally justified by, comparing promised outcomes to what really happened months after go-live. use when a project has been live for a while and the user wants to check whether it achieved what it promised, or needs a benefits realization report — distinct from project-retrospective, which reviews delivery process rather than outcomes." style="--cat-color:#c1502e">
+        <summary>
+          <span class="skill-name">Benefits Realization Review</span>
+          <span class="skill-desc">Reviews whether a completed project or program actually delivered the benefits it was originally justified by, comparing promised outcomes to what really happened months after go-live. Use when a project has been live for a while and the user wants to check whether it achieved what it promised, or needs a benefits realization report — distinct from project-retrospective, which reviews delivery process rather than outcomes.</span>
+          <a class="dl-link" href="dl/benefits-realization-review.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Benefits Realization Review</h1>
+<h2>When to use this</h2>
+<p>A project or program has been live for a meaningful period, and the user wants to check whether the business benefits it was originally justified by actually materialized — not how smoothly it was delivered.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The project just finished and the focus is on delivery process (what worked/didn't in how it was run) — use <code>project-retrospective</code> for that; this skill is specifically about outcome measurement, ideally run separately and later, once there's been time for benefits to show.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Pull the original promised benefits</strong> from the initial justification (e.g. a <code>cost-benefit-analysis</code> or business case). Each should have been stated in a measurable way originally — if it wasn't, that's a finding in itself, worth flagging now for next time's business cases.</li><li><strong>Measure actual performance against each promised benefit using real data</strong>, not impressions or a general sense that "it's going well."</li><li><strong>For benefits not yet realized, distinguish three different situations</strong> — they need different responses: - <strong>Still in progress</strong> — genuinely needs more time - <strong>Blocked</strong> — needs a specific intervention to get unstuck - <strong>Was never realistic</strong> — a planning lesson for next time's business cases, not a delivery failure</li><li><strong>Identify what's needed to close any real gap</strong> — a specific fixable blocker, or a case for formally writing the benefit off rather than leaving it in limbo indefinitely.</li><li><strong>Report honestly even when the answer is uncomfortable.</strong> The entire value of this review is catching benefit shortfall while there's still time to act on it — a review that only reports good news defeats its own purpose.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Benefits realization review: [project], [time since go-live]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Promised benefit</th><th>Target</th><th>Actual</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td><td>Realized / In progress / Blocked / Not realistic</td><td>...</td></tr></tbody></table></div>
+<p>### Overall [Honest summary — did this investment deliver what it promised] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Skipping this review entirely once a project goes live — the single most common failure; benefit tracking usually stops the moment delivery is declared "done."</li><li>Vague original benefit statements that can't actually be measured against real data.</li><li>Treating every unrealized benefit the same, instead of distinguishing in-progress from blocked from never-realistic.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Actual performance is measured with real data, not impression</li><li class="check"><span class="box" aria-hidden="true"></span>Unrealized benefits are categorized (in progress / blocked / not realistic), not lumped together</li><li class="check"><span class="box" aria-hidden="true"></span>Each gap has a stated action — close it or formally write it off</li><li class="check"><span class="box" aria-hidden="true"></span>The report is honest even where the finding is unfavorable</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative booking-platform review, 6 months post-launch</h3>
+<div class="table-wrap"><table><thead><tr><th>Promised benefit</th><th>Target</th><th>Actual</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>Reduce booking-error rework by 3 hrs/week</td><td>3 hrs/week saved</td><td>~2.5 hrs/week saved</td><td>Realized (close to target)</td><td>None needed</td></tr><tr><td>Reduce missed/duplicate bookings by 1% of revenue</td><td>1% of annual revenue</td><td>Data not being tracked consistently</td><td>Blocked</td><td>Set up a monthly error-tracking report before this can be measured</td></tr><tr><td>Improve staff satisfaction with the booking process</td><td>Qualitative — no numeric target set originally</td><td>Anecdotally positive but never measured</td><td>Not realistic to assess as stated</td><td>For future business cases: set a measurable proxy (e.g. a quarterly quick survey) for qualitative benefits, not just an assumption they'll be felt</td></tr></tbody></table></div>
+<p>### Overall The platform delivered its main quantified benefit close to target. One promised benefit can't yet be verified because the measurement itself was never set up — that's a process gap to fix now, not evidence the benefit didn't happen. The qualitative benefit was stated too vaguely to review at all, which is itself the most useful finding for how the next business case should be written.</p></div>
+        </div>
+      </details>
       </div>
     </details>
 
-    <details class="category" id="research-intelligence">
-      <summary class="category-title">Research & intelligence<span class="category-count">3</span></summary>
+    <details class="category" id="project-methodologies" style="--cat-color:#a6790f">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="4.5" cy="5" r="2"/><circle cx="15.5" cy="5" r="2"/><circle cx="10" cy="15.5" r="2"/><path d="M6.3 6.4l2.8 6.6M13.7 6.4l-2.8 6.6"/></svg>
+        Project methodologies<span class="category-count">6</span>
+        <a class="dl-link dl-link-cat" href="dl/project-methodologies.zip" download title="Download all 6 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 6</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="competitor research brief produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. use when the user wants deep research on one specific competitor, asks &quot;what do we know about [company],&quot; or needs a research brief before a strategic decision.">
+      <details class="skill" id="project-methodology-selector" data-search="project methodology selector helps choose which delivery methodology — prince2, pmbok, agile/scrum, waterfall, or a hybrid — actually fits a specific project&#x27;s characteristics, instead of defaulting to whichever one the team already knows. use when starting a new project and unsure which methodology to use, comparing prince2 vs agile vs waterfall, or needing a justified case for a delivery approach." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">Project Methodology Selector</span>
+          <span class="skill-desc">Helps choose which delivery methodology — PRINCE2, PMBOK, Agile/Scrum, Waterfall, or a hybrid — actually fits a specific project's characteristics, instead of defaulting to whichever one the team already knows. Use when starting a new project and unsure which methodology to use, comparing PRINCE2 vs Agile vs Waterfall, or needing a justified case for a delivery approach.</span>
+          <a class="dl-link" href="dl/project-methodology-selector.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Project Methodology Selector</h1>
+<h2>When to use this</h2>
+<p>A project is starting (or an existing one feels like a poor fit for its current approach) and the user wants a reasoned recommendation on delivery methodology, not just a default or a preference.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The methodology is already fixed by contract, regulation, or organisational mandate — there's no real decision to make; go straight to the relevant structuring skill (<code>prince2-project-structuring</code>, <code>pmbok-project-planning</code>, <code>agile-delivery-setup</code>, <code>waterfall-project-plan</code>).</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Characterize the project honestly against the factors that actually drive fit</strong> — not against which methodology is most familiar or fashionable: - <strong>Requirement stability</strong> — stable and well understood → Waterfall/ PRINCE2-friendly; expected to evolve → Agile-friendly - <strong>Need for early/frequent stakeholder feedback</strong> — high → Agile - <strong>Governance/compliance requirements</strong> — formal stage-gates or a contractual/regulatory requirement → PRINCE2/PMBOK-friendly - <strong>Team experience</strong> — a team's first-ever attempt at an unfamiliar methodology on something high-stakes is a real risk factor, not just a preference to override - <strong>Organisational context</strong> — does this project need to interface with a wider program that already runs a particular way</li><li><strong>Don't force a binary choice.</strong> Most real projects are hybrids — a PRINCE2 or PMBOK governance wrapper around Agile delivery sprints is common and often the genuinely correct answer, not a compromise to apologize for.</li><li><strong>State the recommendation with the reasoning explicit</strong>, tied to the specific factors above — a recommendation without stated reasoning is just an opinion.</li><li><strong>Name what has to remain true for the recommendation to hold</strong>, and flag it if that assumption changes later (e.g. "this assumes requirements stay stable through Q2 — if that changes, revisit toward a more iterative approach").</li></ol>
+<h2>Output format</h2>
+<pre><code>## Methodology recommendation: [project]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Factor</th><th>This project's situation</th><th>Implication</th></tr></thead><tbody></tbody></table></div>
+<p>### Recommendation [Methodology or hybrid, with the reasoning stated explicitly]</p>
+<p>### Holds as long as [The assumption(s) this recommendation depends on] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Choosing a methodology because it's fashionable or because leadership has a preference, rather than because it fits the project.</li><li>Treating "hybrid" as an embarrassing compromise instead of what it often genuinely is: the correct answer for a mixed-characteristic project.</li><li>No stated reasoning — a recommendation that's really just an opinion dressed up as analysis.</li><li>Not naming the assumption the recommendation depends on, so a changed situation goes unnoticed.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Each factor is assessed against this specific project, not generic methodology preferences</li><li class="check"><span class="box" aria-hidden="true"></span>The recommendation states its reasoning explicitly</li><li class="check"><span class="box" aria-hidden="true"></span>A hybrid approach is considered seriously, not dismissed by default</li><li class="check"><span class="box" aria-hidden="true"></span>The assumption the recommendation depends on is named</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic internal tools replacement project</h3>
+<div class="table-wrap"><table><thead><tr><th>Factor</th><th>This project's situation</th><th>Implication</th></tr></thead><tbody><tr><td>Requirement stability</td><td>Core workflow is well understood, but the UI/UX approach is genuinely open</td><td>Mixed — leans hybrid</td></tr><tr><td>Stakeholder feedback need</td><td>High — end users have strong, varied opinions on workflow</td><td>Favours Agile for the UI/UX layer</td></tr><tr><td>Governance/compliance</td><td>Program office requires stage-gated budget approval</td><td>Favours a PRINCE2/PMBOK wrapper for governance</td></tr><tr><td>Team experience</td><td>Team has delivered Agile projects before; no PRINCE2 experience but PM office will run governance</td><td>Low risk either way</td></tr><tr><td>Organisational context</td><td>Sits under a wider program that reports via stage gates</td><td>Reinforces the governance wrapper</td></tr></tbody></table></div>
+<p>### Recommendation A hybrid: PRINCE2-style stage gates and a live business case for program-level governance and budget approval, wrapping Agile/Scrum sprints for the actual UI/UX delivery work. This isn't a compromise — it matches both the governance requirement (fixed) and the genuine requirement uncertainty in the delivery detail (not fixed).</p>
+<p>### Holds as long as The program office's stage-gate requirement doesn't change, and the UI/UX scope stays the primary source of requirement uncertainty — if a major compliance requirement later fixes the UI/UX scope too, the case for keeping Agile at the delivery layer weakens and a fuller Waterfall/ PRINCE2 approach could be reconsidered.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="prince2-project-structuring" data-search="prince2 project structuring structures a project using prince2 (projects in controlled environments) — a live business case, clearly separated governance roles, stages with defined tolerances, and exception-based reporting. use when the user needs a prince2-structured project plan, mentions prince2, or needs formal stage-gated governance with tolerances (common in uk/anz public-sector work)." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">PRINCE2 Project Structuring</span>
+          <span class="skill-desc">Structures a project using PRINCE2 (Projects IN Controlled Environments) — a live business case, clearly separated governance roles, stages with defined tolerances, and exception-based reporting. Use when the user needs a PRINCE2-structured project plan, mentions PRINCE2, or needs formal stage-gated governance with tolerances (common in UK/ANZ public-sector work).</span>
+          <a class="dl-link" href="dl/prince2-project-structuring.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>PRINCE2 Project Structuring</h1>
+<h2>When to use this</h2>
+<p>An organisation uses or requires PRINCE2 governance (common in UK/ANZ public sector and formal enterprise programs), and the user needs the project structured that way — business case, roles, stages, tolerances.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A small, informal project — full PRINCE2 ceremony is bureaucratic overkill for it.</li><li>Unsure PRINCE2 is even the right fit — use <code>project-methodology-selector</code> first.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Establish the Business Case and keep it alive.</strong> PRINCE2's defining principle is "continued business justification" — the business case isn't written once and filed; it's checked at every stage boundary, and the project is stopped if it no longer holds up.</li><li><strong>Define the organisation as accountabilities, not job titles.</strong> The Project Board (Executive, Senior User, Senior Supplier), Project Manager, and Team Manager are roles — on a small project one person may hold several, but keep the accountabilities distinct so it's clear who owns what decision.</li><li><strong>Break the project into Management Stages, each with tolerances</strong> (time, cost, scope, risk, quality, benefit) set by the Board. This is "management by exception": the Project Manager runs the stage day to day and only escalates to the Board if a tolerance is breached — the Board doesn't need to be in every decision.</li><li><strong>Apply the relevant themes</strong>, not all seven mechanically: Business Case, Organization, Quality, Plans, Risk, Change, Progress. Use only what the project's size and risk actually warrant.</li><li><strong>Plan products before activities</strong> (Product-Based Planning) — define what deliverables/products are needed and their quality criteria first, then the activities to produce them, rather than jumping straight to a task list.</li><li><strong>Set reporting rules explicitly</strong>: routine Highlight Reports on a cadence, and an Exception Report only when a tolerance is actually breached — this is what keeps the Board's time focused on real decisions, not status theatre.</li></ol>
+<h2>Output format</h2>
+<pre><code>## PRINCE2 structure: [project]</code></pre>
+<p><strong>Business case (one line)</strong>: [justification]</p>
+<p>### Organisation | Role | Held by | Accountable for | |---|---|---|</p>
+<p>### Stage plan | Stage | Deliverables | Time tolerance | Cost tolerance | Escalation trigger | |---|---|---|---|---|</p>
+<p>### Reporting Highlight report: [cadence]. Exception report: [trigger conditions]. ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Full PRINCE2 ceremony applied to a project too small to need it.</li><li>Treating roles as literal job titles rather than accountabilities that can be combined on a small project.</li><li>Losing "continued business justification" — never re-checking the business case as the project evolves.</li><li>No real tolerance discipline, so everything escalates to the Board regardless (defeats management by exception).</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Business case has a re-check point at every stage boundary</li><li class="check"><span class="box" aria-hidden="true"></span>Roles are accountabilities, explicitly assigned, even if combined</li><li class="check"><span class="box" aria-hidden="true"></span>Every stage has stated tolerances and an escalation trigger</li><li class="check"><span class="box" aria-hidden="true"></span>Products/deliverables are planned before the activity list</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic system-replacement project</h3>
+<p>### Business case (one line) Replace the legacy finance system to eliminate a 15,000-transaction processing backlog and restore reliable financial reporting.</p>
+<p>### Organisation | Role | Held by | Accountable for | |---|---|---| | Executive | CFO | Overall business justification, final go/no-go | | Senior User | Finance Operations Lead | Requirements represent real user needs | | Senior Supplier | IT Delivery Lead | Solution is technically sound and deliverable | | Project Manager | Program Manager | Day-to-day delivery within tolerances |</p>
+<p>### Stage plan | Stage | Deliverables | Time tolerance | Cost tolerance | Escalation trigger | |---|---|---|---|---| | Stage 1: Stabilise | Critical defects resolved, backlog reduced 50% | ±1 week | ±5% | Backlog reduction under 30% at midpoint | | Stage 2: Remediate | Core process fixes live | ±2 weeks | ±10% | Any Sev-1 defect introduced | | Stage 3: Optimise | Reporting reliability restored, BAU handover | ±1 week | ±5% | Handover criteria not met |</p>
+<p>### Reporting Highlight report: fortnightly to the Board, one page, RAG status per tolerance dimension. Exception report: raised immediately if any stage tolerance is breached, with options and a recommendation — not just a problem statement.</p>
+<p>Note the escalation triggers are specific and measurable ("backlog reduction under 30% at midpoint"), not vague ("if things go wrong") — that specificity is what makes management-by-exception actually work rather than defaulting to constant escalation.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="pmbok-project-planning" data-search="pmbok project planning plans a project using the pmbok framework&#x27;s knowledge areas (scope, schedule, cost, quality, risk, resources, communications, procurement, stakeholders) and process groups — the pmi/us-style counterpart to prince2. use when the user needs a pmbok-structured project plan, mentions pmi/pmbok, or wants a knowledge-area-based planning approach." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">PMBOK Project Planning</span>
+          <span class="skill-desc">Plans a project using the PMBOK framework's knowledge areas (scope, schedule, cost, quality, risk, resources, communications, procurement, stakeholders) and process groups — the PMI/US-style counterpart to PRINCE2. Use when the user needs a PMBOK-structured project plan, mentions PMI/PMBOK, or wants a knowledge-area-based planning approach.</span>
+          <a class="dl-link" href="dl/pmbok-project-planning.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>PMBOK Project Planning</h1>
+<h2>When to use this</h2>
+<p>The organisation follows or references PMI/PMBOK conventions (common in US-oriented and many corporate PMOs), and the user needs a plan structured around its knowledge areas and process groups.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The organisation runs PRINCE2 instead — use <code>prince2-project-structuring</code>, which is stage/tolerance-based rather than knowledge-area-based, even though the two overlap conceptually.</li><li>Unsure PMBOK is the right fit — use <code>project-methodology-selector</code>.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Identify which process group the project is in</strong> — Initiating, Planning, Executing, Monitoring &amp; Controlling, or Closing — since PMBOK's guidance and the right level of detail differ by phase.</li><li><strong>Apply the knowledge areas proportionally to the project's size</strong>, not as a rigid checklist to fill out regardless of relevance: - <strong>Scope</strong> — what's in/out, decomposed into a Work Breakdown Structure (WBS) - <strong>Schedule</strong> — milestones and dependencies - <strong>Cost</strong> — budget baseline - <strong>Quality</strong> — acceptance criteria for deliverables - <strong>Risk</strong> — cross-reference <code>raid-log-builder</code> rather than duplicating a separate risk process - <strong>Resources</strong> — who and what's needed - <strong>Communications</strong> — cross-reference <code>communication-engagement-plan</code> - <strong>Procurement</strong> — only if external vendors/contracts are involved - <strong>Stakeholders</strong> — cross-reference <code>stakeholder-influence-map</code></li><li><strong>Build the Work Breakdown Structure first</strong> — decompose deliverables into manageable work packages before building a task list or schedule. This is PMBOK's core planning discipline: define what must exist, then how to produce it — the same deliverable-first logic as PRINCE2's Product-Based Planning, phrased differently.</li><li><strong>Cross-reference other skills in this library rather than duplicating them</strong> — PMBOK's breadth means several knowledge areas map directly onto dedicated skills already in this library; use those for depth and keep this skill's output as the overall integrating plan.</li></ol>
+<h2>Output format</h2>
+<pre><code>## PMBOK plan: [project]
+Process group: [Initiating/Planning/Executing/M&amp;C/Closing]</code></pre>
+<p>### Work Breakdown Structure (top level) 1. [Deliverable] 1.1 [Work package] ...</p>
+<p>### Knowledge area summary | Area | Plan / cross-reference | |---|---| | Scope | ... | | Schedule | ... | | Cost | ... | | Quality | ... | | Risk | See RAID log | | Resources | ... | | Communications | See communication &amp; engagement plan | | Procurement | ... (or "not applicable") | | Stakeholders | See stakeholder influence map | ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Treating all nine knowledge areas as equally weighty regardless of project size — a small project needs a light touch on most of them.</li><li>Skipping the WBS and jumping straight to a task list, losing the deliverable-first framing that makes scope actually controllable.</li><li>Duplicating a separate risk/comms/stakeholder process instead of cross-referencing the dedicated skills already built for that depth.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>WBS exists and is deliverable-based, not just a task list</li><li class="check"><span class="box" aria-hidden="true"></span>Each knowledge area is addressed proportionally to project size</li><li class="check"><span class="box" aria-hidden="true"></span>Risk, communications, and stakeholder detail cross-reference the dedicated skills rather than being duplicated shallowly here</li><li class="check"><span class="box" aria-hidden="true"></span>Process group is stated, since it changes what's actually needed</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic office relocation project</h3>
+<p>### Work Breakdown Structure (top level) 1. New site fit-out 1.1 Lease/legal finalised 1.2 Interior design and build 2. IT/systems migration 2.1 Network and hardware moved 2.2 Systems tested at new site 3. Staff transition 3.1 Communications to staff (see communication &amp; engagement plan) 3.2 Move-day logistics</p>
+<p>### Knowledge area summary | Area | Plan / cross-reference | |---|---| | Scope | This site only; excludes any headcount or org changes | | Schedule | Move-day fixed by lease end date; work backward from it | | Cost | Fixed budget agreed with finance; fit-out is the largest line | | Quality | New site must pass a pre-move-in inspection checklist | | Risk | See RAID log — lease/legal delay is the top risk | | Resources | Facilities lead, IT lead, one staff-comms owner | | Communications | See communication &amp; engagement plan — staff need adequate notice | | Procurement | Fit-out contractor, IT/network vendor | | Stakeholders | See stakeholder influence map — staff, landlord, IT vendor |</p>
+<p>This example shows PMBOK's breadth used correctly: most of the actual depth (risk, comms, stakeholders) lives in the dedicated skills, and this plan stays the short integrating summary rather than re-deriving that detail from scratch.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="agile-delivery-setup" data-search="agile delivery setup sets up an agile/scrum delivery structure — a groomed backlog, sprint cadence, ceremonies (standup, planning, review, retro), clearly separated roles, and an enforced definition of done. use when the user needs to set up agile/scrum delivery, structure a backlog and sprints, or asks about agile ceremonies and roles." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">Agile Delivery Setup</span>
+          <span class="skill-desc">Sets up an Agile/Scrum delivery structure — a groomed backlog, sprint cadence, ceremonies (standup, planning, review, retro), clearly separated roles, and an enforced Definition of Done. Use when the user needs to set up Agile/Scrum delivery, structure a backlog and sprints, or asks about Agile ceremonies and roles.</span>
+          <a class="dl-link" href="dl/agile-delivery-setup.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Agile / Scrum Delivery Setup</h1>
+<h2>When to use this</h2>
+<p>A team is delivering work iteratively — requirements are expected to evolve, or early/frequent feedback matters more than a fixed upfront plan — and needs its Agile/Scrum structure actually set up properly, not just declared.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Requirements are genuinely stable and fixed-scope delivery fits better — use <code>waterfall-project-plan</code>, or check <code>project-methodology-selector</code> first if unsure.</li><li>The team already has a working setup and just needs one ceremony designed — <code>workshop-agenda-designer</code> may be the more precise tool for a single session like sprint planning.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm Agile genuinely fits</strong> before setting it up — changing requirements or a real need for frequent stakeholder feedback are the actual justifications, not "Agile is more modern." If unsure, use <code>project-methodology-selector</code>.</li><li><strong>Define roles distinctly and don't blur them:</strong> - <strong>Product Owner</strong> — owns and prioritizes the backlog, makes the "what and why" calls - <strong>Scrum Master</strong> — facilitates, removes blockers, protects the team's process; not a manager assigning tasks - <strong>Delivery team</strong> — self-organizes on *how* the work gets done</li><li><strong>Set up the backlog as a prioritized, continuously groomed list of user-facing items</strong> — not a dumping ground of tasks. Define a Definition of Ready (what makes an item pull-able into a sprint).</li><li><strong>Define sprint cadence and the four core ceremonies:</strong> - <strong>Planning</strong> — what the team commits to this sprint, and roughly how - <strong>Daily standup</strong> — brief peer sync (what's done, what's next, what's blocked) — not a status report upward to a manager - <strong>Review</strong> — demo real work to stakeholders, gather actual feedback - <strong>Retro</strong> — the team reflects on how it worked (for a deeper, less-frequent version, see <code>project-retrospective</code>)</li><li><strong>Define a Definition of Done and actually enforce it</strong> — "done" needs to mean the same thing every sprint (tested, reviewed, meets acceptance criteria), not a shifting, informal standard.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Agile setup: [team/project]</code></pre>
+<p>### Roles | Role | Held by | Owns | |---|---|---|</p>
+<p>### Backlog Definition of Ready: [criteria] Grooming cadence: [...]</p>
+<p>### Sprint cadence Sprint length: [...]</p>
+<div class="table-wrap"><table><thead><tr><th>Ceremony</th><th>Purpose</th><th>Cadence</th><th>Attendees</th></tr></thead><tbody></tbody></table></div>
+<p>### Definition of Done [Explicit, checkable criteria] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>"Cargo cult Agile" — ceremonies performed on schedule without the underlying empowerment or iteration actually happening.</li><li>Product Owner and Scrum Master roles collapsed into one overloaded person on a team large enough to need both distinct.</li><li>A backlog that's really an undifferentiated task list, with no prioritization discipline.</li><li>Standups that turn into status meetings for a manager rather than peer coordination.</li><li>A Definition of Done that exists on paper but isn't actually enforced sprint to sprint.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Roles are distinct, not blurred into one person unnecessarily</li><li class="check"><span class="box" aria-hidden="true"></span>Backlog has a real Definition of Ready, not just a list</li><li class="check"><span class="box" aria-hidden="true"></span>All four ceremonies have a stated purpose, not just a calendar slot</li><li class="check"><span class="box" aria-hidden="true"></span>Definition of Done is specific and actually enforced</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic small product team</h3>
+<p>### Roles | Role | Held by | Owns | |---|---|---| | Product Owner | Product lead | Backlog priority, acceptance of finished work | | Scrum Master | Delivery lead | Ceremony facilitation, removing blockers | | Delivery team | 4 engineers | How the work gets built |</p>
+<p>### Backlog Definition of Ready: user story has a clear acceptance criterion, no unresolved dependency on another team, and is estimated by the team. Grooming cadence: weekly, 30 minutes, Product Owner + team.</p>
+<p>### Sprint cadence Sprint length: 2 weeks.</p>
+<div class="table-wrap"><table><thead><tr><th>Ceremony</th><th>Purpose</th><th>Cadence</th><th>Attendees</th></tr></thead><tbody><tr><td>Planning</td><td>Commit to sprint scope</td><td>Start of sprint, 1hr</td><td>Full team</td></tr><tr><td>Standup</td><td>Sync on progress/blockers</td><td>Daily, 10 min</td><td>Delivery team + SM</td></tr><tr><td>Review</td><td>Demo to stakeholders, gather feedback</td><td>End of sprint, 45 min</td><td>Team + stakeholders</td></tr><tr><td>Retro</td><td>Reflect on how the team worked</td><td>End of sprint, 30 min</td><td>Delivery team + SM</td></tr></tbody></table></div>
+<p>### Definition of Done Code reviewed by one other engineer, automated tests passing, deployed to staging, and accepted by the Product Owner against the story's stated acceptance criteria — not just "code complete."</p>
+<p>Note the standup purpose is written as peer sync, not status reporting — that framing is what keeps it from drifting into a manager check-in over time, which is one of the most common ways Agile ceremonies decay.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="waterfall-project-plan" data-search="waterfall project plan structures a traditional sequential (waterfall) project plan — phases with clear deliverables, gate reviews between phases, formal sign-off, and change control — for projects with stable, well-understood requirements. use when the user needs a waterfall or phase-gate project plan, or is planning a project with fixed, well-defined requirements upfront." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">Waterfall Project Plan</span>
+          <span class="skill-desc">Structures a traditional sequential (Waterfall) project plan — phases with clear deliverables, gate reviews between phases, formal sign-off, and change control — for projects with stable, well-understood requirements. Use when the user needs a Waterfall or phase-gate project plan, or is planning a project with fixed, well-defined requirements upfront.</span>
+          <a class="dl-link" href="dl/waterfall-project-plan.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Waterfall Project Plan</h1>
+<h2>When to use this</h2>
+<p>Requirements are genuinely stable and well understood upfront, there's low need for iterative feedback, or the project is contractually or regulatorily required to follow a phase-gate structure.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Requirements are expected to evolve, or early feedback matters — <code>agile-delivery-setup</code> fits better.</li><li>Waterfall is being chosen by default/habit rather than genuine fit — check <code>project-methodology-selector</code> first.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Confirm the fit honestly</strong> — Waterfall's cost is that late-discovered changes are expensive; it only makes sense when requirements are actually stable enough that this risk is low.</li><li><strong>Define phases explicitly</strong> (commonly Requirements → Design → Build → Test → Deploy, adapted to context), each with a clear deliverable and a named owner.</li><li><strong>Define gate criteria for every phase transition</strong> — what must be true and formally signed off before moving to the next phase. This gate discipline is Waterfall's actual strength; without it, "doing things in order" provides none of the model's real benefit.</li><li><strong>Build in formal change control from the start</strong> — since late changes are expensive in this model, an explicit process (raise, assess impact, approve/reject, re-baseline if approved) prevents scope creeping in informally mid-phase, which is the most common way Waterfall projects go over budget and schedule.</li><li><strong>Sequence with explicit dependencies</strong> between phases, and estimate realistically — Waterfall's visibility only helps if the plan itself is honest about how long things take.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Waterfall plan: [project]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Phase</th><th>Deliverable</th><th>Owner</th><th>Gate criteria (to exit this phase)</th><th>Duration</th></tr></thead><tbody></tbody></table></div>
+<p>### Change control [How a proposed change is raised, assessed, and approved/rejected — and what happens to the schedule/budget if approved] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>No real gate discipline — phases blur together with no formal sign-off, losing the model's main advantage.</li><li>Applying Waterfall to genuinely uncertain requirements, forcing premature commitment and expensive rework later.</li><li>No change control process, letting scope creep in informally within a phase instead of through a visible, assessed process.</li><li>Optimistic phase durations with no acknowledgment of dependency risk between phases.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Every phase has explicit gate criteria, not just a deliverable description</li><li class="check"><span class="box" aria-hidden="true"></span>A formal change control process is defined before it's needed</li><li class="check"><span class="box" aria-hidden="true"></span>Dependencies between phases are made explicit</li><li class="check"><span class="box" aria-hidden="true"></span>The choice of Waterfall itself is justified by requirement stability, not just habit</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic regulatory reporting system build</h3>
+<div class="table-wrap"><table><thead><tr><th>Phase</th><th>Deliverable</th><th>Owner</th><th>Gate criteria</th><th>Duration</th></tr></thead><tbody><tr><td>Requirements</td><td>Signed-off requirements document</td><td>Business analyst</td><td>Regulator's mandatory fields confirmed and signed off by compliance</td><td>3 weeks</td></tr><tr><td>Design</td><td>Approved technical design</td><td>Solution architect</td><td>Design reviewed against every signed-off requirement, no open questions</td><td>4 weeks</td></tr><tr><td>Build</td><td>Working system in test environment</td><td>Dev lead</td><td>All designed functionality implemented, unit tested</td><td>8 weeks</td></tr><tr><td>Test</td><td>Signed-off test results</td><td>QA lead</td><td>All acceptance criteria pass, no unresolved Sev-1/2 defects</td><td>3 weeks</td></tr><tr><td>Deploy</td><td>Live in production</td><td>Dev lead</td><td>Compliance sign-off on go-live readiness</td><td>1 week</td></tr></tbody></table></div>
+<p>### Change control Any proposed change after Requirements sign-off is logged, impact- assessed against schedule/budget/regulatory risk by the project manager and business analyst jointly, and requires Executive approval before being incorporated — with the schedule/budget re-baselined if approved, not silently absorbed.</p>
+<p>This is exactly the kind of project Waterfall genuinely fits: regulatory requirements are externally fixed and well understood upfront, and formal sign-off at each phase is often a compliance necessity, not just a process preference.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="babok-requirements-elicitation" data-search="babok requirements elicitation elicits and documents business requirements using babok (business analysis body of knowledge) discipline — targeted stakeholder analysis, elicitation techniques matched to the situation, structured and traceable requirements documentation. use when the user needs to gather or document business requirements, run a requirements elicitation process, or mentions babok or business analysis." style="--cat-color:#a6790f">
+        <summary>
+          <span class="skill-name">BABOK Requirements Elicitation</span>
+          <span class="skill-desc">Elicits and documents business requirements using BABOK (Business Analysis Body of Knowledge) discipline — targeted stakeholder analysis, elicitation techniques matched to the situation, structured and traceable requirements documentation. Use when the user needs to gather or document business requirements, run a requirements elicitation process, or mentions BABOK or business analysis.</span>
+          <a class="dl-link" href="dl/babok-requirements-elicitation.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>BABOK Requirements Elicitation</h1>
+<h2>When to use this</h2>
+<p>A project or initiative needs its business requirements properly gathered and documented — before design or build starts, or when existing requirements feel too vague to build from.</p>
+<h2>When NOT to use this</h2>
+<ul><li>Requirements are already clear, confirmed, and traceable — this skill's discipline is for the elicitation and documentation process itself, not for re-doing work already done well.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Identify who actually holds the requirements knowledge</strong> — not just who's most senior or available. Use <code>stakeholder-influence-map</code> if the stakeholder landscape is complex; the person who does the work daily often knows more relevant detail than their manager.</li><li><strong>Pick elicitation techniques matched to the situation, not one default technique for everything:</strong> - <strong>Interviews</strong> — deep, one-on-one, good for nuance and sensitive topics - <strong>Workshops</strong> — good for surfacing disagreement and building shared understanding fast across multiple stakeholders (see <code>workshop-agenda-designer</code>) - <strong>Document analysis</strong> — existing process docs, systems, policies - <strong>Observation</strong> — watching the actual work happen, not just asking about it; often surfaces the gap between stated process and real process</li><li><strong>Distinguish requirement types</strong> — conflating them produces documents that are either too vague to build from or too detailed too early: - <strong>Business requirements</strong> — the why (business objective) - <strong>Stakeholder requirements</strong> — what specific groups need - <strong>Solution requirements</strong> — functional/non-functional detail (the how, and only once the what is clear)</li><li><strong>Document requirements so each one is testable and traceable</strong> back to a business objective — a requirement that can't be verified or traced isn't finished yet.</li><li><strong>Validate back with the source stakeholder</strong> before treating a requirement as final — an unconfirmed requirement is a common source of later disputes ("that's not what I meant").</li></ol>
+<h2>Output format</h2>
+<pre><code>## Requirements register: [project]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Requirement</th><th>Type</th><th>Source stakeholder</th><th>Traced to objective</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+<p>### Elicitation log | Technique | Used with | Date | Key findings | |---|---|---|---| ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Eliciting only from the most senior/available person instead of who actually holds the relevant knowledge.</li><li>One elicitation technique used for everything regardless of fit (e.g. only interviews, missing what observation would reveal).</li><li>Requirements written too vague to test, or too solution-prescriptive before the underlying need is even confirmed.</li><li>No traceability back to a business objective, and no validation loop back to the source stakeholder.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Elicitation sources include people who do the actual work, not just management</li><li class="check"><span class="box" aria-hidden="true"></span>Technique choice is matched to the situation, not defaulted</li><li class="check"><span class="box" aria-hidden="true"></span>Business / stakeholder / solution requirement types are kept distinct</li><li class="check"><span class="box" aria-hidden="true"></span>Every requirement is traceable and has been validated with its source</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic customer portal requirements</h3>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Requirement</th><th>Type</th><th>Source stakeholder</th><th>Traced to objective</th><th>Status</th></tr></thead><tbody><tr><td>BR-01</td><td>Reduce average support call volume by 20%</td><td>Business</td><td>Head of Support</td><td>Reduce cost-to-serve</td><td>Confirmed</td></tr><tr><td>SR-01</td><td>Customers must be able to check order status without calling</td><td>Stakeholder</td><td>Support team (frontline)</td><td>BR-01</td><td>Confirmed</td></tr><tr><td>FR-01</td><td>Portal displays real-time order status pulled from the fulfillment system</td><td>Solution</td><td>IT lead (via document analysis of fulfillment system API)</td><td>SR-01</td><td>Draft — pending validation with fulfillment team</td></tr></tbody></table></div>
+<p>### Elicitation log | Technique | Used with | Date | Key findings | |---|---|---|---| | Interview | Head of Support | [date] | Confirmed the actual driver is order-status calls, not billing calls as initially assumed | | Observation | Frontline support agent (shadowed for 2 hours) | [date] | Most order-status calls happen because customers can't find the info themselves, not because the info doesn't exist online — refines the solution requirement | | Document analysis | Fulfillment system API docs | [date] | Real-time status is technically available; confirms FR-01 is feasible |</p>
+<p>Note how the observation session changed the solution direction: the initial assumption (build a new status page) was refined once shadowing revealed customers couldn't *find* existing information rather than it not existing — exactly the kind of gap between stated and observed process this technique is meant to catch.</p></div>
+        </div>
+      </details>
+      </div>
+    </details>
+
+    <details class="category" id="research-intelligence" style="--cat-color:#6b4a8a">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8.3" cy="8.3" r="5.3"/><path d="M16.2 16.2l-3.7-3.7"/></svg>
+        Research & intelligence<span class="category-count">5</span>
+        <a class="dl-link dl-link-cat" href="dl/research-intelligence.zip" download title="Download all 5 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 5</a>
+      </summary>
+      <div class="skill-list">
+      <details class="skill" id="competitor-research-brief" data-search="competitor research brief produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. use when the user wants deep research on one specific competitor, asks &quot;what do we know about [company],&quot; or needs a research brief before a strategic decision." style="--cat-color:#6b4a8a">
         <summary>
           <span class="skill-name">Competitor Research Brief</span>
           <span class="skill-desc">Produces a structured secondary-research brief on a single named competitor, with strict fact/estimate/assumption labeling and sourcing. Use when the user wants deep research on one specific competitor, asks "what do we know about [company]," or needs a research brief before a strategic decision.</span>
+          <a class="dl-link" href="dl/competitor-research-brief.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Competitor Research Brief</h1>
@@ -886,10 +1547,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="discovery interview kit generates a discovery interview guide (for customers, clients, or stakeholders) before interviews happen, and synthesizes raw notes or transcripts into themes afterward. use when the user needs an interview guide, customer/client discovery questions, or wants to synthesize interview notes into findings.">
+      <details class="skill" id="discovery-interview-kit" data-search="discovery interview kit generates a discovery interview guide (for customers, clients, or stakeholders) before interviews happen, and synthesizes raw notes or transcripts into themes afterward. use when the user needs an interview guide, customer/client discovery questions, or wants to synthesize interview notes into findings." style="--cat-color:#6b4a8a">
         <summary>
           <span class="skill-name">Discovery Interview Kit</span>
           <span class="skill-desc">Generates a discovery interview guide (for customers, clients, or stakeholders) before interviews happen, and synthesizes raw notes or transcripts into themes afterward. Use when the user needs an interview guide, customer/client discovery questions, or wants to synthesize interview notes into findings.</span>
+          <a class="dl-link" href="dl/discovery-interview-kit.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Discovery Interview Kit</h1>
@@ -925,10 +1587,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="benchmark comparator compares a business&#x27;s own metrics or offering against named, cited benchmarks instead of vague &quot;industry standard&quot; claims. use when the user asks how they compare to industry, whether a number is normal, or wants to benchmark performance/pricing against known reference points.">
+      <details class="skill" id="benchmark-comparator" data-search="benchmark comparator compares a business&#x27;s own metrics or offering against named, cited benchmarks instead of vague &quot;industry standard&quot; claims. use when the user asks how they compare to industry, whether a number is normal, or wants to benchmark performance/pricing against known reference points." style="--cat-color:#6b4a8a">
         <summary>
           <span class="skill-name">Benchmark Comparator</span>
           <span class="skill-desc">Compares a business's own metrics or offering against named, cited benchmarks instead of vague "industry standard" claims. Use when the user asks how they compare to industry, whether a number is normal, or wants to benchmark performance/pricing against known reference points.</span>
+          <a class="dl-link" href="dl/benchmark-comparator.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Benchmark Comparator</h1>
@@ -959,16 +1622,81 @@ Required output by end of session: [one sentence]</code></pre>
 <p>So what: not an urgent gap versus competitors as stated, but worth noting this compares to competitors' *stated commitments*, not their *actual* performance, which is unverifiable — so this benchmark is directional, not a precise ranking.</p></div>
         </div>
       </details>
+
+      <details class="skill" id="vendor-evaluation-scorecard" data-search="vendor evaluation scorecard builds a weighted scorecard for evaluating and comparing vendor or supplier proposals received, so a selection decision is defensible rather than a gut call. use when the user is choosing between vendor/supplier proposals, evaluating rfp responses received, or needs a vendor selection scorecard — distinct from writing a tender response." style="--cat-color:#6b4a8a">
+        <summary>
+          <span class="skill-name">Vendor Evaluation Scorecard</span>
+          <span class="skill-desc">Builds a weighted scorecard for evaluating and comparing vendor or supplier proposals received, so a selection decision is defensible rather than a gut call. Use when the user is choosing between vendor/supplier proposals, evaluating RFP responses received, or needs a vendor selection scorecard — distinct from writing a tender response.</span>
+          <a class="dl-link" href="dl/vendor-evaluation-scorecard.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Vendor Evaluation Scorecard</h1>
+<h2>When to use this</h2>
+<p>Multiple vendor or supplier proposals have come in and need to be compared and scored to support a selection decision — the receiving side of a tender process (compare to <code>government-tender-response</code>, which is about writing a response, not evaluating ones received).</p>
+<h2>When NOT to use this</h2>
+<ul><li>Only one vendor is genuinely in scope — a scorecard adds no comparative value; just assess the one option directly.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Define evaluation criteria before reviewing proposals in detail</strong>, if at all possible — deciding criteria after seeing proposals risks unconsciously reverse-engineering them to favor a preferred vendor.</li><li><strong>Weight criteria by actual importance to this specific decision</strong>, not equal weighting by default. Price matters more for a commodity purchase; track record and risk matter more for a high-stakes engagement.</li><li><strong>Score each vendor against each criterion with a brief written justification</strong> — not just a number. The justification is what makes the score defensible later and lets someone else understand the reasoning without re-reading every proposal.</li><li><strong>Calculate weighted totals, but treat them as an input to judgment, not an automatic decision.</strong> A close score gap, or a hard disqualifying factor (compliance failure, unacceptable risk), should be able to override a marginal total-score win.</li><li><strong>Document the decision rationale explicitly if the top-scored option isn't the one chosen</strong> — this is exactly the situation an audit or a stakeholder is most likely to question later.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Vendor scorecard: [decision]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Vendor A (score + note)</th><th>Vendor B (score + note)</th><th>...</th></tr></thead><tbody><tr><td>...</td><td>...%</td><td>...</td><td>...</td><td></td></tr><tr><td><strong>Weighted total</strong></td><td></td><td>...</td><td>...</td><td></td></tr></tbody></table></div>
+<p>### Recommendation [Pick, with rationale — especially explicit if it differs from the raw top score] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Setting criteria after seeing proposals, shaping them to justify a preferred pick.</li><li>Equal-weighting every criterion regardless of what actually matters for this decision.</li><li>Treating the weighted total as automatically final, with no room for judgment on disqualifying factors.</li><li>No written justification per score, making the scorecard unreviewable later.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Criteria and weights were set with real reasoning, ideally before or independent of reading proposals in full detail</li><li class="check"><span class="box" aria-hidden="true"></span>Every score has a brief justification, not just a number</li><li class="check"><span class="box" aria-hidden="true"></span>A disqualifying factor, if any, is called out explicitly</li><li class="check"><span class="box" aria-hidden="true"></span>If the recommendation isn't the top raw score, the reason is stated</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative, generic booking-platform vendor selection</h3>
+<div class="table-wrap"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Vendor A</th><th>Vendor B</th></tr></thead><tbody><tr><td>Cost (annual)</td><td>30%</td><td>8/10 — mid-tier pricing, no setup fee</td><td>6/10 — cheaper base fee but costly add-ons</td></tr><tr><td>Reliability / uptime track record</td><td>30%</td><td>9/10 — strong public uptime record, references checked</td><td>5/10 — limited track record, no references provided</td></tr><tr><td>Ease of use for staff</td><td>20%</td><td>7/10 — clean interface, positive trial feedback</td><td>8/10 — slightly more intuitive in trial</td></tr><tr><td>Integration with existing tools</td><td>20%</td><td>6/10 — requires a workaround for accounting sync</td><td>9/10 — native accounting integration</td></tr><tr><td><strong>Weighted total</strong></td><td></td><td><strong>7.5</strong></td><td><strong>6.7</strong></td></tr></tbody></table></div>
+<p>### Recommendation Vendor A, primarily on reliability — the 30%-weighted reliability criterion is the biggest score gap, and for a booking system, downtime risk has an outsized real-world cost (lost bookings) that a small integration convenience with Vendor B doesn't offset. Vendor B's stronger integration score would be reconsidered if Vendor A doesn't resolve the accounting-sync workaround within the first quarter.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="data-insights-summarizer" data-search="data insights summarizer turns a dataset, survey export, or kpi report into a structured summary of what actually matters — key findings, notable patterns, and what&#x27;s not clear from the data — instead of just restating numbers. use when the user has raw data (survey results, a kpi export, a spreadsheet) and wants it summarized into insights, not just described." style="--cat-color:#6b4a8a">
+        <summary>
+          <span class="skill-name">Data Insights Summarizer</span>
+          <span class="skill-desc">Turns a dataset, survey export, or KPI report into a structured summary of what actually matters — key findings, notable patterns, and what's not clear from the data — instead of just restating numbers. Use when the user has raw data (survey results, a KPI export, a spreadsheet) and wants it summarized into insights, not just described.</span>
+          <a class="dl-link" href="dl/data-insights-summarizer.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Data Insights Summarizer</h1>
+<h2>When to use this</h2>
+<p>There's raw data — survey results, a KPI export, a spreadsheet — and the user wants a summary that tells them what it means, not a column-by- column restatement of the numbers.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The data hasn't actually been provided or described yet — ask for it or the relevant figures rather than inventing plausible-sounding findings.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Separate "what the data shows" from "what it means"</strong> and label which is which throughout. The first is descriptive fact; the second is interpretation — both are useful, but blending them without labeling misleads a reader into treating a judgment call as a fact.</li><li><strong>Prioritize findings that would actually change a decision</strong>, not every statistically-notable blip. A 2% quarter-over-quarter wobble in a noisy metric usually isn't worth leading with.</li><li><strong>Look for what's surprising or contradicts an assumption.</strong> Routine, expected numbers are less valuable to highlight than something a reader wouldn't have predicted — that's usually where the real insight is.</li><li><strong>State sample size and data quality caveats explicitly.</strong> A finding from 12 survey responses carries different weight than one from 1,200 — say so rather than presenting both with equal confidence.</li><li><strong>State what the data does NOT tell you or leaves ambiguous.</strong> This is as valuable as what it does show, and is the part most often skipped — a reader left overconfident by an incomplete picture is a real risk.</li><li><strong>Lead with the "so what"</strong> (Pyramid Principle logic — see <code>executive-summary-writer</code>), not a walkthrough of every column in the order they appear in the spreadsheet.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Insights summary: [dataset/source]</code></pre>
+<p><strong>Headline finding</strong>: [the single most decision-relevant takeaway]</p>
+<p>### Supporting findings - [Finding] — Fact / Interpretation - [Finding] — Fact / Interpretation</p>
+<p>### Data quality notes [Sample size, known gaps, anything affecting how much weight to put on this]</p>
+<p>### What this doesn't tell us [Real limits/ambiguity — don't overclaim] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Restating raw numbers ("column X averaged Y") without interpreting what they mean for a decision.</li><li>Treating a small-sample or noisy finding with the same confidence as a robust, well-supported one.</li><li>Omitting what the data can't tell you, leaving the reader more confident in the conclusion than the data actually supports.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Fact and interpretation are labeled separately throughout</li><li class="check"><span class="box" aria-hidden="true"></span>Findings are prioritized by decision relevance, not just statistical notability</li><li class="check"><span class="box" aria-hidden="true"></span>Sample size / data quality is stated</li><li class="check"><span class="box" aria-hidden="true"></span>What the data does NOT show is stated explicitly, not omitted</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative post-trip customer survey (n=48)</h3>
+<p><strong>Headline finding</strong>: Guests rate the crew experience highly, but value-for-money perception is the clearest area holding back repeat bookings — not trip quality itself.</p>
+<p>### Supporting findings - Crew friendliness/knowledge rated 4.7/5 average — Fact (direct survey average, n=48) - Value-for-money rated 3.6/5, the lowest-scoring category — Fact - This gap likely reflects price positioning relative to a specific named competitor mentioned in 9 of 48 open-text responses — Interpretation (a pattern in open text, not a directly asked question) - Repeat-booking intent correlates more with the value-for-money score than with the overall trip-rating score in this sample — Interpretation (an observed pattern in a modest sample, not a proven causal driver)</p>
+<p>### Data quality notes n=48 is a moderate sample for a small operator, but too small to treat sub-group breakdowns (e.g. by trip type) as reliable — those would need a larger sample before acting on confidently.</p>
+<p>### What this doesn't tell us The survey doesn't establish *why* value-for-money scores are lower — whether it's actual price level, unclear pricing communication, or comparison to a specific competitor is inferred from open-text comments, not directly measured. A targeted follow-up question would be needed to confirm before making a pricing decision based on this alone.</p></div>
+        </div>
+      </details>
       </div>
     </details>
 
-    <details class="category" id="financial-operational">
-      <summary class="category-title">Financial & operational<span class="category-count">5</span></summary>
+    <details class="category" id="financial-operational" style="--cat-color:#2c3e5c">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4.5 16V9.5M10 16V4M15.5 16v-5" stroke-linecap="round"/></svg>
+        Financial & operational<span class="category-count">6</span>
+        <a class="dl-link dl-link-cat" href="dl/financial-operational.zip" download title="Download all 6 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 6</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="unit economics breakdown breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what&#x27;s actually profitable, separating fixed from variable costs. use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings.">
+      <details class="skill" id="unit-economics-breakdown" data-search="unit economics breakdown breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what&#x27;s actually profitable, separating fixed from variable costs. use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings." style="--cat-color:#2c3e5c">
         <summary>
           <span class="skill-name">Unit Economics Breakdown</span>
           <span class="skill-desc">Breaks revenue and cost down per unit (per trip, per guest, per customer, per order) to show what's actually profitable, separating fixed from variable costs. Use when the user wants to know if a specific offering, trip, or customer segment is actually profitable, or wants to compare profitability across offerings.</span>
+          <a class="dl-link" href="dl/unit-economics-breakdown.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Unit Economics Breakdown</h1>
@@ -1000,10 +1728,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="financial ratio reviewer sanity-checks basic financial statements and calculates/explains key ratios (liquidity, profitability, efficiency) in plain english, flagging anything that looks off. use when the user wants a financial statement reviewed, asks if their numbers look healthy, or wants financial ratios calculated and explained.">
+      <details class="skill" id="financial-ratio-reviewer" data-search="financial ratio reviewer sanity-checks basic financial statements and calculates/explains key ratios (liquidity, profitability, efficiency) in plain english, flagging anything that looks off. use when the user wants a financial statement reviewed, asks if their numbers look healthy, or wants financial ratios calculated and explained." style="--cat-color:#2c3e5c">
         <summary>
           <span class="skill-name">Financial Ratio Reviewer</span>
           <span class="skill-desc">Sanity-checks basic financial statements and calculates/explains key ratios (liquidity, profitability, efficiency) in plain English, flagging anything that looks off. Use when the user wants a financial statement reviewed, asks if their numbers look healthy, or wants financial ratios calculated and explained.</span>
+          <a class="dl-link" href="dl/financial-ratio-reviewer.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Financial Ratio Reviewer</h1>
@@ -1039,10 +1768,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="risk register builder builds a structured risk register — risk, likelihood, impact, mitigation, and owner — for a project, decision, or ongoing operation. use when the user asks what could go wrong, wants a risk assessment, or needs to document risks before a decision or launch.">
+      <details class="skill" id="risk-register-builder" data-search="risk register builder builds a structured risk register — risk, likelihood, impact, mitigation, and owner — for a project, decision, or ongoing operation. use when the user asks what could go wrong, wants a risk assessment, or needs to document risks before a decision or launch." style="--cat-color:#2c3e5c">
         <summary>
           <span class="skill-name">Risk Register Builder</span>
           <span class="skill-desc">Builds a structured risk register — risk, likelihood, impact, mitigation, and owner — for a project, decision, or ongoing operation. Use when the user asks what could go wrong, wants a risk assessment, or needs to document risks before a decision or launch.</span>
+          <a class="dl-link" href="dl/risk-register-builder.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Risk Register Builder</h1>
@@ -1071,10 +1801,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="raci matrix generator generates a raci (responsible, accountable, consulted, informed) matrix for a project or initiative, clarifying who does the work, who owns the outcome, who must be consulted, and who just needs to be kept informed. use when the user needs to clarify roles and responsibilities, asks &quot;who owns what,&quot; or a project has role confusion or duplicated/dropped work.">
+      <details class="skill" id="raci-matrix-generator" data-search="raci matrix generator generates a raci (responsible, accountable, consulted, informed) matrix for a project or initiative, clarifying who does the work, who owns the outcome, who must be consulted, and who just needs to be kept informed. use when the user needs to clarify roles and responsibilities, asks &quot;who owns what,&quot; or a project has role confusion or duplicated/dropped work." style="--cat-color:#2c3e5c">
         <summary>
           <span class="skill-name">RACI Matrix Generator</span>
           <span class="skill-desc">Generates a RACI (Responsible, Accountable, Consulted, Informed) matrix for a project or initiative, clarifying who does the work, who owns the outcome, who must be consulted, and who just needs to be kept informed. Use when the user needs to clarify roles and responsibilities, asks "who owns what," or a project has role confusion or duplicated/dropped work.</span>
+          <a class="dl-link" href="dl/raci-matrix-generator.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>RACI Matrix Generator</h1>
@@ -1099,10 +1830,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="process map simplifier documents a current operational process step by step, then proposes a simplified version by identifying redundant, delayed, or unnecessary steps. use when the user wants to map out how a process currently works, says a workflow is too slow or complicated, or wants to simplify an existing process.">
+      <details class="skill" id="process-map-simplifier" data-search="process map simplifier documents a current operational process step by step, then proposes a simplified version by identifying redundant, delayed, or unnecessary steps. use when the user wants to map out how a process currently works, says a workflow is too slow or complicated, or wants to simplify an existing process." style="--cat-color:#2c3e5c">
         <summary>
           <span class="skill-name">Process Map Simplifier</span>
           <span class="skill-desc">Documents a current operational process step by step, then proposes a simplified version by identifying redundant, delayed, or unnecessary steps. Use when the user wants to map out how a process currently works, says a workflow is too slow or complicated, or wants to simplify an existing process.</span>
+          <a class="dl-link" href="dl/process-map-simplifier.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Process Map Simplifier</h1>
@@ -1131,16 +1863,57 @@ Required output by end of session: [one sentence]</code></pre>
 <p>### To implement this Requires confirming whether the booking system and accounting tool can share data directly (a real technical dependency to check first) — if not, the calendar-consolidation change alone (removing step 2's separate calendar) can still be done immediately as a smaller, standalone win.</p></div>
         </div>
       </details>
+
+      <details class="skill" id="cost-benefit-analysis" data-search="cost benefit analysis builds a structured cost-benefit case for a proposed investment or initiative — quantified costs, quantified and qualitative benefits kept clearly separate, and a stated net position with sensitivity — so a go/no-go decision rests on an honest comparison, not optimism. use when the user needs to justify an investment, build a business case with costs and benefits, or wants a cba/roi analysis." style="--cat-color:#2c3e5c">
+        <summary>
+          <span class="skill-name">Cost Benefit Analysis</span>
+          <span class="skill-desc">Builds a structured cost-benefit case for a proposed investment or initiative — quantified costs, quantified and qualitative benefits kept clearly separate, and a stated net position with sensitivity — so a go/no-go decision rests on an honest comparison, not optimism. Use when the user needs to justify an investment, build a business case with costs and benefits, or wants a CBA/ROI analysis.</span>
+          <a class="dl-link" href="dl/cost-benefit-analysis.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Cost-Benefit Analysis</h1>
+<h2>When to use this</h2>
+<p>A proposed investment or initiative needs a structured case comparing what it costs against what it delivers, to support a go/no-go decision.</p>
+<h2>When NOT to use this</h2>
+<ul><li>The decision is really about ongoing per-unit profitability, not a one-off investment case — use <code>unit-economics-breakdown</code> instead.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>List all real costs, not just the obvious upfront one</strong> — implementation, training, ongoing maintenance, and the opportunity cost of the team's time spent on it instead of something else.</li><li><strong>List benefits and label each explicitly as quantified or qualitative.</strong> Quantified means a real number with the calculation shown; qualitative means real but not easily monetized (staff morale, reputation, risk reduction). Don't force a qualitative benefit into an invented number just to make the arithmetic cleaner — that fabricated precision undermines the whole case once someone questions it.</li><li><strong>State the time horizon and whether figures are one-off or recurring</strong> — a benefit that recurs annually needs to be treated differently from a one-time saving.</li><li><strong>Calculate the net position</strong> (quantified benefits minus costs) over the stated horizon, and the payback period if relevant.</li><li><strong>State the key assumptions the case depends on, and how sensitive the conclusion is to them</strong> — label each as fact, estimate, or assumption (same discipline as <code>market-sizing-tam-sam-som</code>), and name which one the conclusion is most sensitive to.</li><li><strong>Present qualitative benefits alongside the number, not buried in an appendix</strong> — they're often what actually tips a close decision, even though they don't appear in the net-position arithmetic.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Cost-benefit analysis: [initiative]
+Time horizon: [period]</code></pre>
+<p>### Costs | Cost | One-off / recurring | Amount | |---|---|---|</p>
+<p>### Benefits — quantified | Benefit | Calculation | Amount | |---|---|---|</p>
+<p>### Benefits — qualitative (real, not monetized) - [Benefit]</p>
+<p>### Net position [Quantified benefits − costs, over the horizon; payback period if relevant]</p>
+<p>### Sensitivity Most sensitive to: [assumption]. If that assumption is wrong, the net position becomes [range/direction]. ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Hiding real costs (implementation time, opportunity cost) to make the case look more favorable than it is.</li><li>Forcing qualitative benefits into invented numbers instead of presenting them honestly alongside the quantified case.</li><li>A single-point estimate with no sensitivity or assumption disclosure, hiding how fragile the conclusion actually is.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Costs include implementation/maintenance/opportunity cost, not just the headline spend</li><li class="check"><span class="box" aria-hidden="true"></span>Every benefit is labeled quantified or qualitative, not blended</li><li class="check"><span class="box" aria-hidden="true"></span>Time horizon and one-off vs. recurring is stated</li><li class="check"><span class="box" aria-hidden="true"></span>The most sensitive assumption is named explicitly</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: illustrative booking-platform investment case</h3>
+<p>Time horizon: 3 years, figures approximate/illustrative.</p>
+<p>### Costs | Cost | One-off / recurring | Amount | |---|---|---| | Platform license | Recurring (annual) | $X/year | | Setup and data migration | One-off | $Y | | Staff training time (2 people, 1 day each) | One-off | ~$Z (opportunity cost) |</p>
+<p>### Benefits — quantified | Benefit | Calculation | Amount | |---|---|---| | Reduced booking-error rework | Estimated 3 hrs/week saved × hourly rate × 52 weeks | $A/year | | Fewer missed/duplicate bookings | Estimated 1% of annual booking revenue currently lost to errors | $B/year |</p>
+<p>### Benefits — qualitative (real, not monetized) - Reduced staff frustration and burnout risk during peak season - Better data for future decisions (accurate booking history, not a spreadsheet prone to overwrite errors)</p>
+<p>### Net position Quantified benefits ($A+$B/year) minus recurring cost, over 3 years, minus one-off setup — payback expected within [N] months based on the quantified benefits alone, before qualitative benefits are even considered.</p>
+<p>### Sensitivity Most sensitive to the estimated 3 hrs/week rework-time saving — this is an estimate, not a measured fact. If the real saving is closer to 1 hour/week, payback extends meaningfully but the qualitative benefits (staff stress reduction, data quality) still support the case independently.</p></div>
+        </div>
+      </details>
       </div>
     </details>
 
-    <details class="category" id="business-owner-day-to-day">
-      <summary class="category-title">Business-owner day-to-day<span class="category-count">7</span></summary>
+    <details class="category" id="business-owner-day-to-day" style="--cat-color:#8a5a2f">
+      <summary class="category-title">
+        <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2.5"/><path d="M6.3 10.2l2.1 2.1 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Business-owner day-to-day<span class="category-count">8</span>
+        <a class="dl-link dl-link-cat" href="dl/business-owner-day-to-day.zip" download title="Download all 8 skills in this category as one .zip" onclick="event.stopPropagation()">&#8681; download 8</a>
+      </summary>
       <div class="skill-list">
-      <details class="skill" data-search="meeting notes to actions turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation.">
+      <details class="skill" id="meeting-notes-to-actions" data-search="meeting notes to actions turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Meeting Notes To Actions</span>
           <span class="skill-desc">Turns raw meeting notes or a transcript into a clean record of decisions made and action items with owners and dates. Use when the user has meeting notes/transcript to process, asks what was decided, or wants action items pulled out of a conversation.</span>
+          <a class="dl-link" href="dl/meeting-notes-to-actions.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Meeting Notes to Actions</h1>
@@ -1171,10 +1944,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="weekly ops report turns scattered updates, notes, or raw information into a structured weekly business operations report. use when the user wants to summarize the week, write an ops update, or turn loose notes into a regular team report.">
+      <details class="skill" id="weekly-ops-report" data-search="weekly ops report turns scattered updates, notes, or raw information into a structured weekly business operations report. use when the user wants to summarize the week, write an ops update, or turn loose notes into a regular team report." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Weekly Ops Report</span>
           <span class="skill-desc">Turns scattered updates, notes, or raw information into a structured weekly business operations report. Use when the user wants to summarize the week, write an ops update, or turn loose notes into a regular team report.</span>
+          <a class="dl-link" href="dl/weekly-ops-report.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Weekly Ops Report</h1>
@@ -1207,10 +1981,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="pre mortem facilitator runs a pre-mortem before a big decision, launch, or commitment — imagines it already failed, then works backward to surface risks while there&#x27;s still time to act on them. use when the user is about to make a significant decision or launch and wants to pressure-test it, or explicitly asks for a pre-mortem.">
+      <details class="skill" id="pre-mortem-facilitator" data-search="pre mortem facilitator runs a pre-mortem before a big decision, launch, or commitment — imagines it already failed, then works backward to surface risks while there&#x27;s still time to act on them. use when the user is about to make a significant decision or launch and wants to pressure-test it, or explicitly asks for a pre-mortem." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Pre Mortem Facilitator</span>
           <span class="skill-desc">Runs a pre-mortem before a big decision, launch, or commitment — imagines it already failed, then works backward to surface risks while there's still time to act on them. Use when the user is about to make a significant decision or launch and wants to pressure-test it, or explicitly asks for a pre-mortem.</span>
+          <a class="dl-link" href="dl/pre-mortem-facilitator.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Pre-Mortem Facilitator</h1>
@@ -1241,10 +2016,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="okr drafter turns a broad goal into okrs (objectives and key results) with measurable, falsifiable key results instead of vague aspirations. use when the user wants to set quarterly/periodic goals, turn a goal into targets, or explicitly asks for okrs.">
+      <details class="skill" id="okr-drafter" data-search="okr drafter turns a broad goal into okrs (objectives and key results) with measurable, falsifiable key results instead of vague aspirations. use when the user wants to set quarterly/periodic goals, turn a goal into targets, or explicitly asks for okrs." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">OKR Drafter</span>
           <span class="skill-desc">Turns a broad goal into OKRs (Objectives and Key Results) with measurable, falsifiable key results instead of vague aspirations. Use when the user wants to set quarterly/periodic goals, turn a goal into targets, or explicitly asks for OKRs.</span>
+          <a class="dl-link" href="dl/okr-drafter.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>OKR Drafter</h1>
@@ -1273,10 +2049,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="impact effort prioritizer scores a list of initiatives, ideas, or fixes on impact versus effort and recommends what to tackle first. use when the user has more ideas or possible initiatives than time to do them all and needs help deciding what to prioritize.">
+      <details class="skill" id="impact-effort-prioritizer" data-search="impact effort prioritizer scores a list of initiatives, ideas, or fixes on impact versus effort and recommends what to tackle first. use when the user has more ideas or possible initiatives than time to do them all and needs help deciding what to prioritize." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Impact Effort Prioritizer</span>
           <span class="skill-desc">Scores a list of initiatives, ideas, or fixes on impact versus effort and recommends what to tackle first. Use when the user has more ideas or possible initiatives than time to do them all and needs help deciding what to prioritize.</span>
+          <a class="dl-link" href="dl/impact-effort-prioritizer.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Impact/Effort Prioritizer</h1>
@@ -1304,10 +2081,11 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="positioning pitch crafter sharpens a positioning statement or elevator pitch for a business, product, or consulting offering, making clear who it&#x27;s for, what it does, and why it beats the alternative. use when the user wants to refine how they describe what they do, needs an elevator pitch, or is working on positioning for a business or offering.">
+      <details class="skill" id="positioning-pitch-crafter" data-search="positioning pitch crafter sharpens a positioning statement or elevator pitch for a business, product, or consulting offering, making clear who it&#x27;s for, what it does, and why it beats the alternative. use when the user wants to refine how they describe what they do, needs an elevator pitch, or is working on positioning for a business or offering." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Positioning Pitch Crafter</span>
           <span class="skill-desc">Sharpens a positioning statement or elevator pitch for a business, product, or consulting offering, making clear who it's for, what it does, and why it beats the alternative. Use when the user wants to refine how they describe what they do, needs an elevator pitch, or is working on positioning for a business or offering.</span>
+          <a class="dl-link" href="dl/positioning-pitch-crafter.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Positioning &amp; Pitch Crafter</h1>
@@ -1337,10 +2115,41 @@ Required output by end of session: [one sentence]</code></pre>
         </div>
       </details>
 
-      <details class="skill" data-search="capability competency matrix builds a role-based competency or development framework — the skills expected at each seniority level for a team&#x27;s roles — used for hiring bars, performance conversations, and staff development planning. use when the user needs a skills matrix, competency framework, or development framework for staff or team roles.">
+      <details class="skill" id="negotiation-prep" data-search="negotiation prep structures preparation for a negotiation — each side&#x27;s underlying interests (not just stated positions), batna and walk-away points, and possible multi-issue trades — using an interest-based negotiation approach. use when the user is preparing for a negotiation (contract, deal, supplier terms, salary) or mentions batna or a walk-away point." style="--cat-color:#8a5a2f">
+        <summary>
+          <span class="skill-name">Negotiation Prep</span>
+          <span class="skill-desc">Structures preparation for a negotiation — each side's underlying interests (not just stated positions), BATNA and walk-away points, and possible multi-issue trades — using an interest-based negotiation approach. Use when the user is preparing for a negotiation (contract, deal, supplier terms, salary) or mentions BATNA or a walk-away point.</span>
+          <a class="dl-link" href="dl/negotiation-prep.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
+        </summary>
+        <div class="skill-body">
+          <h1>Negotiation Prep</h1>
+<h2>When to use this</h2>
+<p>An actual negotiation is coming up — a contract, supplier terms, a deal, a rate — and the user wants to walk in prepared rather than reactive.</p>
+<h2>When NOT to use this</h2>
+<ul><li>A trivial, low-stakes exchange where preparation effort isn't worth it — just have the conversation.</li></ul>
+<h2>Workflow</h2>
+<ol><li><strong>Separate positions from interests, for both sides.</strong> A position is what someone asks for ("$50 a unit"); the interest is why they want it (cash-flow timing, margin protection, precedent for other deals). Interests are usually more flexible and more creative to solve for than the stated position.</li><li><strong>Define your BATNA</strong> (Best Alternative To a Negotiated Agreement) — what happens if this negotiation fails and you walk away. This is what actually sets your real power in the room, not how reasonable your ask feels.</li><li><strong>Estimate the other side's likely BATNA too</strong>, even roughly — it tells you how much flexibility they actually have, independent of how firm they sound.</li><li><strong>Set a target and a genuine walk-away point</strong> — the range you'd be happy with, and the point below (or above) which you actually leave the table. Decide this before the room, not during it.</li><li><strong>Look for multi-issue trades</strong>, not just the one obvious number. Two parties fixated on a single price figure often miss value that's easy to unlock once timing, volume, term length, or other terms are brought into the mix.</li><li><strong>Plan your opening move and responses to common tactics</strong> — anchoring, long silences, artificial deadlines — so they don't catch you improvising in the moment.</li></ol>
+<h2>Output format</h2>
+<pre><code>## Negotiation prep: [what/who]</code></pre>
+<div class="table-wrap"><table><thead><tr><th></th><th>Your side</th><th>Their side</th></tr></thead><tbody><tr><td>Stated position</td><td>...</td><td>...</td></tr><tr><td>Underlying interests</td><td>...</td><td>...</td></tr><tr><td>BATNA</td><td>...</td><td>... (estimate)</td></tr><tr><td>Target / walk-away range</td><td>...</td><td>n/a</td></tr></tbody></table></div>
+<p>### Possible multi-issue trades [Beyond the headline number — timing, volume, term, other terms]</p>
+<p>### Opening move &amp; tactic responses [Your first move, and how you'll handle anchoring/silence/deadline pressure] ```</p>
+<h2>Common pitfalls</h2>
+<ul><li>Negotiating only on stated positions, never surfacing interests — leaves value on the table that both sides could have captured.</li><li>No real BATNA, or an unrealistic one — makes any deal look better than it is, weakening your actual position.</li><li>Fixating on a single issue instead of looking for trades across multiple terms.</li></ul>
+<h2>Quality checklist</h2>
+<ul class="checklist"><li class="check"><span class="box" aria-hidden="true"></span>Interests are identified separately from stated positions, both sides</li><li class="check"><span class="box" aria-hidden="true"></span>BATNA is realistic, not aspirational</li><li class="check"><span class="box" aria-hidden="true"></span>A genuine walk-away point is set before the negotiation, not during it</li><li class="check"><span class="box" aria-hidden="true"></span>At least one multi-issue trade is considered beyond the headline number</li></ul>
+          <h3 class="ref-heading">Deeper methodology &amp; worked examples</h3><div class="reference"><h3>Worked example: GIC renegotiating fuel supplier terms</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th>GIC (buyer)</th><th>Fuel supplier</th></tr></thead><tbody><tr><td>Stated position</td><td>Wants a lower per-litre rate</td><td>Wants to hold current pricing</td></tr><tr><td>Underlying interests</td><td>Predictable cost for margin planning; doesn't necessarily need the lowest possible headline rate</td><td>Wants volume certainty and reliable payment timing more than the exact rate</td></tr><tr><td>BATNA</td><td>Could switch to Supplier B at a slightly higher rate but with less reliable delivery</td><td>Could lose the account, but GIC is a meaningful share of their local volume</td></tr><tr><td>Target / walk-away range</td><td>Target: 5% reduction. Walk-away: no worse than current rate with better payment terms</td><td>n/a</td></tr></tbody></table></div>
+<p>### Possible multi-issue trades Since the supplier's real interest is volume certainty and payment timing more than the exact per-litre number, a 12-month volume commitment in exchange for a smaller rate reduction plus better payment terms (e.g. 30-day instead of 14-day) may satisfy both sides better than purely fighting over the headline rate.</p>
+<p>### Opening move &amp; tactic responses Open by naming the volume-commitment trade directly rather than just asking for a discount — reframes the conversation around a trade instead of a one-sided ask. If met with an anchored "we can't move on price," respond by moving the conversation to payment terms rather than repeating the price ask.</p></div>
+        </div>
+      </details>
+
+      <details class="skill" id="capability-competency-matrix" data-search="capability competency matrix builds a role-based competency or development framework — the skills expected at each seniority level for a team&#x27;s roles — used for hiring bars, performance conversations, and staff development planning. use when the user needs a skills matrix, competency framework, or development framework for staff or team roles." style="--cat-color:#8a5a2f">
         <summary>
           <span class="skill-name">Capability Competency Matrix</span>
           <span class="skill-desc">Builds a role-based competency or development framework — the skills expected at each seniority level for a team's roles — used for hiring bars, performance conversations, and staff development planning. Use when the user needs a skills matrix, competency framework, or development framework for staff or team roles.</span>
+          <a class="dl-link" href="dl/capability-competency-matrix.zip" download title="Download this skill's folder as a .zip" onclick="event.stopPropagation()">&#8681; .zip</a>
         </summary>
         <div class="skill-body">
           <h1>Capability / Competency Matrix</h1>
@@ -1377,6 +2186,174 @@ Required output by end of session: [one sentence]</code></pre>
     </footer>
 
   </main>
+
+  <div id="guide-modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="flipchart" role="dialog" aria-modal="true" aria-label="How to use this">
+      <button type="button" class="modal-close" data-close aria-label="Close">&times;</button>
+
+      <div class="flip-card" data-card="0">
+        <p class="flip-kicker">1 / 9</p>
+        <h2>What is a Skill, really?</h2>
+        <p>Think of a Skill as an instruction card you hand to Claude
+          ahead of time. It's a plain text file &mdash; no programming
+          involved &mdash; that says "when someone asks about X, do it
+          this way." Claude only reads the card when it's actually
+          relevant to what you're asking, so having 44 of them installed
+          doesn't slow anything down or clutter the conversation.</p>
+      </div>
+
+      <div class="flip-card" data-card="1" hidden>
+        <p class="flip-kicker">2 / 9</p>
+        <h2>Which "Claude" are you using?</h2>
+        <p>This matters, because it changes where a skill actually goes.
+          There are two different things people call "Claude":</p>
+        <p><strong>claude.ai</strong> &mdash; the website or phone app,
+          where you chat in a browser. <strong>Claude Code</strong> &mdash;
+          a separate tool that runs in a Terminal window (or inside an
+          editor like VS Code), used for coding-adjacent work. This
+          library was built using, and is designed for, <strong>Claude
+          Code</strong>. Cards 3&ndash;7 are about that. If you're on
+          claude.ai instead, skip to card 8.</p>
+      </div>
+
+      <div class="flip-card" data-card="2" hidden>
+        <p class="flip-kicker">3 / 9</p>
+        <h2>Where a skill actually lives</h2>
+        <p>Claude Code automatically checks one specific folder on your
+          own computer: <code>~/.claude/skills/</code>. The
+          <code>~</code> is just shorthand for "your home folder"
+          (on a Mac, that's usually something like
+          <code>/Users/yourname/</code>). You don't need to create this
+          folder yourself &mdash; Claude Code already made it the first
+          time you used it. "Installing" a skill just means putting a
+          copy of its folder inside that one.</p>
+      </div>
+
+      <div class="flip-card" data-card="3" hidden>
+        <p class="flip-kicker">4 / 9</p>
+        <h2>Copying a skill in, step by step</h2>
+        <p><strong>1.</strong> Open the Terminal app &mdash; on a Mac,
+          press <code>Cmd + Space</code>, type <code>Terminal</code>, and
+          press Enter. A plain black or white window opens; that's it.</p>
+        <p><strong>2.</strong> Type or paste this exact line, then press
+          Enter:</p>
+        <pre><code>cp -r claude-skills-library/skills/* ~/.claude/skills/</code></pre>
+        <p><strong>3.</strong> If nothing prints out and you just get your
+          prompt back, it worked &mdash; no news is good news.
+          (<code>cp</code> means "copy," <code>-r</code> means "and
+          everything inside the folder too.") This one line installs
+          every skill in the library at once; run it again any time
+          skills are added or changed.</p>
+      </div>
+
+      <div class="flip-card" data-card="4" hidden>
+        <p class="flip-kicker">5 / 9</p>
+        <h2>How does Claude pick the right one?</h2>
+        <p>Every skill has a short description, like a label on a
+          folder. When you type a request, Claude quietly checks it
+          against every installed skill's label to see which one fits
+          best. You never type a command or choose from a menu &mdash;
+          you just ask for what you want in normal words.</p>
+      </div>
+
+      <div class="flip-card" data-card="5" hidden>
+        <p class="flip-kicker">6 / 9</p>
+        <h2>Try it &mdash; just ask normally</h2>
+        <blockquote>"Why did our bookings drop last month?"</blockquote>
+        <p>That alone is enough &mdash; Claude notices it matches the
+          <code>root-cause-five-whys</code> skill's description and uses
+          it automatically to structure the answer, without you naming
+          anything.</p>
+      </div>
+
+      <div class="flip-card" data-card="6" hidden>
+        <p class="flip-kicker">7 / 9</p>
+        <h2>Want a specific one? Just say its name</h2>
+        <blockquote>"Use the swot-strategic-review skill on this"</blockquote>
+        <p>If Claude picks something other than what you wanted, or you
+          want a particular framework on purpose, name it directly in
+          your sentence &mdash; exactly like this example. No special
+          syntax needed.</p>
+      </div>
+
+      <div class="flip-card" data-card="7" hidden>
+        <p class="flip-kicker">8 / 9</p>
+        <h2>Using this on claude.ai or the Claude Desktop app</h2>
+        <p><strong>Yes, the Desktop app works too</strong> &mdash; it
+          shares the exact same account and the exact same Skills
+          settings as the claude.ai website, so every step below is
+          identical on both. (The Claude phone app can use a skill once
+          it's turned on this way, but you can't upload one directly
+          from a phone.) None of this involves Terminal or
+          <code>~/.claude/skills/</code> at all &mdash; it's a
+          completely separate, upload-based process from cards 3&ndash;4.</p>
+        <p><strong>First, a one-time prerequisite:</strong> code
+          execution needs to be turned on for your account. Go to
+          <strong>Settings &rarr; Capabilities</strong> and make sure
+          "Code execution and file creation" is switched on &mdash;
+          without it, Skills won't fully work.</p>
+        <p><strong>Getting a zip file</strong> is the easiest part: you
+          don't need to make one yourself. Every skill on this page has a
+          small "&#8681; .zip" link next to its name (and there's a
+          "&#8681; Download all 50" button at the top) &mdash; click it
+          and you already have the file claude.ai expects. If you're
+          working from your own copy of a skill's folder instead, you can
+          make one manually: right-click the folder and choose
+          <strong>Compress</strong> (Mac) or <strong>Send to &rarr;
+          Compressed folder</strong> (Windows) &mdash; just make sure the
+          zip contains the folder itself, not a loose <code>SKILL.md</code>
+          file on its own, or claude.ai won't read it correctly.</p>
+        <p><strong>Then upload it:</strong> go to <strong>Settings
+          &rarr; Customize &rarr; Skills &rarr; Upload</strong> and
+          select the zip. Claude reads the <code>SKILL.md</code> inside
+          automatically and shows you its name and description &mdash;
+          you don't need to fill anything in by hand.</p>
+        <p><strong>One easy step to miss:</strong> a newly uploaded skill
+          is switched <em>off</em> by default. Find it in your skills
+          list afterward and toggle it on, or Claude simply won't use it
+          even though it uploaded successfully. There's no "install
+          everything at once" option here the way card 4's one-line
+          command covers all 50 &mdash; each skill is uploaded and
+          switched on individually.</p>
+        <p>Last thing: this is a genuinely separate system from Claude
+          Code. A skill enabled here doesn't appear in Claude Code, and
+          one installed via Terminal doesn't appear here &mdash; if you
+          want a skill available in both places, it needs to be added to
+          both, separately.</p>
+      </div>
+
+      <div class="flip-card" data-card="8" hidden>
+        <p class="flip-kicker">9 / 9</p>
+        <h2>If something feels off</h2>
+        <p>Claude didn't use the skill you expected? Just name it
+          directly (card 7) &mdash; that always works regardless of why
+          the automatic match didn't fire. Edited a skill's instructions
+          yourself? The copy inside <code>~/.claude/skills/</code> won't
+          update on its own &mdash; re-run the command from card 4 so the
+          live version matches your edit. Typed the copy command and got
+          an error instead of silence? Double-check you're actually
+          inside the right folder in Terminal first (the one containing
+          <code>claude-skills-library</code>).</p>
+      </div>
+
+      <div class="flip-nav">
+        <button type="button" id="flip-prev" class="flip-btn" disabled>&larr;</button>
+        <div class="flip-dots">
+          <span class="flip-dot" data-dot="0"></span>
+          <span class="flip-dot" data-dot="1"></span>
+          <span class="flip-dot" data-dot="2"></span>
+          <span class="flip-dot" data-dot="3"></span>
+          <span class="flip-dot" data-dot="4"></span>
+          <span class="flip-dot" data-dot="5"></span>
+          <span class="flip-dot" data-dot="6"></span>
+          <span class="flip-dot" data-dot="7"></span>
+          <span class="flip-dot" data-dot="8"></span>
+        </div>
+        <button type="button" id="flip-next" class="flip-btn">&rarr;</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

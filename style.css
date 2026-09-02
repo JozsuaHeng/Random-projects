@@ -1030,12 +1030,12 @@ body {
   opacity: 0.9;
 }
 .tile[data-theme="playbook"] .art-title {
-  top: 16px;
+  top: 12px;
   left: 16px;
   font-family: "Caveat", cursive;
   font-weight: 700;
-  font-size: 24px;
-  line-height: 1;
+  font-size: 21px;
+  line-height: 1.05;
   color: #1f6f5c;
   transform: rotate(-2deg);
 }
