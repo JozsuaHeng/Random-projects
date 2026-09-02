@@ -271,8 +271,27 @@ body {
 @keyframes mm-draw {
   to { stroke-dashoffset: 0; }
 }
+
+/* Subtle ambient life once the entrance animation settles, so the
+   finished mindmap doesn't read as static — a slow ring pulsing
+   outward from the hub, like a quiet sonar ping. Delayed to start only
+   after the entrance sequence has finished (~2.6s, see the animation
+   delays in build_mindmap()). */
+.mm-pulse-ring {
+  stroke-width: 3;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mm-pulse 3.6s ease-out 2.6s infinite;
+}
+@keyframes mm-pulse {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mm-pop, .mm-line { animation: none; opacity: 1; transform: none; stroke-dashoffset: 0; }
+  .mm-pulse-ring { animation: none; opacity: 0; }
 }
 
 @media (max-width: 720px) {

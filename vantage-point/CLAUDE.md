@@ -1,4 +1,4 @@
-# CLAUDE.md — Vantage Point
+# CLAUDE.md — The Quagmire (skills library page)
 
 ## What this is
 
@@ -7,48 +7,75 @@ separate standalone project at the shelf root, its own local git repo,
 not pushed to GitHub). That project is the actual **functional** Claude
 Skills — installed to `~/.claude/skills/` and used by Claude directly.
 This project exists purely so Jozsua (or anyone else) can *view* that
-same content easily in a browser, as a tile in The Quagmire.
+same content easily in a browser, as a tile in the hub page.
 
-Formerly called "The Playbook" / `the-playbook/` — renamed to "Vantage
-Point" / `vantage-point/` 2026-09-02. If renaming again: update
-`SITE_NAME` in `build.py` (mindmap center label only), `index.html`'s
-`<title>`/`<h1>`/meta description, and the hub tile's art-title text +
-href in `../index.html`.
+Naming history: built as "The Playbook" (`the-playbook/`), renamed to
+"Vantage Point" 2026-09-02, then renamed again the same day to **"The
+Quagmire"** — Jozsua's explicit request ("swap out the name for the
+quagmire"). **Note the resulting ambiguity, flagged but not resolved**:
+the shelf's actual hub page (`ai-slop/index.html`, one level up) is
+*also* called "The Quagmire" — its own `<h1>` says so, and this page's
+own "&larr; The Quagmire" back-link points at it. So there are now two
+differently-titled-the-same-thing pages one click apart. The hub *tile*
+linking to this page (`data-theme="playbook"` in `../index.html`) still
+reads "Vantage Point" and was deliberately left alone, since only this
+page's own identity was asked to change — if that mismatch (tile says
+one name, destination page says another) turns out to be unwanted,
+updating the tile's `art-title` text in `../index.html` is the fix.
+The folder itself stays `vantage-point/` (not renamed) to avoid breaking
+the already-live GitHub Pages URL. If renaming again: update `SITE_NAME`
+in `build.py` (mindmap center label), `index.html`'s
+`<title>`/`<h1>`/meta description, and — if wanted — the hub tile's
+art-title text + the folder name (which would need a URL update too).
 
 - `index.html` + `style.css` + `app.js`: the catalog page (client-side
   search filter only, no backend).
   - A large, animated, colour-coded radial **mindmap** is the primary
     visual overview — center hub, one branch per category, one leaf per
-    skill. Layout is deliberately *not* a perfect circle: `jitter()` in
-    `build_mindmap()` deterministically varies each node's radius (and
-    angle slightly) per its slug/id, so branch and leaf lines read as
-    hand-drawn rather than mechanical — same input always produces the
-    same layout, it's not randomized per page load. Leaf angular spacing
-    is computed from a minimum-pixel-gap formula (`min_leaf_gap_px`), not
-    a fixed arc, specifically to keep labels from overlapping — if a
-    future category has many more skills than today's max (9) and labels
-    start crowding, raise `min_leaf_gap_px` or `r_leaf_base` first (and
-    grow `viewBox`/`cx`/`cy` in step — the current 3000×3000 has ~525px
-    of margin beyond the farthest label at today's sizes/fonts — leaf
-    labels 20px, category labels 24px, hub name 34–38px — check that
-    margin doesn't go negative before shipping a size change). Branch/leaf
-    lines start at the **hub's edge**, not its exact center point, and
-    the hub `<g>` is emitted **last** so it paints on top of every line —
-    both were needed together to stop lines from roughly-opposite
-    branches visibly crossing through the hub circle's interior (a real
-    bug from the first pass, caught from a screenshot — verify any future
-    change to `r_center`/line logic by checking every branch line's start
-    distance from center equals `r_center`, not 0).
+    skill. Leaf label positions are resolved by an **actual iterative
+    collision-avoidance pass** in `build_mindmap()`, not hand-tuned
+    spacing constants: each leaf starts at a jittered angle/radius
+    (deterministic per slug — same layout every rebuild, not random),
+    then every pair of leaf label bounding boxes is checked and any
+    overlapping pair gets pushed further from the hub, repeated (up to
+    600 passes, converges in practice well under that) until zero pairs
+    overlap. `build.py` prints the result of this check on every run
+    ("Mindmap collision resolution: 0 overlapping leaf labels" — treat
+    any other output as a real bug to fix, not noise to ignore). Canvas
+    size (`viewBox`, `cx`/`cy`) is then computed *from* the resolved
+    layout's actual extent plus a margin, not guessed ahead of time —
+    this is what let leaf/category font sizes go from 14px→20px→40px
+    (and category 18px→24px→48px) across three rounds of "still too
+    small" feedback without needing to re-derive spacing constants by
+    hand each time; a future font/count change should just work the same
+    way. (An earlier version used a fixed angular-gap formula with
+    hardcoded constants — it silently produced real overlaps twice
+    before this rewrite; don't revert to that approach.)
+    Branch/leaf lines start at the **hub's edge**, not its exact center
+    point, and the hub `<g>` is emitted **last** so it paints on top of
+    every line — both were needed together to stop lines from
+    roughly-opposite branches visibly crossing through the hub circle's
+    interior (a real bug from the first pass, caught from a screenshot —
+    verify any future change to `r_center`/line logic by checking every
+    branch line's start distance from center equals `r_center`, not 0).
     On load it draws itself outward (hub pops in, each branch's line
     draws, its category node bounces in, then its leaves cascade the
     same way — see `.mm-pop`/`.mm-line` keyframes in `style.css`; the
     pop keyframe deliberately overshoots twice, not once, for a visibly
-    springier bounce than the first pass had).
+    springier bounce). Once the entrance sequence settles (~2.6s), a
+    slow, low-opacity **pulse ring** (`.mm-pulse-ring`, a second circle
+    behind the hub) keeps expanding and fading on an infinite loop —
+    added because the finished, static mindmap read as inert; kept
+    deliberately subtle (long duration, low opacity peak) rather than
+    distracting, and respects `prefers-reduced-motion`.
     It supports pan (click-drag or single-finger touch) and zoom
     (+/−/reset buttons only — mouse-wheel zoom was tried and removed,
     since it hijacked normal page-scroll whenever the cursor was over the
     mindmap), implemented by transforming the `#mm-viewport` `<g>` — see
-    the pan/zoom block in `app.js`. Clicking a **leaf** opens that
+    the pan/zoom block in `app.js`. Its `CX`/`CY`/`VB` constants are read
+    from the SVG's actual `viewBox` attribute at runtime, not hardcoded —
+    they'd otherwise drift out of sync every time `build_mindmap()`'s
+    computed canvas size changes. Clicking a **leaf** opens that
     skill's popup directly (see below); clicking a **category node**
     opens and scrolls to that category section, since categories (unlike
     skills) still expand inline. Drag-then-release is distinguished from
@@ -84,11 +111,18 @@ href in `../index.html`.
     (9 cards, prev/next/dots) written for a genuinely non-technical
     reader, with real multi-paragraph elaboration per card. Card 2
     explicitly names all three "Claudes" (claude.ai, Claude Desktop app,
-    Claude Code) up front, not just two. Card 4 ("Getting a skill into
-    that folder") presents **two equally-valid paths**: Terminal (the
-    `cp` command) and a no-Terminal path (download the zip from this
-    site, unzip, drag the folder into `~/.claude/skills/` via Finder) —
-    added after Jozsua asked whether Terminal was mandatory. Card 8
+    Claude Code) up front, each its own short paragraph, not one dense
+    paragraph. Card 4 ("Getting a skill into that folder") presents
+    **two equally-valid paths as numbered sub-steps each** (1/2/3/4 for
+    Way 1, 1/2/3 for Way 2) rather than flowing prose: Way 1 is
+    Terminal-free (download the zip from this site, unzip, drag the
+    folder into `~/.claude/skills/` via Finder — added after Jozsua
+    asked whether Terminal was mandatory); Way 2 is the `cp` command,
+    and its step 3 now explicitly tells the reader to run
+    `ls ~/.claude/skills/` afterward and what they should see — Jozsua
+    tried the command himself and reported "there's nothing after
+    clicking enter," which the original "no news is good news" framing
+    didn't resolve for a first-timer. Card 8
     (claude.ai/Desktop upload path) went through an elaborate pass and
     then a simplification pass — Jozsua found the elaborate version too
     long; it's now 3 short paragraphs covering the same facts (Desktop

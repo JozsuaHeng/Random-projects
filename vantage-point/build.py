@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 SKILLS_DIR = ROOT / ".." / ".." / "claude-skills-library" / "skills"
 
-SITE_NAME = "Vantage Point"  # change here to rename the mindmap's center label
+SITE_NAME = "The Quagmire"  # change here to rename the mindmap's center label
 
 CATEGORIES = [
     ("Strategic analysis", [
@@ -310,12 +310,31 @@ def jitter(seed, lo, hi):
     return lo + (h % 10000) / 10000.0 * (hi - lo)
 
 
+def text_width(s, font_size):
+    """Rough average-character-width estimate for the body sans font,
+    used only for collision math below — doesn't need to be exact, just
+    a safe-sized upper bound."""
+    return len(s) * font_size * 0.58
+
+
 def build_mindmap():
     """Radial tree: center hub -> category nodes -> skill leaf nodes.
-    Radius (branch/leaf line length) is jittered per node so it reads as
-    a hand-drawn mindmap rather than a perfect target — some lines longer,
-    some shorter. Angular spacing between leaves is computed from a
-    minimum pixel gap so labels don't collide, not from a fixed arc.
+    Two things make this robust rather than hand-tuned:
+
+    1. Leaf radius is jittered per node (deterministic per slug, not
+       random) so lines read as hand-drawn — some longer, some shorter —
+       rather than a perfect wheel.
+    2. Leaf label positions go through an actual iterative collision
+       pass: each label's bounding box is estimated, and any pair of
+       leaves whose boxes overlap gets pushed further from the hub
+       (both of them) and rechecked, repeated until nothing overlaps.
+       This is what actually prevents label overlap — angle/radius
+       constants below are just reasonable starting points, not a
+       guarantee on their own. The final canvas size is computed FROM
+       the resolved layout afterward, not guessed up front, so a future
+       font-size or skill-count change can't silently leave content
+       outside the viewBox.
+
     Branch/leaf lines start at the HUB'S EDGE (not its center point) and
     the hub is drawn last, painted on top — otherwise lines from
     roughly-opposite branches visibly cross through the hub circle.
@@ -323,100 +342,161 @@ def build_mindmap():
     every element carries an animation-delay so the whole thing draws
     itself outward from the hub on load (see .mm-pop / .mm-line in
     style.css for the actual keyframes)."""
-    cx, cy = 1500, 1500
-    r_center = 108
-    r_cat_base, r_cat_jitter = 420, 36
-    r_leaf_base, r_leaf_jitter = 900, 75
-    min_leaf_gap_px = 88  # minimum straight-line distance between adjacent leaves
-    max_arc_cap = 42  # never let one branch's leaves spread wider than this
+    r_center = 190
+    r_cat_base, r_cat_jitter = 760, 60
+    r_leaf_base, r_leaf_jitter = 1500, 140
+    LEAF_FONT, CAT_FONT = 40, 48
     n = len(CATEGORIES)
     total_skills = sum(len(s) for _, s in CATEGORIES)
+    origin = 0.0  # positions computed relative to (0,0); recentered at the end
 
-    branch_parts = []
+    # --- Phase 1: initial category + leaf positions (angle & radius) ---
+    cats = []
+    leaves = []
     for i, (cat_name, slugs) in enumerate(CATEGORIES):
         cat_id = re.sub(r"[^a-z0-9]+", "-", cat_name.lower()).strip("-")
-        color = CATEGORY_COLORS[cat_name]
-        label = MINDMAP_LABELS[cat_name]
-        base_angle_deg = -90 + i * (360 / n)
-        angle_deg = base_angle_deg + jitter(cat_id, -4, 4)
-        angle = math.radians(angle_deg)
+        angle_deg = -90 + i * (360 / n) + jitter(cat_id, -4, 4)
         r_cat = r_cat_base + jitter(cat_id, -r_cat_jitter, r_cat_jitter)
-        catx, caty = cx + r_cat * math.cos(angle), cy + r_cat * math.sin(angle)
-        branch_delay = 200 + i * 70
+        cats.append({"cat_name": cat_name, "cat_id": cat_id, "angle_deg": angle_deg, "r": r_cat, "index": i})
 
-        # Line starts at the hub's edge, not its exact center, so it
-        # never visibly crosses the hub circle's interior.
+        n_leaves = len(slugs)
+        arc = min(46, 6.5 * (n_leaves - 1)) if n_leaves > 1 else 0
+        step = arc / (n_leaves - 1) if n_leaves > 1 else 0
+        for j, slug in enumerate(slugs):
+            leaf_angle_deg = angle_deg + (j - (n_leaves - 1) / 2) * step + jitter(slug + "a", -1.5, 1.5)
+            r_leaf = r_leaf_base + jitter(slug, -r_leaf_jitter, r_leaf_jitter)
+            leaves.append({"slug": slug, "cat_id": cat_id, "cat_index": i, "angle_deg": leaf_angle_deg,
+                            "r": r_leaf, "name": title_case(slug), "j": j})
+
+    # --- Phase 2: iterative collision resolution on leaf label boxes ---
+    def leaf_geom(leaf):
+        angle = math.radians(leaf["angle_deg"])
+        x, y = origin + leaf["r"] * math.cos(angle), origin + leaf["r"] * math.sin(angle)
+        anchor = "start" if math.cos(angle) >= -0.05 else "end"
+        dx = LEAF_FONT * 0.35 if anchor == "start" else -LEAF_FONT * 0.35
+        w = text_width(leaf["name"], LEAF_FONT)
+        h = LEAF_FONT * 1.3
+        if anchor == "start":
+            left, right = x + dx, x + dx + w
+        else:
+            left, right = x + dx - w, x + dx
+        top, bottom = y - h / 2, y + h / 2
+        return x, y, anchor, dx, (left, top, right, bottom)
+
+    PAD, STEP, MAX_ITERS = 16, 30, 600
+    for _ in range(MAX_ITERS):
+        moved = False
+        for i in range(len(leaves)):
+            ai = leaf_geom(leaves[i])[4]
+            for j in range(i + 1, len(leaves)):
+                bj = leaf_geom(leaves[j])[4]
+                if not (ai[2] + PAD < bj[0] or bj[2] + PAD < ai[0] or ai[3] + PAD < bj[1] or bj[3] + PAD < ai[1]):
+                    leaves[i]["r"] += STEP
+                    leaves[j]["r"] += STEP
+                    ai = leaf_geom(leaves[i])[4]  # refresh immediately, not a stale snapshot
+                    moved = True
+        if not moved:
+            break
+    else:
+        print(f"WARNING: mindmap collision resolution hit MAX_ITERS={MAX_ITERS} without fully converging")
+
+    final_boxes = [leaf_geom(l)[4] for l in leaves]
+    remaining = 0
+    for i in range(len(leaves)):
+        for j in range(i + 1, len(leaves)):
+            a, b = final_boxes[i], final_boxes[j]
+            if not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1]):
+                remaining += 1
+    if remaining:
+        print(f"WARNING: {remaining} leaf label pairs still overlap after resolution")
+    else:
+        print("Mindmap collision resolution: 0 overlapping leaf labels")
+
+    # --- Phase 3: compute final geometry + required canvas size ---
+    max_extent = r_center
+    for c in cats:
+        angle = math.radians(c["angle_deg"])
+        c["x"], c["y"] = origin + c["r"] * math.cos(angle), origin + c["r"] * math.sin(angle)
+        c["anchor"] = "start" if math.cos(angle) >= -0.05 else "end"
+        label = MINDMAP_LABELS[c["cat_name"]]
+        reach = c["r"] + 24 + text_width(label, CAT_FONT)
+        max_extent = max(max_extent, reach)
+    for leaf in leaves:
+        x, y, anchor, dx, box = leaf_geom(leaf)
+        leaf["x"], leaf["y"], leaf["anchor"], leaf["dx"] = x, y, anchor, dx
+        max_extent = max(max_extent, abs(box[0]), abs(box[2]), abs(box[1]), abs(box[3]))
+
+    margin = 70
+    half = max_extent + margin
+    cx = cy = half
+    size = half * 2
+
+    # --- Phase 4: emit SVG, offsetting every coordinate by (cx, cy) ---
+    branch_parts = []
+    for c in cats:
+        color = CATEGORY_COLORS[c["cat_name"]]
+        label = MINDMAP_LABELS[c["cat_name"]]
+        angle = math.radians(c["angle_deg"])
+        catx, caty = cx + c["x"], cy + c["y"]
+        branch_delay = 200 + c["index"] * 70
         hub_edge_x, hub_edge_y = cx + r_center * math.cos(angle), cy + r_center * math.sin(angle)
         line_len = math.hypot(catx - hub_edge_x, caty - hub_edge_y)
 
         branch_parts.append(
             f'<line x1="{hub_edge_x:.1f}" y1="{hub_edge_y:.1f}" x2="{catx:.1f}" y2="{caty:.1f}" stroke="{color}" '
-            f'stroke-width="2.5" opacity="0.6" class="mm-line" '
+            f'stroke-width="3" opacity="0.6" class="mm-line" '
             f'style="--len:{line_len:.1f}px; animation-delay:{branch_delay}ms"/>'
         )
 
-        n_leaves = len(slugs)
-        # Minimum angular step so straight-line distance between adjacent
-        # leaves (at the base leaf radius) is at least min_leaf_gap_px.
-        step = 0.0
-        if n_leaves > 1:
-            step = math.degrees(2 * math.asin(min(1.0, min_leaf_gap_px / (2 * r_leaf_base))))
-            arc_span = min(max_arc_cap, step * (n_leaves - 1))
-            step = arc_span / (n_leaves - 1)
         cat_node_delay = branch_delay + 320
-
-        for j, slug in enumerate(slugs):
-            leaf_angle_deg = angle_deg + (j - (n_leaves - 1) / 2) * step + jitter(slug + "a", -1.2, 1.2)
-            leaf_angle = math.radians(leaf_angle_deg)
-            r_leaf = r_leaf_base + jitter(slug, -r_leaf_jitter, r_leaf_jitter)
-            lx, ly = cx + r_leaf * math.cos(leaf_angle), cy + r_leaf * math.sin(leaf_angle)
+        cat_leaves = [l for l in leaves if l["cat_id"] == c["cat_id"]]
+        for j, leaf in enumerate(cat_leaves):
+            lx, ly = cx + leaf["x"], cy + leaf["y"]
             leaf_line_delay = cat_node_delay + 200 + j * 30
             leaf_node_delay = leaf_line_delay + 200
             leaf_line_len = math.hypot(lx - catx, ly - caty)
-
             branch_parts.append(
                 f'<line x1="{catx:.1f}" y1="{caty:.1f}" x2="{lx:.1f}" y2="{ly:.1f}" stroke="{color}" '
-                f'stroke-width="1.3" opacity="0.4" class="mm-line" '
+                f'stroke-width="1.6" opacity="0.4" class="mm-line" '
                 f'style="--len:{leaf_line_len:.1f}px; animation-delay:{leaf_line_delay}ms"/>'
             )
-            anchor = "start" if math.cos(leaf_angle) >= -0.05 else "end"
-            dx = 14 if anchor == "start" else -14
-            display_name = title_case(slug)
-            branch_parts.append(f'<a href="#{slug}" class="mm-leaf" data-cat="{cat_id}">')
+            branch_parts.append(f'<a href="#{leaf["slug"]}" class="mm-leaf" data-cat="{c["cat_id"]}">')
             branch_parts.append(f'<g class="mm-pop" style="transform-origin:{lx:.1f}px {ly:.1f}px; animation-delay:{leaf_node_delay}ms">')
-            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="6" fill="var(--paper)" stroke="{color}" stroke-width="2.2"/>')
-            branch_parts.append(f'<text x="{lx+dx:.1f}" y="{ly+6.5:.1f}" text-anchor="{anchor}" font-size="20" fill="var(--ink-soft)">{html.escape(display_name)}</text>')
+            branch_parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="9" fill="var(--paper)" stroke="{color}" stroke-width="3"/>')
+            branch_parts.append(f'<text x="{lx+leaf["dx"]:.1f}" y="{ly+13:.1f}" text-anchor="{leaf["anchor"]}" font-size="{LEAF_FONT}" fill="var(--ink-soft)">{html.escape(leaf["name"])}</text>')
             branch_parts.append('</g></a>')
 
-        cat_anchor = "start" if math.cos(angle) >= -0.05 else "end"
-        cat_dx = 24 if cat_anchor == "start" else -24
-        branch_parts.append(f'<a href="#{cat_id}" class="mm-node">')
+        cat_dx = 30 if c["anchor"] == "start" else -30
+        branch_parts.append(f'<a href="#{c["cat_id"]}" class="mm-node">')
         branch_parts.append(f'<g class="mm-pop" style="transform-origin:{catx:.1f}px {caty:.1f}px; animation-delay:{cat_node_delay}ms">')
-        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="17" fill="{color}"/>')
-        branch_parts.append(f'<svg x="{catx-11:.1f}" y="{caty-11:.1f}" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.8">{CATEGORY_ICONS[cat_name]}</svg>')
-        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+7.5:.1f}" text-anchor="{cat_anchor}" font-size="24" font-weight="700" fill="{color}">{html.escape(label)}</text>')
+        branch_parts.append(f'<circle cx="{catx:.1f}" cy="{caty:.1f}" r="22" fill="{color}"/>')
+        branch_parts.append(f'<svg x="{catx-14:.1f}" y="{caty-14:.1f}" width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="var(--paper)" stroke-width="1.6">{CATEGORY_ICONS[c["cat_name"]]}</svg>')
+        branch_parts.append(f'<text x="{catx+cat_dx:.1f}" y="{caty+15:.1f}" text-anchor="{c["anchor"]}" font-size="{CAT_FONT}" font-weight="700" fill="{color}">{html.escape(label)}</text>')
         branch_parts.append('</g></a>')
 
     # Hub is emitted LAST so it paints on top of every branch/leaf line —
     # combined with lines starting at its edge (not center) above, this
-    # guarantees nothing is ever visible crossing through it.
+    # guarantees nothing is ever visible crossing through it. A slow,
+    # subtle pulse ring keeps the finished mindmap from reading as inert
+    # once the entrance animation settles.
     hub_parts = [f'<g class="mm-pop mm-hub" style="transform-origin:{cx}px {cy}px; animation-delay:0ms">']
-    hub_parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r_center}" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>')
+    hub_parts.append(f'<circle class="mm-pulse-ring" cx="{cx}" cy="{cy}" r="{r_center}" fill="none" stroke="var(--ink)"/>')
+    hub_parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r_center}" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>')
     name_lines = SITE_NAME.split(" ")
     if len(name_lines) > 1:
         mid = len(name_lines) // 2 + len(name_lines) % 2
         line1, line2 = " ".join(name_lines[:mid]), " ".join(name_lines[mid:])
-        hub_parts.append(f'<text x="{cx}" y="{cy-20}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="34" fill="var(--ink)">{html.escape(line1)}</text>')
-        hub_parts.append(f'<text x="{cx}" y="{cy+18}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="34" fill="var(--ink)">{html.escape(line2)}</text>')
-        sub_y = cy + 46
+        hub_parts.append(f'<text x="{cx}" y="{cy-30}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="60" fill="var(--ink)">{html.escape(line1)}</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy+30}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="60" fill="var(--ink)">{html.escape(line2)}</text>')
+        sub_y = cy + 68
     else:
-        hub_parts.append(f'<text x="{cx}" y="{cy-8}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="38" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
-        sub_y = cy + 24
-    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="18" fill="var(--muted)">{total_skills} skills</text>')
+        hub_parts.append(f'<text x="{cx}" y="{cy-12}" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="600" font-size="66" fill="var(--ink)">{html.escape(SITE_NAME)}</text>')
+        sub_y = cy + 38
+    hub_parts.append(f'<text x="{cx}" y="{sub_y}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="28" fill="var(--muted)">{total_skills} skills</text>')
     hub_parts.append('</g>')
 
     inner = "\n".join(['<g id="mm-viewport">'] + branch_parts + hub_parts + ['</g>'])
-    return f'''<svg id="mm-svg" viewBox="0 0 3000 3000" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
+    return f'''<svg id="mm-svg" viewBox="0 0 {size:.0f} {size:.0f}" role="img" aria-label="Mindmap of {SITE_NAME}: {total_skills} skills across {n} categories, radiating from a central hub. Click any category or skill to jump to it below.">
 {inner}
 </svg>'''
 

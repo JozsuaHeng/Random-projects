@@ -70,7 +70,11 @@
   var canvas = document.getElementById("mm-canvas");
   var svg = document.getElementById("mm-svg");
   var viewport = document.getElementById("mm-viewport");
-  var CX = 1500, CY = 1500, VB = 3000;
+  // Read the actual viewBox rather than hardcoding it — build.py now
+  // computes canvas size dynamically from the resolved layout, so a
+  // fixed constant here would drift out of sync with it.
+  var vbParts = svg.getAttribute("viewBox").split(" ").map(Number);
+  var CX = vbParts[2] / 2, CY = vbParts[3] / 2, VB = vbParts[2];
   var DEFAULT_SCALE = 1.3;
   var scale = DEFAULT_SCALE, tx = CX * (1 - scale), ty = CY * (1 - scale);
   var MIN_SCALE = 0.5, MAX_SCALE = 4;
