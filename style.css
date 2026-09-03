@@ -1056,9 +1056,10 @@ body {
   box-shadow: 0 16px 30px -14px rgba(31, 111, 92, 0.3);
 }
 
-/* --- theme: cost of living map — same centered stat-card DNA as
-   Guilt Trip (tiny label / one big confident number / small detail
-   line), themed in cost-comparison green rather than illustrated. --- */
+/* --- theme: cost of living map — a head-to-head price comparison
+   (two columns + "VS"), matching the app's actual headline feature
+   ("compare up to 3 places side by side") rather than one big number
+   like Guilt Trip. Centered-flex, but structurally its own thing. --- */
 
 .tile[data-theme="colmap"] .art {
   background: radial-gradient(ellipse at 50% 8%, #16302a 0%, #081410 68%);
@@ -1078,192 +1079,174 @@ body {
   color: #eafaf1;
   text-align: center;
 }
-.tile[data-theme="colmap"] .colmap-stat {
+.tile[data-theme="colmap"] .colmap-compare {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tile[data-theme="colmap"] .colmap-side {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
 }
-.tile[data-theme="colmap"] .colmap-label {
-  font-size: 8.5px;
+.tile[data-theme="colmap"] .colmap-city {
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(234, 250, 241, 0.55);
+  color: rgba(234, 250, 241, 0.5);
 }
-.tile[data-theme="colmap"] .colmap-num {
+.tile[data-theme="colmap"] .colmap-price {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 800;
-  font-size: 25px;
+  font-size: 18px;
   line-height: 1;
-  color: #eafaf1;
+  color: rgba(234, 250, 241, 0.5);
 }
-.tile[data-theme="colmap"] .colmap-delta {
+.tile[data-theme="colmap"] .colmap-price-cheap {
+  color: #6fcf9e;
+}
+.tile[data-theme="colmap"] .colmap-vs {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
-  color: #6fcf9e;
+  font-weight: 700;
+  color: rgba(234, 250, 241, 0.3);
 }
 .tile[data-theme="colmap"] .go { color: #6fcf9e; }
 .tile[data-theme="colmap"]:hover {
   border-color: #2f6650;
 }
 
-/* --- theme: rostering app — the same stat-card structure, but the
-   "big number" is the parsed result (a status word) and the detail
-   line is the literal plain-English input the app understood. --- */
+/* --- theme: rostering app — a week strip (7 day-dots, Saturday
+   flagged) top-right, title bottom-left: the same asymmetric
+   icon-row-plus-title composition Broetry/Corporate Radar use,
+   distinct from colmap's centered layout. --- */
 
 .tile[data-theme="roster"] .art {
-  background: radial-gradient(ellipse at 50% 8%, #232c38 0%, #0e1218 68%);
+  background: linear-gradient(155deg, #232c38 0%, #10141a 100%);
   border-bottom: 3px solid #33404f;
+}
+.tile[data-theme="roster"] .roster-week {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  right: 16px;
   display: flex;
-  flex-direction: column;
+  gap: 4px;
+}
+.tile[data-theme="roster"] .roster-day {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(143, 217, 179, 0.16);
+  color: #8fd9b3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 10px 18px;
 }
-.tile[data-theme="roster"] .art-title {
-  position: static;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  color: #eef3f8;
-  text-align: center;
+.tile[data-theme="roster"] .roster-day-off {
+  background: #c0392b;
+  color: #fff;
 }
-.tile[data-theme="roster"] .roster-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.tile[data-theme="roster"] .roster-label {
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.tile[data-theme="roster"] .roster-caption {
+  position: absolute;
+  z-index: 2;
+  top: 35px;
+  right: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  font-style: italic;
   color: rgba(238, 243, 248, 0.5);
 }
-.tile[data-theme="roster"] .roster-num {
+.tile[data-theme="roster"] .art-title {
+  bottom: 14px;
+  left: 16px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 800;
-  font-size: 25px;
-  line-height: 1;
-  color: #8fd9b3;
-}
-.tile[data-theme="roster"] .roster-delta {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8.5px;
-  font-style: italic;
-  color: rgba(238, 243, 248, 0.6);
+  font-weight: 700;
+  font-size: 16px;
+  color: #eef3f8;
 }
 .tile[data-theme="roster"] .go { color: #8fd9b3; }
 .tile[data-theme="roster"]:hover {
   border-color: #4a5d70;
 }
 
-/* --- theme: visa requirement explorer — same recipe again; the big
-   number is real copy from the app itself (its own legend reads
-   "Visa-free: 130"), in an engraved small-caps serif for an official,
-   passport-adjacent feel without illustrating an actual passport. --- */
+/* --- theme: visa requirement explorer — a radial progress ring
+   (130/199 filled) with the number set inside it, title bottom-left:
+   a real data-viz composition, distinct from both the others. --- */
 
 .tile[data-theme="visa"] .art {
-  background: radial-gradient(ellipse at 50% 8%, #3a1620 0%, #150609 68%);
-  border-bottom: 3px solid #4a1b26;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 18px;
+  background: linear-gradient(155deg, #3a1620 0%, #1a080c 100%);
+  border: 1px solid rgba(212, 176, 112, 0.3);
+  border-bottom: 1px solid rgba(212, 176, 112, 0.55);
+}
+.tile[data-theme="visa"] .visa-ring {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 .tile[data-theme="visa"] .art-title {
-  position: static;
+  bottom: 14px;
+  left: 16px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
   color: #f3e6d8;
-  text-align: center;
-}
-.tile[data-theme="visa"] .visa-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.tile[data-theme="visa"] .visa-label {
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(243, 230, 216, 0.55);
-}
-.tile[data-theme="visa"] .visa-num {
-  font-family: "Cinzel", serif;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 1;
-  color: #d9b877;
-}
-.tile[data-theme="visa"] .visa-delta {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 9px;
-  color: rgba(243, 230, 216, 0.6);
 }
 .tile[data-theme="visa"] .go { color: #d9b877; }
 .tile[data-theme="visa"]:hover {
-  border-color: #6b2e39;
+  border-color: #d9b877;
 }
 
-/* --- theme: subscreener — same recipe, all-monospace for a terminal/
-   ticker feel, the delta line in "prices only go up" red. --- */
+/* --- theme: subscreener — a tabular ticker (two rows, top-left),
+   title bottom-left: text-forward like a real price board, distinct
+   from the ring and the week-strip. --- */
 
 .tile[data-theme="subscreener"] .art {
-  background: radial-gradient(ellipse at 50% 8%, #14161a 0%, #05070a 68%);
-  border-bottom: 3px solid #1c2a22;
+  background: #05070a;
+  border-bottom: 1px solid rgba(79, 216, 138, 0.35);
+}
+.tile[data-theme="subscreener"] .subscreener-table {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  left: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 18px;
+  gap: 5px;
 }
+.tile[data-theme="subscreener"] .subscreener-row {
+  display: flex;
+  gap: 8px;
+  font-family: "Space Mono", ui-monospace, monospace;
+  font-size: 9px;
+  font-weight: 700;
+}
+.tile[data-theme="subscreener"] .subscreener-sym {
+  color: rgba(238, 242, 238, 0.5);
+  width: 32px;
+}
+.tile[data-theme="subscreener"] .subscreener-price { color: #eef2ee; }
+.tile[data-theme="subscreener"] .subscreener-chg { color: #e0524a; }
 .tile[data-theme="subscreener"] .art-title {
-  position: static;
+  bottom: 14px;
+  left: 16px;
   font-family: "Space Mono", ui-monospace, monospace;
   font-weight: 700;
   font-size: 13px;
   color: #eef2ee;
-  text-align: center;
-}
-.tile[data-theme="subscreener"] .subscreener-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.tile[data-theme="subscreener"] .subscreener-label {
-  font-family: "Space Mono", ui-monospace, monospace;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(238, 242, 238, 0.5);
-}
-.tile[data-theme="subscreener"] .subscreener-num {
-  font-family: "Space Mono", ui-monospace, monospace;
-  font-weight: 700;
-  font-size: 23px;
-  line-height: 1;
-  color: #eef2ee;
-}
-.tile[data-theme="subscreener"] .subscreener-delta {
-  font-family: "Space Mono", ui-monospace, monospace;
-  font-size: 9px;
-  color: #e0524a;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 .tile[data-theme="subscreener"] .go { color: #4fd88a; }
 .tile[data-theme="subscreener"]:hover {
-  border-color: #274536;
+  border-color: rgba(79, 216, 138, 0.7);
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate

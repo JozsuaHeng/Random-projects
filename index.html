@@ -389,10 +389,16 @@
 
       <a class="tile" data-theme="colmap" href="https://jozsuaheng.github.io/Cost-of-living-map/">
         <div class="art">
-          <div class="colmap-stat">
-            <span class="colmap-label">Median Rent · SF</span>
-            <span class="colmap-num">$1,850</span>
-            <span class="colmap-delta">▲ 34% vs Austin</span>
+          <div class="colmap-compare">
+            <div class="colmap-side">
+              <span class="colmap-city">SF</span>
+              <span class="colmap-price">$1,850</span>
+            </div>
+            <span class="colmap-vs">VS</span>
+            <div class="colmap-side">
+              <span class="colmap-city">Austin</span>
+              <span class="colmap-price colmap-price-cheap">$1,400</span>
+            </div>
           </div>
           <h2 class="art-title">Cost of Living Map</h2>
           <span class="go">Open →</span>
@@ -401,11 +407,16 @@
 
       <a class="tile" data-theme="roster" href="https://jozsuaheng.github.io/Rostering-app/">
         <div class="art">
-          <div class="roster-stat">
-            <span class="roster-label">Saturday</span>
-            <span class="roster-num">OFF</span>
-            <span class="roster-delta">"cannot work saturdays"</span>
+          <div class="roster-week">
+            <span class="roster-day">S</span>
+            <span class="roster-day">M</span>
+            <span class="roster-day">T</span>
+            <span class="roster-day">W</span>
+            <span class="roster-day">T</span>
+            <span class="roster-day">F</span>
+            <span class="roster-day roster-day-off">S</span>
           </div>
+          <span class="roster-caption">"cannot work saturdays"</span>
           <h2 class="art-title">Roster</h2>
           <span class="go">Open →</span>
         </div>
@@ -413,22 +424,22 @@
 
       <a class="tile" data-theme="visa" href="https://jozsuaheng.github.io/Visa-requirements-explorer/">
         <div class="art">
-          <div class="visa-stat">
-            <span class="visa-label">Visa-Free</span>
-            <span class="visa-num">130</span>
-            <span class="visa-delta">of 199 countries</span>
-          </div>
-          <h2 class="art-title">Visa Requirement Explorer</h2>
+          <svg class="deco visa-ring" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <circle cx="76" cy="24" r="16" fill="none" stroke="rgba(217, 184, 119, 0.2)" stroke-width="3" />
+            <circle cx="76" cy="24" r="16" fill="none" stroke="#d9b877" stroke-width="3" stroke-linecap="round" stroke-dasharray="65.7 100.53" transform="rotate(-90 76 24)" />
+            <text x="76" y="22" text-anchor="middle" font-family="'Cinzel', serif" font-weight="600" font-size="11" fill="#f3e6d8">130</text>
+            <text x="76" y="31" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="4.5" fill="rgba(243, 230, 216, 0.6)">of 199</text>
+          </svg>
+          <h2 class="art-title">Visa Requirement<br>Explorer</h2>
           <span class="go">Open →</span>
         </div>
       </a>
 
       <a class="tile" data-theme="subscreener" href="https://jozsuaheng.github.io/Subscription-screener/">
         <div class="art">
-          <div class="subscreener-stat">
-            <span class="subscreener-label">Netflix Premium</span>
-            <span class="subscreener-num">$21.99</span>
-            <span class="subscreener-delta">▲ $2.00 since Jan</span>
+          <div class="subscreener-table">
+            <div class="subscreener-row"><span class="subscreener-sym">NFLX</span><span class="subscreener-price">$21.99</span><span class="subscreener-chg">▲2.00</span></div>
+            <div class="subscreener-row"><span class="subscreener-sym">SPOT</span><span class="subscreener-price">$12.99</span><span class="subscreener-chg">▲1.50</span></div>
           </div>
           <h2 class="art-title">SubScreener</h2>
           <span class="go">Open →</span>
