@@ -6,7 +6,7 @@
 <title>The Quagmire</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Press+Start+2P&family=Cormorant+Garamond:ital,wght@1,600&family=Spectral:ital,wght@1,600&family=Manrope:wght@800&family=Playfair+Display:ital,wght@1,500;1,600&family=Fraunces:ital,wght@0,600;1,600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Press+Start+2P&family=Cormorant+Garamond:ital,wght@1,600&family=Spectral:ital,wght@1,600&family=Manrope:wght@800&family=Playfair+Display:ital,wght@1,500;1,600&family=Fraunces:ital,wght@0,600;1,600&family=Caveat:wght@700&family=Permanent+Marker&family=Cinzel:wght@600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -389,12 +389,18 @@
 
       <a class="tile" data-theme="colmap" href="https://jozsuaheng.github.io/Cost-of-living-map/">
         <div class="art">
-          <svg class="deco colmap-bars" viewBox="0 0 100 60" preserveAspectRatio="none">
-            <rect x="60" y="26" width="9" height="24" rx="1.5" fill="#2f8f6f" opacity="0.85" />
-            <rect x="73" y="12" width="9" height="38" rx="1.5" fill="#6fcf9e" />
-            <rect x="86" y="20" width="9" height="30" rx="1.5" fill="#2f8f6f" opacity="0.85" />
+          <svg class="deco colmap-receipt" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <g transform="rotate(-6 73 27)">
+              <rect x="56" y="3" width="1.6" height="50" fill="#000" opacity="0.25" />
+              <path d="M57 4 H91 V46 L87 52 L83 46 L79 52 L75 46 L71 52 L67 46 L63 52 L59 46 L57 50 Z" fill="#f2ead4" />
+              <text x="74" y="12" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="4.6" font-weight="700" letter-spacing="0.5" fill="#3a3526">RECEIPT</text>
+              <line x1="61" y1="17" x2="87" y2="17" stroke="#a89f7d" stroke-width="1" />
+              <line x1="61" y1="23" x2="80" y2="23" stroke="#a89f7d" stroke-width="1" />
+              <line x1="61" y1="29" x2="85" y2="29" stroke="#a89f7d" stroke-width="1" />
+              <line x1="61" y1="35" x2="74" y2="35" stroke="#a89f7d" stroke-width="1" />
+              <text x="61" y="42" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="4" font-weight="700" fill="#2f4a3c">TOTAL $$$$</text>
+            </g>
           </svg>
-          <span class="colmap-badge">$</span>
           <h2 class="art-title">Cost of<br>Living Map</h2>
           <span class="go">Open →</span>
         </div>
@@ -402,12 +408,15 @@
 
       <a class="tile" data-theme="roster" href="https://jozsuaheng.github.io/Rostering-app/">
         <div class="art">
-          <svg class="deco roster-grid" viewBox="0 0 100 60" preserveAspectRatio="none">
-            <rect x="56" y="6" width="14" height="14" rx="2" fill="#3a4658" />
-            <rect x="74" y="6" width="14" height="14" rx="2" fill="#8fd9b3" />
-            <rect x="56" y="24" width="14" height="14" rx="2" fill="#8fd9b3" opacity="0.5" />
-            <rect x="74" y="24" width="14" height="14" rx="2" fill="#3a4658" />
-            <path d="M78 11 L81.5 14.5 L87 7" stroke="#1a2129" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <svg class="deco roster-note" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <g transform="rotate(5 74 26)">
+              <rect x="58" y="6" width="1.4" height="42" fill="#000" opacity="0.15" />
+              <path d="M58 8 H90 V38 L82 46 H58 Z" fill="#f6e07a" />
+              <path d="M82 46 L82 38 L90 38 Z" fill="#d7c05e" />
+              <text x="63" y="24" font-family="'Permanent Marker', cursive" font-size="10" fill="#3a3220">Sat</text>
+              <line x1="61" y1="19.5" x2="79" y2="25.5" stroke="#c0392b" stroke-width="1.6" stroke-linecap="round" />
+              <text x="62" y="37" font-family="'Permanent Marker', cursive" font-size="7.5" fill="#2f6a4f">off!</text>
+            </g>
           </svg>
           <h2 class="art-title">Roster</h2>
           <span class="go">Open →</span>
@@ -416,12 +425,17 @@
 
       <a class="tile" data-theme="visa" href="https://jozsuaheng.github.io/Visa-requirements-explorer/">
         <div class="art">
-          <svg class="deco visa-stamp" viewBox="0 0 100 60" preserveAspectRatio="none">
-            <circle cx="74" cy="22" r="15" fill="none" stroke="#d4a76a" stroke-width="1.5" stroke-dasharray="2.5 2" />
-            <circle cx="74" cy="22" r="9.5" fill="none" stroke="#d4a76a" stroke-width="1.1" />
-            <path d="M67.5 22 L72 26.5 L81.5 15.5" stroke="#d4a76a" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="14" cy="10" r="1.4" fill="#d4a76a" opacity="0.8" />
-            <circle cx="24" cy="16" r="1.4" fill="#d4a76a" opacity="0.55" />
+          <svg class="deco visa-passport" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <g transform="rotate(-7 74 27)">
+              <rect x="55" y="7" width="1.6" height="42" fill="#000" opacity="0.3" />
+              <rect x="57" y="4" width="34" height="46" rx="2.5" fill="#5c1620" stroke="#d4b070" stroke-width="0.9" />
+              <rect x="60" y="7" width="28" height="40" rx="1.5" fill="none" stroke="#d4b070" stroke-width="0.5" opacity="0.6" />
+              <circle cx="74" cy="21" r="8" fill="none" stroke="#d9b877" stroke-width="1.2" />
+              <path d="M70.3 21 L73 23.8 L78.2 17.6" stroke="#d9b877" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <text x="74" y="40" text-anchor="middle" font-family="'Cinzel', serif" font-weight="600" font-size="4.6" letter-spacing="1.2" fill="#d9b877">PASSPORT</text>
+            </g>
+            <circle cx="13" cy="9" r="1.3" fill="#d4a76a" opacity="0.8" />
+            <circle cx="22" cy="15" r="1.3" fill="#d4a76a" opacity="0.5" />
           </svg>
           <h2 class="art-title">Visa Requirement<br>Explorer</h2>
           <span class="go">Open →</span>
@@ -430,9 +444,15 @@
 
       <a class="tile" data-theme="subscreener" href="https://jozsuaheng.github.io/Subscription-screener/">
         <div class="art">
-          <svg class="deco subscreener-chart" viewBox="0 0 100 60" preserveAspectRatio="none">
-            <polyline points="34,28 46,21 57,24 68,10 80,14 94,4" fill="none" stroke="#5fc98a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="68" cy="10" r="2.2" fill="#e0a83c" />
+          <svg class="deco subscreener-scanlines" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <line x1="0" y1="6" x2="100" y2="6" stroke="#4fd88a" stroke-width="0.3" opacity="0.15" />
+            <line x1="0" y1="16" x2="100" y2="16" stroke="#4fd88a" stroke-width="0.3" opacity="0.15" />
+            <line x1="0" y1="26" x2="100" y2="26" stroke="#4fd88a" stroke-width="0.3" opacity="0.15" />
+          </svg>
+          <svg class="deco subscreener-ticker" viewBox="0 0 100 60" preserveAspectRatio="none">
+            <text x="6" y="14" font-family="'Space Mono', monospace" font-weight="700" font-size="6.4" fill="#e0524a">NFLX  ▲2.00</text>
+            <text x="6" y="24" font-family="'Space Mono', monospace" font-weight="700" font-size="6.4" fill="#e0524a">SPOT  ▲1.50</text>
+            <rect x="6" y="28.5" width="4.2" height="7" fill="#4fd88a" class="subscreener-cursor" />
           </svg>
           <h2 class="art-title">SubScreener</h2>
           <span class="go">Open →</span>
