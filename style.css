@@ -1076,12 +1076,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+}
+.tile[data-theme="colmap"] .worldmap-continents {
   fill: #6fcf9e;
-  opacity: 0.3;
+  opacity: 0.22;
 }
 .tile[data-theme="colmap"] .art-title {
   position: static;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Space Grotesk", -apple-system, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: #eafaf1;
@@ -1099,16 +1101,17 @@ body {
   gap: 2px;
 }
 .tile[data-theme="colmap"] .colmap-city {
-  font-size: 8px;
+  font-family: "Space Grotesk", -apple-system, sans-serif;
+  font-size: 8.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(234, 250, 241, 0.5);
 }
 .tile[data-theme="colmap"] .colmap-price {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 800;
-  font-size: 18px;
+  font-family: "Space Grotesk", -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 19px;
   line-height: 1;
   color: rgba(234, 250, 241, 0.5);
 }
@@ -1149,9 +1152,9 @@ body {
   border-radius: 50%;
   background: rgba(143, 217, 179, 0.16);
   color: #8fd9b3;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Outfit", -apple-system, sans-serif;
+  font-weight: 600;
   font-size: 8px;
-  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1173,9 +1176,9 @@ body {
 .tile[data-theme="roster"] .art-title {
   bottom: 14px;
   left: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 700;
-  font-size: 16px;
+  font-family: "Outfit", -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
   color: #eef3f8;
 }
 .tile[data-theme="roster"] .go { color: #8fd9b3; }
@@ -1183,11 +1186,12 @@ body {
   border-color: #4a5d70;
 }
 
-/* --- theme: visa requirement explorer — a world map colored by visa
-   status (the app's actual core feature: a map that recolors by what
-   your passport needs), most dots gold ("visa-free"), a scattered
-   handful red ("visa required"), plus the real headline stat as a
-   small badge. Title bottom-left. --- */
+/* --- theme: visa requirement explorer — a smooth continent-blob world
+   map (same technique as Cost of Living Map, gold-toned instead of
+   green), a single warm hue throughout so it reads as a passport tool
+   rather than a status/outbreak map. One bright pin marks "your
+   passport." Stat integrated as a caption line above the title
+   instead of a floating badge. --- */
 
 .tile[data-theme="visa"] .art {
   background: linear-gradient(155deg, #3a1620 0%, #1a080c 100%);
@@ -1200,47 +1204,37 @@ body {
   width: 100%;
   height: 100%;
 }
-.tile[data-theme="visa"] .visa-dot-free {
+.tile[data-theme="visa"] .visa-worldmap .worldmap-continents {
   fill: #d9b877;
-  opacity: 0.55;
+  opacity: 0.28;
 }
-.tile[data-theme="visa"] .visa-dot-required {
-  fill: #ff6b5c;
-  opacity: 1;
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(1.7);
+.tile[data-theme="visa"] .visa-pin {
+  fill: #f3e6d8;
+  stroke: #d9b877;
+  stroke-width: 0.6;
 }
-.tile[data-theme="visa"] .visa-badge {
+.tile[data-theme="visa"] .visa-stat {
   position: absolute;
   z-index: 2;
-  top: 12px;
-  right: 14px;
+  bottom: 50px;
+  left: 16px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 800;
-  font-size: 15px;
-  color: #f3e6d8;
-  background: rgba(20, 8, 11, 0.55);
-  border: 1px solid rgba(212, 176, 112, 0.4);
-  border-radius: 8px;
-  padding: 3px 8px;
-}
-.tile[data-theme="visa"] .visa-badge small {
-  display: block;
-  font-size: 6.5px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(217, 184, 119, 0.85);
+  font-size: 10px;
+  color: #d9b877;
+}
+.tile[data-theme="visa"] .visa-stat em {
+  font-style: normal;
+  color: #f3e6d8;
 }
 .tile[data-theme="visa"] .art-title {
   bottom: 14px;
   left: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
   color: #f3e6d8;
 }
 .tile[data-theme="visa"] .go { color: #d9b877; }
@@ -1259,36 +1253,42 @@ body {
 .tile[data-theme="subscreener"] .subscreener-table {
   position: absolute;
   z-index: 2;
-  top: 9px;
-  left: 16px;
-  right: 16px;
+  top: 8px;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.tile[data-theme="subscreener"] .subscreener-col {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 .tile[data-theme="subscreener"] .subscreener-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   font-family: "Space Mono", ui-monospace, monospace;
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 700;
   line-height: 1.3;
 }
 .tile[data-theme="subscreener"] .subscreener-sym {
   color: rgba(238, 242, 238, 0.5);
-  width: 30px;
+  width: 26px;
 }
-.tile[data-theme="subscreener"] .subscreener-price { color: #eef2ee; width: 40px; }
+.tile[data-theme="subscreener"] .subscreener-price { color: #eef2ee; width: 34px; }
 .tile[data-theme="subscreener"] .subscreener-chg { color: #e0524a; }
 .tile[data-theme="subscreener"] .art-title {
-  bottom: 10px;
-  left: 16px;
+  bottom: 8px;
+  left: 14px;
+  z-index: 3;
   font-family: "Space Mono", ui-monospace, monospace;
   font-weight: 700;
   font-size: 12px;
   color: #eef2ee;
-  background: #05070a;
-  padding-right: 6px;
+  background: linear-gradient(90deg, #05070a 65%, transparent 100%);
+  padding: 2px 14px 2px 0;
 }
 .tile[data-theme="subscreener"] .go { color: #4fd88a; }
 .tile[data-theme="subscreener"]:hover {
