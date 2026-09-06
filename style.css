@@ -1176,9 +1176,9 @@ body {
 .tile[data-theme="roster"] .art-title {
   bottom: 14px;
   left: 16px;
-  font-family: "Unbounded", -apple-system, sans-serif;
-  font-weight: 700;
-  font-size: 14px;
+  font-family: "Syne", -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
   color: #eef3f8;
 }
 .tile[data-theme="roster"] .go { color: #8fd9b3; }
@@ -1212,20 +1212,6 @@ body {
   fill: #f3e6d8;
   stroke: #d9b877;
   stroke-width: 0.6;
-}
-.tile[data-theme="visa"] .visa-stat {
-  position: absolute;
-  z-index: 2;
-  bottom: 50px;
-  left: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 700;
-  font-size: 10px;
-  color: #d9b877;
-}
-.tile[data-theme="visa"] .visa-stat em {
-  font-style: normal;
-  color: #f3e6d8;
 }
 .tile[data-theme="visa"] .art-title {
   bottom: 14px;
@@ -1280,27 +1266,6 @@ body {
 }
 .tile[data-theme="subscreener"] .subscreener-price { color: #f4f8f5; width: 28px; }
 .tile[data-theme="subscreener"] .subscreener-chg { color: #ff5c4d; }
-.tile[data-theme="subscreener"] .subscreener-live {
-  position: absolute;
-  z-index: 3;
-  bottom: 10px;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #5fe8a0;
-}
-.tile[data-theme="subscreener"] .subscreener-live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #5fe8a0;
-  box-shadow: 0 0 5px rgba(95, 232, 160, 0.8);
-}
 .tile[data-theme="subscreener"] .art-title {
   bottom: 9px;
   left: 14px;
