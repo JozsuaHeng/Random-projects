@@ -1283,6 +1283,68 @@ body {
   border-color: rgba(79, 216, 138, 0.75);
 }
 
+/* --- theme: maximising shareholder value — a live-chart composition,
+   distinct from every other tile: a full-bleed glowing uptrend line
+   with a gradient fill underneath, like a trading terminal. --- */
+
+.tile[data-theme="msv"] .art {
+  background: linear-gradient(165deg, #071009 0%, #010604 100%);
+  border-bottom: 1px solid rgba(60, 240, 150, 0.4);
+  overflow: hidden;
+}
+.tile[data-theme="msv"] .msv-chart {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.tile[data-theme="msv"] .msv-grid {
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 0.3;
+}
+.tile[data-theme="msv"] .msv-area {
+  fill: url(#msv-fill);
+}
+.tile[data-theme="msv"] .msv-line {
+  fill: none;
+  stroke: #3ff09a;
+  stroke-width: 0.9;
+  filter: drop-shadow(0 0 2.5px rgba(63, 240, 154, 0.9));
+}
+.tile[data-theme="msv"] .msv-ticker {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 14px;
+  font-family: "Fragment Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #eafff2;
+}
+.tile[data-theme="msv"] .msv-chg {
+  color: #3ff09a;
+  font-size: 11px;
+}
+.tile[data-theme="msv"] .art-title {
+  bottom: 12px;
+  left: 14px;
+  z-index: 2;
+  font-family: "Fragment Mono", ui-monospace, monospace;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #cdf5df;
+  background: linear-gradient(90deg, #010604 55%, transparent 100%);
+  padding: 2px 18px 2px 0;
+}
+.tile[data-theme="msv"] .go { color: #3ff09a; }
+.tile[data-theme="msv"]:hover {
+  border-color: rgba(63, 240, 154, 0.7);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
