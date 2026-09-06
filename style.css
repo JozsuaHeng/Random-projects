@@ -1215,13 +1215,18 @@ body {
   stroke-width: 0.6;
 }
 .tile[data-theme="visa"] .art-title {
-  bottom: 14px;
+  top: 12px;
   left: 16px;
-  font-family: "Marcellus", serif;
+  right: 16px;
+  bottom: auto;
+  z-index: 2;
+  font-family: "Italiana", serif;
   font-weight: 400;
-  font-size: 20px;
-  letter-spacing: 0.03em;
+  font-size: 21px;
+  letter-spacing: 0.05em;
   color: #f3e6d8;
+  background: linear-gradient(180deg, #2c1119 65%, transparent 100%);
+  padding: 4px 0 14px;
 }
 .tile[data-theme="visa"] .go { color: #d9b877; }
 .tile[data-theme="visa"]:hover {
