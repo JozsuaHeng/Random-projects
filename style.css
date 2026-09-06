@@ -1403,6 +1403,139 @@ body {
   border-color: rgba(63, 240, 154, 0.7);
 }
 
+/* --- theme: convene — a two-circle Venn diagram (indigo + coral) is
+   the whole visual, since "find the overlap" is literally the app's
+   idea. Rather than a separate floating title (every other tile's
+   bottom-left label), the wordmark itself is split into the diagram:
+   "Con" sits inside the indigo circle, "vene" inside the coral one —
+   so the two halves of the name visually overlap right where the
+   circles do, the same pun the Venn diagram itself is making. The
+   coral circle (and its text, riding along in the same <g>) drifts
+   toward and away from the indigo one, so the lens-shaped overlap
+   breathes — the tile equivalent of a search still narrowing in. --- */
+
+.tile[data-theme="convene"] .art {
+  background: radial-gradient(ellipse at 60% 32%, #201852 0%, #0c0a1a 74%);
+  border-bottom: 3px solid #6a5cd8;
+}
+.tile[data-theme="convene"] .convene-venn {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.tile[data-theme="convene"] .convene-word {
+  font-family: "Unbounded", "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #0c0a1a;
+  stroke-width: 1.6px;
+  stroke-linejoin: round;
+}
+.tile[data-theme="convene"] .convene-word-a {
+  fill: #ffffff;
+}
+.tile[data-theme="convene"] .convene-word-b {
+  fill: #fff1ea;
+}
+.tile[data-theme="convene"] .go { color: #ff7a59; }
+.tile[data-theme="convene"] {
+  border-color: rgba(106, 92, 216, 0.28);
+}
+.tile[data-theme="convene"]:hover {
+  border-color: #ff7a59;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(255, 122, 89, 0.35);
+}
+
+/* --- theme: idle cosmos — v3, a full pixel-art scene, not just a
+   pixel sun with clean vector shapes bolted on next to it (v2's
+   ringed planet and comet trail were smooth SVG shapes, which clashed
+   with the sun's blocky style once you looked at both together). Every
+   body here — sun, Earth, its moon, the ringed planet, its ring, the
+   asteroid-belt debris, the comet's trail, even the background stars —
+   is built from small <rect> pixels via the same generation technique
+   (see convene/cities.js's approach to generated data for the general
+   pattern: precise geometry is generated once with a Python script,
+   not hand-placed), so the whole tile reads as one consistent "pixel
+   universe" instead of a mixed pixel/vector collage. The sun keeps
+   v2's "solid core, speckled edge" idea (still-forming rim, not random
+   noise everywhere) with a soft blurred glow behind it (one shape,
+   not hundreds — see memento/CLAUDE.md for why glow is banned there
+   specifically, which doesn't apply here). Title stays in the small
+   HUD badge top-left (dot + label + energy bar), not another
+   bottom-left caption. --- */
+
+.tile[data-theme="idlecosmos"] .art {
+  background:
+    radial-gradient(ellipse 140px 90px at 78% 60%, rgba(255, 178, 90, 0.16), transparent 70%),
+    radial-gradient(ellipse 180px 120px at 15% 10%, rgba(150, 90, 220, 0.16), transparent 65%),
+    radial-gradient(ellipse at 60% 70%, #1c1030 0%, #07040f 78%);
+  border-bottom: 3px solid #ffb14d;
+}
+.tile[data-theme="idlecosmos"] .cosmos-scene {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.tile[data-theme="idlecosmos"] .cosmos-twinkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cosmos-star-twinkle 2.4s ease-in-out infinite;
+}
+.tile[data-theme="idlecosmos"] .cosmos-hud {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tile[data-theme="idlecosmos"] .cosmos-hud-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffdd7a;
+  box-shadow: 0 0 5px rgba(255, 221, 122, 0.9);
+}
+.tile[data-theme="idlecosmos"] .cosmos-hud-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  color: #f3ecff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+.tile[data-theme="idlecosmos"] .cosmos-bar {
+  position: absolute;
+  z-index: 2;
+  top: 25px;
+  left: 12px;
+  width: 68px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.tile[data-theme="idlecosmos"] .cosmos-bar-fill {
+  position: absolute;
+  inset: 0;
+  width: 62%;
+  background: linear-gradient(90deg, #ffb14d, #ffdd7a);
+}
+.tile[data-theme="idlecosmos"] .go { color: #ffb14d; }
+.tile[data-theme="idlecosmos"] {
+  border-color: rgba(255, 177, 77, 0.25);
+}
+.tile[data-theme="idlecosmos"]:hover {
+  border-color: #ffdd7a;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 
@@ -1614,3 +1747,48 @@ body {
 }
 .tile[data-theme="playbook"] .pb-line-b { animation-delay: 0.5s; }
 .tile[data-theme="playbook"] .pb-line-c { animation-delay: 1s; }
+
+/* Convene: the coral circle drifts toward and away from the indigo one,
+   so the lens-shaped overlap between them visibly breathes — motion
+   that mirrors what the app itself does (narrowing in on a shared
+   window), not just a generic idle wobble. */
+@keyframes convene-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-2px); }
+}
+.tile[data-theme="convene"] .convene-drift {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: convene-drift 3.6s ease-in-out infinite;
+}
+
+/* Idle Cosmos: the HUD dot pulses like a status light — "still
+   building." The background stars are plain SVG <rect> pixels (not the
+   shared .star spans other tiles use — those are absolutely-positioned
+   HTML elements outside the art's SVG, which doesn't fit a scene where
+   everything else is an SVG pixel too), so a third of them get their
+   own scale/opacity twinkle via .cosmos-twinkle instead. */
+@keyframes cosmos-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.tile[data-theme="idlecosmos"] .cosmos-hud-dot {
+  animation: cosmos-pulse 2.2s ease-in-out infinite;
+}
+@keyframes cosmos-star-twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Idle Cosmos: a comet streaks across its own clear patch of sky on a
+   loop and fades before resetting — the README's own "shooting stars
+   and meteors" ambient events, in miniature. */
+@keyframes cosmos-comet {
+  0% { transform: translate(-16px, -6px); opacity: 0; }
+  8% { opacity: 1; }
+  38% { transform: translate(10px, 5px); opacity: 1; }
+  50%, 100% { transform: translate(10px, 5px); opacity: 0; }
+}
+.tile[data-theme="idlecosmos"] .cosmos-comet {
+  animation: cosmos-comet 5s ease-in infinite;
+}

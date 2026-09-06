@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convene — find the meeting time that works for everyone</title>
+<meta name="description" content="Paste a list of names and cities and instantly see the best overlapping meeting window across every time zone — plus a shareable link, no account needed.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="top">
+      <p class="brand">Con<span class="brand-accent">vene</span></p>
+      <p class="tagline">paste names and cities — find the window that works for everyone</p>
+    </header>
+
+    <div class="layout">
+
+      <section class="panel" aria-label="Roster and settings">
+
+        <div class="field-block">
+          <label for="quickCity">Add someone</label>
+          <p class="hint">Type a city and pick it from the list — faster than typing full lines.</p>
+          <div class="quick-add" id="quickAdd">
+            <input type="text" id="quickName" placeholder="Name (optional)" autocomplete="off">
+            <div class="quick-city-wrap">
+              <input type="text" id="quickCity" placeholder="City..." autocomplete="off">
+              <div class="quick-suggest" id="quickSuggest" hidden></div>
+            </div>
+            <button type="button" id="quickAddBtn" class="quick-add-btn" aria-label="Add person">+</button>
+          </div>
+        </div>
+
+        <div class="field-block">
+          <label for="roster">...or paste a whole list</label>
+          <p class="hint">One person per line — "Name - City" or just a city name.</p>
+          <textarea id="roster" rows="6" spellcheck="false" placeholder="Amara - Lagos&#10;Diego - Mexico City&#10;Yuki - Tokyo&#10;Elena - Berlin"></textarea>
+          <p class="demo-note" id="demoNote">Showing an example above — start typing, paste your own list, or use "Add someone" to replace it.</p>
+        </div>
+
+        <div class="roster-list" id="rosterList" aria-live="polite"></div>
+
+        <div class="field-block">
+          <label>Meeting hours</label>
+          <div class="toggle-group" role="group" aria-label="Acceptable meeting hours" id="hoursToggle">
+            <button type="button" data-start="9" data-end="18" class="active">Workday 9–6</button>
+            <button type="button" data-start="8" data-end="21">Extended 8–9pm</button>
+            <button type="button" data-start="7" data-end="23">Anytime awake</button>
+          </div>
+        </div>
+
+        <div class="field-block field-row">
+          <div class="field">
+            <label for="refDate">Date</label>
+            <input type="date" id="refDate">
+          </div>
+          <label class="check-field">
+            <input type="checkbox" id="includeMe" checked>
+            <span>Include my own time zone</span>
+          </label>
+        </div>
+
+        <div class="field-block link-block">
+          <button type="button" id="copyLinkBtn" class="link-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>
+            Copy shareable link
+          </button>
+          <button type="button" id="resetBtn" class="reset-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Reset
+          </button>
+          <span class="link-status" id="linkStatus"></span>
+        </div>
+
+        <footer class="foot">
+          <p>No accounts, no server — the whole roster lives in the link.</p>
+        </footer>
+
+      </section>
+
+      <section class="stage" aria-label="Overlap chart and results">
+
+        <div class="grid-wrap">
+          <div class="grid-scroll">
+            <div class="tz-grid" id="tzGrid"></div>
+          </div>
+        </div>
+
+        <div class="results" id="results"></div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <script src="cities.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
