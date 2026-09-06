@@ -1224,11 +1224,6 @@ body {
   fill: #d9b877;
   opacity: 0.5;
 }
-.tile[data-theme="visa"] .visa-pin {
-  fill: #f3e6d8;
-  stroke: #d9b877;
-  stroke-width: 0.6;
-}
 .tile[data-theme="visa"] .visa-stamp {
   position: absolute;
   z-index: 2;
@@ -1237,7 +1232,6 @@ body {
   width: 66px;
   height: 66px;
   transform: rotate(-11deg);
-  opacity: 0.92;
 }
 .tile[data-theme="visa"] .stamp-ring-outer {
   fill: none;
@@ -1254,14 +1248,18 @@ body {
 }
 .tile[data-theme="visa"] .stamp-text {
   font-family: "Italiana", serif;
-  font-size: 8.5px;
+  font-size: 9px;
   letter-spacing: 0.1em;
-  fill: #f3e6d8;
+  fill: #fff8ec;
+  fill-opacity: 1;
+  paint-order: stroke;
+  stroke: #2c1119;
+  stroke-width: 0.6px;
 }
 .tile[data-theme="visa"] .stamp-icon {
   font-size: 18px;
-  fill: #f3e6d8;
-  opacity: 0.85;
+  fill: #fff8ec;
+  opacity: 1;
 }
 .tile[data-theme="visa"] .go { color: #d9b877; }
 .tile[data-theme="visa"]:hover {
@@ -1316,7 +1314,7 @@ body {
   align-items: center;
   height: 22px;
   margin: 0;
-  padding: 0 10px 0 34px;
+  padding: 0 10px 0 52px;
   background: #101512;
   border-bottom: 1px solid rgba(79, 216, 138, 0.25);
   font-family: "JetBrains Mono", ui-monospace, monospace;
