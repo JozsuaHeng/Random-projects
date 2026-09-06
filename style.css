@@ -138,6 +138,21 @@ body {
   margin: 0;
 }
 
+/* Visually hidden but still readable by assistive tech / browsability —
+   used where a tile's name is carried entirely by its art (see NewCo's
+   seal, and Passportly's stamp below) instead of a floating caption. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .avatar {
   position: absolute;
   z-index: 2;
@@ -1214,19 +1229,39 @@ body {
   stroke: #d9b877;
   stroke-width: 0.6;
 }
-.tile[data-theme="visa"] .art-title {
-  top: 12px;
-  left: 16px;
-  right: 16px;
-  bottom: auto;
+.tile[data-theme="visa"] .visa-stamp {
+  position: absolute;
   z-index: 2;
+  bottom: 4px;
+  right: 4px;
+  width: 66px;
+  height: 66px;
+  transform: rotate(-11deg);
+  opacity: 0.92;
+}
+.tile[data-theme="visa"] .stamp-ring-outer {
+  fill: none;
+  stroke: #d9b877;
+  stroke-width: 2;
+  stroke-dasharray: 3 3.6;
+  opacity: 0.8;
+}
+.tile[data-theme="visa"] .stamp-ring-inner {
+  fill: none;
+  stroke: #d9b877;
+  stroke-width: 1;
+  opacity: 0.5;
+}
+.tile[data-theme="visa"] .stamp-text {
   font-family: "Italiana", serif;
-  font-weight: 400;
-  font-size: 21px;
-  letter-spacing: 0.05em;
-  color: #f3e6d8;
-  background: linear-gradient(180deg, #2c1119 65%, transparent 100%);
-  padding: 4px 0 14px;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  fill: #f3e6d8;
+}
+.tile[data-theme="visa"] .stamp-icon {
+  font-size: 18px;
+  fill: #f3e6d8;
+  opacity: 0.85;
 }
 .tile[data-theme="visa"] .go { color: #d9b877; }
 .tile[data-theme="visa"]:hover {
@@ -1244,7 +1279,7 @@ body {
 .tile[data-theme="subscreener"] .subscreener-table {
   position: absolute;
   z-index: 2;
-  top: 7px;
+  top: 26px;
   left: 10px;
   right: 10px;
   bottom: 6px;
@@ -1272,16 +1307,36 @@ body {
 .tile[data-theme="subscreener"] .subscreener-price { color: #f4f8f5; width: 28px; }
 .tile[data-theme="subscreener"] .subscreener-chg { color: #ff5c4d; }
 .tile[data-theme="subscreener"] .art-title {
-  bottom: 9px;
-  left: 14px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
   z-index: 3;
+  display: flex;
+  align-items: center;
+  height: 22px;
+  margin: 0;
+  padding: 0 10px 0 34px;
+  background: #101512;
+  border-bottom: 1px solid rgba(79, 216, 138, 0.25);
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: -0.01em;
-  color: #f4f8f5;
-  background: linear-gradient(90deg, #05070a 60%, transparent 100%);
-  padding: 2px 20px 2px 0;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(238, 242, 238, 0.75);
+}
+.tile[data-theme="subscreener"] .art-title::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 14px 0 0 #febc2e, 28px 0 0 #28c840;
 }
 .tile[data-theme="subscreener"] .go { color: #4fd88a; }
 .tile[data-theme="subscreener"]:hover {
