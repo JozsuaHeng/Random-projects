@@ -1450,29 +1450,33 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 122, 89, 0.35);
 }
 
-/* --- theme: idle cosmos — v3, a full pixel-art scene, not just a
-   pixel sun with clean vector shapes bolted on next to it (v2's
-   ringed planet and comet trail were smooth SVG shapes, which clashed
-   with the sun's blocky style once you looked at both together). Every
-   body here — sun, Earth, its moon, the ringed planet, its ring, the
-   asteroid-belt debris, the comet's trail, even the background stars —
-   is built from small <rect> pixels via the same generation technique
-   (see convene/cities.js's approach to generated data for the general
-   pattern: precise geometry is generated once with a Python script,
-   not hand-placed), so the whole tile reads as one consistent "pixel
-   universe" instead of a mixed pixel/vector collage. The sun keeps
-   v2's "solid core, speckled edge" idea (still-forming rim, not random
-   noise everywhere) with a soft blurred glow behind it (one shape,
-   not hundreds — see memento/CLAUDE.md for why glow is banned there
-   specifically, which doesn't apply here). Title stays in the small
-   HUD badge top-left (dot + label + energy bar), not another
-   bottom-left caption. --- */
+/* --- theme: idle cosmos — v4. v3 packed the sun, Earth, and the
+   ringed planet into a center-right cluster with a lot of empty space
+   at both edges, which read as lopsided/cluttered rather than
+   detailed. Now it's laid out like an actual small solar-system
+   diagram: the sun sits dead center, two dashed orbit ellipses (also
+   centered on the sun) stretch out toward both edges, Earth+Moon sit
+   on the inner orbit at the left, and the ringed planet sits on the
+   outer orbit at the right — so using the tile's full width is a
+   side-effect of the layout actually meaning something (near vs. far
+   orbits), not just spreading elements out for the sake of it. A
+   handful of small debris pixels follow the orbit curves themselves
+   (not scattered randomly) so extra detail still reads as organized.
+   Every body — sun, Earth, moon, ringed planet + ring, orbit debris,
+   the comet's trail, background stars — is still built from small
+   <rect> pixels via one generation technique, so it stays one
+   consistent "pixel universe" rather than a collage. The sun keeps its
+   "solid core, speckled edge" idea (still-forming rim) with a soft
+   blurred glow behind it (one shape, not hundreds — see
+   memento/CLAUDE.md for why glow is banned there specifically, which
+   doesn't apply here). Title stays in the small HUD badge top-left
+   (dot + label + energy bar), not another bottom-left caption. --- */
 
 .tile[data-theme="idlecosmos"] .art {
   background:
-    radial-gradient(ellipse 140px 90px at 78% 60%, rgba(255, 178, 90, 0.16), transparent 70%),
-    radial-gradient(ellipse 180px 120px at 15% 10%, rgba(150, 90, 220, 0.16), transparent 65%),
-    radial-gradient(ellipse at 60% 70%, #1c1030 0%, #07040f 78%);
+    radial-gradient(ellipse 160px 100px at 50% 55%, rgba(255, 178, 90, 0.14), transparent 70%),
+    radial-gradient(ellipse 180px 120px at 10% 85%, rgba(90, 150, 220, 0.1), transparent 65%),
+    radial-gradient(ellipse at 50% 60%, #1c1030 0%, #07040f 78%);
   border-bottom: 3px solid #ffb14d;
 }
 .tile[data-theme="idlecosmos"] .cosmos-scene {
