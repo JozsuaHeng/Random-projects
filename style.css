@@ -1540,6 +1540,56 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
 }
 
+/* --- theme: last call — a neon bar sign glowing in the dark: a warm
+   red/amber wash bleeds off the flickering "Last Call" script wordmark,
+   a small bell (about to ring, a red dot at its top like an alert)
+   swinging gently top-right. The flicker lives here, on the tile —
+   deliberately not on the app's own header, which you'd actually be
+   staring at repeatedly; see ../last-call/CLAUDE.md. --- */
+
+.tile[data-theme="lastcall"] .art {
+  background: radial-gradient(ellipse 120% 90% at 50% 62%, rgba(255, 90, 77, 0.22), transparent 68%), #0d0705;
+  border-bottom: 1px solid rgba(255, 90, 77, 0.4);
+}
+.tile[data-theme="lastcall"] .lastcall-bell {
+  transform-box: fill-box;
+  transform-origin: 50% 6%;
+  animation: lastcall-swing 3.6s ease-in-out infinite;
+}
+@keyframes lastcall-swing {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+.tile[data-theme="lastcall"] .art-title {
+  bottom: 10px;
+  left: 14px;
+  font-family: "Caveat", cursive;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 0.9;
+  color: #ffe4d6;
+  text-shadow:
+    0 0 4px rgba(255, 90, 77, 0.9),
+    0 0 12px rgba(255, 90, 77, 0.6),
+    0 0 26px rgba(255, 90, 77, 0.35);
+  animation: lastcall-flicker 5s linear infinite;
+}
+@keyframes lastcall-flicker {
+  0%, 3%, 6%, 62%, 64%, 100% { opacity: 1; }
+  4% { opacity: 0.4; }
+  5% { opacity: 0.85; }
+  63% { opacity: 0.55; }
+}
+.tile[data-theme="lastcall"] .go { color: #ff5a4d; }
+.tile[data-theme="lastcall"] {
+  border-color: rgba(255, 90, 77, 0.25);
+}
+.tile[data-theme="lastcall"]:hover {
+  border-color: #ff5a4d;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(255, 90, 77, 0.35);
+}
+
 /* --- "Open →" hint: overlaid on the art itself, not a separate
    band below it, so the tile is just the banner, edge to edge --- */
 

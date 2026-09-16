@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Last Call — cancel your free trials before they charge you</title>
+<meta name="description" content="Track your free trial end dates. Last Call nags you the day before (and the day of) so you actually cancel — plus a calendar file for each one, so the reminder still reaches you even with the tab closed.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="top">
+      <p class="brand">Last Call</p>
+      <p class="motto">for your free trials</p>
+    </header>
+
+    <p class="notify-row">
+      <button type="button" id="notifyBtn" class="notify-btn" hidden>🔔 Enable browser alerts</button>
+      <span id="notifyStatus" class="notify-status" hidden></span>
+    </p>
+
+    <div id="banner" class="banner" hidden role="alert"></div>
+
+    <section class="form-card" aria-label="Track a new trial">
+      <form id="trialForm">
+        <div class="form-row">
+          <div class="field field-service">
+            <label for="service">Service</label>
+            <input type="text" id="service" placeholder="e.g. Some Streaming Thing" maxlength="60" required>
+          </div>
+          <div class="field field-date">
+            <label for="endDate">Trial ends</label>
+            <input type="date" id="endDate" required>
+          </div>
+          <div class="field field-price">
+            <label for="price">Then charges</label>
+            <input type="text" id="price" placeholder="$14.99/mo" maxlength="24">
+          </div>
+        </div>
+        <div class="form-row form-row-notes">
+          <div class="field field-notes">
+            <label for="notes">Notes <span class="optional">(optional)</span></label>
+            <input type="text" id="notes" placeholder="how to cancel, account email, etc." maxlength="140">
+          </div>
+          <button type="submit" class="add-btn">+ Track it</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <div id="emptyState" class="empty-state" hidden>
+        <p>Nothing tracked yet — add a trial above.</p>
+      </div>
+      <ul id="trialList" class="trial-list"></ul>
+    </section>
+
+    <footer class="foot">
+      <p>Nagging only works while this tab is open in your browser — nothing here has a server, so nothing can page you once it's closed. For a reminder that reaches you either way, download the calendar file on any tracked trial; it drops a "cancel this" event onto your own calendar the day before it charges.</p>
+      <p>Everything you enter stays in this browser's local storage. Nothing is sent anywhere.</p>
+    </footer>
+
+  </div>
+
+  <template id="trialCardTemplate">
+    <li class="trial-card">
+      <div class="trial-main">
+        <div class="trial-info">
+          <p class="trial-service"></p>
+          <p class="trial-meta"></p>
+          <p class="trial-notes"></p>
+        </div>
+        <span class="trial-badge"></span>
+      </div>
+      <div class="trial-actions">
+        <button type="button" class="icsBtn" title="Download a calendar reminder">📅 Calendar</button>
+        <button type="button" class="cancelledBtn" title="Mark as cancelled">Cancelled ✓</button>
+        <button type="button" class="deleteBtn" title="Delete">Delete</button>
+      </div>
+    </li>
+  </template>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
