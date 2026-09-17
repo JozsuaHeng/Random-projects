@@ -4861,10 +4861,29 @@
 
       <a class="tile" data-theme="lastcall" href="https://jozsuaheng.github.io/Random-projects/last-call/">
         <div class="art">
-          <svg class="deco lastcall-bell" style="top:14%; right:12%; width:32px;" viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
-            <path d="M12 3.2c-3.6 0-5.4 2.8-5.4 6.2 0 4.5-1.6 5.7-1.6 6.3 0 .5.5.7 1 .7h12c.5 0 1-.2 1-.7 0-.6-1.6-1.8-1.6-6.3 0-3.4-1.8-6.2-5.4-6.2z"/>
-            <path d="M9.8 19.4a2.3 2.3 0 004.4 0"/>
-            <circle cx="19" cy="4.6" r="1.5" fill="#ff4d4d" stroke="none"/>
+          <svg class="deco lastcall-scene" viewBox="0 0 160 60" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <clipPath id="lastcall-clip-top">
+                <polygon points="-183.8,3.6 343.8,60.4 343.8,-150 -183.8,-150"/>
+              </clipPath>
+              <clipPath id="lastcall-clip-bottom">
+                <polygon points="-183.8,3.6 343.8,60.4 343.8,210 -183.8,210"/>
+              </clipPath>
+            </defs>
+            <g transform="rotate(-5 93 31)">
+              <g transform="translate(-0.3,-2.3)" clip-path="url(#lastcall-clip-top)">
+                <rect x="52" y="18" width="82" height="26" rx="5.5" fill="#eef1f3"/>
+                <rect x="52" y="27" width="82" height="6" fill="#c7ccd1"/>
+              </g>
+              <g transform="translate(0.3,2.3)" clip-path="url(#lastcall-clip-bottom)">
+                <rect x="52" y="18" width="82" height="26" rx="5.5" fill="#d7dbdf"/>
+                <rect x="62" y="38" width="22" height="5" rx="2.5" fill="#aeb4bb"/>
+              </g>
+              <rect x="88" y="29" width="2.4" height="2.4" fill="#ff3b3b" opacity="0.85" transform="rotate(24 89.2 30.2)"/>
+              <rect x="102" y="34.5" width="1.8" height="1.8" fill="#ff3b3b" opacity="0.7" transform="rotate(-18 102.9 35.4)"/>
+              <rect x="78" y="33" width="1.6" height="1.6" fill="#ff3b3b" opacity="0.55" transform="rotate(40 78.8 33.8)"/>
+              <line class="lastcall-cut" x1="-183.8" y1="3.6" x2="343.8" y2="60.4"/>
+            </g>
           </svg>
           <h2 class="art-title">Last Call</h2>
           <span class="go">Open →</span>

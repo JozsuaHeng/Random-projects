@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Last Call — cancel your free trials before they charge you</title>
-<meta name="description" content="Track your free trial end dates. Last Call nags you the day before (and the day of) so you actually cancel — plus a calendar file for each one, so the reminder still reaches you even with the tab closed.">
+<meta name="description" content="Track your free trial end dates. Last Call nags you the day before (and the day of) so you actually cancel — plus a Google Calendar or Apple/Outlook reminder for each one, so it still reaches you even with the tab closed.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d1013">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,9 +19,21 @@
   <div class="page">
 
     <header class="top">
-      <p class="brand">Last Call</p>
-      <p class="motto">for your free trials</p>
+      <div class="brand-row">
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <rect x="3.4" y="6.2" width="17.2" height="11.6" rx="2.2" fill="#fff"/>
+            <rect x="3.4" y="9.1" width="17.2" height="2.7" fill="#c7ccd1"/>
+            <rect x="5.6" y="14.2" width="5.4" height="1.5" rx="0.75" fill="#c7ccd1"/>
+            <path d="M2 15.6 L22 8.2" stroke="#0d1013" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <p class="brand">Last Call</p>
+      </div>
+      <p class="motto">so your free trials don't quietly turn into paid ones</p>
     </header>
+
+    <p id="savedStat" class="saved-stat"></p>
 
     <p class="notify-row">
       <button type="button" id="notifyBtn" class="notify-btn" hidden>🔔 Enable browser alerts</button>
@@ -61,7 +76,7 @@
     </section>
 
     <footer class="foot">
-      <p>Nagging only works while this tab is open in your browser — nothing here has a server, so nothing can page you once it's closed. For a reminder that reaches you either way, download the calendar file on any tracked trial; it drops a "cancel this" event onto your own calendar the day before it charges.</p>
+      <p>Nagging only works while this tab is open in your browser — nothing here has a server, so nothing can page you once it's closed. For a reminder that reaches you either way, use the Google Calendar or Apple/Outlook button on any tracked trial; either one drops a real event onto your own calendar the day before it charges.</p>
       <p>Everything you enter stays in this browser's local storage. Nothing is sent anywhere.</p>
     </footer>
 
@@ -74,11 +89,14 @@
           <p class="trial-service"></p>
           <p class="trial-meta"></p>
           <p class="trial-notes"></p>
+          <p class="trial-snoozed"></p>
         </div>
         <span class="trial-badge"></span>
       </div>
       <div class="trial-actions">
-        <button type="button" class="icsBtn" title="Download a calendar reminder">📅 Calendar</button>
+        <button type="button" class="snoozeBtn" title="Quiet this one for a day"></button>
+        <button type="button" class="gcalBtn" title="Add a reminder to Google Calendar">🗓️ Google Calendar</button>
+        <button type="button" class="icsBtn" title="Download a reminder for Apple/Outlook Calendar">📥 Apple/Outlook</button>
         <button type="button" class="cancelledBtn" title="Mark as cancelled">Cancelled ✓</button>
         <button type="button" class="deleteBtn" title="Delete">Delete</button>
       </div>

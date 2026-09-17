@@ -24,6 +24,7 @@
   const notifyStatus = el('notifyStatus');
   const cardTemplate = el('trialCardTemplate');
   const toastEl = el('toast');
+  const savedStat = el('savedStat');
 
   // Demo cards shown only when there's nothing real tracked yet — purely
   // illustrative (see convene/memento for the same "sample state" pattern
@@ -84,6 +85,20 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
+  function addDaysStr(days) {
+    const d = todayLocalMidnight();
+    d.setDate(d.getDate() + days);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  // A snooze doesn't touch the real end date — it only suppresses the
+  // banner/notification nag for this one entry until the given day
+  // arrives. Plain string comparison works because both sides are
+  // YYYY-MM-DD.
+  function isSnoozed(entry) {
+    return !!entry.snoozedUntil && todayStr() < entry.snoozedUntil;
+  }
+
   function daysLeftFor(entry) {
     return Math.round((parseLocalDate(entry.endDate) - todayLocalMidnight()) / MS_DAY);
   }
@@ -100,6 +115,28 @@
     if (daysLeft === 1) return { key: 'tomorrow', label: STATUS_LABEL.tomorrow, daysLeft };
     if (daysLeft <= 3) return { key: 'soon', label: STATUS_LABEL.soon(daysLeft), daysLeft };
     return { key: 'later', label: STATUS_LABEL.later(daysLeft), daysLeft };
+  }
+
+  // ---------------- saved-money stat ----------------
+
+  // The price field is free text ("$14.99/mo", "8/month", "USD 12"), so
+  // this just grabs the first plain number in it rather than trying to
+  // parse currency/period properly — good enough for a rough running
+  // total, not meant to be exact accounting.
+  function parsePriceNumber(price) {
+    if (!price) return 0;
+    const match = String(price).match(/\d+(\.\d+)?/);
+    return match ? parseFloat(match[0]) : 0;
+  }
+
+  function renderSavedStat() {
+    const cancelled = trials.filter((t) => t.cancelled);
+    if (!cancelled.length) {
+      savedStat.textContent = '💰 $0 saved so far — mark a trial "Cancelled" once you’ve actually cancelled it.';
+      return;
+    }
+    const total = cancelled.reduce((sum, t) => sum + parsePriceNumber(t.price), 0);
+    savedStat.textContent = `💰 $${total.toFixed(2)} saved so far, across ${cancelled.length} cancelled trial${cancelled.length === 1 ? '' : 's'}.`;
   }
 
   // ---------------- toast ----------------
@@ -135,6 +172,7 @@
     ordered.forEach((entry) => trialList.appendChild(renderCard(entry)));
 
     renderBanner();
+    renderSavedStat();
   }
 
   function renderCard(entry) {
@@ -161,10 +199,30 @@
       notesEl.remove();
     }
 
+    const snoozed = isSnoozed(entry);
+    const snoozedNoteEl = node.querySelector('.trial-snoozed');
+    if (snoozed) {
+      snoozedNoteEl.textContent = `😴 Snoozed — quiet until ${formatDate(entry.snoozedUntil)}`;
+    } else {
+      snoozedNoteEl.remove();
+    }
+
     node.querySelector('.trial-badge').textContent = status.label;
 
     const cancelledBtn = node.querySelector('.cancelledBtn');
     cancelledBtn.textContent = entry.cancelled ? 'Undo cancel' : 'Cancelled ✓';
+
+    // Snoozing only makes sense for the two states it actually silences
+    // (today/tomorrow — see renderBanner/checkNotifications); it has no
+    // effect on "soon"/"later"/"ended" cards, so the button doesn't
+    // appear on them at all rather than doing nothing when clicked.
+    const snoozeBtn = node.querySelector('.snoozeBtn');
+    const canSnooze = !entry.cancelled && (status.key === 'today' || status.key === 'tomorrow');
+    if (!canSnooze) {
+      snoozeBtn.remove();
+    } else {
+      snoozeBtn.textContent = snoozed ? '😴 Undo snooze' : '😴 Snooze 1 day';
+    }
 
     if (entry.isDemo) {
       node.querySelector('.trial-actions').remove();
@@ -174,7 +232,7 @@
   }
 
   function renderBanner() {
-    const urgent = trials.filter((t) => !t.cancelled && (statusFor(t).daysLeft === 0 || statusFor(t).daysLeft === 1));
+    const urgent = trials.filter((t) => !t.cancelled && !isSnoozed(t) && (statusFor(t).daysLeft === 0 || statusFor(t).daysLeft === 1));
     if (!urgent.length) {
       banner.hidden = true;
       return;
@@ -221,7 +279,7 @@
     const today = todayStr();
     let changed = false;
     trials.forEach((entry) => {
-      if (entry.cancelled) return;
+      if (entry.cancelled || isSnoozed(entry)) return;
       const days = daysLeftFor(entry);
       if (days !== 0 && days !== 1) return;
       const notifiedOn = entry.notifiedOn || [];
@@ -308,6 +366,35 @@
     ].join('\r\n');
   }
 
+  // Google Calendar has no API-key-free "download" format, but it does
+  // accept a plain URL that pre-fills its own "create event" page — no
+  // login flow, no API call, just query params. `dates` has to be in UTC
+  // ("Z" time); building the reminder as a normal local Date and then
+  // reading it back out with .toISOString() does that conversion for us
+  // automatically, since a JS Date always stores a true UTC instant
+  // internally regardless of which local fields were used to set it.
+  function buildGoogleCalendarUrl(entry) {
+    const remind = parseLocalDate(entry.endDate);
+    remind.setDate(remind.getDate() - 1);
+    remind.setHours(9, 0, 0, 0);
+    const remindEnd = new Date(remind.getTime() + 30 * 60000);
+    const fmtUTC = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+    const summary = `Cancel ${entry.service} before it charges you`;
+    const descParts = [];
+    if (entry.price) descParts.push(`Then charges ${entry.price}.`);
+    if (entry.notes) descParts.push(entry.notes);
+    descParts.push(`Trial ends ${entry.endDate}.`);
+
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: summary,
+      dates: `${fmtUTC(remind)}/${fmtUTC(remindEnd)}`,
+      details: descParts.join(' '),
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+
   // ---------------- actions ----------------
 
   function deleteTrial(entry) {
@@ -365,7 +452,17 @@
     const entry = trials.find((t) => t.id === card.dataset.id);
     if (!entry) return;
 
-    if (e.target.closest('.icsBtn')) {
+    if (e.target.closest('.snoozeBtn')) {
+      if (isSnoozed(entry)) {
+        delete entry.snoozedUntil;
+      } else {
+        entry.snoozedUntil = addDaysStr(1);
+      }
+      saveTrials();
+      render();
+    } else if (e.target.closest('.gcalBtn')) {
+      window.open(buildGoogleCalendarUrl(entry), '_blank', 'noopener');
+    } else if (e.target.closest('.icsBtn')) {
       downloadBlob(buildICS(entry), `${slugify(entry.service)}-cancel-reminder.ics`, 'text/calendar');
     } else if (e.target.closest('.cancelledBtn')) {
       entry.cancelled = !entry.cancelled;

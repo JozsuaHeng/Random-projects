@@ -20,11 +20,11 @@ detail: it's stated directly in the footer, because it changes what
 Plain HTML/CSS/JS, no framework, no build step, no dependencies beyond
 Google Fonts — same as everything else in `ai-slop/`.
 
-### Two nagging mechanisms, because a static site can't page you
+### Three nagging mechanisms, because a static site can't page you
 
 There's no server, so nothing can push a notification to you while the
 tab is closed. `app.js` is upfront about this (footer note in
-`index.html`) and covers the gap two ways:
+`index.html`) and covers the gap three ways:
 
 1. **In-browser `Notification` API**, best-effort, while the tab is
    open. `checkNotifications()` runs on initial load and again on every
@@ -35,21 +35,29 @@ tab is closed. `app.js` is upfront about this (footer note in
    every time you reload the page on the same day — only once permission
    is granted, the browser actually supports `Notification`, and
    `daysLeftFor(entry)` is `0` or `1`.
-2. **A downloadable `.ics` calendar file per trial** (`buildICS()`,
-   the 📅 Calendar button), which is the mechanism that actually reaches
-   you even with the tab closed — it drops a real event (plus a
-   `VALARM`) onto whatever calendar app you already use, dated the day
-   before the trial ends at 9am local, titled "Cancel `<service>` before
-   it charges you." This is the same workaround-the-no-backend-
-   constraint idea as Convene's shareable-link trick: instead of trying
-   to fake server behavior, hand the user something that does the actual
-   job through infrastructure they already have.
+2. **"Add to Google Calendar"** (`buildGoogleCalendarUrl()`, the 🗓️
+   button) — Google Calendar has no API-key-free download format, but it
+   does accept a plain URL that pre-fills its own "create event" page, no
+   login flow or API call needed. `dates` has to be UTC (`...Z`); the
+   function builds the reminder as an ordinary local `Date` (9am the day
+   before `endDate`) and reads it back out via `.toISOString()`, which
+   does the local→UTC conversion for free since a JS `Date` always holds
+   a true UTC instant internally regardless of which local fields set it.
+3. **A downloadable `.ics` calendar file per trial** (`buildICS()`,
+   the 📥 Apple/Outlook button) — covers calendar apps that don't take a
+   Google-style URL. Drops a real event (plus a `VALARM`) onto whatever
+   calendar app opens it, same "day before, 9am, titled 'Cancel
+   `<service>` before it charges you'" content as the Google Calendar
+   link, just as a file instead of a URL.
 
-**If browser push notifications (a real backend, service worker, and
-push subscription) ever get added as a third option, that's a
-meaningfully bigger feature** — a real server, not just static hosting
-— so treat it as a deliberate scope change, not a natural extension of
-`checkNotifications()`.
+Both calendar options are the same workaround-the-no-backend-constraint
+idea as Convene's shareable-link trick: instead of trying to fake server
+behavior, hand the user something that does the actual job through
+infrastructure they already have. **If browser push notifications (a
+real backend, service worker, and push subscription) ever get added as
+a fourth option, that's a meaningfully bigger feature** — a real server,
+not just static hosting — so treat it as a deliberate scope change, not
+a natural extension of `checkNotifications()`.
 
 ### Dates are parsed as local midnight, not `new Date(string)`
 
@@ -98,17 +106,104 @@ is generated at render time and never touches `localStorage`, so it
 disappears the instant a real entry exists and can never get confused
 with real data on reload.
 
-### Wordmark: static neon glow, not animated
+### Logo: a cut credit card, not a bell
 
-`.brand` ("Last Call," `Caveat` cursive, layered `text-shadow`) does
-**not** flicker on the app page itself, even though the concept is a
-neon bar sign — this page gets looked at repeatedly while entering and
-checking data, and a flickering wordmark sitting at the top of a
-frequently-revisited utility would get tiring fast, the same "no
-shimmer on a stared-at element" lesson documented in `../memento/`'s and
-`../nook/`'s CLAUDE.md files. The flicker animation exists, but only on
-the hub tile (see below), which visitors only glance at once before
-clicking through.
+**v1's mark was a bell** (favicon, header icon, hub tile). Direct
+feedback: a bell is "too homogenous in the market" — every reminder,
+alarm, and notification app uses a bell, so it carried zero identity
+specific to *this* app's job. Replaced everywhere (`favicon.svg`, the
+app header's `.brand-icon` in `index.html`, `icon-source.svg` for the
+PWA icons, and the hub tile) with the same mark: a plain light credit
+card with a bold dark diagonal line slashed across it — the "cut up
+your card" idiom, rendered literally. It's deliberately simple (a
+rounded rect + a stripe + one thick line) so it stays legible at every
+size this app needs it at, from a 16px browser tab favicon up to a
+512px PWA install icon. **If this mark ever changes again, keep the
+same three pieces (card body, one stripe, one diagonal cut) — don't
+drift toward a generic bell/clock/notification-badge shape**, that's
+specifically the thing being avoided here.
+
+### Wordmark: plain bold sans, not a neon sign
+
+**v1 of this app's header used a cursive, flickering-neon "Last Call"
+wordmark with a swinging bell — it read as a bar/restaurant last-call
+marquee** (the exact wrong association for a bill-cancellation tool).
+Direct user feedback: "looks like a last minute dining call app for
+restaurants wanting to fill up tables." Replaced with `.brand-row`: the
+cut-card icon above, in a small red rounded-square badge
+(`.brand-icon`), next to `.brand` — now plain `Manrope` 800 weight, no
+cursive font, no `text-shadow` glow, no animation. **If a "make the
+header pop more" request comes in later, reach for weight/size/color
+first — do not bring back a script font or a glow effect on this
+header,** both are what caused the original misread.
+
+This also makes the earlier "keep bright/flicker things off the app's
+own repeatedly-viewed header" reasoning *moot* rather than wrong — it
+was true before and still is (same lesson in `../memento/`'s and
+`../nook/`'s CLAUDE.md files), it's just that the new header has no
+glow/flicker to begin with.
+
+### Money-saved stat (`#savedStat`)
+
+`renderSavedStat()` sums `parsePriceNumber(entry.price)` across every
+`cancelled` entry and shows it as `💰 $X.XX saved so far, across N
+cancelled trials`. `parsePriceNumber` just grabs the first plain number
+out of whatever free text is in the price field (`"$14.99/mo"` → `14.99`)
+— **it does not parse currency or billing period**, so a mix of
+monthly/yearly prices will sum into a number that isn't really "dollars
+per month saved," just a rough running total. That's an intentional
+simplification for a fun motivational number, not a real accounting
+feature; don't present it anywhere as more precise than that. Uses a
+dedicated green (`#7dd88a`), the only non-red/amber/muted color on the
+page, since it's the one number here that's good news rather than a
+warning — reusing `--accent` (which means "urgent" everywhere else)
+would have muddied that.
+
+### Snooze (`isSnoozed`, `.snoozeBtn`)
+
+`entry.snoozedUntil` is a `YYYY-MM-DD` string meaning "don't nag about
+this one until this date arrives." **It never touches the real
+`endDate`** — the card's badge keeps showing the true status ("Ends
+tomorrow") even while snoozed; only `renderBanner()` and
+`checkNotifications()` check `isSnoozed()` and skip a snoozed entry.
+That split is deliberate: snoozing is "stop bugging me," not "hide this
+from me" — a tool whose whole purpose is not letting a charge slip past
+you shouldn't have a mode that actually hides one.
+
+The snooze button (`canSnooze` in `renderCard()`) only appears on
+`today`/`tomorrow` cards — the two states that actually produce a nag —
+since snoozing a `soon`/`later`/`ended` card would do nothing
+observable. Clicking it sets `snoozedUntil` to tomorrow via
+`addDaysStr(1)`; clicking again (now labeled "Undo snooze") just
+deletes the field. Because `isSnoozed()` compares against today's date
+fresh on every check rather than storing a boolean, a snooze **expires
+on its own** the day it names arrives — there's no separate "wake up
+and un-snooze everything" logic needed anywhere.
+
+### PWA install support (`manifest.webmanifest`)
+
+A `<link rel="manifest">` + `apple-touch-icon` + `theme-color` meta in
+`index.html`'s `<head>`, backed by `icon-192.png`/`icon-512.png`/
+`apple-touch-icon.png` — all rasterized from `icon-source.svg` (same
+cut-card mark as the favicon/header, but filled edge-to-edge on a solid
+red square rather than a rounded badge, since OS icon masking expects a
+full-bleed square and applies its own corner rounding). This lets a
+visitor "install" the page to their phone's home screen with a real
+icon, opening in `"display": "standalone"` (no browser address bar)
+instead of just bookmarking a tab. **This is still a static site with
+no backend** — installing does not enable the push notifications
+described above; it only changes how the page is launched/framed once
+someone's on it. If real push notifications ever get built (see the
+"nagging mechanisms" section), a service worker would need registering
+separately; this manifest alone doesn't provide one.
+
+`icon-source.svg` was rasterized to PNG via macOS's Quick Look
+thumbnailer (`qlmanage -t -s <size> -o <dir> icon-source.svg`) since no
+image-conversion CLI (ImageMagick, rsvg-convert) was available in this
+environment — a fine one-off approach, but if these icons ever need
+regenerating at a different size, any SVG-to-PNG tool works equally
+well; there's nothing `qlmanage`-specific baked into the output files
+themselves.
 
 ### Delete has an undo toast; cancel is a plain toggle
 
@@ -124,12 +219,48 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). It's a small neon bar-sign scene: a dark card, a
-swinging bell line-icon (`.lastcall-bell`, CSS `swing` keyframe), and
-the "Last Call" wordmark itself doing the flicker animation this app's
-own header deliberately does *not* do — the tile is seen once on the
-way in, so the flicker reads as a fun neon-sign flourish there instead
-of becoming annoying the way it would on a page you keep open.
+`../style.css`). Three versions so far:
+
+- **v1**: a flickering cursive "Last Call" neon sign + swinging bell —
+  read as a bar/restaurant marquee.
+- **v2**: a small mocked-up phone notification banner. Called out
+  directly as still not landing — too small/subtle to read as anything
+  in particular at a glance.
+- **v3 (current)**: the credit-card-cut mark, blown up to fill almost
+  the entire tile. `index.html`'s `.lastcall-scene` SVG draws one card
+  shape twice, each copy clipped to one side of a diagonal line
+  (`#lastcall-clip-top`/`-bottom`) and nudged apart along that line's
+  normal (`translate(-0.3,-2.3)` / `translate(0.3,2.3)`), so it reads as
+  one card that's physically been sliced in two, not two unrelated
+  rectangles. A few small red "debris" squares near the seam and a
+  glowing red line (`.lastcall-cut`, single-element `drop-shadow` — fine
+  per `../memento/CLAUDE.md`'s "no glow on *repeated* elements" rule,
+  since this is one line, not hundreds) sell the cut further. Whole
+  scene is static — a real cut doesn't animate itself, and a bold
+  *static* image reads more immediately than a small animated one did
+  in v2.
+
+  **The viewBox is `0 0 160 60`, not the `100 60` most other tiles on
+  this hub use — this matters and isn't arbitrary.** `.art` is a fixed
+  100px tall but flexible-width box (grid columns run 260px+ wide), so
+  a real tile's aspect ratio is much wider than 100:60. With
+  `preserveAspectRatio="xMidYMid slice"`, the SVG scales up until it
+  covers the whole box and then crops whatever doesn't fit — the wider
+  the tile relative to the viewBox, the more gets cropped top/bottom. A
+  first pass used `100 60` and the card's top half got cropped clean
+  off on a normal-width tile (confirmed by literally rendering it
+  standalone via `qlmanage`, not just reading the numbers). `160 60` is
+  closer to a real tile's actual aspect ratio, so far less gets
+  cropped. **If this art is ever reworked, keep the important geometry
+  (the card, the cut, the debris) vertically centered within roughly
+  y=16–44 of the 60-tall viewBox** — that band survives cropping even
+  on unusually wide tiles; don't let anything essential sit near y=0 or
+  y=60.
+
+If this tile ever needs another pass, the lesson across all three
+versions is **size and directness beat cleverness at this scale** — v3
+works because the entire tile *is* the one clear image, not a detail
+floating in a corner.
 
 ## Running it
 
@@ -140,5 +271,6 @@ Open `index.html` directly in a browser, or serve the folder
 
 Static hosting only, served as part of the shared `ai-slop` GitHub Pages
 site. No environment variables, API keys, or backend. Nothing here ever
-leaves the browser it was written in — the only thing that ever goes
-"out" is the `.ics` file you choose to download into your own calendar.
+leaves the browser it was written in on its own — the only things that
+ever go "out" are the `.ics` file you choose to download, or the
+Google Calendar tab you choose to open, for a specific trial.
