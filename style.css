@@ -1573,6 +1573,25 @@ body {
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.03);
 }
+.tile[data-theme="lastcall"] .lastcall-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 20px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #e3c17d, #a97c3f);
+  opacity: 0.85;
+}
+.tile[data-theme="lastcall"] .lastcall-num {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.32);
+}
 .tile[data-theme="lastcall"] .lastcall-stamp {
   position: absolute;
   top: -10px;
@@ -1604,10 +1623,10 @@ body {
 .tile[data-theme="lastcall"] .art-title {
   bottom: 9px;
   left: 14px;
-  font-family: "Fraunces", serif;
+  font-family: "Playfair Display", serif;
   font-style: italic;
   font-weight: 600;
-  font-size: 23px;
+  font-size: 25px;
   color: #f2eee9;
 }
 .tile[data-theme="lastcall"] .go { color: #d94a4a; }

@@ -239,16 +239,37 @@ again:
   outlined card (`.lastcall-card`, 1.5px border, near-invisible fill)
   with a rotated rubber-stamp "VOID" seal (`.lastcall-stamp`, a solid
   ring plus a dashed inner ring via `::before` for a stamped-ink
-  texture) overlapping its top-right corner, and the wordmark switched
-  from bold `Manrope` to italic `Fraunces` for a quieter, more premium
-  feel. Accent color also moved from bright red (`#ff3b3b`/`#ff5a5a`,
-  used since v1) to a more muted oxblood (`#d94a4a`) to match the
-  calmer treatment — **don't casually revert this tile's accent back to
-  the bright red used elsewhere in the app** (buttons, urgent badges,
-  etc. all still correctly use the bright red; only this tile's palette
-  shifted). "VOID" was chosen deliberately over yet another bell/
-  calendar/clock shape: it's a real, specific, universally understood
-  cancellation stamp, not a generic reminder-app icon.
+  texture) overlapping its top-right corner. Accent color also moved
+  from bright red (`#ff3b3b`/`#ff5a5a`, used since v1) to a more muted
+  oxblood (`#d94a4a`) to match the calmer treatment — **don't casually
+  revert this tile's accent back to the bright red used elsewhere in the
+  app** (buttons, urgent badges, etc. all still correctly use the bright
+  red; only this tile's palette shifted). "VOID" was chosen deliberately
+  over yet another bell/calendar/clock shape: it's a real, specific,
+  universally understood cancellation stamp, not a generic reminder-app
+  icon.
+
+  The wordmark went through two fonts within v4 itself: first italic
+  `Fraunces` (matching the "premium/editorial" brief), then swapped to
+  italic `Playfair Display` on direct feedback ("nicer font please") —
+  both were already loaded via the hub's shared Google Fonts link in
+  `../index.html`, so this was a one-line change, not a new font
+  addition. Playfair Display's higher-contrast strokes read as more
+  classic/elegant than Fraunces's softer ones at this size; if the
+  wordmark ever needs revisiting again, other elegant italic serifs
+  already loaded on this hub (and their current owners) are `Cormorant
+  Garamond` (`../memento/`) and `Spectral` — prefer something not
+  already claimed by another tile so each one stays visually distinct.
+
+  **The card's interior was empty at first** — just the outline with the
+  VOID stamp overlapping one corner — and was called out as needing
+  something in it. Filled with `.lastcall-chip` (a small gold-gradient
+  rounded rect, top-left, echoing a real card's EMV chip) and
+  `.lastcall-num` (a muted, low-opacity `•••• 4412` in `JetBrains Mono`,
+  bottom-left) — both intentionally quiet (low contrast, small) so they
+  read as "yes, this is a credit card" on a second look without
+  competing with the VOID stamp, which is still the one thing meant to
+  grab attention first.
 
   **This tile's illustration is intentionally its own scene, not a
   blown-up copy of the app's small icon** — `favicon.svg` and the app
