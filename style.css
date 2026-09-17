@@ -1540,53 +1540,84 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
 }
 
-/* --- theme: last call — v3. v1 was a flickering cursive neon sign
-   (read as a bar/restaurant marquee). v2 replaced it with a small phone-
-   notification mockup, which was called out as still not landing — too
-   small/subtle to read at a glance. v3 goes bigger and more literal: a
-   credit card sliced clean in half, filling almost the whole banner. The
-   two halves (`.lastcall-clip-top`/`-bottom` in index.html) are the same
-   base card shape, each clipped to one side of a diagonal line and
-   nudged apart along that line's normal, so it reads as "this card just
-   got cut" rather than two unrelated rectangles. `.lastcall-cut` is the
-   single line drawn back in the gap between them. Matches the "cut up
-   your card" idiom directly — a specific, ownable image, not a bell
-   (see ../last-call/CLAUDE.md for why a bell was dropped as too generic
-   a mark for this app specifically). --- */
+/* --- theme: last call — v4. v1 (flickering cursive neon sign) read as a
+   bar/restaurant marquee. v2 (small phone-notification mockup) was too
+   small/subtle to land. v3 (a credit card sliced in half, filling the
+   banner) was rendered and checked directly, but still came back as not
+   working — the illustration itself read as messy rather than bold.
+   v4 drops the bold/loud direction entirely in favor of something
+   restrained and editorial: a hairline-outlined card with a rotated
+   rubber-stamp "VOID" seal (`.lastcall-stamp`, dashed inner ring for a
+   stamped-ink texture) overlapping its corner, and the wordmark in
+   italic `Fraunces` instead of a bold sans — a deliberately quieter,
+   more premium treatment than every version before it. "VOID" is also a
+   more specific, less-generic mark than a bell/calendar/bare card ever
+   was: it's a real, universally understood cancellation stamp, not a
+   shape that could belong to any reminder app. This tile's illustration
+   is intentionally its own distinct scene rather than a literal blow-up
+   of the app's own small icon (`favicon.svg` stays the cut-card mark) —
+   several other tiles on this hub work the same way (Convene's Venn
+   diagram, SubScreener's fake ticker), so the two don't need to match
+   pixel-for-pixel. --- */
 
 .tile[data-theme="lastcall"] .art {
-  background: radial-gradient(ellipse 130% 100% at 70% 25%, rgba(255, 59, 59, 0.2), transparent 65%), linear-gradient(160deg, #15181d 0%, #08090b 100%);
-  border-bottom: 1px solid rgba(255, 59, 59, 0.4);
+  background: radial-gradient(ellipse 120% 100% at 75% 25%, rgba(217, 74, 74, 0.14), transparent 62%), linear-gradient(160deg, #141317 0%, #0a0a0c 100%);
 }
-.tile[data-theme="lastcall"] .lastcall-scene {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
+.tile[data-theme="lastcall"] .lastcall-card {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 118px;
+  height: 66px;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
 }
-.tile[data-theme="lastcall"] .lastcall-cut {
-  stroke: #ff3b3b;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 3px rgba(255, 59, 59, 0.85));
+.tile[data-theme="lastcall"] .lastcall-stamp {
+  position: absolute;
+  top: -10px;
+  right: -14px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid #d94a4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-14deg);
+  opacity: 0.92;
+}
+.tile[data-theme="lastcall"] .lastcall-stamp::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(217, 74, 74, 0.7);
+}
+.tile[data-theme="lastcall"] .lastcall-stamp span {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #e26a6a;
 }
 .tile[data-theme="lastcall"] .art-title {
-  bottom: 10px;
+  bottom: 9px;
   left: 14px;
-  font-family: "Manrope", sans-serif;
-  font-weight: 800;
-  font-size: 17px;
-  color: #f5f6f7;
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 23px;
+  color: #f2eee9;
 }
-.tile[data-theme="lastcall"] .go { color: #ff3b3b; }
+.tile[data-theme="lastcall"] .go { color: #d94a4a; }
 .tile[data-theme="lastcall"] {
-  border-color: rgba(255, 59, 59, 0.25);
+  border-color: rgba(217, 74, 74, 0.22);
 }
 .tile[data-theme="lastcall"]:hover {
-  border-color: #ff3b3b;
+  border-color: #d94a4a;
   transform: translateY(-3px);
-  box-shadow: 0 16px 30px -14px rgba(255, 59, 59, 0.4);
+  box-shadow: 0 16px 30px -14px rgba(217, 74, 74, 0.35);
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate

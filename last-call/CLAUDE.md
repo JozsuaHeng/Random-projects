@@ -219,48 +219,61 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). Three versions so far:
+`../style.css`). Four versions so far — this tile took more iteration
+than anything else on the hub, worth reading in full before touching it
+again:
 
 - **v1**: a flickering cursive "Last Call" neon sign + swinging bell —
   read as a bar/restaurant marquee.
-- **v2**: a small mocked-up phone notification banner. Called out
-  directly as still not landing — too small/subtle to read as anything
-  in particular at a glance.
-- **v3 (current)**: the credit-card-cut mark, blown up to fill almost
-  the entire tile. `index.html`'s `.lastcall-scene` SVG draws one card
-  shape twice, each copy clipped to one side of a diagonal line
-  (`#lastcall-clip-top`/`-bottom`) and nudged apart along that line's
-  normal (`translate(-0.3,-2.3)` / `translate(0.3,2.3)`), so it reads as
-  one card that's physically been sliced in two, not two unrelated
-  rectangles. A few small red "debris" squares near the seam and a
-  glowing red line (`.lastcall-cut`, single-element `drop-shadow` — fine
-  per `../memento/CLAUDE.md`'s "no glow on *repeated* elements" rule,
-  since this is one line, not hundreds) sell the cut further. Whole
-  scene is static — a real cut doesn't animate itself, and a bold
-  *static* image reads more immediately than a small animated one did
-  in v2.
+- **v2**: a small mocked-up phone notification banner — too
+  small/subtle to read as anything in particular at a glance.
+- **v3**: a credit card sliced clean in half, blown up to fill almost
+  the whole tile (two clipped/offset copies of one card shape + a glow
+  line at the seam). Bold and correctly-cropped (see the viewBox lesson
+  below, which is still true and still applies to *any* full-bleed SVG
+  art added to this tile), but the illustration itself came back as
+  reading "messy" rather than bold once actually looked at.
+- **v4 (current)**: a full pivot away from "big bold illustration"
+  toward restrained/editorial, per explicit direction ("minimalistic,
+  stylish, aesthetic, sleek"). Plain HTML/CSS now, no SVG: a hairline-
+  outlined card (`.lastcall-card`, 1.5px border, near-invisible fill)
+  with a rotated rubber-stamp "VOID" seal (`.lastcall-stamp`, a solid
+  ring plus a dashed inner ring via `::before` for a stamped-ink
+  texture) overlapping its top-right corner, and the wordmark switched
+  from bold `Manrope` to italic `Fraunces` for a quieter, more premium
+  feel. Accent color also moved from bright red (`#ff3b3b`/`#ff5a5a`,
+  used since v1) to a more muted oxblood (`#d94a4a`) to match the
+  calmer treatment — **don't casually revert this tile's accent back to
+  the bright red used elsewhere in the app** (buttons, urgent badges,
+  etc. all still correctly use the bright red; only this tile's palette
+  shifted). "VOID" was chosen deliberately over yet another bell/
+  calendar/clock shape: it's a real, specific, universally understood
+  cancellation stamp, not a generic reminder-app icon.
 
-  **The viewBox is `0 0 160 60`, not the `100 60` most other tiles on
-  this hub use — this matters and isn't arbitrary.** `.art` is a fixed
-  100px tall but flexible-width box (grid columns run 260px+ wide), so
-  a real tile's aspect ratio is much wider than 100:60. With
-  `preserveAspectRatio="xMidYMid slice"`, the SVG scales up until it
-  covers the whole box and then crops whatever doesn't fit — the wider
-  the tile relative to the viewBox, the more gets cropped top/bottom. A
-  first pass used `100 60` and the card's top half got cropped clean
-  off on a normal-width tile (confirmed by literally rendering it
-  standalone via `qlmanage`, not just reading the numbers). `160 60` is
-  closer to a real tile's actual aspect ratio, so far less gets
-  cropped. **If this art is ever reworked, keep the important geometry
-  (the card, the cut, the debris) vertically centered within roughly
-  y=16–44 of the 60-tall viewBox** — that band survives cropping even
-  on unusually wide tiles; don't let anything essential sit near y=0 or
-  y=60.
+  **This tile's illustration is intentionally its own scene, not a
+  blown-up copy of the app's small icon** — `favicon.svg` and the app
+  header still use the cut-card mark from v3's era unchanged. Several
+  other tiles on this hub work the same way (Convene's Venn diagram and
+  SubScreener's fake ticker aren't blowups of those apps' favicons
+  either), so this isn't an inconsistency to "fix" — don't feel
+  obligated to make the tile and the favicon match pixel-for-pixel.
 
-If this tile ever needs another pass, the lesson across all three
-versions is **size and directness beat cleverness at this scale** — v3
-works because the entire tile *is* the one clear image, not a detail
-floating in a corner.
+  Four candidate directions were actually rendered (not just described)
+  before this one was picked — a lesson worth keeping for next time:
+  **when a tile isn't landing after one or two tries, stop iterating on
+  the same visual metaphor and generate a few genuinely different ones
+  side by side instead.** Guessing a fourth variation of "a card with
+  something happening to it" would likely have failed the same way v1–v3
+  did.
+
+**The viewBox-cropping lesson from v3 is still real and still applies**
+to any future full-bleed SVG/graphic added to this or any tile: `.art`
+is a fixed 100px tall but flexible-width box (grid columns run 260px+),
+so a real tile's aspect ratio is much wider than a naive square-ish
+viewBox. `preserveAspectRatio="xMidYMid slice"` scales up to cover the
+box and crops whatever doesn't fit — verify by actually rendering the
+tile (e.g. via `qlmanage -t` on a standalone HTML file that links this
+project's real `style.css`), not just by reading the coordinates.
 
 ## Running it
 
