@@ -12,6 +12,12 @@
 
   let currentSort = "net-desc";
 
+  const CONFIDENCE_DEFS = {
+    high: "Official government or OECD figure.",
+    medium: "Reliable, but combined from more than one source (e.g. a wage survey paired separately with statutory tax rates).",
+    low: "A real data-quality limit applies — often because the wage figure excludes a large informal/self-employed workforce, or currency volatility. Treat as directional, not precise.",
+  };
+
   // Fixed scale reference so bar length means the same thing regardless of
   // sort/filter — always relative to the highest gross salary in the full
   // dataset, never just the currently visible rows.
@@ -68,7 +74,10 @@
       <div class="t-row"><span class="k">Net income</span><span class="v">${fmtUSD(c.netUSD)}</span></div>
       ${noteLine}
       <div class="t-source">${c.source}</div>
-      <span class="t-confidence ${c.confidence}">${c.confidence} confidence</span>
+      <div class="t-confidence-row">
+        <span class="t-confidence ${c.confidence}">${c.confidence} confidence</span>
+        <span class="t-confidence-def">${CONFIDENCE_DEFS[c.confidence]}</span>
+      </div>
     `;
     tooltipEl.classList.add("visible");
     positionTooltip(evt);
