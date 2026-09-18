@@ -219,7 +219,7 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). Five versions so far — this tile took more iteration
+`../style.css`). Six versions so far — this tile took more iteration
 than anything else on the hub, worth reading in full before touching it
 again:
 
@@ -253,27 +253,24 @@ again:
   shape again, pair it with something unambiguously about subscriptions
   (app icons, a streaming-style UI, etc.), don't rely on the card alone.
 
-- **v5 (current)**: keeps v4's calmer, graphic (not illustrative-mess)
-  spirit but replaces the subject entirely — a small cluster of
-  colorful rounded-square app icons (`.lastcall-app-a/b/c/front`, plain
-  generic glyphs: a cloud, a music note, a heart, a play triangle —
-  **deliberately not real brand logos**, to avoid impersonating actual
-  services) with the front one wearing a small dark "×" badge in its
-  top-left corner (`.lastcall-badge`). That's the actual iOS/Android
-  "long-press an app to delete it" gesture, which reads as "removing a
-  subscription" far more specifically than a card, bell, calendar, or
-  stamp ever did — the whole reason this version exists is that v4's
-  card, however nicely styled, was specific to the wrong domain
-  (banking) rather than not specific enough.
+- **v5**: keeps v4's calmer, graphic (not illustrative-mess) spirit but
+  replaces the subject entirely — a small cluster of colorful rounded-
+  square app icons (`.lastcall-app-a/b/c/front`, plain generic glyphs: a
+  cloud, a music note, a heart, a play triangle — **deliberately not
+  real brand logos**, to avoid impersonating actual services) with the
+  front one wearing a small dark "×" badge in its top-left corner
+  (`.lastcall-badge`). That's the actual iOS/Android "long-press an app
+  to delete it" gesture, which reads as "removing a subscription" far
+  more specifically than a card, bell, calendar, or stamp ever did —
+  the whole reason this version exists is that v4's card, however
+  nicely styled, was specific to the wrong domain (banking) rather than
+  not specific enough.
 
   Wordmark also moved off serif entirely, to `Sora` (bold weight 800) —
-  matches the tonal shift from "elegant banking" to "colorful consumer
-  app," and was a genuinely new font addition to the hub's shared
-  Google Fonts link in `../index.html` (not a reuse), since every
-  already-loaded elegant serif was the wrong register for this new
-  direction. If the wordmark changes again, `Marcellus` and `Cinzel`
-  are the only currently-loaded display fonts with zero tile owners —
-  check for a free one before adding yet another new font import.
+  matched the tonal shift from "elegant banking" to "colorful consumer
+  app" at the time, and was a genuinely new font addition to the hub's
+  shared Google Fonts link in `../index.html` (not a reuse). **Sora
+  didn't stick** — see v6.
 
   **This tile's illustration is intentionally its own scene, not a
   blown-up copy of the app's small icon** — `favicon.svg` and the app
@@ -285,6 +282,50 @@ again:
   and don't read v5's departure from cards as reason to update the
   favicon/header to match — that mark is independently fine and wasn't
   part of this feedback.
+
+- **v6 (current)**: a polish pass on v5's concept, not another pivot —
+  the icon-cluster/delete-badge idea itself was never in question here,
+  only its execution. Two things called out directly: the wordmark
+  ("looks so plain and boring") and wanting "a bit more detail" on the
+  tile overall.
+
+  Wordmark: `Sora` → `Fredoka` (bold weight 700). Sora's strokes are
+  plain/geometric with almost no distinguishing character at tile size;
+  Fredoka's rounded terminals read with real personality even that
+  small — **confirmed by actually rendering both and comparing, not by
+  reasoning about the font names**, same discipline as every prior round
+  of this tile. `Fredoka` was swapped straight into the hub's shared
+  Google Fonts link in place of `Sora` (`../index.html`), since nothing
+  else on the hub had claimed `Sora` either — no orphaned import left
+  behind. If the wordmark ever changes again: `Marcellus` and `Cinzel`
+  are still the only currently-loaded display fonts with zero tile
+  owners, but they're classical serifs — likely the wrong register for
+  this tile's current "colorful consumer app" direction; a fresh
+  Google Fonts addition (the `Sora`→`Fredoka` pattern) is probably right
+  again rather than reaching for an unclaimed-but-mismatched option.
+
+  Detail added **without new copy** (the hub's "no description text on
+  tiles" rule still applies — see `../CLAUDE.md`):
+  - `.lastcall-app-z` — a faint, desaturated 5th icon peeking from
+    behind the cluster. Pure depth cue ("more than 4 subscriptions
+    piled up"); no glyph inside it, so it doesn't compete for attention.
+  - `.lastcall-motion` — a pair of small curved SVG strokes flanking the
+    front icon, echoing the little motion-lines iOS/Android draw around
+    an icon in "jiggle mode." Reinforces the delete-gesture read from
+    v5 rather than adding a new idea. **Needed a visible-strength check,
+    not just placement math** — the first attempt (thin, low-opacity)
+    was nearly invisible once actually rendered at tile scale and had
+    to be thickened/brightened (`stroke-width: 2.5`, `opacity: 0.55`)
+    before it read as an intentional mark rather than a stray artifact.
+  - `.art`'s flat two-stop gradient became four soft color-matched
+    radial blobs (red/blue/purple/green, matching the icon palette) for
+    a blurred-wallpaper-behind-icons feel.
+
+  **Keep all of this restrained if touched again** — the brief was
+  "more detail," not "busier." Every v6 addition is either very
+  low-opacity (the ghost icon, the bokeh blobs) or very small (the
+  motion strokes), specifically so the four real icons + badge stay the
+  obvious focal point and don't get visually competed with.
 
 **The viewBox-cropping lesson from v3 is still real and still applies**
 to any future full-bleed SVG/graphic added to this or any tile: `.art`

@@ -1540,28 +1540,48 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
 }
 
-/* --- theme: last call — v5. v1–v3 (neon sign, notification mockup,
+/* --- theme: last call — v6. v1–v3 (neon sign, notification mockup,
    sliced card) all missed for various reasons documented in
    ../last-call/CLAUDE.md. v4 (a hairline-outlined card + rotated "VOID"
-   stamp, italic serif wordmark) fixed the "messy/loud" problem but
-   introduced a new one on direct feedback: a single credit card reads
-   as "a card-cancellation program," i.e. banking, not "cancel your
-   Netflix/Spotify/gym app." v5 keeps v4's calmer, more graphic spirit
-   but swaps the subject entirely: a small cluster of colorful rounded-
-   square app icons (`.lastcall-app-*`, generic glyphs — a cloud, a
-   music note, a heart, a play triangle — deliberately not real brand
-   logos) with the front one wearing a small dark "×" badge in its
-   top-left corner (`.lastcall-badge`). That's the exact iOS/Android
-   "long-press an app to delete it" gesture almost everyone already
-   recognizes, which reads as "removing a subscription app" far more
-   specifically than any card/calendar/bell ever did. Wordmark also
-   swapped off serif entirely, to `Sora` (bold, geometric, not yet used
-   by any other tile on this hub) — matches the shift from "elegant
-   banking" to "colorful consumer app," and was swapped in on direct
-   "change the fonts" feedback alongside this rework. --- */
+   stamp, italic serif wordmark) read as "a card-cancellation program,"
+   i.e. banking, not "cancel your Netflix/Spotify/gym app." v5 swapped
+   the subject to a small cluster of colorful rounded-square app icons
+   (`.lastcall-app-*`, generic glyphs — a cloud, a music note, a heart,
+   a play triangle — deliberately not real brand logos) with the front
+   one wearing a small dark "×" badge in its top-left corner
+   (`.lastcall-badge`): the exact iOS/Android "long-press an app to
+   delete it" gesture, which reads as "removing a subscription app" far
+   more specifically than any card/calendar/bell ever did.
+
+   v6 (current) is a polish pass on v5's same concept, not another
+   pivot — two things were called out directly: the wordmark ("looks so
+   plain and boring") and the tile wanting "a bit more detail." Wordmark
+   moved from `Sora` to `Fredoka` (bold, genuinely rounded/friendly
+   terminals, reads with far more personality at this size than Sora's
+   plain geometric strokes did — confirmed by rendering both, not just
+   reading the font names). Detail added without new copy (the hub's
+   "no description text on tiles" rule still applies): `.lastcall-app-z`
+   is a faint, desaturated 5th icon peeking from behind the cluster
+   (implies "more than 4 subscriptions piled up," pure depth cue, no
+   glyph needed); `.lastcall-motion` is a pair of small curved SVG
+   strokes flanking the front icon, echoing the little motion-lines
+   real iOS/Android draw around an icon in "jiggle mode" — reinforces
+   the delete-gesture read from v5 rather than adding a new idea; and
+   `.art`'s flat two-stop gradient became four soft color-matched radial
+   blobs (red/blue/purple/green, matching the icon palette) for a
+   blurred-wallpaper-behind-icons feel. **Keep all of this restrained**
+   — the brief was "more detail," not "busier"; every addition here is
+   either very low-opacity (the ghost icon, the bokeh blobs) or very
+   small (the motion strokes), so the four real icons + badge stay the
+   obvious focal point. --- */
 
 .tile[data-theme="lastcall"] .art {
-  background: radial-gradient(ellipse 120% 100% at 78% 25%, rgba(255, 90, 90, 0.14), transparent 62%), linear-gradient(160deg, #14161a 0%, #0a0a0c 100%);
+  background:
+    radial-gradient(circle 42px at 80% 22%, rgba(255, 92, 92, 0.38), transparent 70%),
+    radial-gradient(circle 46px at 60% 48%, rgba(78, 161, 255, 0.22), transparent 70%),
+    radial-gradient(circle 40px at 90% 58%, rgba(177, 138, 255, 0.2), transparent 70%),
+    radial-gradient(circle 36px at 68% 20%, rgba(62, 207, 142, 0.18), transparent 70%),
+    linear-gradient(160deg, #14161a 0%, #0a0a0c 100%);
 }
 .tile[data-theme="lastcall"] .lastcall-apps {
   position: absolute;
@@ -1576,6 +1596,17 @@ body {
   color: #fff;
   font-size: 13px;
   box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.6);
+}
+.tile[data-theme="lastcall"] .lastcall-app-z {
+  top: 18px;
+  right: 114px;
+  width: 20px;
+  height: 20px;
+  background: #5a6068;
+  opacity: 0.4;
+  transform: rotate(-14deg);
+  z-index: 0;
+  box-shadow: none;
 }
 .tile[data-theme="lastcall"] .lastcall-app-a {
   top: 12px;
@@ -1614,6 +1645,20 @@ body {
   z-index: 3;
   font-size: 18px;
 }
+.tile[data-theme="lastcall"] .lastcall-motion {
+  position: absolute;
+  top: 2px;
+  right: 28px;
+  width: 60px;
+  height: 60px;
+  z-index: 3;
+}
+.tile[data-theme="lastcall"] .lastcall-motion path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
 .tile[data-theme="lastcall"] .lastcall-badge {
   position: absolute;
   top: -6px;
@@ -1630,12 +1675,12 @@ body {
   text-align: center;
 }
 .tile[data-theme="lastcall"] .art-title {
-  bottom: 10px;
+  bottom: 8px;
   left: 14px;
-  font-family: "Sora", sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-style: normal;
-  font-weight: 800;
-  font-size: 19px;
+  font-weight: 700;
+  font-size: 22px;
   color: #f5f6f7;
 }
 .tile[data-theme="lastcall"] .go { color: #ff5c5c; }
