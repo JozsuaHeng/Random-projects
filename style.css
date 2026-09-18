@@ -1762,49 +1762,52 @@ body {
 }
 
 /* Kept: a paycheck split green (kept) vs red (taken by tax), the same
-   two-color language as the app's own chart — four thin stacked-bar
-   silhouettes at varying kept/taken ratios, diagonal dark green-to-red
-   field behind them, wordmark set into a matching gradient like the
-   app's own <h1>. */
+   two-color language as the app's own chart. The name is carried entirely
+   by the art (real flag + kept-ratio bars for six actual rows from the
+   dataset — Switzerland, UAE, India, Mexico, Germany, Belgium — spanning
+   the real range from "keeps almost everything" to "keeps just over
+   half"), same pattern as Passportly's stamp/NewCo's seal; no floating
+   wordmark competing with the bars for space. */
 .tile[data-theme="kept"] .art {
   background: linear-gradient(135deg, #0d2b21 0%, #14141c 48%, #2c1416 100%);
 }
 .kept-bars {
   position: absolute;
   z-index: 1;
-  top: 14px;
-  left: 16px;
-  right: 16px;
+  top: 12px;
+  left: 14px;
+  right: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .kept-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.kept-flag {
+  font-size: 12px;
+  line-height: 1;
+  flex: none;
+  width: 14px;
+  text-align: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.kept-track {
   position: relative;
   display: block;
+  flex: 1;
   height: 6px;
   border-radius: 3px;
   background: rgba(230, 103, 103, 0.28);
   overflow: hidden;
 }
-.kept-bar-fill {
+.kept-fill {
   display: block;
   height: 100%;
   border-radius: 3px 0 0 3px;
   background: #3ddc97;
-}
-.tile[data-theme="kept"] .art-title {
-  bottom: 10px;
-  left: 16px;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-weight: 800;
-  font-size: 25px;
-  background: linear-gradient(100deg, #6ff0bb 0%, #f4f4f8 50%, #ff8f8f 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 .tile[data-theme="kept"] .go { color: #6ff0bb; }
 .tile[data-theme="kept"] {
@@ -2073,13 +2076,13 @@ body {
   animation: cosmos-comet 5s ease-in infinite;
 }
 
-/* Kept: the bottom bar's kept-share gently breathes, as if one country's
-   number is being recalculated live — the others stay still so it reads
-   as one call-out, not a busy chart. */
+/* Kept: one row's kept-share gently breathes, as if that country's number
+   is being recalculated live — the others stay still so it reads as one
+   call-out, not a busy chart. */
 @keyframes kept-fill-breathe {
-  0%, 100% { width: 34%; }
-  50% { width: 47%; }
+  0%, 100% { width: 54%; }
+  50% { width: 68%; }
 }
-.tile[data-theme="kept"] .kept-bar-fill-pulse {
+.tile[data-theme="kept"] .kept-fill-pulse {
   animation: kept-fill-breathe 3.6s ease-in-out infinite;
 }

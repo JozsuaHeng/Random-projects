@@ -15,7 +15,7 @@
   <main class="wrap">
     <a class="back-link" href="https://jozsuaheng.github.io/Random-projects/">← The Quagmire</a>
 
-    <div class="eyebrow">Top economies by GDP · single full-time worker, no children</div>
+    <div class="eyebrow">Top economies by GDP · single full-time worker, no children · figures in USD, market exchange rate</div>
     <h1>Kept</h1>
     <p class="subhead">
       What a typical full-time worker earns before tax, what the state takes,
@@ -23,17 +23,18 @@
       keeps the most.
     </p>
 
-    <div class="controls">
-      <div class="field">
-        <label for="sortSelect">Sort by</label>
-        <select id="sortSelect">
-          <option value="net-desc">Net income (highest first)</option>
-          <option value="gross-desc">Gross salary (highest first)</option>
-          <option value="tax-asc">Tax rate (lowest first)</option>
-          <option value="tax-desc">Tax rate (highest first)</option>
-          <option value="gdp-asc">GDP rank</option>
-        </select>
+    <div class="sort-row">
+      <span class="sort-label">Sort by</span>
+      <div class="sort-buttons" role="group" aria-label="Sort by">
+        <button type="button" class="sort-btn active" data-sort="net-desc">Keeps the most</button>
+        <button type="button" class="sort-btn" data-sort="gross-desc">Highest paid</button>
+        <button type="button" class="sort-btn" data-sort="tax-asc">Lowest tax</button>
+        <button type="button" class="sort-btn" data-sort="tax-desc">Highest tax</button>
+        <button type="button" class="sort-btn" data-sort="gdp-asc">GDP rank</button>
       </div>
+    </div>
+
+    <div class="controls">
       <div class="field">
         <input type="search" id="searchInput" placeholder="Filter country…" aria-label="Filter by country" />
       </div>
@@ -46,25 +47,35 @@
     <div class="legend">
       <div class="legend-item"><span class="legend-swatch kept"></span> Net income (kept)</div>
       <div class="legend-item"><span class="legend-swatch taken"></span> Income tax + employee social contributions</div>
+      <div class="legend-item"><span class="legend-tick"></span> Dataset average net income</div>
       <div class="legend-note">Bar length = gross salary</div>
     </div>
 
+    <div class="confidence-legend">
+      <span class="conf-item"><span class="conf-dot high"></span> High — official government/OECD figure</span>
+      <span class="conf-item"><span class="conf-dot medium"></span> Medium — reliable but combined from multiple sources</span>
+      <span class="conf-item"><span class="conf-dot low"></span> Low — estimate; data quality limits apply (see tooltip)</span>
+    </div>
+
     <div class="chart" id="chart"></div>
-    <div class="table-wrap" id="tableWrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Country</th>
-            <th class="num">Gross (USD)</th>
-            <th class="num">Tax %</th>
-            <th class="num">Tax (USD)</th>
-            <th class="num">Net (USD)</th>
-            <th>Source</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+    <div class="table-scroll">
+      <div class="table-wrap" id="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="gdp-asc">#</th>
+              <th data-sort="country-asc">Country</th>
+              <th class="num" data-sort="gross-desc">Gross (USD)</th>
+              <th class="num" data-sort="tax-asc">Tax %</th>
+              <th class="num" data-sort="tax-desc">Tax (USD)</th>
+              <th class="num" data-sort="net-desc">Net (USD)</th>
+              <th>Confidence</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="foot" id="footNote"></div>

@@ -43,6 +43,14 @@ VAT/consumption tax. `netUSD = grossUSD - taxUSD`.
 - Every entry needs a real `source` string (report name, e.g. "OECD Taxing
   Wages 2024", or "Composite: [statistics bureau] wage + statutory tax
   rates") — never publish a row with a fabricated or unstated source.
+- `note` (optional) is for a genuinely standout quirk worth surfacing
+  directly in the UI — not a restatement of `source`. It renders as a ✦
+  badge next to the country name (chart row and table), and as a
+  highlighted line in the hover tooltip. Reserve it for things a reader
+  would actually want to know at a glance (Russia's 0%-employee-SSC
+  structure, UAE/Saudi having no income tax, India/Indonesia's wage figure
+  excluding most of the workforce) — not every row needs one, and adding
+  one to every row would make none of them stand out.
 
 ## Chart (`app.js` / `style.css`)
 
@@ -72,7 +80,22 @@ reader to do subtraction themselves.
   always exists" rule.
 - Default sort is `net-desc` (highest take-home first) since that's the
   chart's actual headline question. `gdp-asc` recovers the original GDP
-  ranking order if that's ever wanted.
+  ranking order if that's ever wanted. Sort is driven by pill buttons
+  (`.sort-btn`, plain-language labels like "Keeps the most" rather than a
+  raw field name) rather than a `<select>` — a beginner glancing at the
+  page shouldn't need to decode what "net-desc" means. The sortable table
+  headers (`thead th[data-sort]`) call the same `setSort()` so both
+  controls always agree on the active sort; don't let them drift into two
+  separate sort states.
+- Each row carries a small confidence dot (`.row-conf-dot`, colored
+  green/amber/red for high/medium/low) before the flag, and the same dot
+  repeats in the table's Confidence column — this is meant to be
+  skimmable without opening a tooltip, since burying data quality only in
+  hover text means most readers never see it.
+- `AVG_NET_PCT` draws a subtle vertical tick (`.row-avg-tick`) inside
+  *every* row's track at the dataset's average net income — cheap context
+  ("is this country above or below the pack?") without needing a second
+  chart or a shared axis overlay across rows.
 
 ## Running it
 
@@ -82,9 +105,19 @@ Open `index.html` directly, or serve the folder (`python3 -m http.server`)
 ## Hub page tile
 
 Per `../CLAUDE.md`, this gets a themed tile on "The Quagmire"
-(`data-theme="kept"` in `../index.html` / `../style.css`) — a split
-green/red field (same motif as `favicon.svg`) with the wordmark "Kept" set
-into it.
+(`data-theme="kept"` in `../index.html` / `../style.css`). The tile carries
+no visible wordmark — `.art-title` is `sr-only` (same pattern as
+Passportly's stamp / NewCo's seal) because the art itself already reads as
+"a paycheck chart" without needing the word "Kept" competing for space.
+Instead it's six flag+bar mini-rows (`.kept-bars`), each a miniature of the
+real chart's own row — actual kept-ratios from the dataset (Switzerland,
+UAE, India, Mexico, Germany, Belgium), not arbitrary decorative numbers, so
+the tile is a truthful preview rather than a made-up graphic. If the
+underlying data changes enough to meaningfully shift these countries'
+ratios, it's fine for the tile to drift slightly out of sync — it's
+illustrative art, not a live-bound view — but a large change (e.g. a
+country's tax rate correction) is worth refreshing the six `width:` values
+to match.
 
 ## Deployment
 
