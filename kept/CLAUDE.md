@@ -5,9 +5,13 @@
 **Kept** — "which country lets you keep the most of your paycheck," inspired
 by an OECD-style infographic (gross salary / taxes / net take-home, per
 country) shared on Reddit. Rebuilt with its own sourced dataset rather than
-copying the original image's numbers, covering the top economies by nominal
-GDP (a different, broader list than the original's OECD-only set — it
-includes China, India, Brazil, Indonesia, etc.).
+copying the original image's numbers, covering the world's largest
+economies by nominal GDP (a different, broader list than the original's
+OECD-only set — it includes China, India, Brazil, Indonesia, Nigeria,
+Bangladesh, etc.), built up across three research passes and now past 50
+countries. If adding more later, double-check the candidate isn't already
+in `data.js` first — Singapore was accidentally omitted from the original
+top-30 list and had to be added as a batch-3 correction.
 
 Plain HTML/CSS/JS, no framework, no build step, no dependencies beyond
 Google Fonts — same as everything else in `ai-slop/`.
