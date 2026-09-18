@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kept — Which Country Lets You Keep the Most of Your Paycheck?</title>
+<meta name="description" content="What a full-time worker earns before tax, what the state takes, and what actually lands in the bank — across the world's biggest economies." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <a class="back-link" href="https://jozsuaheng.github.io/Random-projects/">← The Quagmire</a>
+
+    <div class="eyebrow">Top economies by GDP · single full-time worker, no children</div>
+    <h1>Kept</h1>
+    <p class="subhead">
+      What a typical full-time worker earns before tax, what the state takes,
+      and what actually <strong>lands in the bank</strong> — ranked by who
+      keeps the most.
+    </p>
+
+    <div class="controls">
+      <div class="field">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect">
+          <option value="net-desc">Net income (highest first)</option>
+          <option value="gross-desc">Gross salary (highest first)</option>
+          <option value="tax-asc">Tax rate (lowest first)</option>
+          <option value="tax-desc">Tax rate (highest first)</option>
+          <option value="gdp-asc">GDP rank</option>
+        </select>
+      </div>
+      <div class="field">
+        <input type="search" id="searchInput" placeholder="Filter country…" aria-label="Filter by country" />
+      </div>
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button type="button" id="chartViewBtn" class="active">Chart</button>
+        <button type="button" id="tableViewBtn">Table</button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch kept"></span> Net income (kept)</div>
+      <div class="legend-item"><span class="legend-swatch taken"></span> Income tax + employee social contributions</div>
+      <div class="legend-note">Bar length = gross salary</div>
+    </div>
+
+    <div class="chart" id="chart"></div>
+    <div class="table-wrap" id="tableWrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Country</th>
+            <th class="num">Gross (USD)</th>
+            <th class="num">Tax %</th>
+            <th class="num">Tax (USD)</th>
+            <th class="num">Net (USD)</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="foot" id="footNote"></div>
+  </main>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
