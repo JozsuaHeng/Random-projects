@@ -1774,23 +1774,24 @@ body {
 .kept-bars {
   position: absolute;
   z-index: 1;
-  top: 12px;
+  top: 11px;
   left: 14px;
   right: 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 .kept-bar {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+  height: 10px;
 }
 .kept-flag {
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1;
   flex: none;
-  width: 14px;
+  width: 12px;
   text-align: center;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
 }
@@ -1798,8 +1799,8 @@ body {
   position: relative;
   display: block;
   flex: 1;
-  height: 6px;
-  border-radius: 3px;
+  height: 4px;
+  border-radius: 2px;
   background: rgba(230, 103, 103, 0.28);
   overflow: hidden;
 }
