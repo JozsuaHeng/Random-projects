@@ -1540,103 +1540,112 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
 }
 
-/* --- theme: last call — v4. v1 (flickering cursive neon sign) read as a
-   bar/restaurant marquee. v2 (small phone-notification mockup) was too
-   small/subtle to land. v3 (a credit card sliced in half, filling the
-   banner) was rendered and checked directly, but still came back as not
-   working — the illustration itself read as messy rather than bold.
-   v4 drops the bold/loud direction entirely in favor of something
-   restrained and editorial: a hairline-outlined card with a rotated
-   rubber-stamp "VOID" seal (`.lastcall-stamp`, dashed inner ring for a
-   stamped-ink texture) overlapping its corner, and the wordmark in
-   italic `Fraunces` instead of a bold sans — a deliberately quieter,
-   more premium treatment than every version before it. "VOID" is also a
-   more specific, less-generic mark than a bell/calendar/bare card ever
-   was: it's a real, universally understood cancellation stamp, not a
-   shape that could belong to any reminder app. This tile's illustration
-   is intentionally its own distinct scene rather than a literal blow-up
-   of the app's own small icon (`favicon.svg` stays the cut-card mark) —
-   several other tiles on this hub work the same way (Convene's Venn
-   diagram, SubScreener's fake ticker), so the two don't need to match
-   pixel-for-pixel. --- */
+/* --- theme: last call — v5. v1–v3 (neon sign, notification mockup,
+   sliced card) all missed for various reasons documented in
+   ../last-call/CLAUDE.md. v4 (a hairline-outlined card + rotated "VOID"
+   stamp, italic serif wordmark) fixed the "messy/loud" problem but
+   introduced a new one on direct feedback: a single credit card reads
+   as "a card-cancellation program," i.e. banking, not "cancel your
+   Netflix/Spotify/gym app." v5 keeps v4's calmer, more graphic spirit
+   but swaps the subject entirely: a small cluster of colorful rounded-
+   square app icons (`.lastcall-app-*`, generic glyphs — a cloud, a
+   music note, a heart, a play triangle — deliberately not real brand
+   logos) with the front one wearing a small dark "×" badge in its
+   top-left corner (`.lastcall-badge`). That's the exact iOS/Android
+   "long-press an app to delete it" gesture almost everyone already
+   recognizes, which reads as "removing a subscription app" far more
+   specifically than any card/calendar/bell ever did. Wordmark also
+   swapped off serif entirely, to `Sora` (bold, geometric, not yet used
+   by any other tile on this hub) — matches the shift from "elegant
+   banking" to "colorful consumer app," and was swapped in on direct
+   "change the fonts" feedback alongside this rework. --- */
 
 .tile[data-theme="lastcall"] .art {
-  background: radial-gradient(ellipse 120% 100% at 75% 25%, rgba(217, 74, 74, 0.14), transparent 62%), linear-gradient(160deg, #141317 0%, #0a0a0c 100%);
+  background: radial-gradient(ellipse 120% 100% at 78% 25%, rgba(255, 90, 90, 0.14), transparent 62%), linear-gradient(160deg, #14161a 0%, #0a0a0c 100%);
 }
-.tile[data-theme="lastcall"] .lastcall-card {
+.tile[data-theme="lastcall"] .lastcall-apps {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  width: 118px;
-  height: 66px;
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  inset: 0;
+}
+.tile[data-theme="lastcall"] .lastcall-app {
+  position: absolute;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.03);
-}
-.tile[data-theme="lastcall"] .lastcall-chip {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 20px;
-  height: 14px;
-  border-radius: 3px;
-  background: linear-gradient(135deg, #e3c17d, #a97c3f);
-  opacity: 0.85;
-}
-.tile[data-theme="lastcall"] .lastcall-num {
-  position: absolute;
-  bottom: 10px;
-  left: 12px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.32);
-}
-.tile[data-theme="lastcall"] .lastcall-stamp {
-  position: absolute;
-  top: -10px;
-  right: -14px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  border: 2px solid #d94a4a;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(-14deg);
-  opacity: 0.92;
+  color: #fff;
+  font-size: 13px;
+  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.6);
 }
-.tile[data-theme="lastcall"] .lastcall-stamp::before {
-  content: "";
+.tile[data-theme="lastcall"] .lastcall-app-a {
+  top: 12px;
+  right: 80px;
+  width: 26px;
+  height: 26px;
+  background: #4ea1ff;
+  transform: rotate(-10deg);
+  z-index: 1;
+}
+.tile[data-theme="lastcall"] .lastcall-app-b {
+  top: 40px;
+  right: 100px;
+  width: 24px;
+  height: 24px;
+  background: #3ecf8e;
+  transform: rotate(12deg);
+  z-index: 1;
+}
+.tile[data-theme="lastcall"] .lastcall-app-c {
+  top: 46px;
+  right: 16px;
+  width: 26px;
+  height: 26px;
+  background: #b18aff;
+  transform: rotate(8deg);
+  z-index: 2;
+}
+.tile[data-theme="lastcall"] .lastcall-app-front {
+  top: 9px;
+  right: 40px;
+  width: 40px;
+  height: 40px;
+  background: #ff5c5c;
+  transform: rotate(-5deg);
+  z-index: 3;
+  font-size: 18px;
+}
+.tile[data-theme="lastcall"] .lastcall-badge {
   position: absolute;
-  inset: 4px;
+  top: -6px;
+  left: -6px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
-  border: 1px dashed rgba(217, 74, 74, 0.7);
-}
-.tile[data-theme="lastcall"] .lastcall-stamp span {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
-  font-size: 9px;
-  letter-spacing: 0.06em;
-  color: #e26a6a;
+  background: #1a1c20;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
 }
 .tile[data-theme="lastcall"] .art-title {
-  bottom: 9px;
+  bottom: 10px;
   left: 14px;
-  font-family: "Playfair Display", serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: 25px;
-  color: #f2eee9;
+  font-family: "Sora", sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 19px;
+  color: #f5f6f7;
 }
-.tile[data-theme="lastcall"] .go { color: #d94a4a; }
+.tile[data-theme="lastcall"] .go { color: #ff5c5c; }
 .tile[data-theme="lastcall"] {
-  border-color: rgba(217, 74, 74, 0.22);
+  border-color: rgba(255, 90, 90, 0.2);
 }
 .tile[data-theme="lastcall"]:hover {
-  border-color: #d94a4a;
+  border-color: #ff5c5c;
   transform: translateY(-3px);
-  box-shadow: 0 16px 30px -14px rgba(217, 74, 74, 0.35);
+  box-shadow: 0 16px 30px -14px rgba(255, 90, 90, 0.35);
 }
 
 /* --- "Open →" hint: overlaid on the art itself, not a separate

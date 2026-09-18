@@ -219,7 +219,7 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). Four versions so far — this tile took more iteration
+`../style.css`). Five versions so far — this tile took more iteration
 than anything else on the hub, worth reading in full before touching it
 again:
 
@@ -233,59 +233,58 @@ again:
   below, which is still true and still applies to *any* full-bleed SVG
   art added to this tile), but the illustration itself came back as
   reading "messy" rather than bold once actually looked at.
-- **v4 (current)**: a full pivot away from "big bold illustration"
-  toward restrained/editorial, per explicit direction ("minimalistic,
-  stylish, aesthetic, sleek"). Plain HTML/CSS now, no SVG: a hairline-
-  outlined card (`.lastcall-card`, 1.5px border, near-invisible fill)
-  with a rotated rubber-stamp "VOID" seal (`.lastcall-stamp`, a solid
-  ring plus a dashed inner ring via `::before` for a stamped-ink
-  texture) overlapping its top-right corner. Accent color also moved
-  from bright red (`#ff3b3b`/`#ff5a5a`, used since v1) to a more muted
-  oxblood (`#d94a4a`) to match the calmer treatment — **don't casually
-  revert this tile's accent back to the bright red used elsewhere in the
-  app** (buttons, urgent badges, etc. all still correctly use the bright
-  red; only this tile's palette shifted). "VOID" was chosen deliberately
-  over yet another bell/calendar/clock shape: it's a real, specific,
-  universally understood cancellation stamp, not a generic reminder-app
-  icon.
+- **v4**: a pivot away from "big bold illustration" toward restrained/
+  editorial, per explicit direction ("minimalistic, stylish, aesthetic,
+  sleek"). A hairline-outlined card with a rotated rubber-stamp "VOID"
+  seal overlapping its corner, wordmark in italic serif (`Fraunces`,
+  then swapped to `Playfair Display` on "nicer font please" feedback —
+  both already loaded via the hub's shared font link, so a one-line
+  change each time), and a muted oxblood accent (`#d94a4a`) instead of
+  the bright red used since v1. Four candidate directions were actually
+  *rendered* side by side before this one was picked, not just guessed
+  — worth repeating any time a tile stalls after one or two tries rather
+  than iterating blind on the same idea again.
 
-  The wordmark went through two fonts within v4 itself: first italic
-  `Fraunces` (matching the "premium/editorial" brief), then swapped to
-  italic `Playfair Display` on direct feedback ("nicer font please") —
-  both were already loaded via the hub's shared Google Fonts link in
-  `../index.html`, so this was a one-line change, not a new font
-  addition. Playfair Display's higher-contrast strokes read as more
-  classic/elegant than Fraunces's softer ones at this size; if the
-  wordmark ever needs revisiting again, other elegant italic serifs
-  already loaded on this hub (and their current owners) are `Cormorant
-  Garamond` (`../memento/`) and `Spectral` — prefer something not
-  already claimed by another tile so each one stays visually distinct.
+  This fixed the "messy/loud" problem from v3, but introduced a new one:
+  called out directly as looking like "a credit card cancellation
+  program" — i.e. reads as a banking tool, not "cancel your Netflix."
+  **A single literal credit card is apparently too specific to banking
+  regardless of how it's styled** — if a future pass reaches for a card
+  shape again, pair it with something unambiguously about subscriptions
+  (app icons, a streaming-style UI, etc.), don't rely on the card alone.
 
-  **The card's interior was empty at first** — just the outline with the
-  VOID stamp overlapping one corner — and was called out as needing
-  something in it. Filled with `.lastcall-chip` (a small gold-gradient
-  rounded rect, top-left, echoing a real card's EMV chip) and
-  `.lastcall-num` (a muted, low-opacity `•••• 4412` in `JetBrains Mono`,
-  bottom-left) — both intentionally quiet (low contrast, small) so they
-  read as "yes, this is a credit card" on a second look without
-  competing with the VOID stamp, which is still the one thing meant to
-  grab attention first.
+- **v5 (current)**: keeps v4's calmer, graphic (not illustrative-mess)
+  spirit but replaces the subject entirely — a small cluster of
+  colorful rounded-square app icons (`.lastcall-app-a/b/c/front`, plain
+  generic glyphs: a cloud, a music note, a heart, a play triangle —
+  **deliberately not real brand logos**, to avoid impersonating actual
+  services) with the front one wearing a small dark "×" badge in its
+  top-left corner (`.lastcall-badge`). That's the actual iOS/Android
+  "long-press an app to delete it" gesture, which reads as "removing a
+  subscription" far more specifically than a card, bell, calendar, or
+  stamp ever did — the whole reason this version exists is that v4's
+  card, however nicely styled, was specific to the wrong domain
+  (banking) rather than not specific enough.
+
+  Wordmark also moved off serif entirely, to `Sora` (bold weight 800) —
+  matches the tonal shift from "elegant banking" to "colorful consumer
+  app," and was a genuinely new font addition to the hub's shared
+  Google Fonts link in `../index.html` (not a reuse), since every
+  already-loaded elegant serif was the wrong register for this new
+  direction. If the wordmark changes again, `Marcellus` and `Cinzel`
+  are the only currently-loaded display fonts with zero tile owners —
+  check for a free one before adding yet another new font import.
 
   **This tile's illustration is intentionally its own scene, not a
   blown-up copy of the app's small icon** — `favicon.svg` and the app
-  header still use the cut-card mark from v3's era unchanged. Several
-  other tiles on this hub work the same way (Convene's Venn diagram and
-  SubScreener's fake ticker aren't blowups of those apps' favicons
-  either), so this isn't an inconsistency to "fix" — don't feel
-  obligated to make the tile and the favicon match pixel-for-pixel.
-
-  Four candidate directions were actually rendered (not just described)
-  before this one was picked — a lesson worth keeping for next time:
-  **when a tile isn't landing after one or two tries, stop iterating on
-  the same visual metaphor and generate a few genuinely different ones
-  side by side instead.** Guessing a fourth variation of "a card with
-  something happening to it" would likely have failed the same way v1–v3
-  did.
+  header still use the credit-card-cut mark from v3's era, unchanged.
+  Several other tiles on this hub work the same way (Convene's Venn
+  diagram and SubScreener's fake ticker aren't blowups of those apps'
+  favicons either), so this is not an inconsistency to "fix" — don't
+  feel obligated to make the tile and the favicon match pixel-for-pixel,
+  and don't read v5's departure from cards as reason to update the
+  favicon/header to match — that mark is independently fine and wasn't
+  part of this feedback.
 
 **The viewBox-cropping lesson from v3 is still real and still applies**
 to any future full-bleed SVG/graphic added to this or any tile: `.art`
