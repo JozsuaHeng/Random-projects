@@ -29,6 +29,7 @@ body {
 }
 
 .page {
+  position: relative;
   width: 100%;
   max-width: 700px;
 }
@@ -82,8 +83,6 @@ body {
   text-align: center;
 }
 
-/* --- notify row --- */
-
 /* Green, not the red used everywhere else on this page — this is the one
    number on the whole app that's good news, so it gets its own color
    rather than borrowing --accent (which means "urgent/danger" here). */
@@ -95,17 +94,151 @@ body {
   margin-bottom: 18px;
 }
 
-.notify-row {
+/* --- settings button + panel ---
+   Notifications used to be a standalone button/status line right under
+   the header, which disappeared once you'd responded to the permission
+   prompt — easy to lose track of. Folded into a proper Settings panel
+   instead (gear icon, top-right of the page), alongside the previously-
+   nonexistent "where do I configure calendar reminders" control
+   (reminder day/time) and a backup export/import — see app.js. */
+
+.settings-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  appearance: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  font-size: 16px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.settings-btn:hover {
+  border-color: var(--accent);
+  transform: rotate(25deg);
 }
 
-.notify-btn {
+/* display:flex on an author rule beats the browser's own [hidden]{display:
+   none} (author styles win cascade ties over the UA stylesheet), so the
+   [hidden] override has to be written explicitly here or this panel shows
+   by default on page load — confirmed by actually rendering the page,
+   not just reasoning about it. */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 6, 7, 0.72);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 30;
+}
+.settings-overlay[hidden] {
+  display: none;
+}
+
+.settings-panel {
+  width: 100%;
+  max-width: 440px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 24px 26px;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.settings-head h2 {
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+}
+.settings-close {
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+}
+.settings-close:hover {
+  color: var(--text);
+}
+
+.settings-section {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.settings-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+.settings-section h3 {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.settings-status,
+.settings-hint {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+.settings-row label {
+  color: var(--text);
+}
+
+#reminderDays {
+  width: 52px;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: var(--text);
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+#reminderHour {
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: var(--text);
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+}
+
+.settings-action-btn {
   appearance: none;
   background: var(--card-2);
   border: 1px solid var(--border);
@@ -113,21 +246,14 @@ body {
   font-family: "Manrope", sans-serif;
   font-size: 13px;
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
-.notify-btn:hover {
+.settings-action-btn:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
-}
-
-.notify-status {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 12px;
-  color: var(--muted);
-  max-width: 420px;
 }
 
 /* --- banner --- */
@@ -420,9 +546,13 @@ input[type="date"]:focus {
     animation: none;
   }
   .add-btn,
-  .notify-btn,
+  .settings-btn,
+  .settings-action-btn,
   .toast {
     transition: none;
+  }
+  .settings-btn:hover {
+    transform: none;
   }
 }
 

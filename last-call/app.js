@@ -1,6 +1,8 @@
 (() => {
   const STORAGE_KEY = 'lastcall.trials.v1';
+  const SETTINGS_KEY = 'lastcall.settings.v1';
   const MS_DAY = 86400000;
+  const DEFAULT_SETTINGS = { reminderDaysBefore: 1, reminderHour: 9 };
 
   const STATUS_LABEL = {
     today: 'Ends today — cancel now',
@@ -20,11 +22,20 @@
   const trialList = el('trialList');
   const emptyState = el('emptyState');
   const banner = el('banner');
-  const notifyBtn = el('notifyBtn');
-  const notifyStatus = el('notifyStatus');
   const cardTemplate = el('trialCardTemplate');
   const toastEl = el('toast');
   const savedStat = el('savedStat');
+
+  const settingsBtn = el('settingsBtn');
+  const settingsOverlay = el('settingsOverlay');
+  const settingsCloseBtn = el('settingsCloseBtn');
+  const settingsNotifyBtn = el('settingsNotifyBtn');
+  const settingsNotifyStatus = el('settingsNotifyStatus');
+  const reminderDaysInput = el('reminderDays');
+  const reminderHourSelect = el('reminderHour');
+  const exportBtn = el('exportBtn');
+  const importBtn = el('importBtn');
+  const importFile = el('importFile');
 
   // Demo cards shown only when there's nothing real tracked yet — purely
   // illustrative (see convene/memento for the same "sample state" pattern
@@ -58,6 +69,24 @@
   }
 
   let trials = loadTrials();
+
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      return {
+        reminderDaysBefore: Number.isFinite(parsed?.reminderDaysBefore) ? parsed.reminderDaysBefore : DEFAULT_SETTINGS.reminderDaysBefore,
+        reminderHour: Number.isFinite(parsed?.reminderHour) ? parsed.reminderHour : DEFAULT_SETTINGS.reminderHour,
+      };
+    } catch {
+      return { ...DEFAULT_SETTINGS };
+    }
+  }
+  function saveSettings() {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  let settings = loadSettings();
 
   function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -231,8 +260,17 @@
     return node;
   }
 
+  // The day-of-charge nag (0) is always on — that's the core promise of
+  // the app — plus whatever advance warning day Settings has configured
+  // (default 1, "the day before"). If someone sets that to 0 as well,
+  // this just collapses to a single day-of nag, which is fine.
+  function isUrgent(entry) {
+    const days = statusFor(entry).daysLeft;
+    return days === 0 || days === settings.reminderDaysBefore;
+  }
+
   function renderBanner() {
-    const urgent = trials.filter((t) => !t.cancelled && !isSnoozed(t) && (statusFor(t).daysLeft === 0 || statusFor(t).daysLeft === 1));
+    const urgent = trials.filter((t) => !t.cancelled && !isSnoozed(t) && isUrgent(t));
     if (!urgent.length) {
       banner.hidden = true;
       return;
@@ -248,45 +286,142 @@
   // exists specifically to cover that gap — see the footer note in index.html.
 
   function initNotifyUI() {
-    if (!('Notification' in window)) return;
+    if (!('Notification' in window)) {
+      settingsNotifyStatus.textContent = "This browser doesn't support notifications. The calendar reminders below still work regardless.";
+      return;
+    }
     if (Notification.permission === 'default') {
-      notifyBtn.hidden = false;
-      notifyBtn.addEventListener('click', async () => {
+      settingsNotifyBtn.hidden = false;
+      settingsNotifyBtn.addEventListener('click', async () => {
         const perm = await Notification.requestPermission();
         updateNotifyStatus(perm);
         if (perm === 'granted') checkNotifications();
       });
-    } else {
-      updateNotifyStatus(Notification.permission);
     }
+    updateNotifyStatus(Notification.permission);
   }
 
   function updateNotifyStatus(perm) {
-    notifyBtn.hidden = perm !== 'default';
+    settingsNotifyBtn.hidden = perm !== 'default';
     if (perm === 'granted') {
-      notifyStatus.textContent = '🔔 Browser alerts on';
-      notifyStatus.hidden = false;
+      settingsNotifyStatus.textContent = "🔔 Browser alerts are on — you'll get a pop-up while this tab is open.";
     } else if (perm === 'denied') {
-      notifyStatus.textContent = 'Browser alerts blocked — enable them in your browser\u2019s site settings if you want pop-ups too.';
-      notifyStatus.hidden = false;
+      settingsNotifyStatus.textContent = "Browser alerts are blocked \u2014 enable them in your browser's site settings if you want pop-ups too.";
     } else {
-      notifyStatus.hidden = true;
+      settingsNotifyStatus.textContent = "Browser alerts are off. Turn them on for a pop-up while this tab is open (calendar reminders below work either way).";
     }
   }
+
+  // ---------------- settings panel ----------------
+
+  function openSettings() {
+    settingsOverlay.hidden = false;
+  }
+  function closeSettings() {
+    settingsOverlay.hidden = true;
+  }
+  settingsBtn.addEventListener('click', openSettings);
+  settingsCloseBtn.addEventListener('click', closeSettings);
+  settingsOverlay.addEventListener('click', (e) => {
+    if (e.target === settingsOverlay) closeSettings();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !settingsOverlay.hidden) closeSettings();
+  });
+
+  function initReminderInputs() {
+    reminderHourSelect.innerHTML = '';
+    for (let h = 0; h < 24; h++) {
+      const opt = document.createElement('option');
+      opt.value = String(h);
+      const label = h === 0 ? '12:00 AM' : h < 12 ? `${h}:00 AM` : h === 12 ? '12:00 PM' : `${h - 12}:00 PM`;
+      opt.textContent = label;
+      reminderHourSelect.appendChild(opt);
+    }
+    reminderDaysInput.value = String(settings.reminderDaysBefore);
+    reminderHourSelect.value = String(settings.reminderHour);
+  }
+
+  reminderDaysInput.addEventListener('change', () => {
+    const v = Math.max(0, Math.min(14, Math.round(Number(reminderDaysInput.value)) || 0));
+    reminderDaysInput.value = String(v);
+    settings.reminderDaysBefore = v;
+    saveSettings();
+    render();
+  });
+  reminderHourSelect.addEventListener('change', () => {
+    settings.reminderHour = Number(reminderHourSelect.value);
+    saveSettings();
+  });
+
+  // ---------------- backup ----------------
+
+  exportBtn.addEventListener('click', () => {
+    downloadBlob(JSON.stringify({ trials, settings }, null, 2), `last-call-backup-${todayStr()}.json`, 'application/json');
+    showToast('Backup downloaded');
+  });
+
+  importBtn.addEventListener('click', () => importFile.click());
+  importFile.addEventListener('change', () => {
+    const file = importFile.files && importFile.files[0];
+    importFile.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(reader.result);
+      } catch {
+        showToast("That file isn't valid JSON");
+        return;
+      }
+      // Accept both the current {trials, settings} shape and a bare
+      // trials array (in case anyone hand-edits/exports just the list).
+      const incoming = Array.isArray(parsed) ? parsed : parsed && parsed.trials;
+      if (!Array.isArray(incoming)) {
+        showToast("That doesn't look like a Last Call backup");
+        return;
+      }
+      const ok = window.confirm(`Replace all ${trials.length} current trials with the ${incoming.length} trials in this backup? This can't be undone.`);
+      if (!ok) return;
+      trials = incoming.map((t) => ({
+        id: typeof t.id === 'string' ? t.id : uid(),
+        service: typeof t.service === 'string' ? t.service : 'Untitled',
+        endDate: typeof t.endDate === 'string' ? t.endDate : todayStr(),
+        price: typeof t.price === 'string' ? t.price : '',
+        notes: typeof t.notes === 'string' ? t.notes : '',
+        cancelled: !!t.cancelled,
+        notifiedOn: Array.isArray(t.notifiedOn) ? t.notifiedOn : [],
+        snoozedUntil: typeof t.snoozedUntil === 'string' ? t.snoozedUntil : undefined,
+        createdAt: typeof t.createdAt === 'number' ? t.createdAt : Date.now(),
+      }));
+      saveTrials();
+      if (!Array.isArray(parsed) && parsed && parsed.settings) {
+        settings = {
+          reminderDaysBefore: Number.isFinite(parsed.settings.reminderDaysBefore) ? parsed.settings.reminderDaysBefore : DEFAULT_SETTINGS.reminderDaysBefore,
+          reminderHour: Number.isFinite(parsed.settings.reminderHour) ? parsed.settings.reminderHour : DEFAULT_SETTINGS.reminderHour,
+        };
+        saveSettings();
+        initReminderInputs();
+      }
+      render();
+      showToast('Backup restored');
+    };
+    reader.readAsText(file);
+  });
 
   function checkNotifications() {
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
     const today = todayStr();
     let changed = false;
     trials.forEach((entry) => {
-      if (entry.cancelled || isSnoozed(entry)) return;
+      if (entry.cancelled || isSnoozed(entry) || !isUrgent(entry)) return;
       const days = daysLeftFor(entry);
-      if (days !== 0 && days !== 1) return;
       const notifiedOn = entry.notifiedOn || [];
       if (notifiedOn.includes(today)) return;
       const body = days === 0
         ? `${entry.service} charges today — cancel now.`
-        : `${entry.service} charges tomorrow — cancel today.`;
+        : `${entry.service} charges in ${days} day${days === 1 ? '' : 's'} — cancel before then.`;
       try {
         new Notification('Last Call', { body, icon: 'favicon.svg' });
       } catch {
@@ -331,8 +466,8 @@
   // since there's no account/server to know the viewer's real zone.
   function buildICS(entry) {
     const remind = parseLocalDate(entry.endDate);
-    remind.setDate(remind.getDate() - 1);
-    remind.setHours(9, 0, 0, 0);
+    remind.setDate(remind.getDate() - settings.reminderDaysBefore);
+    remind.setHours(settings.reminderHour, 0, 0, 0);
     const remindEnd = new Date(remind.getTime() + 30 * 60000);
     const stamp = new Date();
 
@@ -375,8 +510,8 @@
   // internally regardless of which local fields were used to set it.
   function buildGoogleCalendarUrl(entry) {
     const remind = parseLocalDate(entry.endDate);
-    remind.setDate(remind.getDate() - 1);
-    remind.setHours(9, 0, 0, 0);
+    remind.setDate(remind.getDate() - settings.reminderDaysBefore);
+    remind.setHours(settings.reminderHour, 0, 0, 0);
     const remindEnd = new Date(remind.getTime() + 30 * 60000);
     const fmtUTC = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
@@ -482,6 +617,7 @@
   // ---------------- init ----------------
 
   endDateInput.min = todayStr();
+  initReminderInputs();
   initNotifyUI();
   render();
   checkNotifications();

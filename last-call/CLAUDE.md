@@ -34,21 +34,23 @@ tab is closed. `app.js` is upfront about this (footer note in
    `notifiedOn: [dateStr, ...]` so the same trial doesn't re-notify
    every time you reload the page on the same day — only once permission
    is granted, the browser actually supports `Notification`, and
-   `daysLeftFor(entry)` is `0` or `1`.
+   `isUrgent(entry)` is true (see "Settings panel" below for what that
+   means now).
 2. **"Add to Google Calendar"** (`buildGoogleCalendarUrl()`, the 🗓️
    button) — Google Calendar has no API-key-free download format, but it
    does accept a plain URL that pre-fills its own "create event" page, no
    login flow or API call needed. `dates` has to be UTC (`...Z`); the
-   function builds the reminder as an ordinary local `Date` (9am the day
-   before `endDate`) and reads it back out via `.toISOString()`, which
-   does the local→UTC conversion for free since a JS `Date` always holds
-   a true UTC instant internally regardless of which local fields set it.
+   function builds the reminder as an ordinary local `Date` (offset by
+   the Settings-configured reminder day/hour — see below) and reads it
+   back out via `.toISOString()`, which does the local→UTC conversion
+   for free since a JS `Date` always holds a true UTC instant internally
+   regardless of which local fields set it.
 3. **A downloadable `.ics` calendar file per trial** (`buildICS()`,
    the 📥 Apple/Outlook button) — covers calendar apps that don't take a
    Google-style URL. Drops a real event (plus a `VALARM`) onto whatever
-   calendar app opens it, same "day before, 9am, titled 'Cancel
-   `<service>` before it charges you'" content as the Google Calendar
-   link, just as a file instead of a URL.
+   calendar app opens it, same "Settings-configured day/hour, titled
+   'Cancel `<service>` before it charges you'" content as the Google
+   Calendar link, just as a file instead of a URL.
 
 Both calendar options are the same workaround-the-no-backend-constraint
 idea as Convene's shareable-link trick: instead of trying to fake server
@@ -180,6 +182,57 @@ fresh on every check rather than storing a boolean, a snooze **expires
 on its own** the day it names arrives — there's no separate "wake up
 and un-snooze everything" logic needed anywhere.
 
+### Settings panel (`#settingsOverlay`, gear icon top-right)
+
+Added on direct feedback: notifications used to be a standalone button
+right under the header that **disappeared** once you'd granted/denied
+permission (replaced by a status line), so on any later visit there was
+no visible control at all — and there was no answer whatsoever to
+"where do I configure calendar reminder timing," because there wasn't
+one; the day-before/9am reminder was hardcoded. Both are now one panel:
+
+- **Notifications** — same permission logic as before
+  (`initNotifyUI`/`updateNotifyStatus`), just always-visible inside the
+  panel instead of a disappearing inline button, so the current state is
+  checkable on any visit, not just the first one.
+- **Reminder timing** (`settings.reminderDaysBefore`,
+  `settings.reminderHour`, persisted under `lastcall.settings.v1`) —
+  this is what "calendar syncing settings" actually turned into. Default
+  matches the old hardcoded behavior (1 day before, 9am) so nobody's
+  existing habits change unless they touch it. `isUrgent(entry)` (used
+  by both `renderBanner()` and `checkNotifications()`) is `daysLeft ===
+  0 || daysLeft === settings.reminderDaysBefore` — **the day-of-charge
+  nag is always on regardless of this setting**, only the *advance*
+  warning day is configurable. `buildICS()`/`buildGoogleCalendarUrl()`
+  read the same two settings for where to place the event. Changing
+  either input re-renders (banner/badges can depend on the new
+  threshold) but does **not** retroactively move calendar events you've
+  already added to your calendar — those already-created events keep
+  whatever day/hour was configured at the moment you clicked the
+  button, which is stated directly in the panel's hint text.
+- **Backup** (export/import) — `{ trials, settings }` as one JSON file,
+  same shape both ways. Import accepts either that shape or a bare
+  trials array (an old-format or hand-edited file), confirms before
+  overwriting (`window.confirm`, same pattern as `../nook/`'s
+  import), and re-fills every trial field defensively (falls back to a
+  sane default for anything missing/mistyped) rather than trusting the
+  file's shape blindly.
+
+**A real bug worth knowing about if this panel is ever touched again:**
+`.settings-overlay` sets `display: flex` directly in `style.css`. An
+*author* stylesheet rule beats the browser's own built-in `[hidden] {
+display: none }` rule on a cascade tie (author styles always win over
+the user-agent stylesheet, specificity being equal) — so without an
+explicit `.settings-overlay[hidden] { display: none; }` override
+sitting right next to it, the panel showed **by default on every page
+load**, caught only by actually rendering the page and looking, not by
+reading the HTML/CSS separately. Any other `hidden`-controlled element
+that gets a non-`none` `display` value in this file needs the same
+explicit `[hidden]` override — the existing ones (`.banner`,
+`.empty-state`, `#toast`, etc.) never needed this only because none of
+them declare `display` at all, they just rely on the default block
+flow, which doesn't fight with the UA rule.
+
 ### PWA install support (`manifest.webmanifest`)
 
 A `<link rel="manifest">` + `apple-touch-icon` + `theme-color` meta in
@@ -219,7 +272,7 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). Six versions so far — this tile took more iteration
+`../style.css`). Seven versions so far — this tile took more iteration
 than anything else on the hub, worth reading in full before touching it
 again:
 
@@ -283,8 +336,8 @@ again:
   favicon/header to match — that mark is independently fine and wasn't
   part of this feedback.
 
-- **v6 (current)**: a polish pass on v5's concept, not another pivot —
-  the icon-cluster/delete-badge idea itself was never in question here,
+- **v6**: a polish pass on v5's concept, not another pivot — the
+  icon-cluster/delete-badge idea itself was never in question here,
   only its execution. Two things called out directly: the wordmark
   ("looks so plain and boring") and wanting "a bit more detail" on the
   tile overall.
@@ -326,6 +379,33 @@ again:
   low-opacity (the ghost icon, the bokeh blobs) or very small (the
   motion strokes), specifically so the four real icons + badge stay the
   obvious focal point and don't get visually competed with.
+
+- **v7 (current)**: the same two asks came back almost verbatim after
+  v6 shipped — "more detail," "nicer font," "more please." Read as: v6's
+  polish moved in the right direction but hadn't gone far enough yet,
+  not as a sign to change direction again.
+
+  Wordmark: `Fredoka` → `Grandstander` (bolder, more overtly bouncy
+  letterforms). **But the font swap alone was not treated as sufficient
+  this time** — a plain flat-white fill had apparently read as "boring"
+  across three different typefaces in a row (`Sora`, `Fredoka`, and
+  presumably `Grandstander` too if left flat), so `.art-title` also
+  picked up a soft white-to-coral `linear-gradient` fill via
+  `background-clip: text` plus a `drop-shadow` for depth. **The lesson
+  for next time: if "nicer font" comes back a third time, the fix is
+  probably a fill/shadow *treatment*, not a fourth typeface** — swapping
+  families alone had already been tried twice by this point.
+
+  New detail: `.lastcall-dollar`, a small gold coin badge (`$`) near the
+  ghost icon — the first element on this tile referencing *money* rather
+  than *apps*, tying "a pile of subscription icons" back to the actual
+  reason this app exists. Deliberately positioned near the icon cluster
+  (`top: 6px; right: 122px`) rather than near the wordmark — an early
+  placement attempt near the bottom-right came close to overlapping
+  "Last Call" on the hub's narrowest tile columns (min 260px wide),
+  since bold `Grandstander` can run close to 150px wide on its own; keep
+  any future addition near the icon cluster, not the text corner, for
+  the same reason.
 
 **The viewBox-cropping lesson from v3 is still real and still applies**
 to any future full-bleed SVG/graphic added to this or any tile: `.art`

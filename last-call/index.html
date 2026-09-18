@@ -18,6 +18,8 @@
 
   <div class="page">
 
+    <button type="button" id="settingsBtn" class="settings-btn" aria-label="Settings" title="Settings">⚙️</button>
+
     <header class="top">
       <div class="brand-row">
         <span class="brand-icon" aria-hidden="true">
@@ -34,11 +36,6 @@
     </header>
 
     <p id="savedStat" class="saved-stat"></p>
-
-    <p class="notify-row">
-      <button type="button" id="notifyBtn" class="notify-btn" hidden>🔔 Enable browser alerts</button>
-      <span id="notifyStatus" class="notify-status" hidden></span>
-    </p>
 
     <div id="banner" class="banner" hidden role="alert"></div>
 
@@ -76,10 +73,46 @@
     </section>
 
     <footer class="foot">
-      <p>Nagging only works while this tab is open in your browser — nothing here has a server, so nothing can page you once it's closed. For a reminder that reaches you either way, use the Google Calendar or Apple/Outlook button on any tracked trial; either one drops a real event onto your own calendar the day before it charges.</p>
+      <p>Nagging only works while this tab is open in your browser — nothing here has a server, so nothing can page you once it's closed. For a reminder that reaches you either way, use the Google Calendar or Apple/Outlook button on any tracked trial; either one drops a real event onto your own calendar (see Settings for how far ahead).</p>
       <p>Everything you enter stays in this browser's local storage. Nothing is sent anywhere.</p>
     </footer>
 
+  </div>
+
+  <div id="settingsOverlay" class="settings-overlay" hidden>
+    <div class="settings-panel" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="settings-head">
+        <h2>Settings</h2>
+        <button type="button" id="settingsCloseBtn" class="settings-close" aria-label="Close settings">✕</button>
+      </div>
+
+      <section class="settings-section">
+        <h3>Notifications</h3>
+        <p id="settingsNotifyStatus" class="settings-status"></p>
+        <button type="button" id="settingsNotifyBtn" class="settings-action-btn" hidden>🔔 Enable browser alerts</button>
+      </section>
+
+      <section class="settings-section">
+        <h3>Reminder timing</h3>
+        <p class="settings-hint">Used for new browser alerts, and for any Google Calendar / Apple-Outlook reminder you add from here on. Trials you've already added calendar reminders for keep the timing they were created with.</p>
+        <div class="settings-row">
+          <label for="reminderDays">Remind me</label>
+          <input type="number" id="reminderDays" min="0" max="14" value="1">
+          <span>day(s) before, around</span>
+          <select id="reminderHour"></select>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>Backup</h3>
+        <p class="settings-hint">Your trials live only in this browser's storage — nowhere else. Export a copy so clearing your browser data can't silently wipe them, or restore one on a new browser/computer.</p>
+        <div class="settings-row">
+          <button type="button" id="exportBtn" class="settings-action-btn">⬇️ Export backup</button>
+          <button type="button" id="importBtn" class="settings-action-btn">⬆️ Import backup</button>
+          <input type="file" id="importFile" accept="application/json" hidden>
+        </div>
+      </section>
+    </div>
   </div>
 
   <template id="trialCardTemplate">
