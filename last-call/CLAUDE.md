@@ -272,7 +272,7 @@ separate undo mechanism would be redundant.
 
 Per `../CLAUDE.md`, every project here gets a themed tile on the
 `ai-slop/` root hub ("The Quagmire", `.tile[data-theme="lastcall"]` in
-`../style.css`). Seven versions so far — this tile took more iteration
+`../style.css`). Eight versions so far — this tile took more iteration
 than anything else on the hub, worth reading in full before touching it
 again:
 
@@ -380,10 +380,10 @@ again:
   motion strokes), specifically so the four real icons + badge stay the
   obvious focal point and don't get visually competed with.
 
-- **v7 (current)**: the same two asks came back almost verbatim after
-  v6 shipped — "more detail," "nicer font," "more please." Read as: v6's
-  polish moved in the right direction but hadn't gone far enough yet,
-  not as a sign to change direction again.
+- **v7**: the same two asks came back almost verbatim after v6 shipped
+  — "more detail," "nicer font," "more please." Read as: v6's polish
+  moved in the right direction but hadn't gone far enough yet, not as a
+  sign to change direction again.
 
   Wordmark: `Fredoka` → `Grandstander` (bolder, more overtly bouncy
   letterforms). **But the font swap alone was not treated as sufficient
@@ -406,6 +406,27 @@ again:
   since bold `Grandstander` can run close to 150px wide on its own; keep
   any future addition near the icon cluster, not the text corner, for
   the same reason.
+
+- **v8 (current)**: explicit follow-up — "more detail on the right
+  side, more symbols." Two more real icons added to the cluster:
+  `.lastcall-app-d` (a star, teal `#4dd9c4`) and `.lastcall-app-e` (an
+  envelope, pink `#ff8fc7`), both plain Unicode glyphs (`★`/`✉`) in the
+  same style as the original four — six distinct symbols now, not four.
+
+  **The star was tried in amber/gold first and visually clashed** —
+  sitting directly next to `.lastcall-dollar` (also gold), two
+  same-family-colored circles read as one blob rather than two separate
+  symbols, confirmed by rendering, not by eyeballing the hex values in
+  isolation. Moved to teal for real separation. **Check a new icon's
+  color against its actual neighbors, not just against the palette
+  list** — that's the specific mistake this caught.
+
+  Both new icons sit in the tile's upper band (`top: 0`–`28px`), same
+  reasoning as `.lastcall-dollar` in v7: that region never vertically
+  overlaps the wordmark's bottom-left corner no matter how wide "Last
+  Call" renders, so new elements placed there don't need individual
+  overlap math against the title text the way anything lower/further
+  left would.
 
 **The viewBox-cropping lesson from v3 is still real and still applies**
 to any future full-bleed SVG/graphic added to this or any tile: `.art`

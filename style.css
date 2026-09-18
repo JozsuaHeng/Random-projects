@@ -1540,7 +1540,7 @@ body {
   box-shadow: 0 16px 30px -14px rgba(255, 177, 77, 0.35);
 }
 
-/* --- theme: last call — v6. v1–v3 (neon sign, notification mockup,
+/* --- theme: last call — v8. v1–v3 (neon sign, notification mockup,
    sliced card) all missed for various reasons documented in
    ../last-call/CLAUDE.md. v4 (a hairline-outlined card + rotated "VOID"
    stamp, italic serif wordmark) read as "a card-cancellation program,"
@@ -1578,11 +1578,27 @@ body {
    (min 260px), since "Last Call" in bold Grandstander can run close to
    150px wide on its own.
 
-   **If yet another round of "more/nicer" comes in, don't just swap the
-   font family again** — this round's actual fix was adding a fill
-   treatment (gradient + shadow) on top of the swap, not the swap alone;
-   a future pass should look for a similar "treatment," not just try a
-   sixth typeface. --- */
+   v7's fix was adding a fill treatment (gradient + shadow) on top of
+   the font swap, not the swap alone — worth remembering before trying
+   a sixth typeface if "nicer font" ever comes back a third time.
+
+   v8 (current): explicit ask for "more detail on the right side, more
+   symbols" — two more real icons, `.lastcall-app-d` (star, teal) and
+   `.lastcall-app-e` (envelope, pink), filling the previously-empty
+   space above the original four. Six distinct glyphs now, not four.
+   Star was first tried in amber/gold (`#ffb454`) — visually redundant
+   sitting right next to the already-gold `.lastcall-dollar` coin, two
+   same-family colors reading as one blob rather than two symbols — and
+   was moved to teal (`#4dd9c4`) specifically for palette separation.
+   **When adding another icon here, check its color against every
+   neighbor it'll actually sit next to, not just against the palette in
+   the abstract** — that's what the amber/gold clash slipped past on
+   the first pass. Both new icons stay in the tile's upper band (`top:
+   0`–`28px`) rather than extending the cluster lower/further left,
+   for the same reason `.lastcall-dollar` did in v7: that region has no
+   vertical overlap with the wordmark's bottom-left corner regardless of
+   how wide "Last Call" renders, so new elements placed there don't need
+   individual overlap math against the title. --- */
 
 .tile[data-theme="lastcall"] .art {
   background:
@@ -1643,6 +1659,26 @@ body {
   background: #b18aff;
   transform: rotate(8deg);
   z-index: 2;
+}
+.tile[data-theme="lastcall"] .lastcall-app-d {
+  top: 0;
+  right: 150px;
+  width: 18px;
+  height: 18px;
+  background: #4dd9c4;
+  transform: rotate(14deg);
+  font-size: 10px;
+  z-index: 1;
+}
+.tile[data-theme="lastcall"] .lastcall-app-e {
+  top: 28px;
+  right: 156px;
+  width: 17px;
+  height: 17px;
+  background: #ff8fc7;
+  transform: rotate(-11deg);
+  font-size: 9px;
+  z-index: 1;
 }
 .tile[data-theme="lastcall"] .lastcall-app-front {
   top: 9px;
