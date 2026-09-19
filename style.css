@@ -2135,7 +2135,7 @@ body {
 .tile[data-theme="insignia"] .insignia-crop::after { width: 1px; height: 12px; }
 .tile[data-theme="insignia"] .insignia-crop-tl { top: 12px; left: 12px; }
 .tile[data-theme="insignia"] .insignia-crop-tr { top: 12px; right: 12px; }
-.tile[data-theme="insignia"] .insignia-crop-bl { bottom: 12px; left: 20px; }
+.tile[data-theme="insignia"] .insignia-crop-bl { bottom: 12px; left: 12px; }
 .tile[data-theme="insignia"] .insignia-crop-br { bottom: 12px; right: 12px; }
 .tile[data-theme="insignia"] .insignia-crop-tl::before, .tile[data-theme="insignia"] .insignia-crop-tl::after { top: 0; left: 0; }
 .tile[data-theme="insignia"] .insignia-crop-tr::before, .tile[data-theme="insignia"] .insignia-crop-tr::after { top: 0; right: 0; }
@@ -2143,8 +2143,8 @@ body {
 .tile[data-theme="insignia"] .insignia-crop-br::before, .tile[data-theme="insignia"] .insignia-crop-br::after { bottom: 0; right: 0; }
 .tile[data-theme="insignia"] .insignia-label {
   position: absolute;
-  left: 14px;
-  bottom: 17px;
+  left: 20px;
+  bottom: 14px;
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 9px;
   font-weight: 600;

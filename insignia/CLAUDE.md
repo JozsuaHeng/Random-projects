@@ -503,6 +503,91 @@ deliberately `zoom`, not `transform: scale`, so layout still reflows
 instead of just visually stretching; supported in all current evergreen
 browsers.
 
+## Five capability additions (round 3)
+
+Built after being asked "any ideas to increase the capabilities and
+intelligence of creating interesting and more differentiated logos?" —
+five specific answers, each a genuinely different *kind* of lever from
+what came before (layouts, shape count, palette count, texture), not
+more of the same kind:
+
+- **Organic blob shapes** (`blobPath()`, `generateBlobRadii()`,
+  `SHAPE_KINDS` now 9 kinds) — every other shape kind is straight-edged;
+  "blob" is a closed curve through `n` randomized-radius points, each
+  used as a quadratic Bézier control point landing on the midpoint to
+  the next point (not the points themselves — hitting the raw points
+  would put hard corners at each one, defeating the point). The radii
+  are rolled once in spec generation (`generateBlobRadii()`) and stored
+  as `spec.blobRadii`, threaded through every `shapeMarkup()` call
+  alongside `texture` — **never call `Math.random()` inside `blobPath()`
+  or its caller**, same rule as every other piece of mark randomness,
+  since re-rendering (palette regenerate, theme toggle, a Recent chip)
+  must draw the exact same silhouette every time. `DEFAULT_BLOB_RADII` is
+  the fallback when none was threaded through (old saved specs, mostly).
+- **Negative-space letter cut** (`renderNegspaceLetter()`,
+  `spec.letterCut`) — a second Negative Space technique alongside the
+  offset-shape crescent: an SVG `<mask>` (white = visible, the letter
+  drawn in black = cut away) removes the business's actual initial from
+  a filled circle, the FedEx-arrow trick. Needs its own globally-unique
+  id counter (`maskIdCounter`) for the same reason `hatchedFill()`'s
+  `<clipPath>` does — ids must be unique across the whole document, not
+  per-`<svg>`. `markQuotesName()` now also returns true for
+  `negspace` specs that rolled `letterCut`, so a wordmark reroll
+  regenerates the mark for *those* results but not the plain-crescent
+  ones, which don't reference the name at all.
+- **Icon-as-letter Combo lockups** (`spec.letterFusion`, the `.fusion`
+  CSS class) — when Combo's inner icon is a monogram, ~40% of the time
+  it depicts the wordmark's literal first character (not
+  `deriveLetters()`'s semi-random pick) and `renderStage()` drops that
+  same character from the *displayed* wordmark text (`state.name.slice(1)`
+  — every other reference to the name, usage line, hex codes, Recent/
+  Favorites tooltips, still uses the full `state.name`). Forces
+  `layout: "side"` (fusion reads as nothing in the stacked layout) and a
+  `.fusion` class shrinks the mark canvas to near text-cap-height and
+  collapses the gap between icon and text. **Honest limitation**: the
+  icon is a separate SVG element from the HTML wordmark text, with
+  independent sizing — this can't be pixel-perfect hand-drawn typography
+  the way a real fused logotype would be, only a small tight icon
+  immediately next to the remaining letters. Untested visually, same as
+  everything else built without the ability to preview it here.
+- **Print-misregistration effect** (`applyMisprint()`, `spec.misprint`,
+  ~20% of Geometric/Monogram/Badge results) — a faded, offset echo of
+  the same mark sitting just behind the real one, like a badge stamped
+  slightly off-register. `renderMark()`'s dispatcher now calls the
+  underlying renderer through `applyMisprint()`, which invokes it
+  *twice* rather than reusing one rendered string — anything
+  textured/letter-cut mints its own unique id per call, and pasting the
+  same rendered string (with the same ids already baked in) into the
+  document twice would create duplicate ids, which is invalid SVG. Not
+  wired into Line (already has layered echoes) or Negative Space (a
+  second offset copy would visually fight the exact-match cutout
+  technique).
+- **Keyword mood bias** (`keywordMoodBias()`, `rollTextureBiased()`,
+  `TRADITIONAL_MOOD_WORDS`/`MODERN_MOOD_WORDS`) — extends the keyword
+  intelligence already used for category/palette choice (see
+  "Business-details mode" above) down into a mark's own decorative
+  choices, which is the literal answer to "increase the *intelligence*":
+  typed keywords now also reweight (never force) Badge's laurel/texture
+  odds, Negative Space's letter-cut odds, and Geometric's texture odds,
+  toward the ornate/textured/laurel end for a "traditional"-sounding
+  description and away from it for a "modern"-sounding one.
+  `generateMarkSpec()` now takes a third `keywordsRaw` argument (all
+  three call sites — `rollFresh()`, `regenMark()`, `regenWordmark()` —
+  had to be updated to pass it) and computes `mood` once per call,
+  passing it down to `generateGeometricSpec(mood)` and reading it
+  directly in the badge/negspace cases. A description matching both
+  mood word lists, or neither, resolves to `null` (no bias) rather than
+  picking one arbitrarily — no strong signal is deliberately the
+  contentless case, not a coin-flip between two contradictory pulls.
+
+All five were verified the same way as every previous round: a headless
+Node harness generating and rendering thousands of marks per category
+(now also checking that no two SVG ids collide when a generation's
+primary and inverse swatch render *together*, the actual on-page
+scenario, not just individually), plus explicit probability checks
+confirming the mood bias actually shifts outcomes in the intended
+direction rather than just running without crashing.
+
 ## Verifying a change to the generator without a browser
 
 There's no test suite, but `data.js` + `app.js` are plain functions with

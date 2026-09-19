@@ -149,6 +149,28 @@ function pickPaletteIndex(exclude, keywordsRaw) {
   return idx;
 }
 
+// Extends the same keyword intelligence already used for category/palette
+// choice down into a mark's own decorative choices — a "traditional"-
+// leaning business nudges toward the more ornate/textured/laurel end of
+// what's already possible, a "modern"-leaning one nudges the other way.
+// This never *forces* a choice, only reweights the existing dice roll
+// (see rollTextureBiased() and the badge/negspace cases in
+// generateMarkSpec below), and a description that matches both moods
+// (or neither) just falls back to the normal unbiased odds — no
+// contradictory result, and "no strong signal" stays the common case.
+const TRADITIONAL_MOOD_WORDS = ["heritage", "traditional", "classic", "law", "legal", "craft", "artisan", "academy", "estate", "vintage", "established", "family"];
+const MODERN_MOOD_WORDS = ["tech", "startup", "digital", "modern", "software", "app", "ai", "saas", "innovative", "cloud"];
+
+function keywordMoodBias(keywordsRaw) {
+  const words = splitKeywords(keywordsRaw);
+  if (!words.length) return null;
+  const traditional = words.some((w) => TRADITIONAL_MOOD_WORDS.some((m) => keywordMatches(w, m)));
+  const modern = words.some((w) => MODERN_MOOD_WORDS.some((m) => keywordMatches(w, m)));
+  if (traditional && !modern) return "traditional";
+  if (modern && !traditional) return "modern";
+  return null;
+}
+
 // --- Mark geometry helpers (0–100 viewBox, center at 50,50) ---
 
 function polygonPoints(cx, cy, r, sides, rotationDeg) {
@@ -179,11 +201,53 @@ function starPoints(cx, cy, rOuter, rInner, points, rotationDeg) {
 const SIDES_MAP = { triangle: 3, square: 4, diamond: 4, pentagon: 5, hex: 6, octagon: 8 };
 
 // The full shape vocabulary Geometric (and Negative Space's cut shape,
-// and Combo's inner icon) draw from — 8 kinds instead of the original 5,
+// and Combo's inner icon) draw from — 9 kinds instead of the original 5,
 // specifically so a fixed-size random pool doesn't start repeating
 // itself as fast. Kept as one shared list rather than inlined per call
-// site so adding a 9th kind later is a one-line change.
-const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star"];
+// site so adding a 10th kind later is a one-line change.
+const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star", "blob"];
+
+// A fallback for "blob" when no per-spec radii were threaded through
+// (old saved specs, or a context that didn't bother) — never used for a
+// freshly generated mark, just insurance against a missing value.
+const DEFAULT_BLOB_RADII = [1, 0.82, 1.12, 0.88, 1.15, 0.85, 1.05, 0.9];
+
+// Every other shape kind here is rigid straight edges — "blob" is the
+// one organic kind, a closed curve through `radii.length` randomized
+// points (each a 0.72–1.28 multiple of `r`) instead of a regular
+// polygon. The randomization has to happen once in spec generation and
+// get threaded down as `radii`, never rolled here — same rule as every
+// other bit of mark randomness, since this runs again on every re-render
+// (palette regenerate, theme toggle, Recent/Favorites thumbnails) and
+// must draw the exact same silhouette every time.
+//
+// Technique: for each of the n corner points P[i], curve through it as
+// a quadratic control point, landing on the midpoint between P[i] and
+// P[i+1] — starting from the midpoint before P[0]. Using edge-midpoints
+// as the actual path vertices (rather than the corners themselves) is
+// what makes the curve pass *near* each random point without ever
+// hitting a hard corner, which is what makes it read as organic instead
+// of a spiky star.
+function blobPath(cx, cy, r, radii, rotationDeg) {
+  const n = radii.length;
+  const pts = radii.map((mult, i) => {
+    const angle = (rotationDeg - 90 + i * 360 / n) * Math.PI / 180;
+    const rad = r * mult;
+    return [cx + rad * Math.cos(angle), cy + rad * Math.sin(angle)];
+  });
+  const midpoint = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  const mids = pts.map((p, i) => midpoint(p, pts[(i + 1) % n]));
+  const fmt = (p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
+  let d = `M ${fmt(mids[n - 1])} `;
+  for (let i = 0; i < n; i++) d += `Q ${fmt(pts[i])} ${fmt(mids[i])} `;
+  return d.trim() + " Z";
+}
+
+function generateBlobRadii(pointCount) {
+  const radii = [];
+  for (let i = 0; i < pointCount; i++) radii.push(0.72 + Math.random() * 0.56);
+  return radii;
+}
 
 // --- Engraved/hatched fill — the actual answer to "these are just flat
 // shapes." A flat-filled polygon reads as a modern icon no matter how
@@ -215,9 +279,9 @@ function hatchedFill(clipShapeMarkup, cx, cy, color, angleDeg, spacing, cross) {
   return `<clipPath id="${id}">${clipShapeMarkup}</clipPath><g clip-path="url(#${id})">${group}</g>`;
 }
 
-function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly, texture) {
+function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly, texture, blobRadii) {
   if (!strokeOnly && texture) {
-    const outline = shapeMarkup(kind, cx, cy, r, rotation, color, false);
+    const outline = shapeMarkup(kind, cx, cy, r, rotation, color, false, null, blobRadii);
     // Re-run undecorated to get this shape's own outline (fill doesn't
     // matter inside a <clipPath>, only the geometry does) as the hatch's
     // clip region — cheaper than a second geometry function per kind.
@@ -227,6 +291,12 @@ function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly, texture) {
     return strokeOnly
       ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2.6"/>`
       : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`;
+  }
+  if (kind === "blob") {
+    const d = blobPath(cx, cy, r, blobRadii || DEFAULT_BLOB_RADII, rotation);
+    return strokeOnly
+      ? `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.6"/>`
+      : `<path d="${d}" fill="${color}"/>`;
   }
   if (kind === "star") {
     const pts = starPoints(cx, cy, r, r * 0.45, 5, rotation);
@@ -309,6 +379,14 @@ function rollDetail() {
   return { ornate, extreme: ornate && Math.random() < EXTREME_CHANCE };
 }
 
+// ~20% chance of the print-misregistration effect (see applyMisprint()).
+// A small offset in both axes, never zero in either direction, so the
+// ghost copy is never invisible-behind-the-original.
+function rollMisprint() {
+  if (Math.random() >= 0.2) return null;
+  return { dx: pick([-3, -2, 2, 3]), dy: pick([-3, -2, 2, 3]) };
+}
+
 // Five genuinely different ways to arrange Geometric's shapes — not just
 // parameter jitter on one template. This is the single biggest lever for
 // "more differentiated": a fixed layout with randomized colors/rotation
@@ -346,14 +424,25 @@ function rollTexture() {
   };
 }
 
-function generateGeometricSpec() {
+// Mood-aware version — "modern" keeps things flat (hatching reads as
+// hand-engraved/vintage, the opposite of what a "modern"/"tech" business
+// wants), "traditional" tries the roll twice, which raises the odds of
+// landing texture without ever guaranteeing it outright.
+function rollTextureBiased(mood) {
+  if (mood === "modern") return null;
+  if (mood === "traditional") return rollTexture() || rollTexture();
+  return rollTexture();
+}
+
+function generateGeometricSpec(mood) {
   const layoutKind = pick(GEOMETRIC_LAYOUTS);
   const rotation = Math.floor(Math.random() * 360);
   const { ornate, extreme } = rollDetail();
   const base = {
     kind: "geometric", layoutKind, rotation, ornate, extreme,
     ring: Math.random() < 0.55, orbitDots: Math.random() < 0.5,
-    accentDominant: Math.random() < 0.35, texture: rollTexture(), layout: "stack"
+    accentDominant: Math.random() < 0.35, texture: rollTextureBiased(mood),
+    blobRadii: generateBlobRadii(8), misprint: rollMisprint(), layout: "stack"
   };
   if (layoutKind === "radial") {
     const count = 3 + Math.floor(Math.random() * 4); // 3–6, arranged in a ring
@@ -380,24 +469,34 @@ function generateGeometricSpec() {
   return { ...base, shapes, jitter };
 }
 
-function generateMarkSpec(categoryKey, name) {
+function generateMarkSpec(categoryKey, name, keywordsRaw) {
+  const mood = keywordMoodBias(keywordsRaw);
   switch (categoryKey) {
     case "geometric":
-      return generateGeometricSpec();
+      return generateGeometricSpec(mood);
     case "monogram": {
       const { ornate, extreme } = rollDetail();
       return {
         kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square", "hex", "pentagon", "octagon", "star"]),
         filled: Math.random() < 0.6, innerRing: Math.random() < 0.6, accentDominant: Math.random() < 0.35,
-        texture: rollTexture(), ornate, extreme, layout: "stack"
+        texture: rollTextureBiased(mood), misprint: rollMisprint(), ornate, extreme, layout: "stack"
       };
     }
     case "badge": {
       const { ornate, extreme } = rollDetail();
+      // "Traditional" pushes toward the seal+laurel+hatching combination
+      // this whole category is themed around in the first place;
+      // "modern" pulls the other way, toward a plainer seal with no
+      // ornamentation at all — still a seal, since a badge/crest concept
+      // itself doesn't stop fitting a modern brand, only how ornately
+      // it's rendered does.
+      let laurelChance = 0.4;
+      if (mood === "traditional") laurelChance = 0.65;
+      else if (mood === "modern") laurelChance = 0.15;
       return {
         kind: "badge", letter: deriveLetters(name, true), containerKind: pick(["seal", "seal", "shield"]),
-        accentDominant: Math.random() < 0.35, texture: rollTexture(), laurel: Math.random() < 0.4,
-        ornate, extreme, layout: "stack"
+        accentDominant: Math.random() < 0.35, texture: rollTextureBiased(mood), laurel: Math.random() < laurelChance,
+        misprint: rollMisprint(), ornate, extreme, layout: "stack"
       };
     }
     case "line": {
@@ -413,10 +512,18 @@ function generateMarkSpec(categoryKey, name) {
     }
     case "negspace": {
       const { ornate, extreme } = rollDetail();
+      // The letter-cut trick is a "clever branding" move in a way the
+      // plain offset-shape crescent isn't — reads as more fitting for a
+      // "modern"-leaning business than a "traditional" one, so nudge
+      // toward it there and away from it for "traditional."
+      let letterCutChance = 0.4;
+      if (mood === "modern") letterCutChance = 0.6;
+      else if (mood === "traditional") letterCutChance = 0.2;
       return {
-        kind: "negspace", cutKind: pick(["circle", "circle", "square", "diamond", "hex"]),
+        kind: "negspace", cutKind: pick(["circle", "circle", "square", "diamond", "hex", "blob"]),
         dx: pick([15, -15]), dy: pick([11, -11]), secondDot: Math.random() < 0.5,
-        texture: rollTexture(), ornate, extreme, layout: "stack"
+        letterCut: Math.random() < letterCutChance, letter: deriveLetters(name, true),
+        texture: rollTextureBiased(mood), blobRadii: generateBlobRadii(8), ornate, extreme, layout: "stack"
       };
     }
     case "wordmark": {
@@ -427,16 +534,33 @@ function generateMarkSpec(categoryKey, name) {
     case "combo": {
       const innerKind = pick(["geometric-single", "monogram", "line", "negspace"]);
       let inner;
+      // Icon-as-letter: when the inner icon is a monogram, ~40% of the
+      // time it depicts the wordmark's *actual* first character (not
+      // deriveLetters()'s semi-random 1-or-2-letter pick) and the
+      // wordmark text drops that same character — see the `letterFusion`
+      // handling in renderStage(). This is the honest version of "fuse
+      // the icon into the word": the icon and text are two separate DOM
+      // elements (an SVG canvas, a block of HTML text) with independent
+      // sizing, so it can't be pixel-perfect custom typography the way a
+      // real logo would hand-draw it — but "Insignia" rendered as [a
+      // graphic I] + "nsignia", tight together, reads as one lockup
+      // rather than an icon that happens to sit next to unrelated text.
+      let letterFusion = false;
       if (innerKind === "monogram") {
-        inner = { kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square"]), filled: Math.random() < 0.6 };
+        letterFusion = Math.random() < 0.4;
+        const letters = letterFusion ? name.trim().charAt(0).toUpperCase() : deriveLetters(name);
+        inner = { kind: "monogram", letters, container: pick(["circle", "square"]), filled: Math.random() < 0.6 };
       } else if (innerKind === "line") {
         inner = { kind: "line", pathIndex: Math.floor(Math.random() * LINE_PATH_TEMPLATES.length), generatedPath: null, mirror: Math.random() < 0.5, rotate: 0, strokeRole: "accent" };
       } else if (innerKind === "negspace") {
         inner = { kind: "negspace", cutKind: pick(["circle", "square"]), dx: pick([15, -15]), dy: pick([11, -11]), secondDot: false };
       } else {
-        inner = { kind: "geometric", layoutKind: "layered", shapes: [pick(SHAPE_KINDS)], rotation: pick([0, 15, 30, 45]), jitter: [{ dx: 0, dy: 0 }] };
+        inner = { kind: "geometric", layoutKind: "layered", shapes: [pick(SHAPE_KINDS)], rotation: pick([0, 15, 30, 45]), jitter: [{ dx: 0, dy: 0 }], blobRadii: generateBlobRadii(8) };
       }
-      return { kind: "combo", inner, layout: pick(["side", "stacked"]) };
+      // Fusion only reads as intended in the side-by-side layout —
+      // stacked (icon above text) would just look like a mismatched
+      // monogram sitting on top of a name missing its first letter.
+      return { kind: "combo", inner, letterFusion, layout: letterFusion ? "side" : pick(["side", "stacked"]) };
     }
     default:
       return { kind: "geometric", shapes: ["circle"], rotation: 0, jitter: [{ dx: 0, dy: 0 }], layout: "stack" };
@@ -450,6 +574,11 @@ function generateMarkSpec(categoryKey, name) {
 // letters never go stale next to a name that's moved on.
 function markQuotesName(categoryKey, spec) {
   if (categoryKey === "monogram" || categoryKey === "badge") return true;
+  // Negative Space only quotes the name when this particular result rolled
+  // the letter-cut variant — the plain offset-shape crescent doesn't
+  // reference the name at all, so a wordmark reroll shouldn't force a
+  // pointless mark reroll for those results.
+  if (categoryKey === "negspace" && spec && spec.letterCut) return true;
   if (categoryKey === "combo" && spec && spec.inner && spec.inner.kind === "monogram") return true;
   return false;
 }
@@ -489,9 +618,9 @@ function renderLayeredShapes(spec, ink, accent) {
   spec.shapes.forEach((kind, i) => {
     const j = spec.jitter[i] || { dx: 0, dy: 0 };
     const cx = 50 + j.dx, cy = 50 + j.dy;
-    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, c1, false, spec.texture);
-    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, c2, false, spec.texture);
-    else out += shapeMarkup(kind, cx, cy, sizes[2], spec.rotation, c1, true);
+    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, c1, false, spec.texture, spec.blobRadii);
+    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, c2, false, spec.texture, spec.blobRadii);
+    else out += shapeMarkup(kind, cx, cy, sizes[2], spec.rotation, c1, true, null, spec.blobRadii);
   });
   return out;
 }
@@ -514,7 +643,7 @@ function renderRadialShapes(spec, ink, accent) {
     // whatever `cx + r*cos(a)` had concatenated into a string.
     const cx = 50 + 28 * Math.cos(rad);
     const cy = 50 + 28 * Math.sin(rad);
-    out += shapeMarkup(spec.shapes[i], cx, cy, 13, deg, i % 2 === 0 ? c1 : c2, false, spec.texture);
+    out += shapeMarkup(spec.shapes[i], cx, cy, 13, deg, i % 2 === 0 ? c1 : c2, false, spec.texture, spec.blobRadii);
   }
   out += shapeMarkup("circle", 50, 50, 7, 0, n % 2 === 0 ? c2 : c1, false, spec.texture);
   return out;
@@ -531,7 +660,7 @@ function renderScatterShapes(spec, ink, accent) {
     }
   }
   pts.forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === pts.length - 1, spec.texture);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === pts.length - 1, spec.texture, spec.blobRadii);
   });
   return out;
 }
@@ -549,7 +678,7 @@ function renderGridShapes(spec, ink, accent) {
   const c2 = spec.accentDominant ? ink : accent;
   let out = "";
   gridPositions(spec.count).forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.cellSize, spec.rotation, i % 2 === 0 ? c1 : c2, false, spec.texture);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.cellSize, spec.rotation, i % 2 === 0 ? c1 : c2, false, spec.texture, spec.blobRadii);
   });
   return out;
 }
@@ -571,7 +700,7 @@ function renderCascadeShapes(spec, ink, accent) {
   const positions = cascadePositions(spec.count, spec.dir);
   const sizes = [22, 17, 13, 10];
   positions.forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === positions.length - 1, spec.texture);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === positions.length - 1, spec.texture, spec.blobRadii);
   });
   return out;
 }
@@ -805,14 +934,47 @@ function renderLine(spec, ink, accent, elaborate) {
   return out + "</g>";
 }
 
+// A different negative-space technique from the offset-shape crescent
+// below: cut the business's actual initial *out* of a filled circle via
+// an SVG <mask> (white = visible, black = cut away — the letter is drawn
+// in black, so it becomes a hole showing whatever's behind, i.e. the
+// canvas color) instead of a generic shape-on-shape offset. This is the
+// FedEx-arrow style trick — the mark and the name are no longer
+// independent, which nothing else in this file does. Needs the same
+// globally-unique-id discipline as hatchedFill()'s <clipPath>, just its
+// own counter so "insignia-mask-N" ids never collide with
+// "insignia-hatch-N" ones even at the same N.
+let maskIdCounter = 0;
+
+function renderNegspaceLetter(spec, ink, accent, elaborate) {
+  const detailed = elaborate !== false;
+  const id = `insignia-mask-${maskIdCounter++}`;
+  let out = `<mask id="${id}"><rect x="0" y="0" width="100" height="100" fill="white"/>` +
+    `<text x="50" y="60" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="58" fill="black">${spec.letter}</text></mask>` +
+    `<circle cx="50" cy="50" r="40" fill="${ink}" mask="url(#${id})"/>`;
+  if (detailed) {
+    out += `<circle cx="50" cy="50" r="45" fill="none" stroke="${ink}" stroke-width="1" opacity="0.3"/>`;
+    if (spec.ornate) {
+      out += `<circle cx="50" cy="50" r="48" fill="none" stroke="${accent}" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.4 4.6" opacity="0.6"/>`;
+    }
+  }
+  const dotX = 50 + spec.dx * 0.85, dotY = 50 + spec.dy * 0.85;
+  out += `<circle cx="${dotX}" cy="${dotY}" r="5.5" fill="${accent}"/>`;
+  if (detailed && spec.ornate && spec.extreme) {
+    out += `<circle cx="${50 - spec.dx * 0.85}" cy="${50 - spec.dy * 0.85}" r="3" fill="${accent}" opacity="0.5"/>`;
+  }
+  return out;
+}
+
 function renderNegspace(spec, ink, accent, bg, elaborate) {
+  if (spec.letterCut) return renderNegspaceLetter(spec, ink, accent, elaborate);
   const detailed = elaborate !== false;
   const cutKind = spec.cutKind || "circle";
   // Only the base shape can be textured — the cutout has to stay a flat
   // solid fill exactly matching the canvas color, or the negative-space
   // illusion breaks (hatching would let the "erased" region show through
   // as a pattern instead of reading as empty background).
-  let out = shapeMarkup(cutKind, 50, 50, 36, 0, ink, false, spec.texture) +
+  let out = shapeMarkup(cutKind, 50, 50, 36, 0, ink, false, spec.texture, spec.blobRadii) +
     shapeMarkup(cutKind, 50 + spec.dx, 50 + spec.dy, 36, 0, bg, false);
   if (detailed) {
     out += `<circle cx="50" cy="50" r="43" fill="none" stroke="${ink}" stroke-width="1" opacity="0.3"/>`;
@@ -864,11 +1026,29 @@ function renderFlourish(spec, ink, accent) {
   return treatments.map((t) => renderFlourishPart(t, ink, accent)).join("");
 }
 
+// Vintage print-misregistration effect: a faded, offset echo of the same
+// mark sitting just behind the real one, like a badge stamped slightly
+// off-register. `renderFn` gets called *twice* rather than reusing one
+// rendered string, on purpose — anything textured/letter-cut generates
+// its own globally-unique <clipPath>/<mask> id per call (see
+// hatchedFill()/renderNegspaceLetter()), and reusing the same rendered
+// string twice would paste that id into the document twice, which is
+// invalid SVG. Re-invoking the renderer gives the ghost copy its own
+// fresh ids instead. Only wired into Geometric/Monogram/Badge — Line's
+// already-layered echoes and Negative Space's exact-match cutout
+// technique don't need or suit a second offset copy.
+function applyMisprint(spec, elaborate, renderFn) {
+  const body = renderFn();
+  if (elaborate === false || !spec.misprint) return body;
+  const ghost = renderFn();
+  return `<g transform="translate(${spec.misprint.dx},${spec.misprint.dy})" opacity="0.4">${ghost}</g>` + body;
+}
+
 function renderMark(spec, ink, accent, bg, elaborate) {
   switch (spec.kind) {
-    case "geometric": return renderGeometric(spec, ink, accent, elaborate);
-    case "monogram": return renderMonogram(spec, ink, accent, elaborate);
-    case "badge": return renderBadge(spec, ink, accent, elaborate);
+    case "geometric": return applyMisprint(spec, elaborate, () => renderGeometric(spec, ink, accent, elaborate));
+    case "monogram": return applyMisprint(spec, elaborate, () => renderMonogram(spec, ink, accent, elaborate));
+    case "badge": return applyMisprint(spec, elaborate, () => renderBadge(spec, ink, accent, elaborate));
     case "line": return renderLine(spec, ink, accent, elaborate);
     case "negspace": return renderNegspace(spec, ink, accent, bg, elaborate);
     case "flourish": return renderFlourish(spec, ink, accent);
@@ -1110,7 +1290,13 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryTag.textContent = CATEGORIES[state.categoryUsed].label;
     markPrimary.innerHTML = renderMark(state.markSpec, palette.ink, palette.accent, PAPER);
     markInverse.innerHTML = renderMark(state.markSpec, INVERSE_INK, palette.accent, INVERSE_BG);
-    wordmarkEl.textContent = state.name;
+    // Letter-fusion combos drop their first character from the visible
+    // wordmark text — the monogram icon depicts it instead. Every other
+    // reference to the brand (usage line, hex codes, Recent/Favorites
+    // tooltips) still uses the full state.name; only this one element's
+    // displayed text is shortened.
+    const isFusion = !!(state.markSpec && state.markSpec.kind === "combo" && state.markSpec.letterFusion);
+    wordmarkEl.textContent = isFusion ? state.name.slice(1) : state.name;
     wordmarkEl.className = "stage-wordmark " + state.wordmarkTreatment;
     // Text and its own underline/rule never share a color — whichever
     // role the text didn't take becomes the rule color, so the
@@ -1130,6 +1316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const onDark = contrastRatio(palette.accent, INVERSE_BG);
     contrastLineEl.textContent = `Contrast — on light ${onLight.toFixed(1)}:1 (${contrastBadge(onLight)}) · on dark ${onDark.toFixed(1)}:1 (${contrastBadge(onDark)})`;
     stageContent.classList.toggle("layout-row", !!(state.markSpec && state.markSpec.layout === "side"));
+    stageContent.classList.toggle("fusion", isFusion);
   }
 
   function withTransition(mutate, after) {
@@ -1282,7 +1469,7 @@ document.addEventListener("DOMContentLoaded", () => {
       state.wordmarkColorRole = pickWordmarkColorRole(PALETTES[state.paletteIndex].accent);
     }
     if (!state.locks.mark) {
-      state.markSpec = generateMarkSpec(state.categoryUsed, state.name);
+      state.markSpec = generateMarkSpec(state.categoryUsed, state.name, keywords);
     }
   }
 
@@ -1292,7 +1479,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function regenMark() {
     withTransition(() => {
-      state.markSpec = generateMarkSpec(state.categoryUsed, state.name);
+      state.markSpec = generateMarkSpec(state.categoryUsed, state.name, getBusinessKeywords());
     }, pushRecent);
   }
 
@@ -1302,7 +1489,7 @@ document.addEventListener("DOMContentLoaded", () => {
       state.wordmarkTreatment = pick(WORDMARK_TREATMENTS);
       state.wordmarkColorRole = pickWordmarkColorRole(PALETTES[state.paletteIndex].accent);
       if (markQuotesName(state.categoryUsed, state.markSpec)) {
-        state.markSpec = generateMarkSpec(state.categoryUsed, state.name);
+        state.markSpec = generateMarkSpec(state.categoryUsed, state.name, getBusinessKeywords());
       }
     }, pushRecent);
   }

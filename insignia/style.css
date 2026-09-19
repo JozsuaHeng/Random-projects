@@ -484,6 +484,26 @@ body::before {
   text-align: left;
 }
 
+/* Icon-as-letter Combo results ("Insignia" -> a monogram "I" + "nsignia",
+   tight together) need a much smaller icon and a near-zero gap to read
+   as one word instead of an icon that happens to sit beside unrelated
+   text. The on-dark swatch/label would just clutter a composition this
+   tight, so it's hidden here specifically — see the `isFusion` handling
+   in renderStage() in app.js. */
+.fusion .lockup {
+  gap: 4px;
+}
+.fusion .mark-group {
+  gap: 2px;
+}
+.fusion .mark-canvas.primary {
+  width: 46px;
+  height: 46px;
+}
+.fusion .mark-inverse-wrap {
+  display: none;
+}
+
 .mark-group {
   display: flex;
   flex-direction: column;
