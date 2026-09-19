@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insignia</title>
+<meta name="description" content="Logo and mark generator.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>
+// Runs before the stylesheet paints anything, so an explicit saved
+// override (as opposed to "follow the system") never flashes the wrong
+// theme on load. See applyTheme()/cycleTheme() in app.js for the rest —
+// this is just the part that has to happen this early.
+(function () {
+  try {
+    var t = localStorage.getItem("insignia-theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,600;0,800;1,600&family=Playfair+Display:ital,wght@0,600;1,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 26 26" width="26" height="26">
+        <polygon points="13,3 23,21 3,21" fill="#1c1c1c"/>
+        <circle cx="16" cy="16" r="6.5" fill="#3454d1"/>
+      </svg>
+      <span class="wordmark">Insignia</span>
+    </div>
+    <p class="tagline">logo &amp; mark generator</p>
+    <button type="button" class="theme-toggle" id="themeToggleBtn" data-state="system">
+      <svg class="icon-system" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      <svg class="icon-light" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="icon-dark" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg>
+    </button>
+  </header>
+
+  <main class="layout">
+
+    <div class="chips" id="chips" role="radiogroup" aria-label="Style">
+      <button type="button" class="chip active" data-category="all" role="radio" aria-checked="true">All</button>
+      <button type="button" class="chip" data-category="geometric" role="radio" aria-checked="false">Geometric</button>
+      <button type="button" class="chip" data-category="monogram" role="radio" aria-checked="false">Monogram</button>
+      <button type="button" class="chip" data-category="badge" role="radio" aria-checked="false">Badge &amp; Crest</button>
+      <button type="button" class="chip" data-category="line" role="radio" aria-checked="false">Line Mark</button>
+      <button type="button" class="chip" data-category="negspace" role="radio" aria-checked="false">Negative Space</button>
+      <button type="button" class="chip" data-category="wordmark" role="radio" aria-checked="false">Wordmark</button>
+      <button type="button" class="chip" data-category="combo" role="radio" aria-checked="false">Combination</button>
+    </div>
+
+    <div class="seed-row">
+      <input type="text" id="seedInput" class="seed-input" placeholder="Fold in your own word (optional)" maxlength="16" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="business-panel">
+      <p class="business-label">or generate for your actual business</p>
+      <div class="business-inputs">
+        <input type="text" id="businessNameInput" class="business-input" placeholder="Business name (optional)" maxlength="28" autocomplete="off" spellcheck="false">
+        <input type="text" id="businessKeywordsInput" class="business-input" placeholder="A few words about it — e.g. law, trust, tradition" maxlength="60" autocomplete="off" spellcheck="false">
+      </div>
+      <p class="business-hint">A name here is used exactly as typed. Keywords pick a fitting style and palette when "All" is selected.</p>
+    </div>
+
+    <div class="lock-row" role="group" aria-label="Lock fields across Generate">
+      <span class="lock-row-label">Keep locked:</span>
+      <button type="button" class="lock-toggle" id="lockMarkBtn" aria-pressed="false">Mark</button>
+      <button type="button" class="lock-toggle" id="lockWordmarkBtn" aria-pressed="false">Wordmark</button>
+      <button type="button" class="lock-toggle" id="lockPaletteBtn" aria-pressed="false">Palette</button>
+    </div>
+
+    <section class="stage">
+      <span class="crop crop-tl" aria-hidden="true"></span>
+      <span class="crop crop-tr" aria-hidden="true"></span>
+      <span class="crop crop-bl" aria-hidden="true"></span>
+      <span class="crop crop-br" aria-hidden="true"></span>
+      <div class="stage-content" id="stageContent">
+        <span class="stage-category" id="categoryTag">Geometric</span>
+
+        <div class="lockup" id="lockup">
+
+          <div class="mark-group">
+            <div class="mark-canvas-row">
+              <svg class="mark-canvas primary" id="markPrimary" viewBox="0 0 100 100"></svg>
+              <button type="button" class="field-icon" id="regenMarkBtn" aria-label="Regenerate mark only" title="Regenerate mark only">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+              </button>
+            </div>
+            <div class="mark-inverse-wrap">
+              <svg class="mark-canvas inverse" id="markInverse" viewBox="0 0 100 100"></svg>
+              <span class="mark-inverse-label">On dark</span>
+            </div>
+          </div>
+
+          <div class="wordmark-col">
+            <div class="stage-wordmark-row">
+              <h1 class="stage-wordmark treatment-tracked" id="stageWordmark">Vertexify</h1>
+              <button type="button" class="field-icon small" id="regenWordmarkBtn" aria-label="Regenerate wordmark only" title="Regenerate wordmark only">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+              </button>
+            </div>
+
+            <div class="stage-palette-row">
+              <span class="swatch-dot" id="swatchInk"></span>
+              <span class="swatch-dot" id="swatchAccent"></span>
+              <span class="palette-name" id="paletteName">Onyx &amp; Brass</span>
+              <button type="button" class="field-icon small" id="regenPaletteBtn" aria-label="Regenerate palette only" title="Regenerate palette only">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="usage-line" id="usageLine">Vertexify mark — reproduction, recoloring, or rotation requires written approval from Brand.</p>
+        <p class="contrast-line" id="contrastLine">Contrast — on light 4.2:1 (✓ AA) · on dark 3.1:1 (△ AA-large)</p>
+      </div>
+    </section>
+    <p class="hint">Press <kbd>Space</kbd> to generate a whole new lockup &middot; <svg class="hint-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11A8 8 0 1 0 18.5 16"/><path d="M20 5v6h-6"/></svg> rerolls just that piece &mdash; everything else stays</p>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" id="generateBtn">Generate</button>
+      <button type="button" class="btn-ghost" id="saveFavoriteBtn">
+        <svg class="btn-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6z"/></svg>
+        Save
+      </button>
+      <div class="export-wrap">
+        <button type="button" class="btn-ghost" id="exportBtn" aria-haspopup="true" aria-expanded="false">Export ▾</button>
+        <div class="export-menu" id="exportMenu" role="menu" hidden>
+          <button type="button" class="export-item" id="copySvgBtn" role="menuitem">Copy SVG</button>
+          <button type="button" class="export-item" id="downloadSvgBtn" role="menuitem">Download SVG</button>
+          <button type="button" class="export-item" id="downloadPngBtn" role="menuitem">Download PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="recent" aria-label="Recently generated">
+      <div class="recent-header">
+        <button type="button" class="ghost-icon" id="historyPrevBtn" aria-label="Older" title="Older">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <h2 class="recent-label">Recent</h2>
+        <button type="button" class="ghost-icon" id="historyNextBtn" aria-label="Newer" title="Newer">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="recent-list" id="recentList"></div>
+    </section>
+
+    <section class="favorites" aria-label="Saved favorites">
+      <h2 class="recent-label">Favorites</h2>
+      <p class="favorites-empty" id="favoritesEmpty">Nothing saved yet — hit <strong>Save</strong> under a result you like. Saved here, in your browser, so it survives a reload.</p>
+      <div class="favorites-list" id="favoritesList"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Insignia is not a real brand agency. Neither is the mark you just generated.</p>
+  </footer>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

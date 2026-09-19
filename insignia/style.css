@@ -1,0 +1,992 @@
+/* Theme: light is the default (:root), overridden either by the system
+   preference (the @media block, guarded so an explicit override always
+   wins) or by an explicit choice from the toggle button (the [data-theme]
+   blocks). See applyTheme()/cycleTheme() in app.js and the inline script
+   in index.html's <head> that sets [data-theme] before first paint.
+
+   --swatch-light / --swatch-dark are deliberately NOT theme variables —
+   they're the fixed colors data.js's PAPER/INVERSE_BG represent (what a
+   generated mark looks like pasted onto real white/black backgrounds),
+   and must stay constant no matter what theme Insignia's own UI is in. */
+:root {
+  color-scheme: light;
+  --paper: #f7f4ec;
+  --paper-elevated: #fffdf8;
+  --ink: #1c1c1c;
+  --ink-soft: #55524a;
+  --ink-faint: #9a958a;
+  --rule: #ded7c6;
+  --accent: #3454d1;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(52, 84, 209, 0.1);
+  --shadow: rgba(28, 26, 20, 0.1);
+  --swatch-light: #f7f4ec;
+  --swatch-dark: #1c1c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #15171d;
+    --paper-elevated: #1c1f27;
+    --ink: #f2f0ea;
+    --ink-soft: #b9b6ac;
+    --ink-faint: #7b786f;
+    --rule: #2d3038;
+    --accent: #6b86ff;
+    --accent-ink: #0d0e12;
+    --accent-soft: rgba(107, 134, 255, 0.16);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #15171d;
+  --paper-elevated: #1c1f27;
+  --ink: #f2f0ea;
+  --ink-soft: #b9b6ac;
+  --ink-faint: #7b786f;
+  --rule: #2d3038;
+  --accent: #6b86ff;
+  --accent-ink: #0d0e12;
+  --accent-soft: rgba(107, 134, 255, 0.16);
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Archivo", -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  position: relative;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center top;
+  opacity: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 900px 500px at 50% -10%, rgba(52, 84, 209, 0.05), transparent 60%), var(--paper);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand .mark {
+  flex: none;
+}
+
+.wordmark {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--ink-faint);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  align-self: baseline;
+}
+
+/* Theme toggle — cycles System -> Light -> Dark -> System. Only one of
+   the three icons is ever visible, picked by [data-state] so the button
+   itself never needs its markup rewritten, just the attribute flipped. */
+
+.theme-toggle {
+  margin-left: auto;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--paper-elevated);
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.theme-toggle svg {
+  display: none;
+}
+
+.theme-toggle[data-state="system"] .icon-system,
+.theme-toggle[data-state="light"] .icon-light,
+.theme-toggle[data-state="dark"] .icon-dark {
+  display: block;
+}
+
+/* Layout */
+
+.layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* Category chips */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.chip {
+  font-family: "Archivo", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 7px 15px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--ink-faint);
+  color: var(--ink);
+}
+
+.chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Seed + business inputs */
+
+.seed-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.seed-input,
+.business-input {
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-family: "Archivo", sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+
+.seed-input {
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.seed-input::placeholder,
+.business-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.seed-input:focus,
+.business-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.business-panel {
+  width: 100%;
+  max-width: 480px;
+  border: 1px dashed var(--rule);
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-align: center;
+}
+
+.business-label {
+  margin: 0 0 10px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.business-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.business-input {
+  flex: 1 1 180px;
+  text-align: left;
+}
+
+.business-hint {
+  margin: 10px 0 0;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+
+/* Lock row — deliberately NOT placed next to the fields it locks (inline
+   with the hero wordmark, say). NewCo's CLAUDE.md documents why a pin
+   icon bolted onto hero-sized brand text never reads well no matter how
+   it's styled; keeping these as their own small utility row, away from
+   the stage entirely, sidesteps that problem rather than re-fighting it.
+   Locking only changes what Generate / a chip click leave alone — a
+   field's own regenerate icon still works on a locked field, since
+   clicking it is its own explicit "change just this" signal. */
+
+.lock-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.lock-row-label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-right: 2px;
+}
+
+.lock-toggle {
+  font-family: "Archivo", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.lock-toggle:hover {
+  border-color: var(--ink-faint);
+  color: var(--ink);
+}
+
+.lock-toggle.locked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Stage */
+
+.stage {
+  position: relative;
+  width: 100%;
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 48px 36px 36px;
+  text-align: center;
+  box-shadow: 0 20px 46px var(--shadow);
+}
+
+.crop {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.crop::before,
+.crop::after {
+  content: "";
+  position: absolute;
+  background: var(--ink-faint);
+  opacity: 0.55;
+}
+
+.crop::before { width: 14px; height: 1px; }
+.crop::after { width: 1px; height: 14px; }
+
+.crop-tl { top: 12px; left: 12px; }
+.crop-tr { top: 12px; right: 12px; }
+.crop-bl { bottom: 12px; left: 12px; }
+.crop-br { bottom: 12px; right: 12px; }
+
+.crop-tl::before, .crop-tl::after { top: 0; left: 0; }
+.crop-tr::before, .crop-tr::after { top: 0; right: 0; }
+.crop-bl::before, .crop-bl::after { bottom: 0; left: 0; }
+.crop-br::before, .crop-br::after { bottom: 0; right: 0; }
+
+.stage-content {
+  transition: opacity 0.15s ease;
+}
+
+.stage-content.fading {
+  opacity: 0;
+}
+
+.stage-category {
+  display: inline-block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+
+.stage-category::before {
+  content: "STYLE — ";
+  color: var(--ink-faint);
+}
+
+/* Lockup: icon group + wordmark/palette column. Stacked by default;
+   the "combo" category's mark spec occasionally sets layout:"side",
+   which toggles .layout-row on #stageContent to lay them out as a real
+   side-by-side lockup instead. */
+
+.lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.layout-row .lockup {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  text-align: left;
+}
+
+.mark-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark-canvas-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark-canvas {
+  display: block;
+}
+
+.mark-canvas.primary {
+  width: 128px;
+  height: 128px;
+  background: var(--swatch-light);
+  border-radius: 6px;
+}
+
+.mark-inverse-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mark-canvas.inverse {
+  width: 44px;
+  height: 44px;
+  background: var(--swatch-dark);
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.mark-inverse-label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.wordmark-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.layout-row .wordmark-col {
+  align-items: flex-start;
+}
+
+.stage-wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stage-wordmark {
+  margin: 0;
+  font-size: clamp(28px, 6vw, 44px);
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* Wordmark treatments — regenerating the "wordmark" field picks a new
+   name AND a new treatment together, the same way NewCo bundles a name
+   reroll with its description (see markQuotesName() in app.js). */
+.treatment-tracked {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.treatment-italic {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.treatment-condensed {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.treatment-underline {
+  font-family: "Archivo", sans-serif;
+  font-weight: 600;
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--wm-accent, var(--accent));
+}
+
+.treatment-serif {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 600;
+}
+
+.stage-palette-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swatch-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid rgba(28, 26, 20, 0.15);
+  flex: none;
+}
+
+.palette-name {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.usage-line {
+  margin: 30px 0 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  max-width: 42ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contrast-line {
+  margin: 10px 0 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+}
+
+/* Shared icon buttons — bare at rest, same lesson NewCo's field-icon
+   documents: any visible container next to hero-sized brand text reads
+   as chrome bolted onto a wordmark. */
+
+.ghost-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.ghost-icon:hover {
+  color: var(--accent);
+  border-color: var(--rule);
+}
+
+.ghost-icon:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ghost-icon:disabled:hover {
+  color: var(--ink-faint);
+  border-color: transparent;
+  background: transparent;
+}
+
+.field-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.field-icon svg {
+  fill: none;
+}
+
+.field-icon:hover {
+  color: var(--accent);
+}
+
+.field-icon.small {
+  width: 20px;
+  height: 20px;
+}
+
+/* Actions */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-ghost {
+  font-family: "Archivo", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 12px 24px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.1s ease, opacity 0.15s ease, border-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-ghost {
+  background: var(--paper-elevated);
+  border-color: var(--rule);
+  color: var(--ink);
+  min-width: 92px;
+  justify-content: center;
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink-faint);
+}
+
+.btn-ghost.saved {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-icon {
+  flex: none;
+  fill: none;
+}
+
+/* Export menu — a single "Export ▾" button opens a small popover with
+   the three output actions, instead of three separate buttons crowding
+   the main action row. */
+
+.export-wrap {
+  position: relative;
+}
+
+.export-menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 168px;
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 14px 34px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* An author-origin `display` declaration beats the UA [hidden]{display:
+   none} rule regardless of specificity, so toggling the `hidden`
+   attribute in app.js would silently do nothing without this. */
+.export-menu[hidden] {
+  display: none;
+}
+
+.export-item {
+  font-family: "Archivo", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.export-item:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.export-item.copied {
+  color: var(--accent);
+}
+
+/* Hint */
+
+.hint {
+  margin: -10px 0 0;
+  font-size: 12px;
+  color: var(--ink-faint);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.hint kbd {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--ink-soft);
+  background: var(--paper-elevated);
+}
+
+.hint-icon {
+  flex: none;
+  fill: none;
+  position: relative;
+  top: 1px;
+}
+
+/* Recent — chips are tiny rendered mark thumbnails instead of text, the
+   one place this generator's history diverges from NewCo's (a picture
+   identifies a logo faster than its brand-name text would). */
+
+.recent {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.recent-header .ghost-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.recent-label {
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+.recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.recent-chip {
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.recent-chip svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.recent-chip:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.recent-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Favorites — persisted to localStorage (see FAVORITES_KEY in app.js), so
+   unlike Recent it survives a reload. Same tiny-thumbnail chip as Recent,
+   plus a remove (×) button since favorites are meant to be curated, not
+   just a rolling last-8 log. */
+
+.favorites {
+  width: 100%;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.favorites-empty {
+  margin: 10px auto 0;
+  max-width: 40ch;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}
+
+.favorites-empty strong {
+  color: var(--ink-soft);
+}
+
+.favorites-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.favorite-chip {
+  position: relative;
+}
+
+.favorite-chip button:first-child {
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  background: var(--paper-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.favorite-chip button:first-child svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.favorite-chip button:first-child:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.favorite-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: var(--paper-elevated);
+  color: var(--ink-faint);
+  font-size: 11px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.favorite-chip:hover .favorite-remove,
+.favorite-remove:focus-visible {
+  opacity: 1;
+}
+
+.favorite-remove:hover {
+  color: #c23b2e;
+  border-color: #c23b2e;
+}
+
+/* Footer */
+
+.footer {
+  margin-top: 52px;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+/* Responsive */
+
+@media (max-width: 560px) {
+  .page {
+    padding: 40px 18px 32px;
+  }
+
+  .stage {
+    padding: 40px 20px 28px;
+  }
+
+  .layout-row .lockup {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .layout-row .wordmark-col {
+    align-items: center;
+  }
+
+  .business-inputs {
+    flex-direction: column;
+  }
+
+  .business-input {
+    flex: 1 1 auto;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-ghost,
+  .export-wrap {
+    flex: 1;
+  }
+
+  .export-wrap .btn-ghost {
+    width: 100%;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .tagline {
+    width: 100%;
+    order: 3;
+  }
+}
