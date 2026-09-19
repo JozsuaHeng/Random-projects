@@ -266,6 +266,44 @@ other project in this folder.
     with the neutral as the pop. Missing `accentDominant` on an old saved
     spec is falsy, same as any other boolean flag added this way — `c1`/
     `c2` just resolve to the original always-`ink`-dominant behavior.
+  - **Engraved/hatched fill (`hatchedFill()`, `spec.texture`) — the actual
+    answer to "these are just flat shapes."** More rings and dots around
+    a flat-filled circle still reads as a flat-filled circle; the fix was
+    changing what "filled" means, not adding more around it. `texture` is
+    `null` ~55% of the time (plain flat fill, still the more common
+    default) or `{ angle, spacing, cross }` the rest — when present,
+    `shapeMarkup()`'s 8th argument, filled shapes render as parallel (or,
+    when `cross` is true, cross-hatched) fine lines clipped to the
+    shape's own outline via an SVG `<clipPath>`, instead of a flat
+    `fill="color"`. **`<clipPath>` ids must be unique across the whole
+    HTML document, not just within one `<svg>`** — Recent chips,
+    Favorites, and a generation's own primary + inverse swatch can all be
+    separate inline `<svg>` elements on the page at once, so
+    `hatchIdCounter` is a plain incrementing module-level counter, not
+    per-render or per-spec state. Wired into Geometric (every filled
+    shape in all five layouts), Monogram (the container, only when
+    `filled` — nothing to hatch on an outline-only container), Badge (the
+    seal's inner circle / the shield's inset), and Negative Space (the
+    *base* shape only — the cutout has to stay a flat solid fill exactly
+    matching the canvas color, or the negative-space illusion breaks, so
+    it's the one filled shape in this codebase that must never take a
+    texture regardless of the spec). A spec's `texture` object is
+    generated once by `rollTexture()` and reused for every hatch call
+    that spec makes, so a mark's "grain direction" reads as one
+    considered choice, not a different angle per shape.
+  - **Laurel wreath (`renderLaurel()`, `spec.laurel`, seal Badge only)** —
+    a different kind of detail from everything else in this file: not
+    another ring or tick pattern on the same three circles, but ~10 small
+    leaf ellipses individually placed along the outside of each side of
+    the seal (220°→320° on one side, its mirror 140°→40° on the other,
+    same clockwise-from-top angle convention as the tick-mark loops).
+    This is what "more detail" turned out to actually mean on a second
+    pass: more *elements*, not more layers of the same few elements.
+    Shield doesn't get one — wrapping a wreath around a silhouette that
+    doesn't match its own outline risked looking disconnected rather than
+    detailed, untested since there's no way to preview it here; seal's
+    circular ring gives the wreath's own arc something to sit flush
+    against.
   - **On light / on dark** — `renderStage()` calls `renderMark()` twice per
     result: once with the palette's `ink` on `PAPER` (the primary, large
     canvas) and once with the fixed `INVERSE_INK` (near-white) on the

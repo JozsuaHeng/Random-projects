@@ -185,7 +185,44 @@ const SIDES_MAP = { triangle: 3, square: 4, diamond: 4, pentagon: 5, hex: 6, oct
 // site so adding a 9th kind later is a one-line change.
 const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star"];
 
-function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly) {
+// --- Engraved/hatched fill — the actual answer to "these are just flat
+// shapes." A flat-filled polygon reads as a modern icon no matter how
+// many of them are on screen; a hand-engraved one (parallel or
+// cross-hatched line fill instead of solid color, clipped to the shape's
+// own outline) reads as detailed and print-production the moment you
+// look at it, which is exactly this app's whole visual premise. Needs a
+// globally-unique <clipPath> id per call — several marks (Recent chips,
+// Favorites, the primary + inverse swatch of the *same* generation) can
+// all be inline SVGs on the page at once, and SVG ids must be unique
+// across the whole document, not just within one <svg>. ---
+
+let hatchIdCounter = 0;
+
+// `clipShapeMarkup` is any raw SVG shape markup (a <circle>/<polygon>/
+// <rect>/<path> string) describing the region to fill — reuses whatever
+// geometry the caller already has instead of needing its own shape
+// vocabulary. `cross` draws a second pass at +90° for a denser weave.
+function hatchedFill(clipShapeMarkup, cx, cy, color, angleDeg, spacing, cross) {
+  const id = `insignia-hatch-${hatchIdCounter++}`;
+  const span = 70; // generous enough to fully cover any shape on this 0–100 canvas once clipped
+  let lines = "";
+  for (let off = -span; off <= span; off += spacing) {
+    const y = (cy + off).toFixed(1);
+    lines += `<line x1="${(cx - span).toFixed(1)}" y1="${y}" x2="${(cx + span).toFixed(1)}" y2="${y}" stroke="${color}" stroke-width="0.6"/>`;
+  }
+  let group = `<g transform="rotate(${angleDeg} ${cx} ${cy})">${lines}</g>`;
+  if (cross) group += `<g transform="rotate(${angleDeg + 90} ${cx} ${cy})">${lines}</g>`;
+  return `<clipPath id="${id}">${clipShapeMarkup}</clipPath><g clip-path="url(#${id})">${group}</g>`;
+}
+
+function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly, texture) {
+  if (!strokeOnly && texture) {
+    const outline = shapeMarkup(kind, cx, cy, r, rotation, color, false);
+    // Re-run undecorated to get this shape's own outline (fill doesn't
+    // matter inside a <clipPath>, only the geometry does) as the hatch's
+    // clip region — cheaper than a second geometry function per kind.
+    return hatchedFill(outline, cx, cy, color, texture.angle, texture.spacing, texture.cross);
+  }
   if (kind === "circle") {
     return strokeOnly
       ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2.6"/>`
@@ -297,6 +334,18 @@ function generateRandomLinePath() {
   return { d, nodes: points.map((p) => [p.x, p.y]) };
 }
 
+// Null ~55% of the time — plain flat fill stays the more common default,
+// engraved/hatched fill the "wait, how did they draw that" minority, same
+// "usually restrained, sometimes a lot more" balance as ornate/extreme.
+function rollTexture() {
+  if (Math.random() < 0.55) return null;
+  return {
+    angle: pick([30, 45, 60, 120, 135, 150]),
+    spacing: pick([2.5, 3, 3.5]),
+    cross: Math.random() < 0.4
+  };
+}
+
 function generateGeometricSpec() {
   const layoutKind = pick(GEOMETRIC_LAYOUTS);
   const rotation = Math.floor(Math.random() * 360);
@@ -304,7 +353,7 @@ function generateGeometricSpec() {
   const base = {
     kind: "geometric", layoutKind, rotation, ornate, extreme,
     ring: Math.random() < 0.55, orbitDots: Math.random() < 0.5,
-    accentDominant: Math.random() < 0.35, layout: "stack"
+    accentDominant: Math.random() < 0.35, texture: rollTexture(), layout: "stack"
   };
   if (layoutKind === "radial") {
     const count = 3 + Math.floor(Math.random() * 4); // 3–6, arranged in a ring
@@ -340,14 +389,15 @@ function generateMarkSpec(categoryKey, name) {
       return {
         kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square", "hex", "pentagon", "octagon", "star"]),
         filled: Math.random() < 0.6, innerRing: Math.random() < 0.6, accentDominant: Math.random() < 0.35,
-        ornate, extreme, layout: "stack"
+        texture: rollTexture(), ornate, extreme, layout: "stack"
       };
     }
     case "badge": {
       const { ornate, extreme } = rollDetail();
       return {
         kind: "badge", letter: deriveLetters(name, true), containerKind: pick(["seal", "seal", "shield"]),
-        accentDominant: Math.random() < 0.35, ornate, extreme, layout: "stack"
+        accentDominant: Math.random() < 0.35, texture: rollTexture(), laurel: Math.random() < 0.4,
+        ornate, extreme, layout: "stack"
       };
     }
     case "line": {
@@ -365,7 +415,8 @@ function generateMarkSpec(categoryKey, name) {
       const { ornate, extreme } = rollDetail();
       return {
         kind: "negspace", cutKind: pick(["circle", "circle", "square", "diamond", "hex"]),
-        dx: pick([15, -15]), dy: pick([11, -11]), secondDot: Math.random() < 0.5, ornate, extreme, layout: "stack"
+        dx: pick([15, -15]), dy: pick([11, -11]), secondDot: Math.random() < 0.5,
+        texture: rollTexture(), ornate, extreme, layout: "stack"
       };
     }
     case "wordmark": {
@@ -438,8 +489,8 @@ function renderLayeredShapes(spec, ink, accent) {
   spec.shapes.forEach((kind, i) => {
     const j = spec.jitter[i] || { dx: 0, dy: 0 };
     const cx = 50 + j.dx, cy = 50 + j.dy;
-    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, c1, false);
-    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, c2, false);
+    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, c1, false, spec.texture);
+    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, c2, false, spec.texture);
     else out += shapeMarkup(kind, cx, cy, sizes[2], spec.rotation, c1, true);
   });
   return out;
@@ -463,9 +514,9 @@ function renderRadialShapes(spec, ink, accent) {
     // whatever `cx + r*cos(a)` had concatenated into a string.
     const cx = 50 + 28 * Math.cos(rad);
     const cy = 50 + 28 * Math.sin(rad);
-    out += shapeMarkup(spec.shapes[i], cx, cy, 13, deg, i % 2 === 0 ? c1 : c2, false);
+    out += shapeMarkup(spec.shapes[i], cx, cy, 13, deg, i % 2 === 0 ? c1 : c2, false, spec.texture);
   }
-  out += shapeMarkup("circle", 50, 50, 7, 0, n % 2 === 0 ? c2 : c1, false);
+  out += shapeMarkup("circle", 50, 50, 7, 0, n % 2 === 0 ? c2 : c1, false, spec.texture);
   return out;
 }
 
@@ -480,7 +531,7 @@ function renderScatterShapes(spec, ink, accent) {
     }
   }
   pts.forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === pts.length - 1);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === pts.length - 1, spec.texture);
   });
   return out;
 }
@@ -498,7 +549,7 @@ function renderGridShapes(spec, ink, accent) {
   const c2 = spec.accentDominant ? ink : accent;
   let out = "";
   gridPositions(spec.count).forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.cellSize, spec.rotation, i % 2 === 0 ? c1 : c2, false);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.cellSize, spec.rotation, i % 2 === 0 ? c1 : c2, false, spec.texture);
   });
   return out;
 }
@@ -520,7 +571,7 @@ function renderCascadeShapes(spec, ink, accent) {
   const positions = cascadePositions(spec.count, spec.dir);
   const sizes = [22, 17, 13, 10];
   positions.forEach((p, i) => {
-    out += shapeMarkup(spec.shapes[i], p.x, p.y, sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === positions.length - 1);
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === positions.length - 1, spec.texture);
   });
   return out;
 }
@@ -571,23 +622,32 @@ function renderMonogram(spec, ink, accent, elaborate) {
   const letterColor = spec.filled ? c2 : c1;
   const strokeAttr = spec.filled ? "" : ` stroke="${c1}" stroke-width="2.6"`;
   const detailed = elaborate !== false;
+  const useTexture = spec.filled && spec.texture; // hatching replaces a flat fill — nothing to hatch when unfilled
   let container, inset = "", outer = "";
   const insetColor = spec.filled ? c2 : c1;
   if (spec.container === "circle") {
-    container = `<circle cx="50" cy="50" r="38" fill="${bg}"${strokeAttr}/>`;
+    container = useTexture
+      ? hatchedFill(`<circle cx="50" cy="50" r="38"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
+      : `<circle cx="50" cy="50" r="38" fill="${bg}"${strokeAttr}/>`;
     if (detailed && spec.innerRing) inset = `<circle cx="50" cy="50" r="32" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
     if (detailed && spec.ornate) outer = `<circle cx="50" cy="50" r="43" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   } else if (spec.container === "square") {
-    container = `<rect x="13" y="13" width="74" height="74" rx="10" fill="${bg}"${strokeAttr}/>`;
+    container = useTexture
+      ? hatchedFill(`<rect x="13" y="13" width="74" height="74" rx="10"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
+      : `<rect x="13" y="13" width="74" height="74" rx="10" fill="${bg}"${strokeAttr}/>`;
     if (detailed && spec.innerRing) inset = `<rect x="19" y="19" width="62" height="62" rx="7" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
     if (detailed && spec.ornate) outer = `<rect x="9" y="9" width="82" height="82" rx="12" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   } else if (spec.container === "star") {
-    container = `<polygon points="${starPoints(50, 50, 41, 20, 5, 0)}" fill="${bg}"${strokeAttr}/>`;
+    container = useTexture
+      ? hatchedFill(`<polygon points="${starPoints(50, 50, 41, 20, 5, 0)}"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
+      : `<polygon points="${starPoints(50, 50, 41, 20, 5, 0)}" fill="${bg}"${strokeAttr}/>`;
     if (detailed && spec.innerRing) inset = `<polygon points="${starPoints(50, 50, 34, 16, 5, 0)}" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
     if (detailed && spec.ornate) outer = `<circle cx="50" cy="50" r="46" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   } else {
     const sides = { pentagon: 5, hex: 6, octagon: 8 }[spec.container] || 6;
-    container = `<polygon points="${polygonPoints(50, 50, 41, sides, 0)}" fill="${bg}"${strokeAttr}/>`;
+    container = useTexture
+      ? hatchedFill(`<polygon points="${polygonPoints(50, 50, 41, sides, 0)}"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
+      : `<polygon points="${polygonPoints(50, 50, 41, sides, 0)}" fill="${bg}"${strokeAttr}/>`;
     if (detailed && spec.innerRing) inset = `<polygon points="${polygonPoints(50, 50, 34, sides, 0)}" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
     if (detailed && spec.ornate) outer = `<polygon points="${polygonPoints(50, 50, 46, sides, 0)}" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   }
@@ -620,6 +680,33 @@ function renderMonogram(spec, ink, accent, elaborate) {
 // a visible double-line frame instead of one bare outline.
 const SHIELD_PATH = "M50,7 L84,19 L84,52 C84,75 68,91 50,97 C32,91 16,75 16,52 L16,19 Z";
 const SHIELD_PATH_INSET = "M50,14 L78,24 L78,51 C78,69 65,82 50,87 C35,82 22,69 22,51 L22,24 Z";
+
+// A real laurel wreath, not another ring: ~10 small leaf ellipses along
+// the outside of each side of the seal, sweeping from lower-side to
+// upper-side (220°→320° on the left, its mirror 140°→40° on the right,
+// in this file's clockwise-from-top angle convention — see the tick-mark
+// loops above for the same convention). This is "more detail" in the
+// sense the user actually meant: a genuinely different kind of element
+// (many small individually-placed shapes), not more rings/dots stacked
+// on the same three circles.
+function renderLaurel(color) {
+  let out = "";
+  const leafCount = 5;
+  for (let i = 0; i < leafCount; i++) {
+    const t = i / (leafCount - 1);
+    const degLeft = 220 + t * 100;
+    const degRight = 360 - degLeft;
+    [degLeft, degRight].forEach((deg) => {
+      const rad = (deg - 90) * Math.PI / 180;
+      const r = 47 + Math.sin(t * Math.PI) * 2.5; // slight outward bulge at the midpoint of the sweep
+      const x = (50 + r * Math.cos(rad)).toFixed(1);
+      const y = (50 + r * Math.sin(rad)).toFixed(1);
+      const leafAngle = (deg + 90).toFixed(1);
+      out += `<ellipse cx="${x}" cy="${y}" rx="4.2" ry="1.5" transform="rotate(${leafAngle} ${x} ${y})" fill="${color}" opacity="0.82"/>`;
+    });
+  }
+  return out;
+}
 
 function renderBadgeSeal(spec, ink, accent, detailed) {
   const c1 = spec.accentDominant ? accent : ink;
@@ -654,10 +741,14 @@ function renderBadgeSeal(spec, ink, accent, detailed) {
       }
     }
   }
+  const innerFill = spec.texture
+    ? hatchedFill(`<circle cx="50" cy="50" r="29"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
+    : `<circle cx="50" cy="50" r="29" fill="${c1}"/>`;
+  const laurel = detailed && spec.laurel ? renderLaurel(c2) : "";
   return `<circle cx="50" cy="50" r="45" fill="none" stroke="${c2}" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.4 5.4" opacity="0.85"/>` +
-    ticks +
+    ticks + laurel +
     `<circle cx="50" cy="50" r="37" fill="none" stroke="${c1}" stroke-width="1" opacity="0.5"/>` +
-    `<circle cx="50" cy="50" r="29" fill="${c1}"/>` +
+    innerFill +
     `<text x="50" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="26" fill="${c2}">${spec.letter}</text>` +
     `<path d="M38,76 L33,92 L45,83 Z" fill="${c1}"/>` +
     `<path d="M62,76 L67,92 L55,83 Z" fill="${c1}"/>`;
@@ -669,8 +760,12 @@ function renderBadgeShield(spec, ink, accent, detailed) {
   const insetStroke = detailed && spec.ornate ? ` stroke="${c2}" stroke-width="0.8" opacity="0.9"` : "";
   const rule = detailed && spec.ornate ? `<line x1="30" y1="60" x2="70" y2="60" stroke="${c2}" stroke-width="1" opacity="0.5"/>` : "";
   const doubleRule = detailed && spec.extreme ? `<line x1="26" y1="68" x2="74" y2="68" stroke="${c2}" stroke-width="0.6" opacity="0.4"/>` : "";
+  const inset = spec.texture
+    ? hatchedFill(`<path d="${SHIELD_PATH_INSET}"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross) +
+      (insetStroke ? `<path d="${SHIELD_PATH_INSET}" fill="none"${insetStroke}/>` : "")
+    : `<path d="${SHIELD_PATH_INSET}" fill="${c1}"${insetStroke}/>`;
   return `<path d="${SHIELD_PATH}" fill="none" stroke="${c2}" stroke-width="2.2" opacity="0.85"/>` +
-    `<path d="${SHIELD_PATH_INSET}" fill="${c1}"${insetStroke}/>` +
+    inset +
     `<text x="50" y="46" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="24" fill="${c2}">${spec.letter}</text>` +
     rule + doubleRule;
 }
@@ -713,7 +808,11 @@ function renderLine(spec, ink, accent, elaborate) {
 function renderNegspace(spec, ink, accent, bg, elaborate) {
   const detailed = elaborate !== false;
   const cutKind = spec.cutKind || "circle";
-  let out = shapeMarkup(cutKind, 50, 50, 36, 0, ink, false) +
+  // Only the base shape can be textured — the cutout has to stay a flat
+  // solid fill exactly matching the canvas color, or the negative-space
+  // illusion breaks (hatching would let the "erased" region show through
+  // as a pattern instead of reading as empty background).
+  let out = shapeMarkup(cutKind, 50, 50, 36, 0, ink, false, spec.texture) +
     shapeMarkup(cutKind, 50 + spec.dx, 50 + spec.dy, 36, 0, bg, false);
   if (detailed) {
     out += `<circle cx="50" cy="50" r="43" fill="none" stroke="${ink}" stroke-width="1" opacity="0.3"/>`;
