@@ -161,7 +161,29 @@ function polygonPoints(cx, cy, r, sides, rotationDeg) {
   return pts.join(" ");
 }
 
-const SIDES_MAP = { triangle: 3, square: 4, diamond: 4, hex: 6 };
+// Alternating outer/inner radius polygon — an ordinary regular-polygon
+// point generator can't produce a star's concave points, so it gets its
+// own function instead of an entry in SIDES_MAP.
+function starPoints(cx, cy, rOuter, rInner, points, rotationDeg) {
+  const rot = (rotationDeg - 90) * Math.PI / 180;
+  const step = Math.PI / points;
+  const pts = [];
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? rOuter : rInner;
+    const a = rot + i * step;
+    pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+  }
+  return pts.join(" ");
+}
+
+const SIDES_MAP = { triangle: 3, square: 4, diamond: 4, pentagon: 5, hex: 6, octagon: 8 };
+
+// The full shape vocabulary Geometric (and Negative Space's cut shape,
+// and Combo's inner icon) draw from — 8 kinds instead of the original 5,
+// specifically so a fixed-size random pool doesn't start repeating
+// itself as fast. Kept as one shared list rather than inlined per call
+// site so adding a 9th kind later is a one-line change.
+const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star"];
 
 function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly) {
   if (kind === "circle") {
@@ -169,11 +191,37 @@ function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly) {
       ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2.6"/>`
       : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`;
   }
-  const rot = (kind === "diamond" || kind === "square") ? rotation + 45 : rotation;
+  if (kind === "star") {
+    const pts = starPoints(cx, cy, r, r * 0.45, 5, rotation);
+    return strokeOnly
+      ? `<polygon points="${pts}" fill="none" stroke="${color}" stroke-width="2.6"/>`
+      : `<polygon points="${pts}" fill="${color}"/>`;
+  }
+  // A regular 4-gon at rotation 0 already sits point-up (diamond
+  // orientation) — polygonPoints() starts its first vertex straight up.
+  // Only "square" needs the +45° correction to flatten that into an
+  // axis-aligned square; "diamond" is already correct as-is. (These used
+  // to both get +45°, which made them render as the exact same shape —
+  // fixed here since that silently cut the shape vocabulary from 8 kinds
+  // to 7.)
+  const rot = kind === "square" ? rotation + 45 : rotation;
   const pts = polygonPoints(cx, cy, r, SIDES_MAP[kind], rot);
   return strokeOnly
     ? `<polygon points="${pts}" fill="none" stroke="${color}" stroke-width="2.6"/>`
     : `<polygon points="${pts}" fill="${color}"/>`;
+}
+
+// `n` distinct shape kinds from `pool` — replenishes if `n` exceeds the
+// pool size (never happens today at 8 kinds / max 6 needed, but cheap
+// insurance against a future layout wanting more).
+function pickShapesDistinct(pool, n) {
+  const shapes = [];
+  const bag = pool.slice();
+  for (let i = 0; i < n; i++) {
+    if (!bag.length) bag.push(...pool);
+    shapes.push(bag.splice(Math.floor(Math.random() * bag.length), 1)[0]);
+  }
+  return shapes;
 }
 
 // Derives 1–2 monogram/badge letters from whatever the current name is
@@ -192,36 +240,150 @@ function deriveLetters(name, forceOne) {
 // Regenerating the mark calls this again; regenerating the palette never
 // does (same spec, new renderMark() colors). ---
 
+// `n` distinct values from `arr` — used for Wordmark's occasional
+// 3-treatment combos (`pickDistinct(arr, 2)` covers the old always-a-pair
+// behavior).
+function pickDistinct(arr, n) {
+  const pool = arr.slice();
+  const chosen = [];
+  for (let i = 0; i < n && pool.length; i++) {
+    chosen.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  }
+  return chosen;
+}
+
+// Chance any given "elaborate" mark also gets the denser ornate layer —
+// a second ring, more orbit dots, alternating tick marks, a third nested
+// echo, depending on category. Rolled once per category case below
+// rather than as one shared flag, so it reads naturally as "how much
+// further to push THIS mark" per spec, not a single global toggle.
+const ORNATE_CHANCE = 0.35;
+
+// A rarer third tier, only ever possible on top of an already-ornate
+// result (an "extreme" mark is always also "ornate" — there's no jump
+// straight from plain to extreme). This is specifically what makes *some*
+// results come out extremely detailed rather than nudging every result
+// up by the same fixed amount: roughly 35% of marks are ornate, and
+// roughly 40% of *those* (~14% overall) go one tier further.
+const EXTREME_CHANCE = 0.4;
+
+function rollDetail() {
+  const ornate = Math.random() < ORNATE_CHANCE;
+  return { ornate, extreme: ornate && Math.random() < EXTREME_CHANCE };
+}
+
+// Five genuinely different ways to arrange Geometric's shapes — not just
+// parameter jitter on one template. This is the single biggest lever for
+// "more differentiated": a fixed layout with randomized colors/rotation
+// still reads as "the same logo" after a few generations, where a
+// different *arrangement algorithm* reads as a different logo outright.
+const GEOMETRIC_LAYOUTS = ["layered", "layered", "radial", "scatter", "grid", "cascade"];
+
+// A 7th "recipe" for Line Mark, alongside the 6 hand-authored
+// LINE_PATH_TEMPLATES: a genuinely procedural path, so results aren't
+// forever limited to 6 possible shapes. 3–5 random points, sorted
+// left-to-right before connecting so it reads as a considered route
+// rather than a scribble crossing over itself. Shares its exact shape
+// with `{d, nodes}` from data.js so renderLine() doesn't need to know or
+// care which kind it got.
+function generateRandomLinePath() {
+  const count = 3 + Math.floor(Math.random() * 3);
+  const points = [];
+  for (let i = 0; i < count; i++) {
+    points.push({ x: Math.round(8 + Math.random() * 84), y: Math.round(8 + Math.random() * 84) });
+  }
+  points.sort((a, b) => a.x - b.x);
+  const d = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
+  return { d, nodes: points.map((p) => [p.x, p.y]) };
+}
+
+function generateGeometricSpec() {
+  const layoutKind = pick(GEOMETRIC_LAYOUTS);
+  const rotation = Math.floor(Math.random() * 360);
+  const { ornate, extreme } = rollDetail();
+  const base = {
+    kind: "geometric", layoutKind, rotation, ornate, extreme,
+    ring: Math.random() < 0.55, orbitDots: Math.random() < 0.5,
+    accentDominant: Math.random() < 0.35, layout: "stack"
+  };
+  if (layoutKind === "radial") {
+    const count = 3 + Math.floor(Math.random() * 4); // 3–6, arranged in a ring
+    return { ...base, shapes: pickShapesDistinct(SHAPE_KINDS, count), count };
+  }
+  if (layoutKind === "scatter") {
+    const count = 3 + Math.floor(Math.random() * 3); // 3–5, spread + optionally connected
+    const shapes = pickShapesDistinct(SHAPE_KINDS, count);
+    const positions = shapes.map(() => ({ x: Math.round(18 + Math.random() * 64), y: Math.round(18 + Math.random() * 64) }));
+    const sizes = shapes.map(() => Math.round(9 + Math.random() * 10));
+    return { ...base, shapes, positions, sizes, connect: Math.random() < 0.7 };
+  }
+  if (layoutKind === "grid") {
+    const count = Math.random() < 0.6 ? 4 : 6; // 2x2 or 3x2 lattice
+    return { ...base, shapes: pickShapesDistinct(SHAPE_KINDS, count), count, cellSize: count === 6 ? 13 : 16 };
+  }
+  if (layoutKind === "cascade") {
+    const count = 3 + Math.floor(Math.random() * 2); // 3–4, diagonal staircase
+    return { ...base, shapes: pickShapesDistinct(SHAPE_KINDS, count), count, dir: pick(["up-right", "up-left"]) };
+  }
+  // "layered" — the original recipe: 3 shapes, decreasing size, near center
+  const shapes = pickShapesDistinct(SHAPE_KINDS, 3);
+  const jitter = shapes.map(() => ({ dx: Math.round((Math.random() - 0.5) * 14), dy: Math.round((Math.random() - 0.5) * 14) }));
+  return { ...base, shapes, jitter };
+}
+
 function generateMarkSpec(categoryKey, name) {
   switch (categoryKey) {
-    case "geometric": {
-      const kinds = ["circle", "triangle", "square", "diamond", "hex"];
-      const count = Math.random() < 0.5 ? 2 : 3;
-      const pool = kinds.slice();
-      const shapes = [];
-      for (let i = 0; i < count; i++) shapes.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
-      const jitter = shapes.map(() => ({ dx: Math.round((Math.random() - 0.5) * 14), dy: Math.round((Math.random() - 0.5) * 14) }));
-      return { kind: "geometric", shapes, rotation: pick([0, 15, 30, 45, 60]), jitter, layout: "stack" };
+    case "geometric":
+      return generateGeometricSpec();
+    case "monogram": {
+      const { ornate, extreme } = rollDetail();
+      return {
+        kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square", "hex", "pentagon", "octagon", "star"]),
+        filled: Math.random() < 0.6, innerRing: Math.random() < 0.6, accentDominant: Math.random() < 0.35,
+        ornate, extreme, layout: "stack"
+      };
     }
-    case "monogram":
-      return { kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square", "hex"]), filled: Math.random() < 0.6, layout: "stack" };
-    case "badge":
-      return { kind: "badge", letter: deriveLetters(name, true), layout: "stack" };
-    case "line":
-      return { kind: "line", pathIndex: Math.floor(Math.random() * LINE_PATH_TEMPLATES.length), mirror: Math.random() < 0.5, rotate: pick([0, 0, 0, 90, 180]), strokeRole: pick(["accent", "accent", "ink"]), layout: "stack" };
-    case "negspace":
-      return { kind: "negspace", dx: pick([15, -15]), dy: pick([11, -11]), layout: "stack" };
-    case "wordmark":
-      return { kind: "flourish", treatment: pick(["underline", "dot", "brackets", "ticks"]), layout: "stack" };
+    case "badge": {
+      const { ornate, extreme } = rollDetail();
+      return {
+        kind: "badge", letter: deriveLetters(name, true), containerKind: pick(["seal", "seal", "shield"]),
+        accentDominant: Math.random() < 0.35, ornate, extreme, layout: "stack"
+      };
+    }
+    case "line": {
+      const { ornate, extreme } = rollDetail();
+      const useGenerated = Math.random() < 0.4;
+      return {
+        kind: "line",
+        pathIndex: useGenerated ? null : Math.floor(Math.random() * LINE_PATH_TEMPLATES.length),
+        generatedPath: useGenerated ? generateRandomLinePath() : null,
+        mirror: Math.random() < 0.5, rotate: pick([0, 0, 0, 90, 180]),
+        strokeRole: pick(["accent", "accent", "ink"]), ornate, extreme, layout: "stack"
+      };
+    }
+    case "negspace": {
+      const { ornate, extreme } = rollDetail();
+      return {
+        kind: "negspace", cutKind: pick(["circle", "circle", "square", "diamond", "hex"]),
+        dx: pick([15, -15]), dy: pick([11, -11]), secondDot: Math.random() < 0.5, ornate, extreme, layout: "stack"
+      };
+    }
+    case "wordmark": {
+      const count = Math.random() < 0.3 ? 3 : 2;
+      const treatments = pickDistinct(["underline", "dot", "brackets", "ticks"], count);
+      return { kind: "flourish", treatments, layout: "stack" };
+    }
     case "combo": {
-      const innerKind = pick(["geometric-single", "monogram", "line"]);
+      const innerKind = pick(["geometric-single", "monogram", "line", "negspace"]);
       let inner;
       if (innerKind === "monogram") {
         inner = { kind: "monogram", letters: deriveLetters(name), container: pick(["circle", "square"]), filled: Math.random() < 0.6 };
       } else if (innerKind === "line") {
-        inner = { kind: "line", pathIndex: Math.floor(Math.random() * LINE_PATH_TEMPLATES.length), mirror: Math.random() < 0.5, rotate: 0, strokeRole: "accent" };
+        inner = { kind: "line", pathIndex: Math.floor(Math.random() * LINE_PATH_TEMPLATES.length), generatedPath: null, mirror: Math.random() < 0.5, rotate: 0, strokeRole: "accent" };
+      } else if (innerKind === "negspace") {
+        inner = { kind: "negspace", cutKind: pick(["circle", "square"]), dx: pick([15, -15]), dy: pick([11, -11]), secondDot: false };
       } else {
-        inner = { kind: "geometric", shapes: [pick(["circle", "triangle", "square", "diamond", "hex"])], rotation: pick([0, 15, 30, 45]), jitter: [{ dx: 0, dy: 0 }] };
+        inner = { kind: "geometric", layoutKind: "layered", shapes: [pick(SHAPE_KINDS)], rotation: pick([0, 15, 30, 45]), jitter: [{ dx: 0, dy: 0 }] };
       }
       return { kind: "combo", inner, layout: pick(["side", "stacked"]) };
     }
@@ -242,64 +404,340 @@ function markQuotesName(categoryKey, spec) {
 }
 
 // --- Rendering: spec + colors -> SVG markup for the 0–100 canvas ---
+//
+// Every renderer takes a trailing `elaborate` flag. `undefined` (the
+// default, when a caller doesn't pass one) means "yes, draw the extra
+// detail layers" — only an explicit `false` turns them off. renderMark()
+// forces `false` when it recurses into a "combo" spec's inner icon, so a
+// combination mark's icon stays compact next to its wordmark instead of
+// getting as busy as a standalone mark; every other caller (the main
+// stage, Recent/Favorites thumbnails, SVG/PNG export) just omits the
+// argument and gets the full version.
 
-function renderGeometric(spec, ink, accent) {
+// Five shape-arrangement algorithms for Geometric, dispatched by
+// spec.layoutKind. Each is a pure function of the spec — any randomness
+// (which positions, how many shapes) was already rolled once in
+// generateGeometricSpec() and stored on the spec, never rolled here,
+// since these run again on every re-render (theme toggle, palette
+// regenerate, Recent/Favorites thumbnails) and must draw the exact same
+// shapes every time, only recolored.
+
+// `spec.accentDominant` swaps which color plays the "large/first" role
+// vs the "secondary" role — every layout below resolves that through c1
+// (dominant) / c2 (secondary) rather than reading `ink`/`accent`
+// directly, so a mark can just as easily read as "mostly the bright
+// accent color, ink as a small pop" as the reverse. Real perceptual
+// variety, not just shape variety: two marks with the same layout and
+// palette can still look like different results.
+
+function renderLayeredShapes(spec, ink, accent) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
   const sizes = [30, 21, 13];
   let out = "";
   spec.shapes.forEach((kind, i) => {
     const j = spec.jitter[i] || { dx: 0, dy: 0 };
     const cx = 50 + j.dx, cy = 50 + j.dy;
-    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, ink, false);
-    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, accent, false);
-    else out += shapeMarkup(kind, cx, cy, sizes[2], spec.rotation, ink, true);
+    if (i === 0) out += shapeMarkup(kind, cx, cy, sizes[0], spec.rotation, c1, false);
+    else if (i === 1) out += shapeMarkup(kind, cx, cy, sizes[1], spec.rotation, c2, false);
+    else out += shapeMarkup(kind, cx, cy, sizes[2], spec.rotation, c1, true);
   });
   return out;
 }
 
-function renderMonogram(spec, ink, accent) {
-  const bg = spec.filled ? ink : "none";
-  const letterColor = spec.filled ? accent : ink;
-  const strokeAttr = spec.filled ? "" : ` stroke="${ink}" stroke-width="2.6"`;
-  let container;
+function renderRadialShapes(spec, ink, accent) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  let out = "";
+  const n = spec.count;
+  for (let i = 0; i < n; i++) {
+    const deg = spec.rotation + (i * 360 / n);
+    const rad = (deg - 90) * Math.PI / 180;
+    // Numbers, not .toFixed() strings — shapeMarkup() feeds these into
+    // polygonPoints()/starPoints() for anything but a circle, which does
+    // real arithmetic (cx + r*cos(a)) on them. A stringified cx/cy works
+    // fine for a circle (template-string interpolation doesn't care) but
+    // silently breaks every polygon shape via string concatenation
+    // instead of addition — caught by generating a few hundred radial
+    // marks headlessly and finding `.toFixed is not a function` on
+    // whatever `cx + r*cos(a)` had concatenated into a string.
+    const cx = 50 + 28 * Math.cos(rad);
+    const cy = 50 + 28 * Math.sin(rad);
+    out += shapeMarkup(spec.shapes[i], cx, cy, 13, deg, i % 2 === 0 ? c1 : c2, false);
+  }
+  out += shapeMarkup("circle", 50, 50, 7, 0, n % 2 === 0 ? c2 : c1, false);
+  return out;
+}
+
+function renderScatterShapes(spec, ink, accent) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  let out = "";
+  const pts = spec.positions;
+  if (spec.connect) {
+    for (let i = 0; i < pts.length - 1; i++) {
+      out += `<line x1="${pts[i].x}" y1="${pts[i].y}" x2="${pts[i + 1].x}" y2="${pts[i + 1].y}" stroke="${c1}" stroke-width="0.7" opacity="0.35"/>`;
+    }
+  }
+  pts.forEach((p, i) => {
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === pts.length - 1);
+  });
+  return out;
+}
+
+function gridPositions(count) {
+  const xs = count === 6 ? [28, 50, 72] : [34, 66];
+  const ys = [34, 66];
+  const pts = [];
+  ys.forEach((y) => xs.forEach((x) => pts.push({ x, y })));
+  return pts;
+}
+
+function renderGridShapes(spec, ink, accent) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  let out = "";
+  gridPositions(spec.count).forEach((p, i) => {
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, spec.cellSize, spec.rotation, i % 2 === 0 ? c1 : c2, false);
+  });
+  return out;
+}
+
+function cascadePositions(count, dir) {
+  const pts = [];
+  for (let i = 0; i < count; i++) {
+    const t = count > 1 ? i / (count - 1) : 0;
+    const x = dir === "up-right" ? 25 + t * 50 : 75 - t * 50;
+    pts.push({ x: Math.round(x), y: Math.round(75 - t * 50) });
+  }
+  return pts;
+}
+
+function renderCascadeShapes(spec, ink, accent) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  let out = "";
+  const positions = cascadePositions(spec.count, spec.dir);
+  const sizes = [22, 17, 13, 10];
+  positions.forEach((p, i) => {
+    out += shapeMarkup(spec.shapes[i], p.x, p.y, sizes[i], spec.rotation, i % 2 === 0 ? c1 : c2, i === positions.length - 1);
+  });
+  return out;
+}
+
+function renderGeometric(spec, ink, accent, elaborate) {
+  const detailed = elaborate !== false;
+  // Missing on any spec saved before layoutKind existed — falls back to
+  // the original (and still most common) recipe, not a crash.
+  const layoutKind = spec.layoutKind || "layered";
+  let out = "";
+  if (detailed && spec.ring) {
+    out += `<circle cx="50" cy="50" r="45" fill="none" stroke="${ink}" stroke-width="1" opacity="0.3"/>`;
+    if (spec.ornate) out += `<circle cx="50" cy="50" r="40" fill="none" stroke="${accent}" stroke-width="0.8" opacity="0.35"/>`;
+  }
+  if (layoutKind === "radial") out += renderRadialShapes(spec, ink, accent);
+  else if (layoutKind === "scatter") out += renderScatterShapes(spec, ink, accent);
+  else if (layoutKind === "grid") out += renderGridShapes(spec, ink, accent);
+  else if (layoutKind === "cascade") out += renderCascadeShapes(spec, ink, accent);
+  else out += renderLayeredShapes(spec, ink, accent);
+  if (detailed && spec.orbitDots) {
+    const angles = spec.ornate ? [0, 45, 90, 135, 180, 225, 270, 315] : [0, 120, 240];
+    angles.forEach((deg) => {
+      const rad = (deg - 90) * Math.PI / 180;
+      const dx = (50 + 47 * Math.cos(rad)).toFixed(1);
+      const dy = (50 + 47 * Math.sin(rad)).toFixed(1);
+      out += `<circle cx="${dx}" cy="${dy}" r="2.4" fill="${accent}"/>`;
+      if (spec.ornate) {
+        const ix = (50 + 31 * Math.cos(rad)).toFixed(1), iy = (50 + 31 * Math.sin(rad)).toFixed(1);
+        out += `<line x1="${ix}" y1="${iy}" x2="${dx}" y2="${dy}" stroke="${ink}" stroke-width="0.6" opacity="0.3"/>`;
+      }
+    });
+  }
+  if (detailed && spec.extreme) {
+    for (let deg = 0; deg < 360; deg += 15) {
+      const rad = (deg - 90) * Math.PI / 180;
+      const x1 = (50 + 47.5 * Math.cos(rad)).toFixed(1), y1 = (50 + 47.5 * Math.sin(rad)).toFixed(1);
+      const x2 = (50 + 49.5 * Math.cos(rad)).toFixed(1), y2 = (50 + 49.5 * Math.sin(rad)).toFixed(1);
+      out += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${ink}" stroke-width="0.5" opacity="0.35"/>`;
+    }
+  }
+  return out;
+}
+
+function renderMonogram(spec, ink, accent, elaborate) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  const bg = spec.filled ? c1 : "none";
+  const letterColor = spec.filled ? c2 : c1;
+  const strokeAttr = spec.filled ? "" : ` stroke="${c1}" stroke-width="2.6"`;
+  const detailed = elaborate !== false;
+  let container, inset = "", outer = "";
+  const insetColor = spec.filled ? c2 : c1;
   if (spec.container === "circle") {
     container = `<circle cx="50" cy="50" r="38" fill="${bg}"${strokeAttr}/>`;
+    if (detailed && spec.innerRing) inset = `<circle cx="50" cy="50" r="32" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
+    if (detailed && spec.ornate) outer = `<circle cx="50" cy="50" r="43" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   } else if (spec.container === "square") {
     container = `<rect x="13" y="13" width="74" height="74" rx="10" fill="${bg}"${strokeAttr}/>`;
+    if (detailed && spec.innerRing) inset = `<rect x="19" y="19" width="62" height="62" rx="7" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
+    if (detailed && spec.ornate) outer = `<rect x="9" y="9" width="82" height="82" rx="12" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
+  } else if (spec.container === "star") {
+    container = `<polygon points="${starPoints(50, 50, 41, 20, 5, 0)}" fill="${bg}"${strokeAttr}/>`;
+    if (detailed && spec.innerRing) inset = `<polygon points="${starPoints(50, 50, 34, 16, 5, 0)}" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
+    if (detailed && spec.ornate) outer = `<circle cx="50" cy="50" r="46" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
   } else {
-    container = `<polygon points="${polygonPoints(50, 50, 41, 6, 0)}" fill="${bg}"${strokeAttr}/>`;
+    const sides = { pentagon: 5, hex: 6, octagon: 8 }[spec.container] || 6;
+    container = `<polygon points="${polygonPoints(50, 50, 41, sides, 0)}" fill="${bg}"${strokeAttr}/>`;
+    if (detailed && spec.innerRing) inset = `<polygon points="${polygonPoints(50, 50, 34, sides, 0)}" fill="none" stroke="${insetColor}" stroke-width="1" opacity="0.55"/>`;
+    if (detailed && spec.ornate) outer = `<polygon points="${polygonPoints(50, 50, 46, sides, 0)}" fill="none" stroke="${c2}" stroke-width="0.8" opacity="0.4"/>`;
+  }
+  let ticks = "";
+  if (detailed && spec.ornate) {
+    [0, 90, 180, 270].forEach((deg) => {
+      const rad = (deg - 90) * Math.PI / 180;
+      const x1 = (50 + 48 * Math.cos(rad)).toFixed(1), y1 = (50 + 48 * Math.sin(rad)).toFixed(1);
+      const x2 = (50 + 53 * Math.cos(rad)).toFixed(1), y2 = (50 + 53 * Math.sin(rad)).toFixed(1);
+      ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c1}" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>`;
+    });
+    if (spec.extreme) {
+      [45, 135, 225, 315].forEach((deg) => {
+        const rad = (deg - 90) * Math.PI / 180;
+        const x1 = (50 + 49 * Math.cos(rad)).toFixed(1), y1 = (50 + 49 * Math.sin(rad)).toFixed(1);
+        const x2 = (50 + 52 * Math.cos(rad)).toFixed(1), y2 = (50 + 52 * Math.sin(rad)).toFixed(1);
+        ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c2}" stroke-width="1" stroke-linecap="round" opacity="0.45"/>`;
+      });
+    }
   }
   const fontSize = spec.letters.length > 1 ? 28 : 36;
   const text = `<text x="50" y="52" text-anchor="middle" dominant-baseline="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="${fontSize}" fill="${letterColor}">${spec.letters}</text>`;
-  return container + text;
+  return outer + container + inset + ticks + text;
 }
 
-function renderBadge(spec, ink, accent) {
-  return `<circle cx="50" cy="50" r="45" fill="none" stroke="${accent}" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.4 5.4" opacity="0.85"/>` +
-    `<circle cx="50" cy="50" r="37" fill="none" stroke="${ink}" stroke-width="1" opacity="0.5"/>` +
-    `<circle cx="50" cy="50" r="29" fill="${ink}"/>` +
-    `<text x="50" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="26" fill="${accent}">${spec.letter}</text>` +
-    `<path d="M38,76 L33,92 L45,83 Z" fill="${ink}"/>` +
-    `<path d="M62,76 L67,92 L55,83 Z" fill="${ink}"/>`;
+// A heraldic shield silhouette — a genuinely different container from
+// the seal's concentric circles, not just a parameter change on it. Two
+// paths: the outline and a slightly inset copy (same technique as the
+// seal's middle ring / the line marks' nested echoes) so the shield gets
+// a visible double-line frame instead of one bare outline.
+const SHIELD_PATH = "M50,7 L84,19 L84,52 C84,75 68,91 50,97 C32,91 16,75 16,52 L16,19 Z";
+const SHIELD_PATH_INSET = "M50,14 L78,24 L78,51 C78,69 65,82 50,87 C35,82 22,69 22,51 L22,24 Z";
+
+function renderBadgeSeal(spec, ink, accent, detailed) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  let ticks = "";
+  if (detailed) {
+    for (let deg = 0; deg < 360; deg += 30) {
+      const rad = (deg - 90) * Math.PI / 180;
+      const x1 = (50 + 39.5 * Math.cos(rad)).toFixed(1), y1 = (50 + 39.5 * Math.sin(rad)).toFixed(1);
+      const x2 = (50 + 43 * Math.cos(rad)).toFixed(1), y2 = (50 + 43 * Math.sin(rad)).toFixed(1);
+      ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c1}" stroke-width="1" opacity="0.4"/>`;
+    }
+    if (spec.ornate) {
+      for (let deg = 15; deg < 360; deg += 30) {
+        const rad = (deg - 90) * Math.PI / 180;
+        const x1 = (50 + 40.5 * Math.cos(rad)).toFixed(1), y1 = (50 + 40.5 * Math.sin(rad)).toFixed(1);
+        const x2 = (50 + 43 * Math.cos(rad)).toFixed(1), y2 = (50 + 43 * Math.sin(rad)).toFixed(1);
+        ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c1}" stroke-width="0.6" opacity="0.3"/>`;
+      }
+      [0, 90, 180, 270].forEach((deg) => {
+        const rad = (deg - 90) * Math.PI / 180;
+        const dx = (50 + 49 * Math.cos(rad)).toFixed(1), dy = (50 + 49 * Math.sin(rad)).toFixed(1);
+        ticks += `<circle cx="${dx}" cy="${dy}" r="1.8" fill="${c2}"/>`;
+      });
+      if (spec.extreme) {
+        for (let deg = 7.5; deg < 360; deg += 15) {
+          const rad = (deg - 90) * Math.PI / 180;
+          const x1 = (50 + 41.5 * Math.cos(rad)).toFixed(1), y1 = (50 + 41.5 * Math.sin(rad)).toFixed(1);
+          const x2 = (50 + 43 * Math.cos(rad)).toFixed(1), y2 = (50 + 43 * Math.sin(rad)).toFixed(1);
+          ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c2}" stroke-width="0.5" opacity="0.3"/>`;
+        }
+      }
+    }
+  }
+  return `<circle cx="50" cy="50" r="45" fill="none" stroke="${c2}" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.4 5.4" opacity="0.85"/>` +
+    ticks +
+    `<circle cx="50" cy="50" r="37" fill="none" stroke="${c1}" stroke-width="1" opacity="0.5"/>` +
+    `<circle cx="50" cy="50" r="29" fill="${c1}"/>` +
+    `<text x="50" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="26" fill="${c2}">${spec.letter}</text>` +
+    `<path d="M38,76 L33,92 L45,83 Z" fill="${c1}"/>` +
+    `<path d="M62,76 L67,92 L55,83 Z" fill="${c1}"/>`;
 }
 
-function renderLine(spec, ink, accent) {
-  const d = LINE_PATH_TEMPLATES[spec.pathIndex];
+function renderBadgeShield(spec, ink, accent, detailed) {
+  const c1 = spec.accentDominant ? accent : ink;
+  const c2 = spec.accentDominant ? ink : accent;
+  const insetStroke = detailed && spec.ornate ? ` stroke="${c2}" stroke-width="0.8" opacity="0.9"` : "";
+  const rule = detailed && spec.ornate ? `<line x1="30" y1="60" x2="70" y2="60" stroke="${c2}" stroke-width="1" opacity="0.5"/>` : "";
+  const doubleRule = detailed && spec.extreme ? `<line x1="26" y1="68" x2="74" y2="68" stroke="${c2}" stroke-width="0.6" opacity="0.4"/>` : "";
+  return `<path d="${SHIELD_PATH}" fill="none" stroke="${c2}" stroke-width="2.2" opacity="0.85"/>` +
+    `<path d="${SHIELD_PATH_INSET}" fill="${c1}"${insetStroke}/>` +
+    `<text x="50" y="46" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="24" fill="${c2}">${spec.letter}</text>` +
+    rule + doubleRule;
+}
+
+function renderBadge(spec, ink, accent, elaborate) {
+  const detailed = elaborate !== false;
+  return spec.containerKind === "shield"
+    ? renderBadgeShield(spec, ink, accent, detailed)
+    : renderBadgeSeal(spec, ink, accent, detailed);
+}
+
+function renderLine(spec, ink, accent, elaborate) {
+  const tmpl = spec.generatedPath || LINE_PATH_TEMPLATES[spec.pathIndex];
   const color = spec.strokeRole === "accent" ? accent : ink;
+  const echoColor = spec.strokeRole === "accent" ? ink : accent;
   let transform = "";
   if (spec.mirror) transform += "translate(100,0) scale(-1,1) ";
   if (spec.rotate) transform += `rotate(${spec.rotate},50,50) `;
-  const open = transform ? `<g transform="${transform.trim()}">` : "<g>";
-  return `${open}<path d="${d}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  let out = transform ? `<g transform="${transform.trim()}">` : "<g>";
+  const detailed = elaborate !== false;
+  if (detailed) {
+    out += `<g transform="translate(50,50) scale(0.55) translate(-50,-50)" opacity="0.4"><path d="${tmpl.d}" fill="none" stroke="${echoColor}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+    if (spec.ornate) {
+      out += `<g transform="translate(50,50) scale(0.3) translate(-50,-50)" opacity="0.28"><path d="${tmpl.d}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+      if (spec.extreme) {
+        out += `<g transform="translate(50,50) scale(0.16) translate(-50,-50)" opacity="0.22"><path d="${tmpl.d}" fill="none" stroke="${echoColor}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+      }
+    }
+  }
+  out += `<path d="${tmpl.d}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if (detailed) {
+    tmpl.nodes.forEach(([nx, ny]) => {
+      out += `<circle cx="${nx}" cy="${ny}" r="3.4" fill="${echoColor}"/>`;
+      if (spec.ornate) out += `<circle cx="${nx}" cy="${ny}" r="6" fill="none" stroke="${echoColor}" stroke-width="0.7" opacity="0.5"/>`;
+    });
+  }
+  return out + "</g>";
 }
 
-function renderNegspace(spec, ink, accent, bg) {
-  return `<circle cx="50" cy="50" r="36" fill="${ink}"/>` +
-    `<circle cx="${50 + spec.dx}" cy="${50 + spec.dy}" r="36" fill="${bg}"/>` +
-    `<circle cx="${50 - spec.dx * 0.45}" cy="${50 - spec.dy * 0.45}" r="6.5" fill="${accent}"/>`;
+function renderNegspace(spec, ink, accent, bg, elaborate) {
+  const detailed = elaborate !== false;
+  const cutKind = spec.cutKind || "circle";
+  let out = shapeMarkup(cutKind, 50, 50, 36, 0, ink, false) +
+    shapeMarkup(cutKind, 50 + spec.dx, 50 + spec.dy, 36, 0, bg, false);
+  if (detailed) {
+    out += `<circle cx="50" cy="50" r="43" fill="none" stroke="${ink}" stroke-width="1" opacity="0.3"/>`;
+    if (spec.ornate) {
+      out += `<circle cx="50" cy="50" r="47" fill="none" stroke="${accent}" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.4 4.6" opacity="0.6"/>`;
+    }
+  }
+  const dotX = 50 - spec.dx * 0.45, dotY = 50 - spec.dy * 0.45;
+  const dot2X = 50 - spec.dx * 0.9, dot2Y = 50 - spec.dy * 0.9;
+  out += `<circle cx="${dotX}" cy="${dotY}" r="6.5" fill="${accent}"/>`;
+  if (detailed && spec.secondDot) {
+    out += `<circle cx="${dot2X}" cy="${dot2Y}" r="3.2" fill="${accent}" opacity="0.6"/>`;
+  }
+  if (detailed && spec.ornate) {
+    out += `<circle cx="${(dotX + dot2X) / 2}" cy="${(dotY + dot2Y) / 2}" r="2" fill="${accent}" opacity="0.45"/>`;
+    if (spec.extreme) {
+      out += `<circle cx="${50 - spec.dx * 1.3}" cy="${50 - spec.dy * 1.3}" r="1.5" fill="${accent}" opacity="0.3"/>`;
+    }
+  }
+  return out;
 }
 
-function renderFlourish(spec, ink, accent) {
-  switch (spec.treatment) {
+function renderFlourishPart(treatment, ink, accent) {
+  switch (treatment) {
     case "underline":
       return `<line x1="20" y1="62" x2="80" y2="62" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>`;
     case "dot":
@@ -315,15 +753,27 @@ function renderFlourish(spec, ink, accent) {
   }
 }
 
-function renderMark(spec, ink, accent, bg) {
+// Renders both of the spec's two distinct treatments together (e.g.
+// underline + dot) — Wordmark is the one category built around having no
+// icon at all, so it stays deliberately lighter-touch than the others
+// even at its most detailed, rather than growing a full icon to match.
+function renderFlourish(spec, ink, accent) {
+  // Favorites persist to localStorage, so a spec saved before treatments
+  // became an array can still show up here with the old singular
+  // `spec.treatment` — fall back to it instead of crashing on `.map`.
+  const treatments = spec.treatments || (spec.treatment ? [spec.treatment] : []);
+  return treatments.map((t) => renderFlourishPart(t, ink, accent)).join("");
+}
+
+function renderMark(spec, ink, accent, bg, elaborate) {
   switch (spec.kind) {
-    case "geometric": return renderGeometric(spec, ink, accent);
-    case "monogram": return renderMonogram(spec, ink, accent);
-    case "badge": return renderBadge(spec, ink, accent);
-    case "line": return renderLine(spec, ink, accent);
-    case "negspace": return renderNegspace(spec, ink, accent, bg);
+    case "geometric": return renderGeometric(spec, ink, accent, elaborate);
+    case "monogram": return renderMonogram(spec, ink, accent, elaborate);
+    case "badge": return renderBadge(spec, ink, accent, elaborate);
+    case "line": return renderLine(spec, ink, accent, elaborate);
+    case "negspace": return renderNegspace(spec, ink, accent, bg, elaborate);
     case "flourish": return renderFlourish(spec, ink, accent);
-    case "combo": return renderMark(spec.inner, ink, accent, bg);
+    case "combo": return renderMark(spec.inner, ink, accent, bg, false);
     default: return "";
   }
 }
@@ -365,6 +815,42 @@ function contrastBadge(ratio) {
   if (ratio >= 4.5) return "✓ AA";
   if (ratio >= 3) return "△ AA-large";
   return "⚠ low";
+}
+
+// --- Wordmark color — the biggest, most eye-catching element on the
+// stage was, until now, always the app's own neutral --ink theme color,
+// completely untied to the generated palette. Every mark-level variety
+// added above this could double and it would still read as "the same
+// logo" at a glance, because the one thing your eye lands on first never
+// changed. Fixed by coloring the wordmark from the palette itself,
+// occasionally in the accent color outright for real punch — gated by
+// the same contrast math the contrast-line readout already uses, so an
+// accent that wouldn't read well as hero-sized text just doesn't get
+// picked for that role. ---
+
+const STAGE_PAPER_LIGHT = "#fffdf8"; // must match style.css's light --paper-elevated
+const STAGE_PAPER_DARK = "#1c1f27"; // must match style.css's dark --paper-elevated
+
+function isAppDarkMode() {
+  const explicit = document.documentElement.getAttribute("data-theme");
+  if (explicit === "dark") return true;
+  if (explicit === "light") return false;
+  return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+
+// "ink" role still means "whatever's readable against the stage card in
+// the app's CURRENT theme" (mirrors how a generated mark's own ink flips
+// between the light and dark swatch) — palette.ink in light mode,
+// INVERSE_INK in dark mode, since palette.ink is only ever designed to
+// read against a light surface.
+function wordmarkInkColor(paletteInk) {
+  return isAppDarkMode() ? INVERSE_INK : paletteInk;
+}
+
+function pickWordmarkColorRole(accentHex) {
+  const stageBg = isAppDarkMode() ? STAGE_PAPER_DARK : STAGE_PAPER_LIGHT;
+  const accentReadable = contrastRatio(accentHex, stageBg) >= 3;
+  return accentReadable && Math.random() < 0.35 ? "accent" : "ink";
 }
 
 // --- Export helpers ---
@@ -456,6 +942,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const wordmarkEl = document.getElementById("stageWordmark");
   const swatchInk = document.getElementById("swatchInk");
   const swatchAccent = document.getElementById("swatchAccent");
+  const hexInk = document.getElementById("hexInk");
+  const hexAccent = document.getElementById("hexAccent");
   const paletteName = document.getElementById("paletteName");
   const usageLineEl = document.getElementById("usageLine");
   const contrastLineEl = document.getElementById("contrastLine");
@@ -475,6 +963,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const lockWordmarkBtn = document.getElementById("lockWordmarkBtn");
   const lockPaletteBtn = document.getElementById("lockPaletteBtn");
   const themeToggleBtn = document.getElementById("themeToggleBtn");
+  const themeToggleLabel = document.getElementById("themeToggleLabel");
   const seedInput = document.getElementById("seedInput");
   const businessNameInput = document.getElementById("businessNameInput");
   const businessKeywordsInput = document.getElementById("businessKeywordsInput");
@@ -488,8 +977,9 @@ document.addEventListener("DOMContentLoaded", () => {
     name: "",
     markSpec: null,
     wordmarkTreatment: "treatment-tracked",
+    wordmarkColorRole: "ink",
     paletteIndex: 0,
-    recent: [], // { name, categoryUsed, markSpec, wordmarkTreatment, paletteIndex }
+    recent: [], // { name, categoryUsed, markSpec, wordmarkTreatment, wordmarkColorRole, paletteIndex }
     historyIndex: 0,
     favorites: loadFavorites(), // same shape as `recent` entries, persisted
     // Locks only affect Generate / a chip click (both funnel through
@@ -523,10 +1013,19 @@ document.addEventListener("DOMContentLoaded", () => {
     markInverse.innerHTML = renderMark(state.markSpec, INVERSE_INK, palette.accent, INVERSE_BG);
     wordmarkEl.textContent = state.name;
     wordmarkEl.className = "stage-wordmark " + state.wordmarkTreatment;
-    wordmarkEl.style.setProperty("--wm-accent", palette.accent);
+    // Text and its own underline/rule never share a color — whichever
+    // role the text didn't take becomes the rule color, so the
+    // treatment-underline rule stays visible under accent-colored text
+    // instead of nearly vanishing into it.
+    const inkColor = wordmarkInkColor(palette.ink);
+    const isAccentText = state.wordmarkColorRole === "accent";
+    wordmarkEl.style.color = isAccentText ? palette.accent : inkColor;
+    wordmarkEl.style.setProperty("--wm-accent", isAccentText ? inkColor : palette.accent);
     paletteName.textContent = palette.name;
     swatchInk.style.background = palette.ink;
     swatchAccent.style.background = palette.accent;
+    hexInk.textContent = palette.ink.toUpperCase();
+    hexAccent.textContent = palette.accent.toUpperCase();
     usageLineEl.textContent = usageLine(state.name);
     const onLight = contrastRatio(palette.accent, PAPER);
     const onDark = contrastRatio(palette.accent, INVERSE_BG);
@@ -574,6 +1073,7 @@ document.addEventListener("DOMContentLoaded", () => {
       state.name = entry.name;
       state.markSpec = entry.markSpec;
       state.wordmarkTreatment = entry.wordmarkTreatment;
+      state.wordmarkColorRole = entry.wordmarkColorRole || "ink"; // pre-existing entries predate this field
       state.paletteIndex = entry.paletteIndex;
     }, renderRecent);
   }
@@ -584,6 +1084,7 @@ document.addEventListener("DOMContentLoaded", () => {
       categoryUsed: state.categoryUsed,
       markSpec: state.markSpec,
       wordmarkTreatment: state.wordmarkTreatment,
+      wordmarkColorRole: state.wordmarkColorRole,
       paletteIndex: state.paletteIndex
     });
     if (state.recent.length > 8) state.recent.length = 8;
@@ -635,6 +1136,7 @@ document.addEventListener("DOMContentLoaded", () => {
       state.name = entry.name;
       state.markSpec = entry.markSpec;
       state.wordmarkTreatment = entry.wordmarkTreatment;
+      state.wordmarkColorRole = entry.wordmarkColorRole || "ink"; // pre-existing entries predate this field
       state.paletteIndex = entry.paletteIndex;
     });
   }
@@ -645,6 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
       categoryUsed: state.categoryUsed,
       markSpec: state.markSpec,
       wordmarkTreatment: state.wordmarkTreatment,
+      wordmarkColorRole: state.wordmarkColorRole,
       paletteIndex: state.paletteIndex
     });
     if (state.favorites.length > 24) state.favorites.length = 24;
@@ -666,15 +1169,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function rollFresh() {
     const keywords = getBusinessKeywords();
     state.categoryUsed = resolveCategory(state.activeCategory, keywords);
+    // Palette resolves before wordmark now (used to be the other way
+    // round) — wordmarkColorRole needs this generation's *final* accent
+    // to decide whether accent-colored text would even be readable.
+    // Palette resolution never depends on name/mark, so reordering it
+    // earlier is free.
+    if (!state.locks.palette) {
+      state.paletteIndex = pickPaletteIndex(undefined, keywords);
+    }
     if (!state.locks.wordmark) {
       state.name = resolveName(state.categoryUsed, getSeed(), getBusinessName());
       state.wordmarkTreatment = pick(WORDMARK_TREATMENTS);
+      state.wordmarkColorRole = pickWordmarkColorRole(PALETTES[state.paletteIndex].accent);
     }
     if (!state.locks.mark) {
       state.markSpec = generateMarkSpec(state.categoryUsed, state.name);
-    }
-    if (!state.locks.palette) {
-      state.paletteIndex = pickPaletteIndex(undefined, keywords);
     }
   }
 
@@ -692,6 +1201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     withTransition(() => {
       state.name = resolveName(state.categoryUsed, getSeed(), getBusinessName());
       state.wordmarkTreatment = pick(WORDMARK_TREATMENTS);
+      state.wordmarkColorRole = pickWordmarkColorRole(PALETTES[state.paletteIndex].accent);
       if (markQuotesName(state.categoryUsed, state.markSpec)) {
         state.markSpec = generateMarkSpec(state.categoryUsed, state.name);
       }
@@ -821,6 +1331,7 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggleBtn.dataset.state = shown;
     themeToggleBtn.title = `Theme: ${cap(shown)} — click to change`;
     themeToggleBtn.setAttribute("aria-label", `Theme: ${shown}. Click to change.`);
+    themeToggleLabel.textContent = shown === "system" ? "Auto" : cap(shown);
   }
 
   function cycleTheme() {

@@ -76,6 +76,10 @@ body {
   background-position: center top;
   opacity: 1;
   transition: background-color 0.2s ease, color 0.2s ease;
+  /* Bumps the whole page up ~15% on load, since the default 1x read as
+     small on a real screen — `zoom` (not `transform: scale`) so layout
+     still reflows correctly instead of just visually stretching. */
+  zoom: 1.15;
 }
 
 body::before {
@@ -88,7 +92,7 @@ body::before {
 }
 
 .page {
-  max-width: 720px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 56px 24px 40px;
   min-height: 100vh;
@@ -113,6 +117,13 @@ body::before {
 
 .brand .mark {
   flex: none;
+  /* The triangle is fill="currentColor" in the markup specifically so it
+     tracks --ink and stays visible in dark mode — it used to be a
+     hardcoded #1c1c1c, which went near-invisible against a dark
+     background. The circle stays a hardcoded crimson on purpose: it
+     reads fine on both light and dark, and it's the one color that ties
+     this mark back to the hub tile's identical circle. */
+  color: var(--ink);
 }
 
 .wordmark {
@@ -140,13 +151,13 @@ body::before {
   flex: none;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 30px;
+  gap: 6px;
   height: 30px;
+  padding: 0 12px 0 10px;
   border-radius: 999px;
   border: 1px solid var(--rule);
   background: var(--paper-elevated);
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
@@ -158,6 +169,7 @@ body::before {
 
 .theme-toggle svg {
   display: none;
+  flex: none;
 }
 
 .theme-toggle[data-state="system"] .icon-system,
@@ -166,36 +178,87 @@ body::before {
   display: block;
 }
 
-/* Layout */
+.theme-toggle-label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
-.layout {
+/* Workspace — a two-pane layout so switching styles/seed/locks never
+   means scrolling away from the result: a narrow, sticky sidebar holds
+   every input control, a wider column on the right holds the actual
+   generator output (stage, actions, history). Collapses to a single
+   stacked column below the 860px breakpoint — see the responsive block
+   at the end of this file. */
+
+.workspace {
   flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+}
+
+.sidebar {
+  flex: 0 0 250px;
+  width: 250px;
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-label {
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.generator {
+  flex: 1;
+  min-width: 0;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 24px;
 }
 
-/* Category chips */
+/* Category chips — a vertical list in the sidebar (row of wrapped pills
+   again once the layout collapses to one column, see the responsive
+   block). */
 
 .chips {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
   width: 100%;
 }
 
 .chip {
   font-family: "Archivo", sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--ink-soft);
   background: var(--paper-elevated);
   border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 7px 15px;
+  border-radius: 10px;
+  padding: 9px 14px;
+  text-align: left;
+  width: 100%;
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
@@ -215,8 +278,6 @@ body::before {
 
 .seed-row {
   width: 100%;
-  display: flex;
-  justify-content: center;
 }
 
 .seed-input,
@@ -224,7 +285,7 @@ body::before {
   background: var(--paper-elevated);
   border: 1px solid var(--rule);
   border-radius: 999px;
-  padding: 9px 18px;
+  padding: 9px 16px;
   font-family: "Archivo", sans-serif;
   font-size: 13px;
   color: var(--ink);
@@ -233,8 +294,7 @@ body::before {
 
 .seed-input {
   width: 100%;
-  max-width: 300px;
-  text-align: center;
+  text-align: left;
 }
 
 .seed-input::placeholder,
@@ -250,11 +310,10 @@ body::before {
 
 .business-panel {
   width: 100%;
-  max-width: 480px;
   border: 1px dashed var(--rule);
   border-radius: 14px;
-  padding: 16px 18px;
-  text-align: center;
+  padding: 16px 16px;
+  text-align: left;
 }
 
 .business-label {
@@ -269,12 +328,12 @@ body::before {
 
 .business-inputs {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
 }
 
 .business-input {
-  flex: 1 1 180px;
+  width: 100%;
   text-align: left;
 }
 
@@ -288,7 +347,7 @@ body::before {
 /* Lock row — deliberately NOT placed next to the fields it locks (inline
    with the hero wordmark, say). NewCo's CLAUDE.md documents why a pin
    icon bolted onto hero-sized brand text never reads well no matter how
-   it's styled; keeping these as their own small utility row, away from
+   it's styled; keeping these as their own small sidebar group, away from
    the stage entirely, sidesteps that problem rather than re-fighting it.
    Locking only changes what Generate / a chip click leave alone — a
    field's own regenerate icon still works on a locked field, since
@@ -296,19 +355,24 @@ body::before {
 
 .lock-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 7px;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 }
 
 .lock-row-label {
+  margin: 0;
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10.5px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-right: 2px;
+}
+
+.lock-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
 }
 
 .lock-toggle {
@@ -528,7 +592,10 @@ body::before {
 .stage-palette-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  column-gap: 7px;
 }
 
 .swatch-dot {
@@ -537,6 +604,14 @@ body::before {
   border-radius: 50%;
   border: 1px solid rgba(28, 26, 20, 0.15);
   flex: none;
+}
+
+.hex-code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  margin-right: 4px;
 }
 
 .palette-name {
@@ -940,6 +1015,68 @@ body::before {
 }
 
 /* Responsive */
+
+/* Below this, the sidebar/generator split stops paying for itself —
+   collapse to one stacked column (sidebar first, generator below) and
+   let the sticky positioning go, since there's no side-by-side scroll
+   problem left to solve once it's single-column anyway. Category chips
+   go back to wrapped horizontal pills here too: a vertical list of 8
+   full-width buttons is the right call in a 250px sidebar, but not as
+   the very first thing in a narrow single mobile column. */
+@media (max-width: 860px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    flex: none;
+  }
+
+  .generator {
+    max-width: none;
+    width: 100%;
+  }
+
+  .chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .chip {
+    width: auto;
+    text-align: center;
+    border-radius: 999px;
+  }
+
+  .seed-input {
+    text-align: center;
+  }
+
+  .business-panel {
+    text-align: center;
+  }
+
+  .business-inputs {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .business-input {
+    flex: 1 1 180px;
+    width: auto;
+  }
+
+  .lock-row {
+    align-items: center;
+  }
+
+  .lock-toggle-group {
+    justify-content: center;
+  }
+}
 
 @media (max-width: 560px) {
   .page {

@@ -69,7 +69,13 @@ const PALETTES = [
   { name: "Onyx & Teal", ink: "#15181a", accent: "#2c8c86", moods: ["health", "healthcare", "spa", "clinic", "yoga", "therapy", "therapist", "medical", "dental", "dentist", "physio", "pharmacy"] },
   { name: "Ink & Violet", ink: "#18161c", accent: "#7355c7", moods: ["creative", "publishing", "publisher", "literary", "magazine", "gaming", "game", "music", "musician", "podcast", "media"] },
   { name: "Charcoal & Rust", ink: "#1a1815", accent: "#b25a2e", moods: ["craft", "coffee", "cafe", "artisan", "brewery", "brewing", "outfitter", "leather", "woodwork", "carpentry", "woodworking", "roastery"] },
-  { name: "Slate & Berry", ink: "#181820", accent: "#a1315f", moods: ["fashion", "boutique", "perfume", "editorial", "beauty", "salon", "cosmetics", "makeup", "hairdresser", "stylist"] }
+  { name: "Slate & Berry", ink: "#181820", accent: "#a1315f", moods: ["fashion", "boutique", "perfume", "editorial", "beauty", "salon", "cosmetics", "makeup", "hairdresser", "stylist"] },
+  { name: "Ink & Emerald", ink: "#151a16", accent: "#2f9e5c", moods: ["growth", "investment", "finance", "bank", "botanical", "garden", "agriculture"] },
+  { name: "Slate & Sky", ink: "#161a1e", accent: "#4fa3d1", moods: ["travel", "airline", "aviation", "water", "ocean", "marine", "logistics", "shipping"] },
+  { name: "Onyx & Magenta", ink: "#18151a", accent: "#d1418f", moods: ["beauty", "nightlife", "creative", "salon", "cosmetics", "event", "party"] },
+  { name: "Charcoal & Olive", ink: "#191a15", accent: "#8a8c2f", moods: ["outdoor", "military", "vintage", "artisan", "farm", "surplus", "camping"] },
+  { name: "Ink & Plum", ink: "#17151a", accent: "#5b3a8c", moods: ["literary", "publishing", "magazine", "gaming", "nightlife", "theater", "arts"] },
+  { name: "Graphite & Slate", ink: "#191a1c", accent: "#5f7080", moods: ["consulting", "corporate", "professional", "law", "finance", "advisory", "accounting"] }
 ];
 
 // Free-text keyword → category suggestion, used only when "All" is the
@@ -95,13 +101,19 @@ const INVERSE_BG = "#1c1c1c"; // fixed dark swatch background
 
 // Hand-authored single-stroke icon paths for the Line Mark category, each
 // normalized to a 0–100 box. Picked at random, occasionally mirrored.
+// Each template also carries `nodes` — the path's own defined vertices,
+// hand-picked per path rather than computed, since extracting real
+// coordinates back out of arbitrary SVG path data isn't worth the code.
+// renderLine() in app.js draws a small dot at each one and a fainter,
+// scaled-down echo of the same path behind it, so "Line Mark" results
+// read as a considered route/signal diagram instead of one bare stroke.
 const LINE_PATH_TEMPLATES = [
-  "M10,72 L35,32 L55,56 L90,18", // ascent / peak
-  "M8,50 C22,28 34,72 50,50 C66,28 78,72 92,50", // wave
-  "M10,86 L10,64 L35,64 L35,42 L60,42 L60,20 L85,20", // ascending steps
-  "M12,54 L38,80 L90,16", // swoop / checkmark
-  "M62,10 C32,10 22,50 62,90", // open bracket
-  "M5,50 L26,50 L36,20 L52,80 L62,50 L95,50" // signal pulse
+  { d: "M10,72 L35,32 L55,56 L90,18", nodes: [[10, 72], [35, 32], [55, 56], [90, 18]] }, // ascent / peak
+  { d: "M8,50 C22,28 34,72 50,50 C66,28 78,72 92,50", nodes: [[8, 50], [50, 50], [92, 50]] }, // wave
+  { d: "M10,86 L10,64 L35,64 L35,42 L60,42 L60,20 L85,20", nodes: [[10, 86], [35, 64], [60, 42], [85, 20]] }, // ascending steps
+  { d: "M12,54 L38,80 L90,16", nodes: [[12, 54], [38, 80], [90, 16]] }, // swoop / checkmark
+  { d: "M62,10 C32,10 22,50 62,90", nodes: [[62, 10], [62, 90]] }, // open bracket
+  { d: "M5,50 L26,50 L36,20 L52,80 L62,50 L95,50", nodes: [[5, 50], [36, 20], [52, 80], [95, 50]] } // signal pulse
 ];
 
 // Deadpan, deterministic "usage rule" line under every generated lockup —
