@@ -200,12 +200,42 @@ function starPoints(cx, cy, rOuter, rInner, points, rotationDeg) {
 
 const SIDES_MAP = { triangle: 3, square: 4, diamond: 4, pentagon: 5, hex: 6, octagon: 8 };
 
+// Hand-authored pictorial icons — the actual answer to "it's all so
+// basic": infinite combinations of circles and triangles still read as
+// generated-geometric-icon no matter how many there are, because that's
+// what they are. These are real recognizable things instead. Each path
+// is normalized to roughly fit a -10..10 box centered on the origin —
+// shapeMarkup() positions/sizes/rotates it the same way it does every
+// other shape, via `transform="translate(cx,cy) rotate(rot) scale(r/10)"`,
+// so an icon slots into the exact same call sites (Geometric's layouts,
+// Negative Space's cut shape, Combo's inner icon, Badge's center glyph)
+// with zero extra plumbing beyond that one wrapper.
+//
+// Deliberately picked for geometric simplicity over ambition — mostly
+// straight-line or symmetric-curve constructions (a leaf, a droplet, a
+// mountain range, a wave, an arrow, a pine tree), not anything requiring
+// delicate asymmetric tuning (a bird, an animal, a flame) that's much
+// easier to get visibly wrong without the ability to preview it here.
+// "Gear" isn't in this table at all — see shapeMarkup()'s "gear" case,
+// which reuses starPoints() with a blunter inner radius instead of
+// hand-authoring yet another path, since that's already-proven code.
+const ICON_PATHS = {
+  leaf: "M 0,-10 C 6,-6 6,6 0,10 C -6,6 -6,-6 0,-10 Z",
+  droplet: "M 0,-10 C 6,-2 9,3 9,6 A 9,9 0 1 1 -9,6 C -9,3 -6,-2 0,-10 Z",
+  mountain: "M -10,8 L -4,-8 L 0,-2 L 4,-10 L 10,8 Z",
+  wave: "M -10,3 C -7,-5 -3,-5 0,2 C 3,-5 7,-5 10,3 L 10,8 L -10,8 Z",
+  arrow: "M 0,-10 L 4,3 L 0,0 L -4,3 Z",
+  tree: "M 0,-10 L 6,2 L 2,2 L 2,6 L -2,6 L -2,2 L -6,2 Z"
+};
+const ICON_KINDS = Object.keys(ICON_PATHS).concat(["gear"]);
+
 // The full shape vocabulary Geometric (and Negative Space's cut shape,
-// and Combo's inner icon) draw from — 9 kinds instead of the original 5,
-// specifically so a fixed-size random pool doesn't start repeating
-// itself as fast. Kept as one shared list rather than inlined per call
-// site so adding a 10th kind later is a one-line change.
-const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star", "blob"];
+// and Combo's inner icon) draw from — 16 kinds instead of the original
+// 5 (9 abstract + 7 pictorial), specifically so a fixed-size random pool
+// doesn't start repeating itself as fast. Kept as one shared list rather
+// than inlined per call site so adding a 17th kind later is a one-line
+// change.
+const SHAPE_KINDS = ["circle", "triangle", "square", "diamond", "pentagon", "hex", "octagon", "star", "blob"].concat(ICON_KINDS);
 
 // A fallback for "blob" when no per-spec radii were threaded through
 // (old saved specs, or a context that didn't bother) — never used for a
@@ -303,6 +333,22 @@ function shapeMarkup(kind, cx, cy, r, rotation, color, strokeOnly, texture, blob
     return strokeOnly
       ? `<polygon points="${pts}" fill="none" stroke="${color}" stroke-width="2.6"/>`
       : `<polygon points="${pts}" fill="${color}"/>`;
+  }
+  if (kind === "gear") {
+    // A blunter-toothed version of the same star construction (0.72
+    // inner-radius ratio instead of star's 0.45, 8 points instead of 5)
+    // reads as a cog wheel rather than a sharp star — reusing proven
+    // math instead of hand-authoring yet another path.
+    const pts = starPoints(cx, cy, r, r * 0.72, 8, rotation);
+    return strokeOnly
+      ? `<polygon points="${pts}" fill="none" stroke="${color}" stroke-width="2.6"/>`
+      : `<polygon points="${pts}" fill="${color}"/>`;
+  }
+  if (ICON_PATHS[kind]) {
+    const t = `translate(${cx} ${cy}) rotate(${rotation}) scale(${(r / 10).toFixed(3)})`;
+    return strokeOnly
+      ? `<path d="${ICON_PATHS[kind]}" transform="${t}" fill="none" stroke="${color}" stroke-width="0.9"/>`
+      : `<path d="${ICON_PATHS[kind]}" transform="${t}" fill="${color}"/>`;
   }
   // A regular 4-gon at rotation 0 already sits point-up (diamond
   // orientation) — polygonPoints() starts its first vertex straight up.
@@ -493,9 +539,15 @@ function generateMarkSpec(categoryKey, name, keywordsRaw) {
       let laurelChance = 0.4;
       if (mood === "traditional") laurelChance = 0.65;
       else if (mood === "modern") laurelChance = 0.15;
+      // A pictorial icon in place of the letter, ~35% of the time — see
+      // ICON_KINDS/ICON_PATHS above. Deliberately drawn from the
+      // pictorial+gear set only, not all of SHAPE_KINDS — a plain circle
+      // or triangle as a badge's center glyph would just look like a
+      // mistake, where a leaf or a gear reads as a deliberate choice.
+      const centerIcon = Math.random() < 0.35 ? pick(ICON_KINDS) : null;
       return {
         kind: "badge", letter: deriveLetters(name, true), containerKind: pick(["seal", "seal", "shield"]),
-        accentDominant: Math.random() < 0.35, texture: rollTextureBiased(mood), laurel: Math.random() < laurelChance,
+        centerIcon, accentDominant: Math.random() < 0.35, texture: rollTextureBiased(mood), laurel: Math.random() < laurelChance,
         misprint: rollMisprint(), ornate, extreme, layout: "stack"
       };
     }
@@ -874,11 +926,18 @@ function renderBadgeSeal(spec, ink, accent, detailed) {
     ? hatchedFill(`<circle cx="50" cy="50" r="29"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross)
     : `<circle cx="50" cy="50" r="29" fill="${c1}"/>`;
   const laurel = detailed && spec.laurel ? renderLaurel(c2) : "";
+  // Center glyph: a pictorial icon in place of the letter, when this
+  // spec rolled one — see spec.centerIcon in generateMarkSpec's "badge"
+  // case. Sized to roughly fill the same footprint the letter-at-
+  // font-size-26 does inside the r=29 inner circle.
+  const glyph = spec.centerIcon
+    ? shapeMarkup(spec.centerIcon, 50, 51, 15, 0, c2, false)
+    : `<text x="50" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="26" fill="${c2}">${spec.letter}</text>`;
   return `<circle cx="50" cy="50" r="45" fill="none" stroke="${c2}" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.4 5.4" opacity="0.85"/>` +
     ticks + laurel +
     `<circle cx="50" cy="50" r="37" fill="none" stroke="${c1}" stroke-width="1" opacity="0.5"/>` +
     innerFill +
-    `<text x="50" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="26" fill="${c2}">${spec.letter}</text>` +
+    glyph +
     `<path d="M38,76 L33,92 L45,83 Z" fill="${c1}"/>` +
     `<path d="M62,76 L67,92 L55,83 Z" fill="${c1}"/>`;
 }
@@ -893,9 +952,12 @@ function renderBadgeShield(spec, ink, accent, detailed) {
     ? hatchedFill(`<path d="${SHIELD_PATH_INSET}"/>`, 50, 50, c1, spec.texture.angle, spec.texture.spacing, spec.texture.cross) +
       (insetStroke ? `<path d="${SHIELD_PATH_INSET}" fill="none"${insetStroke}/>` : "")
     : `<path d="${SHIELD_PATH_INSET}" fill="${c1}"${insetStroke}/>`;
+  const glyph = spec.centerIcon
+    ? shapeMarkup(spec.centerIcon, 50, 47, 12, 0, c2, false)
+    : `<text x="50" y="46" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="24" fill="${c2}">${spec.letter}</text>`;
   return `<path d="${SHIELD_PATH}" fill="none" stroke="${c2}" stroke-width="2.2" opacity="0.85"/>` +
     inset +
-    `<text x="50" y="46" text-anchor="middle" dominant-baseline="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="700" font-size="24" fill="${c2}">${spec.letter}</text>` +
+    glyph +
     rule + doubleRule;
 }
 

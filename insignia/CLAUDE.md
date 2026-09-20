@@ -503,6 +503,68 @@ deliberately `zoom`, not `transform: scale`, so layout still reflows
 instead of just visually stretching; supported in all current evergreen
 browsers.
 
+## Pictorial icon library (round 4)
+
+Built after concluding that the "still too basic" feedback wasn't a
+combinatorics problem — 5 layouts × 9 shapes × 16 palettes × several
+boolean toggles already clears a thousand distinct results many times
+over — it was a *vocabulary* problem: infinite combinations of circles
+and triangles still read as "generated geometric icon," because that's
+what they are. The fix is real recognizable shapes, composed through the
+exact same engine, not a new one.
+
+- **`ICON_PATHS`** — 6 hand-authored SVG paths (leaf, droplet, mountain,
+  wave, arrow, tree), each normalized to roughly fit a `-10..10` box
+  centered on the origin. `shapeMarkup()` positions/sizes/rotates any
+  `ICON_PATHS[kind]` the same way it does every procedural shape, via
+  `transform="translate(cx,cy) rotate(rot) scale(r/10)"` — the `/10` is
+  what makes "radius r" mean the same thing for an icon as it does for a
+  circle of that radius, so an icon drops into every existing call site
+  (Geometric's 5 layouts, Negative Space's cut shape, Combo's inner icon,
+  Badge's center glyph) with zero new plumbing beyond that one wrapper.
+  Texture/hatching works on icons for free too — `hatchedFill()` just
+  needs *some* markup as its clip source, and a transformed `<path>`
+  works exactly like a `<polygon>` there.
+- **`gear`** is deliberately *not* a hand-authored path — it's
+  `starPoints(cx, cy, r, r * 0.72, 8, rotation)`, the exact same function
+  the `star` shape already uses, just with a blunter inner-radius ratio
+  (0.72 vs star's 0.45) and more points (8 vs 5). A cog wheel's teeth are
+  fiddly to get right as hand-tuned bezier curves without the ability to
+  preview them; reusing already-proven math sidesteps that risk entirely.
+  `ICON_KINDS` is `Object.keys(ICON_PATHS).concat(["gear"])` — 7 total —
+  and `SHAPE_KINDS` is now the original 9 abstract kinds concatenated
+  with `ICON_KINDS`, 16 in total.
+- **Deliberately scoped down from the original "8-10 icons" pitch to 7,
+  and to simple/symmetric/mostly-straight-line constructions** (a
+  droplet's `C...A...C` teardrop is the most complex curve in the set) —
+  a bird, an animal, or a flame needs delicate asymmetric curve tuning
+  that's much easier to get visibly wrong blind. If more icons get added
+  later, favor the same kind of geometric simplicity over ambition;
+  verify new ones with the same path-token validation described below
+  before trusting them.
+- **Badge's `spec.centerIcon`** — ~35% of Badge results now show a
+  pictorial icon instead of the letter in the center of the seal/shield,
+  drawn from `ICON_KINDS` specifically (not all of `SHAPE_KINDS`) — a
+  plain circle or triangle standing in for a monogram letter would read
+  as a mistake, where a leaf or a gear reads as a deliberate choice.
+  `renderBadgeSeal`/`renderBadgeShield` each build a `glyph` variable
+  that's either the icon (via `shapeMarkup`) or the original `<text>`,
+  sized to roughly fill the same footprint the letter did.
+- **Verification, extended for the specific risk hand-authored paths
+  add**: beyond the usual generate-and-render sweep, a path-token
+  validator parses every `ICON_PATHS` entry's `d` string (regex-split
+  into command letters and numbers) and confirms every numeric token is
+  `isFinite` and the path starts with `M`/ends with `Z` — catches a typo
+  in hand-written path data that would otherwise only surface as a
+  silently malformed shape, not a thrown exception. Combined with a
+  forced sweep of every icon kind at multiple sizes, in fill/stroke-only/
+  textured modes, and through Badge's `centerIcon` for both container
+  variants. **None of this is a substitute for actually looking at the
+  rendered icons** — the validator confirms the paths are *well-formed*,
+  not that they look like a recognizable leaf. Treat this batch as
+  needing visual review before trusting the shapes themselves, the one
+  part of this round no amount of headless testing can cover.
+
 ## Five capability additions (round 3)
 
 Built after being asked "any ideas to increase the capabilities and
