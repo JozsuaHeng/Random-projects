@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Autopsy — What's Actually Taking Up Space on Your Mac</title>
+<meta name="description" content="Point it at a folder and it maps out what's really using your disk space — caches, dependency folders, old installers — with a plain-English verdict on each. Never deletes anything for you." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <a class="back-link" href="https://jozsuaheng.github.io/Random-projects/">← The Quagmire</a>
+
+    <div class="eyebrow">Runs entirely in your browser · nothing ever leaves your Mac · Chrome or Edge only</div>
+    <h1>Autopsy</h1>
+    <p class="subhead">
+      Point it at a folder and it maps out what's actually using the space —
+      caches, dependency folders, old installers, forgotten downloads —
+      with a plain verdict on each: <strong>safe to delete</strong>,
+      <strong>worth a look</strong>, or <strong>keep</strong>.
+      It never deletes anything itself — you get the map, you make every call.
+    </p>
+
+    <div id="unsupported" class="notice notice-warn" hidden>
+      Your browser can't run this tool — it needs the File System Access API,
+      which only Chrome and Edge support on Mac (Safari and Firefox don't
+      have it yet). Open this page in Chrome or Edge and try again.
+    </div>
+
+    <div id="errorNotice" class="notice notice-warn" hidden></div>
+
+    <div id="intro" class="panel">
+      <h2 class="panel-title">How this works</h2>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div><strong>Scan your Home folder.</strong> One grant covers Documents, Desktop, Downloads, dev projects, and the hidden <code>Library</code> folder — all in one shot.</div></li>
+        <li><span class="step-num">2</span><div><strong>Also scan Applications</strong> <span class="step-optional">— optional.</span> Apps live outside your Home folder, so they need a separate grant.</div></li>
+        <li><span class="step-num">3</span><div><strong>Get your map.</strong> Everything worth acting on gets a plain verdict. To remove something, delete it yourself in Finder — this tool only recommends, never deletes.</div></li>
+      </ol>
+      <p class="fine-print">Runs entirely in this tab — nothing is ever uploaded. No "scan everything" button because Chrome itself blocks webpages from touching system folders like <code>/System</code>, a hard security rule, not a gap in this tool.</p>
+      <div class="scan-actions">
+        <button id="scanBtn" class="btn btn-primary" type="button">Scan your Home folder…</button>
+        <button id="scanAppsBtn" class="btn btn-secondary" type="button">Also scan Applications…</button>
+      </div>
+      <div class="quick-scan-row">
+        <span class="quick-scan-label">Or jump straight to just one:</span>
+        <button class="btn btn-chip" data-startin="downloads" type="button">Downloads</button>
+        <button class="btn btn-chip" data-startin="desktop" type="button">Desktop</button>
+        <button class="btn btn-chip" data-startin="documents" type="button">Documents</button>
+      </div>
+    </div>
+
+    <div class="panel forgotten-panel">
+      <h2 class="panel-title">Commonly forgotten spots it specifically looks for</h2>
+      <p class="forgotten-intro">Reachable in Finder via <strong>Go → Go to Folder</strong> (<kbd>⌘⇧G</kbd>), but easy to never stumble onto otherwise:</p>
+      <ul class="forgotten-list">
+        <li><strong>iPhone/iPad backups</strong> <code>(MobileSync)</code> — old Finder/iTunes backups, often tens of GB.</li>
+        <li><strong>Xcode device symbol files</strong> <code>(iOS DeviceSupport)</code> — debug data per iOS version you've plugged a device in on.</li>
+        <li><strong>Docker Desktop's virtual disk</strong> <code>(Docker.raw)</code> — only grows as you pull container images.</li>
+        <li><strong>Crash reports, logs, and window-restore state</strong> — small individually, but they pile up silently for years.</li>
+        <li><strong>Safari website data</strong> <code>(WebKit)</code> and <strong>cookies</strong> — closer to your logins than a disposable cache, so these come back "worth a look," not "safe to delete."</li>
+      </ul>
+      <p class="forgotten-note">One honest gap: <strong>local Time Machine snapshots</strong> (About This Mac → Storage) aren't regular files — they're APFS snapshot metadata, invisible to this or any browser tool. Only Apple's own storage panel can see those.</p>
+      <div class="scan-actions">
+        <button id="scanLibraryBtn" class="btn btn-secondary" type="button">Check just these — scan Library…</button>
+      </div>
+      <p class="scan-hint">In the dialog that opens, press ⌘⇧G, type <code>~/Library</code>, and select it — much faster than a full Home scan since it skips Documents, Photos, and everything else.</p>
+    </div>
+
+    <div id="progress" class="panel" hidden>
+      <div class="progress-row">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="progressText">Scanning…</span>
+      </div>
+      <div class="live-stage">
+        <canvas id="liveCanvas"></canvas>
+      </div>
+      <p class="live-hint">Every dot is a real file or folder as it's found — the hub in the middle is the folder you picked, and each ring out from it is one level deeper. This is just a show for while it scans and isn't kept afterward; the Sunburst and List views after the scan are the precise, exact-size picture.</p>
+    </div>
+
+    <div id="results" hidden>
+      <div class="summary-row">
+        <div class="stat-card">
+          <div class="stat-label">Total scanned</div>
+          <div class="stat-value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card stat-safe">
+          <div class="stat-label">Safe to delete</div>
+          <div class="stat-value" id="statSafe">—</div>
+        </div>
+        <div class="stat-card stat-review">
+          <div class="stat-label">Worth a look</div>
+          <div class="stat-value" id="statReview">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Items scanned</div>
+          <div class="stat-value" id="statItems">—</div>
+        </div>
+      </div>
+      <p id="skippedNote" class="skipped-note" hidden></p>
+
+      <div class="toolbar">
+        <div class="filter-pills" role="group" aria-label="Filter by verdict">
+          <button type="button" class="filter-pill active" data-filter="all">All</button>
+          <button type="button" class="filter-pill filter-safe" data-filter="safe">Safe to delete</button>
+          <button type="button" class="filter-pill filter-review" data-filter="review">Worth a look</button>
+          <button type="button" class="filter-pill filter-keep" data-filter="keep">Keep</button>
+        </div>
+        <button id="scanAnotherBtn" class="btn btn-secondary" type="button">Scan another folder…</button>
+      </div>
+
+      <div class="view-tabs" role="tablist" aria-label="Visualization view">
+        <button type="button" class="view-tab active" data-view="sunburst" role="tab" aria-selected="true">Sunburst map</button>
+        <button type="button" class="view-tab" data-view="list" role="tab" aria-selected="false">List view</button>
+      </div>
+
+      <div id="sunburstView" class="sunburst-view">
+        <nav class="breadcrumb" id="breadcrumb" aria-label="Zoom path"></nav>
+        <div class="sunburst-stage">
+          <svg id="sunburstSvg" viewBox="0 0 520 520" role="img" aria-label="Radial map of folder sizes — click a slice to zoom in"></svg>
+          <div class="sunburst-center" id="sunburstCenter"></div>
+        </div>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-swatch legend-safe"></span>Safe to delete</span>
+          <span class="legend-item"><span class="legend-swatch legend-review"></span>Worth a look</span>
+          <span class="legend-item"><span class="legend-swatch legend-keep"></span>Keep</span>
+          <span class="legend-item"><span class="legend-swatch legend-neutral"></span>Unflagged folder</span>
+        </div>
+        <p class="sunburst-hint">Click (or focus + Enter) a slice to zoom into it. Click the center circle to zoom back out. Each ring is one folder level deep — zoom in to reveal what's further down.</p>
+      </div>
+
+      <div id="listView" hidden>
+        <div class="tree-head">
+          <span class="col-name">Item</span>
+          <span class="col-verdict">Verdict</span>
+          <span class="col-size">Size</span>
+        </div>
+        <div id="tree" class="tree"></div>
+      </div>
+    </div>
+
+    <div id="tooltip" class="chart-tooltip" hidden role="status"></div>
+
+    <footer class="foot">
+      <p>Everything here is a recommendation, not an instruction — the final
+      call on what to keep or trash is always yours. Built with the browser's
+      File System Access API; see <a href="CLAUDE.md">CLAUDE.md</a> for how
+      the scan rules work.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

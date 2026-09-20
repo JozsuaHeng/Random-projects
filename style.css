@@ -2161,3 +2161,92 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 16px 34px -14px rgba(52, 84, 209, 0.35);
 }
+
+/* Autopsy: a shrinking skyline of "file" bars along the top, with a
+   magnifying glass sweeping back and forth over them — the bars it's just
+   passed over turn green and dim (files it's already sized up and flagged),
+   the ones ahead stay full and neutral (not yet scanned). Reads as
+   "inspecting storage" without needing a hard-drive icon cliché. */
+.tile[data-theme="autopsy"] .art {
+  background: linear-gradient(135deg, #0d2b21 0%, #14141c 55%, #10182c 100%);
+}
+.dd-files {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  height: 42px;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+.dd-file {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  background: rgba(232, 232, 236, 0.32);
+}
+.dd-file-found {
+  background: rgba(61, 220, 151, 0.55);
+  animation: dd-fade 2.6s ease-in-out infinite;
+}
+.dd-file-found:nth-child(3) { animation-delay: 0s; }
+.dd-file-found:nth-child(4) { animation-delay: 0.2s; }
+.dd-file-found:nth-child(5) { animation-delay: 0.4s; }
+.dd-file-found:nth-child(6) { animation-delay: 0.6s; }
+@keyframes dd-fade {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.4; }
+}
+.dd-glass {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  animation: dd-sweep 3.4s ease-in-out infinite;
+}
+.dd-glass-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #eaf6ff;
+  background: rgba(234, 246, 255, 0.08);
+}
+.dd-glass-handle {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: #eaf6ff;
+  transform: rotate(45deg);
+  transform-origin: top;
+}
+@keyframes dd-sweep {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-55px, 5px); }
+}
+.dd-title {
+  left: 16px;
+  bottom: 12px;
+  font-size: 15px;
+  line-height: 1.15;
+  color: #eaf6ff;
+  z-index: 3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+.tile[data-theme="autopsy"] .go { color: #3ddc97; }
+.tile[data-theme="autopsy"] {
+  border-color: rgba(61, 220, 151, 0.2);
+}
+.tile[data-theme="autopsy"]:hover {
+  border-color: #3ddc97;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -14px rgba(61, 220, 151, 0.35);
+}
