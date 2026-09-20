@@ -2162,84 +2162,109 @@ body {
   box-shadow: 0 16px 34px -14px rgba(52, 84, 209, 0.35);
 }
 
-/* Autopsy: a shrinking skyline of "file" bars along the top, with a
-   magnifying glass sweeping back and forth over them — the bars it's just
-   passed over turn green and dim (files it's already sized up and flagged),
-   the ones ahead stay full and neutral (not yet scanned). Reads as
-   "inspecting storage" without needing a hard-drive icon cliché. */
+/* Autopsy: a lab-specimen exam board, not a magnifying glass over a file
+   list — this reads more literally as "diagnosing" than the earlier
+   version and carries the name entirely through the art (no wordmark, see
+   ../autopsy/CLAUDE.md's tile section for why). Four corner brackets frame
+   it like a slide under a scanner; a 12-cell specimen grid sits behind a
+   sweeping scan beam, with cells lighting up in the same three verdict
+   colors used throughout the actual app (safe/review/keep) roughly in
+   sync with the beam's pass; a heartbeat/ECG line along the bottom ties
+   it to "autopsy" as a diagnosis, not just a disk icon. */
 .tile[data-theme="autopsy"] .art {
-  background: linear-gradient(135deg, #0d2b21 0%, #14141c 55%, #10182c 100%);
+  background:
+    repeating-linear-gradient(0deg, rgba(111, 159, 242, 0.05) 0px, rgba(111, 159, 242, 0.05) 1px, transparent 1px, transparent 14px),
+    repeating-linear-gradient(90deg, rgba(111, 159, 242, 0.05) 0px, rgba(111, 159, 242, 0.05) 1px, transparent 1px, transparent 14px),
+    linear-gradient(135deg, #0d2b21 0%, #14141c 55%, #10182c 100%);
 }
-.dd-files {
-  position: absolute;
-  z-index: 1;
-  top: 12px;
-  left: 14px;
-  right: 14px;
-  height: 42px;
-  display: flex;
-  align-items: flex-end;
-  gap: 5px;
-}
-.dd-file {
-  flex: 1;
-  border-radius: 2px 2px 0 0;
-  background: rgba(232, 232, 236, 0.32);
-}
-.dd-file-found {
-  background: rgba(61, 220, 151, 0.55);
-  animation: dd-fade 2.6s ease-in-out infinite;
-}
-.dd-file-found:nth-child(3) { animation-delay: 0s; }
-.dd-file-found:nth-child(4) { animation-delay: 0.2s; }
-.dd-file-found:nth-child(5) { animation-delay: 0.4s; }
-.dd-file-found:nth-child(6) { animation-delay: 0.6s; }
-@keyframes dd-fade {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 0.4; }
-}
-.dd-glass {
+.au-corner {
   position: absolute;
   z-index: 2;
-  top: 8px;
-  right: 30px;
-  width: 30px;
-  height: 30px;
-  animation: dd-sweep 3.4s ease-in-out infinite;
+  width: 12px;
+  height: 12px;
 }
-.dd-glass-ring {
+.au-corner::before, .au-corner::after {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid #eaf6ff;
-  background: rgba(234, 246, 255, 0.08);
+  background: rgba(234, 246, 255, 0.55);
 }
-.dd-glass-handle {
+.au-corner::before { width: 12px; height: 1.5px; }
+.au-corner::after { width: 1.5px; height: 12px; }
+.au-corner-tl { top: 10px; left: 10px; }
+.au-corner-tr { top: 10px; right: 10px; }
+.au-corner-bl { bottom: 10px; left: 10px; }
+.au-corner-br { bottom: 10px; right: 10px; }
+.au-corner-tl::before, .au-corner-tl::after { top: 0; left: 0; }
+.au-corner-tr::before, .au-corner-tr::after { top: 0; right: 0; }
+.au-corner-bl::before, .au-corner-bl::after { bottom: 0; left: 0; }
+.au-corner-br::before, .au-corner-br::after { bottom: 0; right: 0; }
+
+.au-grid {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 3px;
-  height: 13px;
+  z-index: 1;
+  top: 22px;
+  left: 24px;
+  right: 24px;
+  bottom: 34px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+}
+.au-cell {
   border-radius: 2px;
-  background: #eaf6ff;
-  transform: rotate(45deg);
-  transform-origin: top;
+  background: rgba(232, 232, 236, 0.14);
 }
-@keyframes dd-sweep {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-55px, 5px); }
+.au-cell-safe, .au-cell-review, .au-cell-keep {
+  animation: au-cell-glow 4.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.32s);
 }
-.dd-title {
+.au-cell-safe { background: rgba(61, 220, 151, 0.16); }
+.au-cell-review { background: rgba(240, 179, 78, 0.16); }
+.au-cell-keep { background: rgba(111, 159, 242, 0.16); }
+@keyframes au-cell-glow {
+  0%, 60%, 100% { filter: brightness(1); }
+  25% { filter: brightness(2.4); }
+}
+.au-beam {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  bottom: 30px;
+  width: 2px;
+  left: 0;
+  background: linear-gradient(180deg, transparent, #eaf6ff, transparent);
+  box-shadow: 0 0 10px 1px rgba(234, 246, 255, 0.7);
+  animation: au-sweep 4.8s ease-in-out infinite;
+}
+@keyframes au-sweep {
+  0% { left: 22px; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: calc(100% - 22px); opacity: 0; }
+}
+.au-ecg {
+  position: absolute;
+  z-index: 1;
   left: 16px;
-  bottom: 12px;
-  font-size: 15px;
-  line-height: 1.15;
-  color: #eaf6ff;
-  z-index: 3;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  right: 16px;
+  bottom: 10px;
+  height: 16px;
+  overflow: visible;
+}
+.au-ecg path {
+  fill: none;
+  stroke: #3ddc97;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: au-ecg-draw 4.8s linear infinite;
+  opacity: 0.8;
+}
+@keyframes au-ecg-draw {
+  to { stroke-dashoffset: -260; }
 }
 .tile[data-theme="autopsy"] .go { color: #3ddc97; }
 .tile[data-theme="autopsy"] {

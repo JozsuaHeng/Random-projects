@@ -143,106 +143,94 @@ Google Fonts — same as everything else in `ai-slop/`.
   the tree, and nothing else does. Don't repurpose it for anything else
   without checking both consumers still make sense.
 
-## Sunburst view (`app.js` — Sunburst section, built with the `dataviz` skill)
+## Tesseract engine (`app.js` — shared math + live scan + results view)
 
-The primary visualization is a radial hierarchy chart (rings = depth, arc
-angle = share of the parent's size, color = verdict) rather than a treemap
-or a force-directed node graph — chosen deliberately (see the conversation
-that shaped this: a sunburst was requested by name over those alternatives).
-The List view is kept as an equal, always-reachable alternative (a `dataviz`
-skill requirement: "a table view always exists") because a sunburst is built
-for *"which branch is way bigger than its siblings"* at a glance, not for
-precisely comparing two similar-sized items — that's the List view's job.
+**Replaced the sunburst entirely** (2026-09-20) after it was asked to be
+removed in favor of a literal rotating 4D hypercube, "extremely detailed,"
+paced like Idle Cosmos's piece-by-piece cosmic build-up, used for *both* the
+scan-in-progress show and the after-scan results view — one engine, two
+callers, not two unrelated systems. The tesseract math (`TESS_VERTS`,
+`TESS_EDGES`, `TESS_BUILD_ORDER`, `rotate4D`, `project4D`, `makeTesseract`,
+`tesseractRevealFraction`, `drawTesseract`) is shared; live-scan and results
+mode differ only in what drives the reveal and what they draw on top.
 
-- **Fill colors are a separately-tuned step of the same three hues as the
-  badges**, not the same hex values. The badges (`--safe`/`--review`/`--keep`
-  in `style.css`) are tuned bright for small text on a dark background; the
-  dataviz skill's dark-mode lightness band for a *filled chart mark*
-  (~OKLCH L 0.48–0.67) is lower than that, so reusing the badge hex directly
-  failed the skill's own lightness-band check. `--fill-safe` (`#009c5c`),
-  `--fill-review` (`#b37900`), and `--fill-keep` (`#4b79c8`) are the badge
-  hues re-stepped to the correct lightness for a fill, keeping the same hue
-  identity a person already learned from the List view's badges. Validated
-  via the skill's `validate_palette.js` against the dark card surface
-  (`#12121a`, `--pairs all` since any two arcs can sit side by side): all
-  checks pass except a CVD floor **WARN** between review↔safe under
-  protanopia/tritanopia (ΔE 7.6/5.5, inside the legal 6–8 floor band *only*
-  with secondary encoding) — covered by the tooltip's text label, the
-  legend, and the badge-styled reason text, never color alone. If these
-  hexes are ever changed, re-run the validator before shipping; don't
-  eyeball a replacement.
-- **Rings only render `MAX_RINGS` (4) deep from whatever node is currently
-  focused**, not the whole tree at once. A real home-folder scan is often
-  10+ levels deep; rendering all of it at once would produce arcs a
-  fraction of a degree wide at the outer rings — invisible and unclickable.
-  Zooming in (`zoomTo`) re-centers the chart on the clicked node and
-  re-runs the same 4-ring layout from there, so depth is always reachable,
-  just not all at once.
-- **Each ring caps at `MAX_CHILDREN_PER_RING` (7) individual arcs**, folding
-  any remainder into one grey `+N smaller items` arc (`isOther: true`,
-  `--fill-neutral`, not clickable). This exists because a home folder can
-  easily have 50+ entries at one level — without capping, a ring would be a
-  chaotic hairball of sliver arcs, which is exactly the "too many series"
-  failure the dataviz skill's color-formula guidance warns about (fold the
-  tail into "Other" rather than generating more identity). The List view has
-  no such cap — if someone needs to see every item in a big folder
-  individually, that's what it's for.
-- **The synthetic multi-root wrapper** (`getSunburstRoot()`'s `{ name: 'All
-  scans', ... }` node, built only when `forest.length > 1`, e.g. after
-  scanning both Home and Applications) exists purely so the sunburst always
-  has one root to center on. It's rebuilt fresh on every `resetSunburstFocus()`
-  call — don't hold a reference to an old wrapper across scans, its
-  `children[].parent` pointers get reassigned to the newest wrapper each time.
-- Tooltip content is built with `textContent`/`createElement`, never
-  `innerHTML` — folder and file names are effectively untrusted strings (they
-  come from the visitor's real filesystem, not from this code), same
-  discipline as the List view's node rendering.
-
-## Live scan visualization (`app.js` — "Live scan visualization" section)
-
-A Canvas-based radial particle show that runs *while* a scan is in progress
-(inside `#progress`, replacing the plain spinner), requested explicitly as a
-"hub and spoke, the more detailed and complex the better" view of files
-appearing in real time. It is deliberately **not** the same code path as the
-Sunburst — different job, different constraints:
-
-- **It's a decoupled producer/consumer, not a direct render-per-file.**
-  `onDiscover(item)` is a swappable no-op hook called from inside
-  `scanEntry`/`sumSizeOnly` for every single file and folder the scan
-  touches. During live viz it just pushes onto `liveQueue` — it never
-  touches the DOM or canvas directly. A separate `requestAnimationFrame`
-  loop (`liveFrame`) drains up to `LIVE_DRAIN_PER_FRAME` (50) items per
-  frame into `liveNodes`. This split is what keeps the scan itself fast: a
-  real home-folder scan can touch 100,000+ files, and rendering one visual
-  update per file synchronously would make the *scan* wait on the *frame
-  rate*, not the other way around.
-- **Position is an approximation, not a real layout.** Unlike the Sunburst
-  (which computes exact angles from real sibling sizes), a live bubble's
-  angle comes from `sectorAngleFor(topName)` — a stable per-top-level-folder
-  angle (assigned by golden-angle spacing as new top-level folders are first
-  seen) plus random jitter that widens with depth. This is intentional: a
-  real parent-accurate layout would need the item's full ancestor chain
-  positioned first, which isn't available yet for a file discovered deep
-  inside a folder that's still being walked. The approximation still reads
-  correctly as "these files are all under Downloads, that cluster over
-  there is Library" — which is the actual goal (a lively, legible show),
-  not exact geometry (that's what the Sunburst is for, after the scan).
-- **`LIVE_NODE_CAP` (1400) and `LIVE_QUEUE_CAP` (3000) bound memory/CPU
-  regardless of scan size.** Once over the node cap, unflagged bubbles are
-  evicted first (`findIndex((n) => !n.flag)`) so the visually interesting
-  (colored, flagged) bubbles survive longer than plain neutral filler —
-  don't change the eviction order without keeping that priority.
-- **Nothing here is kept after the scan.** `stopLiveViz()` clears
-  `liveNodes`/`liveQueue` and cancels the animation frame the moment the
-  scan ends (in `runScan`'s `finally` block) — the Sunburst and List views
-  render from the actual scanned tree, not from anything the live viz
-  accumulated. If a future change wants the live view's positions to persist
-  into the results view, that's a different, harder feature (real parent-
-  accurate coordinates), not a tweak to this one.
-- Hit-testing for the hover tooltip (`liveHitTest`) manually inverts the
-  canvas's rotation transform to convert pointer coordinates back into each
-  node's pre-rotation space — there's no DOM element per bubble to attach a
-  listener to, so this is the only way hover works on a `<canvas>`.
+- **The math is a real 4D rotation + projection, not a spinning cube icon.**
+  16 vertices (every `±1` combination across 4 axes), 32 edges (any two
+  vertices differing in exactly one axis — `diff & (diff-1) === 0`).
+  `rotate4D` rotates in the XW and YZ planes (the two that make a tesseract
+  visually warp its inner/outer cubes into each other, the classic "4D
+  rotation" look) plus a slower XY spin for good measure, then `project4D`
+  does a perspective divide by `w` (4D→3D) followed by one by `z` (3D→2D).
+  If this ever needs a "flatter"/"more dramatic" look, tune the `wDist`/
+  `zDist` perspective constants in `project4D`, not the rotation speeds.
+- **Staged reveal is `Math.min(timeFraction, itemFraction)`**
+  (`tesseractRevealFraction`) — deliberately the *slower* of "how much wall
+  time has passed since this instance unlocked" and "how many real items
+  have been found since then." This was the direct fix for "slow it down so
+  people can actually see it being put together": a fast scan of a small
+  folder still takes `minBuildMs` (7.5s for the primary hypercube) to
+  finish visibly, because time-fraction gates it; a slow scan of a huge
+  folder never *looks* done early just because a clock ran out, because
+  item-fraction gates it instead. Don't swap this for `Math.max` or an
+  average — either breaks one of the two guarantees.
+- **`TESS_BUILD_ORDER` reveals all 16 vertices before any edges**, and
+  edges are pre-sorted so one never appears before both its endpoints
+  (`Math.max(...edge)` as the primary sort key). This is what makes the
+  build look like points appearing then wiring themselves together, rather
+  than half-formed floating lines.
+- **Bigger scans unlock satellite hypercubes** (`LIVE_SATELLITE_THRESHOLDS`
+  = `[3000, 12000, 40000, 120000]` items), each smaller, orbiting the
+  primary, each running its own reveal on its own `unlockedAt`/
+  `itemsAtUnlock` window — the Idle-Cosmos-style "more usage unlocks the
+  next thing out" structure applied to hypercubes instead of planets. A
+  quick Downloads-folder scan will likely only ever build the primary one;
+  a full Home scan is where the escalation actually pays off.
+- **`onDiscover` only ever spawns a decorative particle during live mode**
+  (`startLiveViz`'s callback) — a drifting spark colored by verdict, capped
+  at `LIVE_PARTICLE_CAP` (260), never a full tracked object. This keeps a
+  six-figure item count from ever touching the DOM or blocking a frame —
+  same reasoning as the old hub-and-spoke version, just simpler now that
+  particles don't need exact positions, only ambient motion.
+- **Results mode (`buildResultsTesseract`/`resultsFrame`) reuses the exact
+  same `drawTesseract`, just with `forceFull: true`** (skips the reveal
+  math, always draws the complete structure) and attaches up to 16 "notable
+  item" nodes per hypercube — the biggest top-level things found
+  (`getNotableItems`, same top-N + "+N more" folding idea the sunburst used)
+  — to that instance's vertex positions ("primary" nodes).
+- **The Map view (its user-facing name — internally still "tesseract"/
+  "results" in code, e.g. `#tesseractView`, `buildResultsTesseract`) is a
+  frozen still frame, not a loop**, on purpose: it's meant to be held still
+  long enough to actually click, unlike the live scan show, which is meant
+  to move. `startResultsViz` captures one `resultsFrozenTs` timestamp and
+  calls `renderResultsStatic(ts)` once; there is no `requestAnimationFrame`
+  loop for this view at all. A filter-pill click or a tab-switch-in or a
+  window resize each just call `renderResultsStatic(resultsFrozenTs)` again
+  with the *same* timestamp — the orientation must never drift between
+  those calls, only the frame's inputs (canvas size, `activeFilter`) do.
+- **"Child" nodes make the graph reflect real containment, not just
+  decoration** ("intelligent bubbles and spokes," asked for by name): a
+  primary node whose item has children spawns up to 3 secondary nodes for
+  its own biggest sub-items, connected by a spoke line drawn from the
+  primary's *actual resolved position* outward, away from center. This can
+  only happen inside `renderResultsStatic`, after the tesseract's vertices
+  are projected — a child node has no position of its own until its
+  parent's position is known, which is why `buildResultsTesseract` only
+  builds the data relationship (`kind: 'child'`, a `parent` reference) and
+  leaves `x`/`y`/`r` at 0 until render time.
+- **Click opens the `#mapInspector` panel** (name, size, verdict badge,
+  reason, a "View in List →" button) rather than jumping to List view
+  immediately — this replaced an earlier version that switched tabs
+  directly on click, which felt like an unexplained jump rather than an
+  inspectable result. The panel is a fixed corner overlay inside
+  `.sunburst-stage`, not positioned near the clicked node, so it never
+  covers whatever was just clicked.
+- **`.sunburst-stage` fills its full container width edge-to-edge** (no
+  `max-width`, `overflow: hidden` clips the canvas to the panel's own
+  rounded corners) — asked for explicitly after the first version rendered
+  as a small centered square with wasted side margins.
+- Tooltip content (`showTooltip`/`hideTooltip`, unchanged from the sunburst
+  era) is built with `textContent`/`createElement`, never `innerHTML` —
+  folder and file names are effectively untrusted strings.
 
 ## Running it
 
@@ -254,12 +242,16 @@ silently or throw. The deployed GitHub Pages version (https) works fine.
 ## Hub page tile
 
 Per `../CLAUDE.md`, this gets a themed tile on "The Quagmire"
-(`data-theme="autopsy"` in `../index.html` / `../style.css`) — a
-magnifying glass sweeping over a small stack of file blocks that shrink
-and fade as it passes, implying "finding and clearing clutter" without
-needing a text description. (The tile's internal CSS classes still use a
-`dd-` prefix, a holdover from this project's original working name "Disk
-Detective" — cosmetic only, safe to rename if ever touched again.)
+(`data-theme="autopsy"` in `../index.html` / `../style.css`, classes
+prefixed `au-`) — redesigned 2026-09-20 from an earlier magnifying-glass
+version into a lab-specimen exam board: four corner brackets frame a
+12-cell grid behind a sweeping scan beam, cells lighting up in the app's
+own safe/review/keep colors roughly as the beam passes, plus an animated
+ECG line along the bottom. No visible wordmark (`.art-title` is
+`sr-only`, same pattern as Kept/Passportly) — the art carries the name.
+If revisiting this tile, keep the "diagnosis," not "generic disk icon,"
+read: the ECG line and ordered cell-lighting are what make it read as
+*examining* something rather than just scanning a folder.
 
 ## Deployment
 

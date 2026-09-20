@@ -108,10 +108,6 @@ async function scanEntry(handle, name, depth, forceFull, topName) {
   children.sort((a, b) => b.size - a.size);
   const hasFlaggedDescendant = children.some((c) => c.flag || c.hasFlaggedDescendant);
   const dirNode = { name, kind: 'directory', size, flag: rule ? { category: rule.category, level: rule.level, reason: rule.reason } : null, children, hasFlaggedDescendant };
-  // Parent pointers are only needed for the sunburst's breadcrumb/zoom-out —
-  // set once here rather than re-derived, since nothing else needs to walk
-  // upward through the tree.
-  children.forEach((c) => { c.parent = dirNode; });
   onDiscover({ name, size, flag: dirNode.flag, depth, topName });
   return dirNode;
 }
@@ -230,88 +226,139 @@ function renderTree() {
   }
 }
 
-// --- Sunburst ---
-// A radial hierarchy chart: rings = folder depth, arc angle = share of the
-// parent's size, color = verdict. Chosen over a flat list as the primary
-// view because "which branch is way bigger than its siblings" is exactly
-// what this shape is good at — precise comparison of close values stays
-// the List view's job (see the dataviz skill's guidance on part-to-whole
-// charts), which is why that view is kept as an equal, always-available
-// alternative rather than being replaced.
+// --- Tesseract engine (shared math, used by both the live scan-in-progress
+// show and the after-scan results view) ---
+// A real rotating 4D hypercube — 16 vertices (every combination of ±1 in 4
+// axes), 32 edges (any two vertices differing in exactly one axis) — chosen
+// over the earlier sunburst because a literal tesseract was asked for by
+// name, "extremely detailed," in the same spirit as Idle Cosmos's
+// piece-by-piece cosmic build-up. It replaces the sunburst as the results
+// view too (see `buildResultsTesseract`) rather than living only in the
+// scan-in-progress show. The List view remains the one place with a fully
+// precise, fully recursive breakdown — the dataviz skill's "a table view
+// always exists" rule — since a tesseract's vertices are a fixed 16 slots,
+// not an arbitrarily-deep hierarchy the way sunburst arcs were.
 
-const SUNBURST_FILL = { safe: 'var(--fill-safe)', review: 'var(--fill-review)', keep: 'var(--fill-keep)' };
-const RING_WIDTH = 40;
-const CENTER_RADIUS = 46;
-const MAX_RINGS = 4;
-const MAX_CHILDREN_PER_RING = 7;
+const TESS_COLORS = { safe: '#009c5c', review: '#b37900', keep: '#4b79c8' };
+const TESS_NEUTRAL = '#3a3a46'; // matches --fill-neutral in style.css's legend swatch
 
-let focusNode = null;
-
-function getSunburstRoot() {
-  if (forest.length === 0) return null;
-  if (forest.length === 1) return forest[0];
-  const total = forest.reduce((sum, r) => sum + r.size, 0);
-  const wrapper = { name: 'All scans', size: total, flag: null, children: forest };
-  forest.forEach((r) => { r.parent = wrapper; });
-  return wrapper;
+function tessColorFor(node) {
+  if (node && node.flag) return TESS_COLORS[node.flag.level] || TESS_NEUTRAL;
+  return TESS_NEUTRAL;
 }
 
-function resetSunburstFocus() {
-  focusNode = getSunburstRoot();
+const TESS_VERTS = [];
+for (let vi = 0; vi < 16; vi++) {
+  TESS_VERTS.push([(vi & 1) ? 1 : -1, (vi & 2) ? 1 : -1, (vi & 4) ? 1 : -1, (vi & 8) ? 1 : -1]);
 }
-
-function fillForNode(node) {
-  if (node.flag) return SUNBURST_FILL[node.flag.level] || 'var(--fill-neutral)';
-  return 'var(--fill-neutral)';
-}
-
-function polarToXY(cx, cy, r, angle) {
-  return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
-}
-
-function arcPath(cx, cy, innerR, outerR, a0, a1) {
-  const largeArc = a1 - a0 > Math.PI ? 1 : 0;
-  const [x1, y1] = polarToXY(cx, cy, outerR, a0);
-  const [x2, y2] = polarToXY(cx, cy, outerR, a1);
-  const [x3, y3] = polarToXY(cx, cy, innerR, a1);
-  const [x4, y4] = polarToXY(cx, cy, innerR, a0);
-  return `M ${x1} ${y1} A ${outerR} ${outerR} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerR} ${innerR} 0 ${largeArc} 0 ${x4} ${y4} Z`;
-}
-
-function layoutRing(node, depth, a0, a1, out) {
-  if (depth > MAX_RINGS || !node.children || node.children.length === 0) return;
-  const kids = node.children.filter((c) => c.size > 0).sort((a, b) => b.size - a.size);
-  let shown = kids;
-  let otherSize = 0;
-  let otherCount = 0;
-  if (kids.length > MAX_CHILDREN_PER_RING) {
-    shown = kids.slice(0, MAX_CHILDREN_PER_RING - 1);
-    const rest = kids.slice(MAX_CHILDREN_PER_RING - 1);
-    otherCount = rest.length;
-    otherSize = rest.reduce((sum, c) => sum + c.size, 0);
+const TESS_EDGES = [];
+for (let a = 0; a < 16; a++) {
+  for (let b = a + 1; b < 16; b++) {
+    const diff = a ^ b;
+    if (diff && (diff & (diff - 1)) === 0) TESS_EDGES.push([a, b]);
   }
-  const total = node.size || 1;
-  const innerR = CENTER_RADIUS + (depth - 1) * RING_WIDTH;
-  const outerR = CENTER_RADIUS + depth * RING_WIDTH;
-  let cursor = a0;
-  for (const child of shown) {
-    const span = (child.size / total) * (a1 - a0);
-    const seg = { node: child, a0: cursor, a1: cursor + span, innerR, outerR, isOther: false };
-    out.push(seg);
-    layoutRing(child, depth + 1, seg.a0, seg.a1, out);
-    cursor = seg.a1;
+}
+// The order items appear in during a staged reveal: every vertex first,
+// then edges sorted so one never appears before both its endpoints have —
+// otherwise a "growing" tesseract would show floating lines with no ends.
+const TESS_BUILD_ORDER = [
+  ...TESS_VERTS.map((_, i) => ({ type: 'vertex', i })),
+  ...TESS_EDGES.slice()
+    .sort((e1, e2) => Math.max(...e1) - Math.max(...e2) || Math.min(...e1) - Math.min(...e2))
+    .map(([a, b]) => ({ type: 'edge', a, b })),
+];
+
+function rotate4D(p, angleXW, angleYZ, angleXY) {
+  let [x, y, z, w] = p;
+  const nx = x * Math.cos(angleXW) - w * Math.sin(angleXW);
+  const nw = x * Math.sin(angleXW) + w * Math.cos(angleXW);
+  const ny = y * Math.cos(angleYZ) - z * Math.sin(angleYZ);
+  const nz = y * Math.sin(angleYZ) + z * Math.cos(angleYZ);
+  x = nx; w = nw; y = ny; z = nz;
+  const fx = x * Math.cos(angleXY) - y * Math.sin(angleXY);
+  const fy = x * Math.sin(angleXY) + y * Math.cos(angleXY);
+  return [fx, fy, z, w];
+}
+
+function project4D(p, wDist, zDist) {
+  const [x, y, z, w] = p;
+  const wf = wDist / (wDist - w);
+  const x3 = x * wf, y3 = y * wf, z3 = z * wf;
+  const zf = zDist / (zDist - z3);
+  return [x3 * zf, y3 * zf];
+}
+
+function makeTesseract(opts) {
+  return {
+    scale: opts.scale || 1,
+    orbitRadius: opts.orbitRadius || 0,
+    orbitSpeed: opts.orbitSpeed || 0,
+    orbitAngle: Math.random() * Math.PI * 2,
+    phase: Math.random() * Math.PI * 2,
+    forceFull: !!opts.forceFull,
+    unlockedAt: opts.unlockedAt || 0,
+    itemsAtUnlock: opts.itemsAtUnlock || 0,
+    itemsTarget: opts.itemsTarget || 1,
+    minBuildMs: opts.minBuildMs || 6000,
+  };
+}
+
+function tesseractRevealFraction(inst, ts) {
+  if (inst.forceFull) return 1;
+  const timeFrac = Math.min(1, (ts - inst.unlockedAt) / inst.minBuildMs);
+  const itemFrac = Math.min(1, Math.max(0, stats.items - inst.itemsAtUnlock) / inst.itemsTarget);
+  return Math.min(timeFrac, itemFrac);
+}
+
+// Draws one hypercube, returns its vertices' final on-screen positions so a
+// caller (the results view) can attach labeled nodes to them.
+function drawTesseract(ctx, cx, cy, baseRadius, ts, inst) {
+  const frac = tesseractRevealFraction(inst, ts);
+  const revealedCount = Math.max(1, Math.floor(frac * TESS_BUILD_ORDER.length));
+  const angleXW = ts * 0.00035 + inst.phase;
+  const angleYZ = ts * 0.00023 + inst.phase * 1.3;
+  const angleXY = ts * 0.00012;
+
+  let ox = cx, oy = cy;
+  if (inst.orbitRadius) {
+    const orbitAngle = inst.orbitAngle + ts * inst.orbitSpeed * 0.0003;
+    ox = cx + Math.cos(orbitAngle) * inst.orbitRadius * baseRadius;
+    oy = cy + Math.sin(orbitAngle) * inst.orbitRadius * baseRadius;
   }
-  if (otherCount > 0) {
-    const span = (otherSize / total) * (a1 - a0);
-    out.push({
-      node: { name: `+${otherCount} smaller item${otherCount === 1 ? '' : 's'}`, size: otherSize, flag: null, children: [] },
-      a0: cursor,
-      a1: cursor + span,
-      innerR,
-      outerR,
-      isOther: true,
-    });
+  const r = baseRadius * inst.scale * 0.4;
+
+  const projected = TESS_VERTS.map((v) => {
+    const rotated = rotate4D(v, angleXW, angleYZ, angleXY);
+    const [x2, y2] = project4D(rotated, 3, 3.6);
+    return [ox + x2 * r, oy + y2 * r];
+  });
+
+  for (let idx = 0; idx < revealedCount; idx++) {
+    const step = TESS_BUILD_ORDER[idx];
+    if (step.type !== 'edge') continue;
+    const [x1, y1] = projected[step.a];
+    const [x2, y2] = projected[step.b];
+    ctx.strokeStyle = 'rgba(111, 159, 242, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
   }
+  for (let idx = 0; idx < revealedCount; idx++) {
+    const step = TESS_BUILD_ORDER[idx];
+    if (step.type !== 'vertex') continue;
+    const [x, y] = projected[step.i];
+    ctx.beginPath();
+    ctx.fillStyle = '#eaf6ff';
+    ctx.shadowColor = '#6f9ff2';
+    ctx.shadowBlur = 7;
+    ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  return projected;
 }
 
 function showTooltip(evt, node) {
@@ -353,101 +400,6 @@ function hideTooltip() {
   document.getElementById('tooltip').hidden = true;
 }
 
-function zoomTo(node) {
-  focusNode = node;
-  renderSunburst();
-}
-
-function renderCenter() {
-  const el = document.getElementById('sunburstCenter');
-  el.innerHTML = '';
-  const nameEl = document.createElement('div');
-  nameEl.className = 'sunburst-center-name';
-  nameEl.textContent = focusNode.name;
-  const sizeEl = document.createElement('div');
-  sizeEl.className = 'sunburst-center-size';
-  sizeEl.textContent = formatBytes(focusNode.size);
-  el.appendChild(nameEl);
-  el.appendChild(sizeEl);
-  if (focusNode.parent) {
-    el.classList.add('clickable');
-    el.title = 'Zoom out';
-    el.onclick = () => zoomTo(focusNode.parent);
-  } else {
-    el.classList.remove('clickable');
-    el.onclick = null;
-    el.title = '';
-  }
-}
-
-function renderBreadcrumb() {
-  const el = document.getElementById('breadcrumb');
-  el.innerHTML = '';
-  const chain = [];
-  for (let n = focusNode; n; n = n.parent) chain.unshift(n);
-  chain.forEach((node, i) => {
-    const isLast = i === chain.length - 1;
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'crumb' + (isLast ? ' crumb-current' : '');
-    btn.textContent = node.name;
-    if (isLast) {
-      btn.disabled = true;
-    } else {
-      btn.addEventListener('click', () => zoomTo(node));
-    }
-    el.appendChild(btn);
-    if (!isLast) {
-      const sep = document.createElement('span');
-      sep.className = 'crumb-sep';
-      sep.textContent = '›';
-      el.appendChild(sep);
-    }
-  });
-}
-
-function renderSunburst() {
-  const svg = document.getElementById('sunburstSvg');
-  svg.innerHTML = '';
-  if (!focusNode) return;
-
-  const cx = 260, cy = 260;
-  const segments = [];
-  layoutRing(focusNode, 1, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2, segments);
-
-  const ns = 'http://www.w3.org/2000/svg';
-  for (const seg of segments) {
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', arcPath(cx, cy, seg.innerR, seg.outerR, seg.a0, seg.a1));
-    path.setAttribute('class', 'sunburst-arc' + (seg.isOther ? ' sunburst-arc-other' : ''));
-    path.style.fill = fillForNode(seg.node);
-
-    if (activeFilter !== 'all' && !(seg.node.flag && seg.node.flag.level === activeFilter)) {
-      path.classList.add('dimmed');
-    }
-
-    const canZoom = !seg.isOther && seg.node.children && seg.node.children.length > 0;
-    if (canZoom) {
-      path.classList.add('clickable');
-      path.tabIndex = 0;
-      path.setAttribute('role', 'button');
-      path.setAttribute('aria-label', `${seg.node.name}, ${formatBytes(seg.node.size)}, zoom in`);
-      path.addEventListener('click', () => zoomTo(seg.node));
-      path.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); zoomTo(seg.node); }
-      });
-    }
-    path.addEventListener('pointermove', (e) => showTooltip(e, seg.node));
-    path.addEventListener('pointerleave', hideTooltip);
-    path.addEventListener('focus', (e) => showTooltip(e, seg.node));
-    path.addEventListener('blur', hideTooltip);
-    svg.appendChild(path);
-  }
-
-  renderCenter();
-  renderBreadcrumb();
-}
-
 function sumByLevel(node, level) {
   let total = 0;
   if (node.flag && node.flag.level === level) return node.size;
@@ -479,73 +431,48 @@ function updateProgressText() {
     `Scanning… ${stats.items.toLocaleString()} items found`;
 }
 
-// --- Live scan visualization ---
-// A radial "hub and spoke" particle show, one bubble per file/folder as
-// `onDiscover` reports it, drawn on <canvas> rather than SVG/DOM. This is
-// pure spectacle for while a scan is running — not the source of truth
-// (the Sunburst/List views are, once the scan finishes) — which is what
-// lets it take liberties a real chart couldn't: bubble position is a
-// deliberately approximate hash of "which top-level folder is this under"
-// plus jitter, not an exact parent-child layout, and old/uninteresting
-// bubbles get evicted once a real scan's item count (which routinely runs
-// into six figures for a home folder) would otherwise overwhelm the canvas.
-// Decoupling discovery from rendering — `onDiscover` just pushes onto
-// `liveQueue`, a separate rAF loop drains it — is what keeps the scan
-// itself fast: it never waits on a frame.
+// --- Live scan visualization: the tesseract being built ---
+// A single hypercube starts assembling the instant a scan begins. Its
+// reveal speed is `Math.min(timeFraction, itemFraction)` (see
+// `tesseractRevealFraction`) — deliberately the *slower* of "how much wall
+// time has passed" and "how many real items have been found," which is
+// what makes it both properly slow (a fast scan of a small folder still
+// takes `minBuildMs` to visibly finish, so there's something to watch) and
+// still tied to real data (a slow scan of a huge folder never finishes
+// "early" just because a clock ran out). Bigger scans unlock additional,
+// smaller satellite hypercubes orbiting the first — a nod to the
+// escalating-scale structure of Idle Cosmos, where more real usage
+// unlocks the next thing out. `onDiscover` only spawns a drifting spark,
+// never a full render — that's what keeps a six-figure item count from
+// ever blocking a frame.
 
-const LIVE_MAX_RINGS = 6;
-const LIVE_NODE_CAP = 1400;
-const LIVE_QUEUE_CAP = 3000;
-const LIVE_DRAIN_PER_FRAME = 50;
-const LIVE_GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
-const LIVE_COLORS = { safe: '#009c5c', review: '#b37900', keep: '#4b79c8' };
-const LIVE_NEUTRAL = '#4a4a5c';
+const LIVE_SATELLITE_THRESHOLDS = [3000, 12000, 40000, 120000];
+const LIVE_PARTICLE_CAP = 260;
 
-let liveQueue = [];
-let liveNodes = [];
-let liveSectorAngles = new Map();
-let liveRotation = 0;
+let liveInstances = [];
+let liveParticles = [];
 let liveRafId = null;
 let liveVizActive = false;
 
-function sectorAngleFor(name) {
-  if (!liveSectorAngles.has(name)) {
-    liveSectorAngles.set(name, liveSectorAngles.size * LIVE_GOLDEN_ANGLE);
-  }
-  return liveSectorAngles.get(name);
-}
-
-function sizeToLiveRadius(bytes) {
-  if (bytes <= 0) return 1.5;
-  return Math.min(16, Math.max(1.5, Math.log2(bytes + 1) * 0.8));
-}
-
-function spawnLiveNode(item) {
-  const ring = Math.min(Math.max(item.depth, 1), LIVE_MAX_RINGS);
-  const baseAngle = sectorAngleFor(item.topName || item.name);
-  const spread = (Math.PI / 5) * (ring / LIVE_MAX_RINGS) + Math.PI / 24;
-  liveNodes.push({
-    name: item.name,
-    size: item.size,
-    flag: item.flag,
-    ring,
-    angle: baseAngle + (Math.random() - 0.5) * spread,
-    jitterR: (Math.random() - 0.5) * 0.6,
-    r: sizeToLiveRadius(item.size),
-    color: item.flag ? LIVE_COLORS[item.flag.level] || LIVE_NEUTRAL : LIVE_NEUTRAL,
-    born: performance.now(),
-    x: 0,
-    y: 0,
+function unlockLiveSatellites() {
+  LIVE_SATELLITE_THRESHOLDS.forEach((threshold, idx) => {
+    if (stats.items >= threshold && liveInstances.length === idx + 1) {
+      const next = LIVE_SATELLITE_THRESHOLDS[idx + 1] || threshold * 3;
+      liveInstances.push(makeTesseract({
+        scale: 0.55 - idx * 0.07,
+        orbitRadius: 0.62 + idx * 0.17,
+        orbitSpeed: 0.15 + idx * 0.05,
+        unlockedAt: performance.now(),
+        itemsAtUnlock: threshold,
+        itemsTarget: next - threshold,
+        minBuildMs: 5000,
+      }));
+    }
   });
-  if (liveNodes.length > LIVE_NODE_CAP) {
-    let idx = liveNodes.findIndex((n) => !n.flag);
-    if (idx === -1) idx = 0;
-    liveNodes.splice(idx, 1);
-  }
 }
 
-function resizeLiveCanvas() {
-  const canvas = document.getElementById('liveCanvas');
+function resizeCanvasTo(canvasId) {
+  const canvas = document.getElementById(canvasId);
   const rect = canvas.getBoundingClientRect();
   if (rect.width === 0) return;
   const dpr = window.devicePixelRatio || 1;
@@ -553,89 +480,59 @@ function resizeLiveCanvas() {
   canvas.height = rect.height * dpr;
 }
 
-function liveFrame(ts) {
-  let drained = 0;
-  while (drained < LIVE_DRAIN_PER_FRAME && liveQueue.length) {
-    spawnLiveNode(liveQueue.shift());
-    drained++;
+function drawParticles(ctx, cx, cy, radius, ts, particles) {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    const age = ts - p.born;
+    if (age > 6000) { particles.splice(i, 1); continue; }
+    const dist = p.dist * radius * (1 + age * 0.00004);
+    const x = cx + Math.cos(p.angle) * dist;
+    const y = cy + Math.sin(p.angle) * dist;
+    const fade = age < 400 ? age / 400 : Math.max(0, 1 - (age - 4000) / 2000);
+    ctx.beginPath();
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = 0.8 * fade;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 4;
+    ctx.arc(x, y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
   }
+}
+
+function liveFrame(ts) {
+  unlockLiveSatellites();
 
   const canvas = document.getElementById('liveCanvas');
   const ctx = canvas.getContext('2d');
   const w = canvas.width, h = canvas.height;
   ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2;
+  const baseRadius = Math.min(w, h) * 0.46;
 
-  const size = Math.min(w, h);
-  const maxR = size * 0.46;
-  const hubR = size * 0.07;
-  const ringStep = (maxR - hubR) / LIVE_MAX_RINGS;
-
-  liveRotation += 0.0009;
-
-  ctx.save();
-  ctx.translate(w / 2, h / 2);
-  ctx.rotate(liveRotation);
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-  ctx.lineWidth = 1;
-  for (let i = 1; i <= LIVE_MAX_RINGS; i++) {
-    ctx.beginPath();
-    ctx.arc(0, 0, hubR + i * ringStep, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  for (const node of liveNodes) {
-    const radius = hubR + node.ring * ringStep + node.jitterR * ringStep;
-    const x = radius * Math.cos(node.angle);
-    const y = radius * Math.sin(node.angle);
-    node.x = x;
-    node.y = y;
-
-    const innerRadius = hubR + (node.ring - 1) * ringStep;
-    ctx.strokeStyle = node.color + '55';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(innerRadius * Math.cos(node.angle), innerRadius * Math.sin(node.angle));
-    ctx.lineTo(x, y);
-    ctx.stroke();
-
-    const grow = Math.min(1, (ts - node.born) / 260);
-    ctx.beginPath();
-    ctx.fillStyle = node.color;
-    ctx.globalAlpha = 0.85 * grow;
-    ctx.shadowColor = node.color;
-    ctx.shadowBlur = node.flag ? 8 : 3;
-    ctx.arc(x, y, node.r * grow, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
-  }
-
-  const pulse = 1 + Math.sin(ts / 400) * 0.06;
-  ctx.beginPath();
-  ctx.fillStyle = '#e8e8ec';
-  ctx.shadowColor = '#6f9ff2';
-  ctx.shadowBlur = 18;
-  ctx.arc(0, 0, hubR * pulse, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  ctx.restore();
+  drawParticles(ctx, cx, cy, baseRadius, ts, liveParticles);
+  for (const inst of liveInstances) drawTesseract(ctx, cx, cy, baseRadius, ts, inst);
 
   if (liveVizActive) liveRafId = requestAnimationFrame(liveFrame);
 }
 
 function startLiveViz() {
-  liveNodes = [];
-  liveQueue = [];
-  liveSectorAngles = new Map();
-  liveRotation = 0;
+  const now = performance.now();
+  liveInstances = [makeTesseract({ scale: 1, unlockedAt: now, itemsAtUnlock: 0, itemsTarget: LIVE_SATELLITE_THRESHOLDS[0], minBuildMs: 7500 })];
+  liveParticles = [];
   liveVizActive = true;
   onDiscover = (item) => {
-    liveQueue.push(item);
-    if (liveQueue.length > LIVE_QUEUE_CAP) liveQueue.splice(0, liveQueue.length - LIVE_QUEUE_CAP);
+    if (liveParticles.length >= LIVE_PARTICLE_CAP) liveParticles.shift();
+    liveParticles.push({
+      color: tessColorFor(item),
+      born: performance.now(),
+      angle: Math.random() * Math.PI * 2,
+      dist: 0.25 + Math.random() * 0.95,
+      size: item.flag ? 2.6 : 1.3,
+    });
   };
-  resizeLiveCanvas();
+  resizeCanvasTo('liveCanvas');
   liveRafId = requestAnimationFrame(liveFrame);
 }
 
@@ -644,38 +541,199 @@ function stopLiveViz() {
   onDiscover = () => {};
   if (liveRafId) cancelAnimationFrame(liveRafId);
   liveRafId = null;
-  liveNodes = [];
-  liveQueue = [];
+  liveInstances = [];
+  liveParticles = [];
 }
 
-function liveHitTest(clientX, clientY) {
-  const canvas = document.getElementById('liveCanvas');
+// --- Results view: the finished tesseract ---
+// Once a scan completes, the same engine renders a fully-assembled (or
+// multi-hypercube, if the scan was big enough to unlock satellites)
+// structure, now static geometry with real "notable item" nodes attached
+// to its vertices — the biggest top-level things found, colored by
+// verdict, sized by their share of what was scanned. There's no zoom/
+// breadcrumb here (unlike the old sunburst) — 16 vertices per hypercube is
+// a fixed number of slots, not an arbitrarily deep hierarchy, so instead
+// clicking a node jumps to the List view, which has the real recursive
+// breakdown.
+
+let resultsInstances = [];
+let resultsNodes = [];
+let resultsFrozenTs = 0;
+let inspectedItem = null;
+
+function getNotableItems(limit) {
+  const all = [];
+  for (const root of forest) all.push(...root.children);
+  all.sort((a, b) => b.size - a.size);
+  if (all.length <= limit) return all;
+  const shown = all.slice(0, limit - 1);
+  const rest = all.slice(limit - 1);
+  const otherSize = rest.reduce((sum, c) => sum + c.size, 0);
+  shown.push({ name: `+${rest.length} more`, size: otherSize, flag: null, children: [] });
+  return shown;
+}
+
+function sizeToNodeRadius(bytes) {
+  return Math.min(13, Math.max(3, Math.log2((bytes || 1) + 1) * 0.7));
+}
+
+// "Intelligent" here means the graph reflects real containment, not
+// decoration: each top-level item ("primary", pinned to a tesseract
+// vertex) that has children gets up to 3 "child" nodes for its own
+// biggest sub-items, branching outward from it. The spoke connecting them
+// is drawn from the primary's actual resolved position, not a fixed
+// tesseract edge — this is real hierarchy layered on top of the fixed
+// geometric frame, which is why it has to happen in `renderResultsStatic`
+// (positions only exist once the frame's vertices are projected) rather
+// than at build time.
+function buildResultsTesseract() {
+  resultsInstances = [makeTesseract({ scale: 1, forceFull: true })];
+  for (const threshold of LIVE_SATELLITE_THRESHOLDS) {
+    if (stats.items < threshold) break;
+    const idx = resultsInstances.length - 1;
+    resultsInstances.push(makeTesseract({ scale: 0.55 - idx * 0.07, orbitRadius: 0.62 + idx * 0.17, orbitSpeed: 0.15 + idx * 0.05, forceFull: true }));
+  }
+  const primaries = getNotableItems(resultsInstances.length * 16);
+  resultsNodes = [];
+  primaries.forEach((item, idx) => {
+    const primaryNode = { item, kind: 'primary', instanceIndex: Math.floor(idx / 16), vertexIndex: idx % 16, x: 0, y: 0, r: 0 };
+    resultsNodes.push(primaryNode);
+    if (!item.children || item.children.length === 0) return;
+    const kids = item.children.filter((c) => c.size > 0).sort((a, b) => b.size - a.size).slice(0, 3);
+    kids.forEach((kid, kidx) => {
+      resultsNodes.push({ item: kid, kind: 'child', parent: primaryNode, siblingIndex: kidx, siblingCount: kids.length, x: 0, y: 0, r: 0 });
+    });
+  });
+}
+
+// Renders one still frame at a fixed timestamp — called once after a scan
+// finishes, and again (with the *same* frozen timestamp) on tab-switch-in
+// or window resize, so the frozen orientation never drifts. There is no
+// requestAnimationFrame loop here on purpose: this view is meant to be
+// held still long enough to actually click things, unlike the live scan
+// show, which is meant to move.
+function renderResultsStatic(ts) {
+  const canvas = document.getElementById('resultsCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2;
+  const baseRadius = Math.min(w, h) * 0.46;
+
+  const projectedByInstance = resultsInstances.map((inst) => drawTesseract(ctx, cx, cy, baseRadius, ts, inst));
+
+  for (const rn of resultsNodes) {
+    if (rn.kind !== 'primary') continue;
+    const projected = projectedByInstance[rn.instanceIndex];
+    if (!projected) continue;
+    const [x, y] = projected[rn.vertexIndex];
+    rn.x = x; rn.y = y;
+    rn.r = sizeToNodeRadius(rn.item.size);
+  }
+  for (const rn of resultsNodes) {
+    if (rn.kind !== 'child') continue;
+    const p = rn.parent;
+    const dist = Math.hypot(p.x - cx, p.y - cy) || 1;
+    const dirX = (p.x - cx) / dist, dirY = (p.y - cy) / dist;
+    const spokeLen = 24 + rn.siblingIndex * 20;
+    const spread = (rn.siblingIndex - (rn.siblingCount - 1) / 2) * 0.4;
+    const cosA = Math.cos(spread), sinA = Math.sin(spread);
+    rn.x = p.x + (dirX * cosA - dirY * sinA) * spokeLen;
+    rn.y = p.y + (dirX * sinA + dirY * cosA) * spokeLen;
+    rn.r = sizeToNodeRadius(rn.item.size) * 0.75;
+  }
+
+  for (const rn of resultsNodes) {
+    if (rn.kind !== 'child') continue;
+    ctx.strokeStyle = tessColorFor(rn.item) + '66';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(rn.parent.x, rn.parent.y);
+    ctx.lineTo(rn.x, rn.y);
+    ctx.stroke();
+  }
+  for (const rn of resultsNodes) {
+    const dim = activeFilter !== 'all' && !(rn.item.flag && rn.item.flag.level === activeFilter);
+    ctx.beginPath();
+    ctx.fillStyle = tessColorFor(rn.item);
+    ctx.globalAlpha = dim ? 0.18 : rn.kind === 'child' ? 0.85 : 0.95;
+    ctx.shadowColor = ctx.fillStyle;
+    ctx.shadowBlur = rn.item.flag ? 10 : 4;
+    ctx.arc(rn.x, rn.y, rn.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  }
+}
+
+function startResultsViz() {
+  buildResultsTesseract();
+  resultsFrozenTs = performance.now();
+  resizeCanvasTo('resultsCanvas');
+  renderResultsStatic(resultsFrozenTs);
+}
+
+function resultsHitTest(clientX, clientY) {
+  const canvas = document.getElementById('resultsCanvas');
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
-  const mx = (clientX - rect.left) * dpr - canvas.width / 2;
-  const my = (clientY - rect.top) * dpr - canvas.height / 2;
-  const cosR = Math.cos(-liveRotation), sinR = Math.sin(-liveRotation);
-  const lx = mx * cosR - my * sinR;
-  const ly = mx * sinR + my * cosR;
+  const mx = (clientX - rect.left) * dpr;
+  const my = (clientY - rect.top) * dpr;
   let hit = null, hitDist = Infinity;
-  for (const node of liveNodes) {
-    const d = Math.hypot(lx - node.x, ly - node.y);
-    const hitR = Math.max(node.r, 6) + 3;
-    if (d <= hitR && d < hitDist) {
-      hit = node;
-      hitDist = d;
-    }
+  for (const rn of resultsNodes) {
+    const d = Math.hypot(mx - rn.x, my - rn.y);
+    const hitR = Math.max(rn.r, 8) + 4;
+    if (d <= hitR && d < hitDist) { hit = rn; hitDist = d; }
   }
   return hit;
 }
 
-document.getElementById('liveCanvas').addEventListener('pointermove', (e) => {
-  const hit = liveHitTest(e.clientX, e.clientY);
-  if (hit) showTooltip(e, hit);
+function showInspector(item) {
+  inspectedItem = item;
+  document.getElementById('mapInspectorName').textContent = item.name;
+  document.getElementById('mapInspectorSize').textContent = formatBytes(item.size);
+  const badgeWrap = document.getElementById('mapInspectorBadge');
+  badgeWrap.innerHTML = '';
+  const reasonEl = document.getElementById('mapInspectorReason');
+  if (item.flag) {
+    const badge = document.createElement('span');
+    badge.className = 'badge badge-' + item.flag.level;
+    badge.textContent = item.flag.level === 'safe' ? 'Safe to delete' : item.flag.level === 'review' ? 'Worth a look' : 'Keep';
+    badgeWrap.appendChild(badge);
+    reasonEl.textContent = item.flag.reason;
+    reasonEl.hidden = false;
+  } else {
+    reasonEl.textContent = '';
+    reasonEl.hidden = true;
+  }
+  document.getElementById('mapInspector').hidden = false;
+}
+
+document.getElementById('liveCanvas').addEventListener('pointermove', hideTooltip);
+document.getElementById('resultsCanvas').addEventListener('pointermove', (e) => {
+  const hit = resultsHitTest(e.clientX, e.clientY);
+  e.target.style.cursor = hit ? 'pointer' : 'default';
+  if (hit) showTooltip(e, hit.item);
   else hideTooltip();
 });
-document.getElementById('liveCanvas').addEventListener('pointerleave', hideTooltip);
-window.addEventListener('resize', () => { if (liveVizActive) resizeLiveCanvas(); });
+document.getElementById('resultsCanvas').addEventListener('pointerleave', hideTooltip);
+document.getElementById('resultsCanvas').addEventListener('click', (e) => {
+  const hit = resultsHitTest(e.clientX, e.clientY);
+  if (hit) showInspector(hit.item);
+});
+document.getElementById('mapInspectorClose').addEventListener('click', () => {
+  document.getElementById('mapInspector').hidden = true;
+});
+document.getElementById('mapInspectorGoto').addEventListener('click', () => {
+  document.querySelector('.view-tab[data-view="list"]').click();
+});
+window.addEventListener('resize', () => {
+  if (liveVizActive) resizeCanvasTo('liveCanvas');
+  if (!document.getElementById('tesseractView').hidden) {
+    resizeCanvasTo('resultsCanvas');
+    renderResultsStatic(resultsFrozenTs);
+  }
+});
 
 // --- Wiring ---
 
@@ -723,8 +781,7 @@ async function runScan(startIn) {
     document.getElementById('results').hidden = false;
     renderSummary();
     renderTree();
-    resetSunburstFocus();
-    renderSunburst();
+    startResultsViz();
   } catch (err) {
     showError(err);
   } finally {
@@ -749,7 +806,9 @@ document.querySelectorAll('.filter-pill').forEach((pill) => {
     pill.classList.add('active');
     activeFilter = pill.dataset.filter;
     renderTree();
-    renderSunburst();
+    // The Map view is a still frame, not a loop — it needs an explicit
+    // re-render (at the same frozen orientation) to pick up a filter change.
+    if (resultsNodes.length) renderResultsStatic(resultsFrozenTs);
   });
 });
 
@@ -762,8 +821,15 @@ document.querySelectorAll('.view-tab').forEach((tab) => {
     tab.classList.add('active');
     tab.setAttribute('aria-selected', 'true');
     const view = tab.dataset.view;
-    document.getElementById('sunburstView').hidden = view !== 'sunburst';
+    document.getElementById('tesseractView').hidden = view !== 'tesseract';
     document.getElementById('listView').hidden = view !== 'list';
+    if (view === 'tesseract') {
+      // Re-measure + redraw at the same frozen timestamp: a hidden canvas
+      // reports zero size, so switching back in needs a fresh resize, but
+      // the orientation itself must never drift between visits.
+      resizeCanvasTo('resultsCanvas');
+      renderResultsStatic(resultsFrozenTs);
+    }
   });
 });
 

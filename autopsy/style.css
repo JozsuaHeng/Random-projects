@@ -503,14 +503,16 @@ h1 {
 .view-tab:hover { color: var(--text); }
 .view-tab.active { color: var(--text); border-bottom-color: var(--safe); }
 
-/* --- Sunburst: chart-fill hues are deliberately darker/less luminous
-   than the badge/text accents used elsewhere (--safe/--review/--keep) —
-   the dataviz skill's dark-mode lightness band for filled marks (~L
-   0.48-0.67) is lower than what's legible for small badge text, so this
-   is a different tuned step of the same three hues, not a mismatch.
-   Validated colorblind-safe via the skill's validator (dark surface
-   #12121a, all-pairs check: PASS; CVD floor WARN on review<->safe is
-   covered by the tooltip + legend + badge text as secondary encoding). --- */
+/* --- Tesseract: a real 4D-rotated hypercube (16 vertices, 32 edges,
+   projected 4D→3D→2D each frame — see app.js), not a decorative cube icon.
+   Fill hues are deliberately darker/less luminous than the badge/text
+   accents used elsewhere (--safe/--review/--keep) — the dataviz skill's
+   dark-mode lightness band for filled marks (~L 0.48-0.67) is lower than
+   what's legible for small badge text, so this is a different tuned step
+   of the same three hues, not a mismatch. Validated colorblind-safe via
+   the skill's validator (dark surface #12121a, all-pairs check: PASS; CVD
+   floor WARN on review<->safe is covered by the tooltip + legend + badge
+   text as secondary encoding). --- */
 :root {
   --fill-safe: #009c5c;
   --fill-review: #b37900;
@@ -523,87 +525,74 @@ h1 {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  width: 100%;
 }
 
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-self: flex-start;
-  font-size: 13px;
-}
-.crumb {
-  font-family: inherit;
-  font-size: 13px;
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 6px;
-}
-.crumb:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
-.crumb-current { color: var(--text); font-weight: 700; cursor: default; }
-.crumb-current:hover { background: none; }
-.crumb-sep { color: var(--muted); opacity: 0.5; }
-
+/* Fills the full width of its container, corner to corner — no side
+   margins eating into it like the old centered-square version. The
+   border/radius live here and `overflow: hidden` clips the canvas to
+   match, so the drawing itself visually reaches every rounded corner. */
 .sunburst-stage {
   position: relative;
   width: 100%;
-  max-width: 460px;
   aspect-ratio: 1 / 1;
-}
-#sunburstSvg { width: 100%; height: 100%; overflow: visible; }
-
-.sunburst-arc {
-  stroke: var(--card);
-  stroke-width: 2px;
-  transition: filter 0.12s ease, opacity 0.15s ease;
-}
-.sunburst-arc.clickable { cursor: pointer; }
-.sunburst-arc.clickable:hover,
-.sunburst-arc.clickable:focus-visible {
-  filter: brightness(1.25);
-  outline: none;
-}
-.sunburst-arc:focus-visible { stroke: #eaf6ff; stroke-width: 2.5px; }
-.sunburst-arc.dimmed { opacity: 0.22; }
-.sunburst-arc-other { opacity: 0.6; }
-
-.sunburst-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 17%;
-  height: 17%;
-  border-radius: 50%;
-  background: var(--card);
   border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  border-radius: 20px;
+  background: var(--card);
+  overflow: hidden;
+}
+#resultsCanvas { width: 100%; height: 100%; display: block; cursor: default; }
+
+.map-inspector {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  width: 220px;
+  max-width: calc(100% - 32px);
+  background: rgba(18, 18, 26, 0.94);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 16px 32px -14px rgba(0, 0, 0, 0.6);
+}
+.map-inspector-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
   padding: 4px;
 }
-.sunburst-center.clickable { cursor: pointer; }
-.sunburst-center.clickable:hover { border-color: var(--muted); }
-.sunburst-center-name {
-  font-size: 11px;
+.map-inspector-close:hover { color: var(--text); }
+.map-inspector-name {
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.15;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding-right: 18px;
+  margin-bottom: 3px;
+  word-break: break-word;
 }
-.sunburst-center-size {
+.map-inspector-size {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.map-inspector-reason {
+  font-size: 12px;
   color: var(--muted);
-  margin-top: 2px;
+  line-height: 1.5;
+  margin: 8px 0 14px;
+}
+.map-inspector .btn {
+  width: 100%;
+  font-size: 12px;
+  padding: 8px 10px;
 }
 
 .legend {

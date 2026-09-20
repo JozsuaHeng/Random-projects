@@ -78,7 +78,7 @@
       <div class="live-stage">
         <canvas id="liveCanvas"></canvas>
       </div>
-      <p class="live-hint">Every dot is a real file or folder as it's found — the hub in the middle is the folder you picked, and each ring out from it is one level deeper. This is just a show for while it scans and isn't kept afterward; the Sunburst and List views after the scan are the precise, exact-size picture.</p>
+      <p class="live-hint">A 4D hypercube assembling itself, point by point and edge by edge, as real files and folders are found — sparks drifting around it are the files themselves. The bigger the scan, the more hypercubes join it. Purely a show for while it scans, deliberately paced slower than the scan itself so there's something to actually watch; the Tesseract and List views after the scan are the precise, exact-size picture.</p>
     </div>
 
     <div id="results" hidden>
@@ -113,15 +113,21 @@
       </div>
 
       <div class="view-tabs" role="tablist" aria-label="Visualization view">
-        <button type="button" class="view-tab active" data-view="sunburst" role="tab" aria-selected="true">Sunburst map</button>
+        <button type="button" class="view-tab active" data-view="tesseract" role="tab" aria-selected="true">Map view</button>
         <button type="button" class="view-tab" data-view="list" role="tab" aria-selected="false">List view</button>
       </div>
 
-      <div id="sunburstView" class="sunburst-view">
-        <nav class="breadcrumb" id="breadcrumb" aria-label="Zoom path"></nav>
+      <div id="tesseractView" class="sunburst-view">
         <div class="sunburst-stage">
-          <svg id="sunburstSvg" viewBox="0 0 520 520" role="img" aria-label="Radial map of folder sizes — click a slice to zoom in"></svg>
-          <div class="sunburst-center" id="sunburstCenter"></div>
+          <canvas id="resultsCanvas"></canvas>
+          <div id="mapInspector" class="map-inspector" hidden>
+            <button type="button" class="map-inspector-close" id="mapInspectorClose" aria-label="Close">×</button>
+            <div class="map-inspector-name" id="mapInspectorName"></div>
+            <div class="map-inspector-size" id="mapInspectorSize"></div>
+            <div id="mapInspectorBadge"></div>
+            <p class="map-inspector-reason" id="mapInspectorReason"></p>
+            <button type="button" class="btn btn-secondary" id="mapInspectorGoto">View in List →</button>
+          </div>
         </div>
         <div class="legend">
           <span class="legend-item"><span class="legend-swatch legend-safe"></span>Safe to delete</span>
@@ -129,7 +135,7 @@
           <span class="legend-item"><span class="legend-swatch legend-keep"></span>Keep</span>
           <span class="legend-item"><span class="legend-swatch legend-neutral"></span>Unflagged folder</span>
         </div>
-        <p class="sunburst-hint">Click (or focus + Enter) a slice to zoom into it. Click the center circle to zoom back out. Each ring is one folder level deep — zoom in to reveal what's further down.</p>
+        <p class="sunburst-hint">Bigger nodes are your biggest top-level items; smaller ones branching off them are what's biggest <em>inside</em> that item — real containment, not decoration. Hover (or focus) for name, size, and verdict; click for details and a jump to the exact spot in List view. It builds itself while scanning; once done, it holds still so you can actually click things.</p>
       </div>
 
       <div id="listView" hidden>
