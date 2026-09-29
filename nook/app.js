@@ -13,6 +13,10 @@
   // board of notes reads as a mixed set of index cards, not a uniform grid.
   const ACCENTS = ['clay', 'ink', 'moss', 'plum', 'ochre', 'berry'];
   const SHAPES = ['stripe-left', 'stripe-top', 'corner-fold', 'tab'];
+  const NOTE_TEMPLATES = {
+    meeting: 'Meeting notes\nDate: \nAttendees: \n\nKey Findings:\n\nAction Items:\n- [ ] ',
+    todo: 'To-do\n- [ ] \n- [ ] \n- [ ] ',
+  };
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
   const randomRot = () => Math.round((Math.random() * 4 - 2) * 100) / 100;
 
@@ -25,9 +29,16 @@
   const importFile = el('importFile');
   const noteTemplate = el('noteTemplate');
   const colorPopoverTemplate = el('colorPopoverTemplate');
+  const templatePopoverTemplate = el('templatePopoverTemplate');
   const zoneTemplate = el('zoneTemplate');
   const connectorLayer = el('connectorLayer');
   const createGhost = el('createGhost');
+  const trashZone = el('trashZone');
+  const pinnedLayer = el('pinnedLayer');
+  const minimapEl = el('minimap');
+  const minimapContent = el('minimapContent');
+  const minimapViewport = el('minimapViewport');
+  const statsPill = el('statsPill');
 
   const expandOverlay = el('expandOverlay');
   const expandCard = el('expandCard');
@@ -69,6 +80,12 @@
     s = s.replace(/==(.+?)==/g, '<mark>$1</mark>');
     s = s.replace(/\^\^(.+?)\^\^/g, '<span class="caps-text">$1</span>');
     s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Tags (#project, #idea) — run after the link rule above, and require
+    // the # to be at a word boundary (start of string or after
+    // whitespace), specifically so a URL's own "#fragment" (already
+    // tucked inside an href="..." attribute by this point) or a literal
+    // "/#123" never gets misread as a tag.
+    s = s.replace(/(^|\s)#([a-zA-Z][\w-]{0,30})/g, (m, pre, tag) => `${pre}<span class="tag-pill" data-tag="${tag.toLowerCase()}">#${tag}</span>`);
     s = s.replace(/⁣IC(\d+)⁣/g, (m, idx) => `<code>${escapeHtml(inlineCodes[+idx])}</code>`);
     return s;
   }
@@ -92,6 +109,14 @@
     // is what makes plain pasted text (not already Markdown) still read
     // as "intelligently" formatted.
     let firstBlockEmitted = false;
+    // Counts checklist lines in the order encountered, used as the
+    // data-task index checkboxes are toggled by (see toggleChecklistLine).
+    // Deliberately NOT the raw line number: the fenced-code-block collapse
+    // above merges multi-line blocks into one placeholder line, which
+    // would throw off a raw index but never affects *this* count, since a
+    // checklist line inside a fenced block was already swallowed into that
+    // placeholder and never reaches this loop as its own line either way.
+    let taskIndex = -1;
 
     function flushParagraph() {
       if (paragraphBuf.length) {
@@ -105,7 +130,8 @@
       }
     }
     function closeList() {
-      if (inList) { html += `</${inList}>`; inList = null; }
+      if (inList === 'task') { html += '</ul>'; inList = null; }
+      else if (inList) { html += `</${inList}>`; inList = null; }
     }
 
     for (const line of lines) {
@@ -131,6 +157,20 @@
       const label = !inList && line.match(/^([A-Za-z][A-Za-z0-9 ,'&/()-]{1,60}):\s*$/);
       if (label) { flushParagraph(); html += `<p><strong>${inlineMd(label[1])}:</strong></p>`; firstBlockEmitted = true; continue; }
 
+      // Checklist syntax — checked before the generic bullet rule below,
+      // since "- [ ] foo" would otherwise match that instead (the literal
+      // "[ ]" would just become bullet text).
+      const task = line.match(/^[-*]\s+\[([ xX])\]\s+(.*)$/);
+      if (task) {
+        flushParagraph();
+        if (inList !== 'task') { closeList(); html += '<ul class="task-list">'; inList = 'task'; }
+        taskIndex += 1;
+        const checked = task[1].toLowerCase() === 'x';
+        html += `<li class="task-item"><label><input type="checkbox" class="task-checkbox" data-task="${taskIndex}"${checked ? ' checked' : ''}><span class="${checked ? 'task-done' : ''}">${inlineMd(task[2])}</span></label></li>`;
+        firstBlockEmitted = true;
+        continue;
+      }
+
       // Bullet glyphs beyond -/*, since pasted text often carries • ‣ ○ etc.
       const ul = line.match(/^[-*•‣◦○·]\s+(.*)$/);
       if (ul) { flushParagraph(); if (inList !== 'ul') { closeList(); html += '<ul>'; inList = 'ul'; } html += `<li>${inlineMd(ul[1])}</li>`; firstBlockEmitted = true; continue; }
@@ -146,6 +186,33 @@
     }
     flushParagraph(); closeList();
     return html;
+  }
+
+  // Flips a checklist line's [ ]/[x] by scanning note.content the same
+  // way renderMarkdown() does (skipping fenced-code interiors, counting
+  // checklist lines in order) so `taskIndex` from a rendered checkbox's
+  // data-task always resolves to the right raw line regardless of what
+  // else is in the note.
+  function toggleChecklistLine(note, taskIndex) {
+    const lines = note.content.split('\n');
+    let count = -1;
+    let inFence = false;
+    for (let i = 0; i < lines.length; i++) {
+      if (/^\s*```/.test(lines[i])) { inFence = !inFence; continue; }
+      if (inFence) continue;
+      const m = lines[i].match(/^(\s*[-*]\s+\[)([ xX])(\]\s*.*)$/);
+      if (!m) continue;
+      count += 1;
+      if (count !== taskIndex) continue;
+      lines[i] = m[1] + (m[2].toLowerCase() === 'x' ? ' ' : 'x') + m[3];
+      note.content = lines.join('\n');
+      note.updatedAt = Date.now();
+      saveBoard();
+      const refs = noteRefs.get(note.id);
+      if (refs && refs.editEl.hidden) refs.renderEl.innerHTML = renderMarkdown(note.content);
+      if (expandedId === note.id && expandEdit.hidden) expandRender.innerHTML = renderMarkdown(note.content);
+      return;
+    }
   }
 
   function noteTitle(note) {
@@ -304,6 +371,13 @@
     interacting = v;
     if (v) hideGhost();
   }
+  // Cached scale/offset mapping board-space coordinates into the minimap's
+  // pixel box — recomputed only when notes/zones actually change (see
+  // refreshMinimap), not on every pan/zoom frame (see updateMinimapViewport).
+  let minimapLayout = null;
+  // The tag currently spotlighted (lowercase, matching a tag-pill's
+  // data-tag), or null when nothing's filtered.
+  let activeTagHighlight = null;
 
   // ---------------- theme ----------------
 
@@ -323,6 +397,7 @@
 
   function applyView() {
     boardInner.style.transform = `translate(${view.panX}px, ${view.panY}px) scale(${view.zoom})`;
+    updateMinimapViewport();
   }
   function animateApplyView() {
     boardInner.classList.add('animate');
@@ -355,7 +430,9 @@
   }
 
   function fitToContent(instant) {
-    const items = [...notes, ...zones];
+    // Pinned notes left the canvas for a fixed screen corner — they no
+    // longer have a meaningful position to frame.
+    const items = [...notes.filter((n) => !n.pinned), ...zones];
     if (!items.length) { toast('Nothing to fit yet'); return; }
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (const n of items) {
@@ -399,7 +476,7 @@
     saveView();
   }, { passive: false });
 
-  const zoneControlSelector = '.note-card, .zone-edge, .zone-label, .zone-resize-handle, .zone-delete, .note-connect-handle';
+  const zoneControlSelector = '.note-card, .zone-edge, .zone-label-row, .zone-resize-handle, .zone-delete, .note-connect-handle, .connector-label';
 
   board.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
@@ -451,6 +528,143 @@
   board.addEventListener('pointerleave', hideGhost);
   board.addEventListener('pointerdown', hideGhost);
 
+  // ---------------- trash zone ----------------
+
+  // Generous invisible padding around the small circular trash button —
+  // makes it a realistic drop target while dragging, not just its literal
+  // 36px circle.
+  function pointOverTrash(clientX, clientY) {
+    const rect = trashZone.getBoundingClientRect();
+    const pad = 16;
+    return clientX >= rect.left - pad && clientX <= rect.right + pad &&
+      clientY >= rect.top - pad && clientY <= rect.bottom + pad;
+  }
+
+  // ---------------- minimap ----------------
+
+  // Full relayout: recomputes the board-space bounding box over every note
+  // + zone and rebuilds the dots/outlines. Called whenever the set of
+  // notes/zones or their position/size changes (create, delete, drag-end,
+  // resize-end, import) — NOT on every drag frame, since the bounding box
+  // rarely changes mid-drag and this is O(n) over the whole board.
+  function refreshMinimap() {
+    // Pinned notes aren't part of the canvas's spatial layout any more —
+    // leave them off the overview the same way fitToContent() does.
+    const canvasNotes = notes.filter((n) => !n.pinned);
+    const items = [...canvasNotes, ...zones];
+    minimapEl.hidden = items.length === 0;
+    if (!items.length) { minimapLayout = null; return; }
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const it of items) {
+      minX = Math.min(minX, it.x); minY = Math.min(minY, it.y);
+      maxX = Math.max(maxX, it.x + it.w); maxY = Math.max(maxY, it.y + it.h);
+    }
+    const pad = 60;
+    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+    const contentW = Math.max(1, maxX - minX);
+    const contentH = Math.max(1, maxY - minY);
+    const box = minimapContent.getBoundingClientRect();
+    const scale = Math.min(box.width / contentW, box.height / contentH);
+    const offsetX = (box.width - contentW * scale) / 2 - minX * scale;
+    const offsetY = (box.height - contentH * scale) / 2 - minY * scale;
+    minimapLayout = { scale, offsetX, offsetY };
+
+    minimapContent.querySelectorAll('.minimap-dot, .minimap-zone-rect').forEach((n) => n.remove());
+    for (const z of zones) {
+      const rect = document.createElement('div');
+      rect.className = 'minimap-zone-rect';
+      rect.style.left = (z.x * scale + offsetX) + 'px';
+      rect.style.top = (z.y * scale + offsetY) + 'px';
+      rect.style.width = Math.max(3, z.w * scale) + 'px';
+      rect.style.height = Math.max(3, z.h * scale) + 'px';
+      minimapContent.appendChild(rect);
+    }
+    for (const n of canvasNotes) {
+      const dot = document.createElement('div');
+      dot.className = 'minimap-dot';
+      dot.style.left = ((n.x + n.w / 2) * scale + offsetX) + 'px';
+      dot.style.top = ((n.y + n.h / 2) * scale + offsetY) + 'px';
+      dot.style.background = `var(--accent-${n.color})`;
+      minimapContent.appendChild(dot);
+    }
+    updateMinimapViewport();
+  }
+
+  // Cheap path: only repositions the outline showing what's currently on
+  // screen, reusing the last computed scale/offset — this is what runs on
+  // every pan/zoom frame via applyView(), so it can't afford to touch
+  // notes/zones at all.
+  function updateMinimapViewport() {
+    if (!minimapLayout || minimapEl.hidden) return;
+    const { scale, offsetX, offsetY } = minimapLayout;
+    const topLeft = screenToBoard(0, 0);
+    const bottomRight = screenToBoard(window.innerWidth, window.innerHeight);
+    minimapViewport.style.left = (topLeft.x * scale + offsetX) + 'px';
+    minimapViewport.style.top = (topLeft.y * scale + offsetY) + 'px';
+    minimapViewport.style.width = Math.max(4, (bottomRight.x - topLeft.x) * scale) + 'px';
+    minimapViewport.style.height = Math.max(4, (bottomRight.y - topLeft.y) * scale) + 'px';
+  }
+
+  // ---------------- zone note counts ----------------
+
+  // "Inside" a zone means the note's center point falls within the zone's
+  // rectangle — simplest reasonable definition, and matches how the app
+  // otherwise treats zones as purely visual (no stored membership list).
+  function computeZoneNoteCount(zone) {
+    let count = 0;
+    for (const n of notes) {
+      if (n.pinned) continue;
+      const cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+      if (cx >= zone.x && cx <= zone.x + zone.w && cy >= zone.y && cy <= zone.y + zone.h) count += 1;
+    }
+    return count;
+  }
+  function refreshZoneCounts() {
+    for (const z of zones) {
+      const refs = zoneRefs.get(z.id);
+      if (!refs) continue;
+      const count = computeZoneNoteCount(z);
+      refs.countEl.textContent = count > 0 ? String(count) : '';
+    }
+  }
+
+  // Small board-wide "N notes · M words" pill (see .stats-pill in
+  // style.css) — the only one of these overlays that also needs
+  // refreshing on a plain content edit, not just create/delete/move, so
+  // it additionally gets called directly from saveAndRender()/
+  // saveExpandEdit() rather than only through syncOverlays() below.
+  function refreshStats() {
+    let words = 0;
+    for (const n of notes) {
+      const text = (n.content || '').trim();
+      if (text) words += text.split(/\s+/).length;
+    }
+    statsPill.hidden = notes.length === 0;
+    statsPill.textContent = `${notes.length} note${notes.length === 1 ? '' : 's'} · ${words} word${words === 1 ? '' : 's'}`;
+  }
+
+  // Notes/zones changing position, size, or existence affects both the
+  // minimap and every zone's count at once — one call at each mutation
+  // point instead of remembering to call both separately.
+  function syncOverlays() {
+    refreshMinimap();
+    refreshZoneCounts();
+    refreshStats();
+  }
+
+  minimapEl.addEventListener('pointerdown', (e) => {
+    if (!minimapLayout) return;
+    e.stopPropagation();
+    const rect = minimapContent.getBoundingClientRect();
+    const boardX = (e.clientX - rect.left - minimapLayout.offsetX) / minimapLayout.scale;
+    const boardY = (e.clientY - rect.top - minimapLayout.offsetY) / minimapLayout.scale;
+    view.panX = window.innerWidth / 2 - boardX * view.zoom;
+    view.panY = window.innerHeight / 2 - boardY * view.zoom;
+    animateApplyView();
+    saveView();
+  });
+
   // ---------------- note lifecycle ----------------
 
   function getNote(id) {
@@ -475,6 +689,7 @@
     };
     notes.push(note);
     saveBoard();
+    syncOverlays();
     const refs = createNoteDOM(note);
     bringToFront(note, refs.card);
     maybeShowEmptyHint();
@@ -491,6 +706,7 @@
     if (idx === -1) return;
     notes.splice(idx, 1);
     saveBoard();
+    syncOverlays();
     removeConnectorsForNote(note.id);
     const refs = noteRefs.get(note.id);
     if (refs) refs.card.remove();
@@ -511,10 +727,14 @@
     card.dataset.color = note.color;
     card.dataset.shape = note.shape || 'stripe-left';
     card.style.setProperty('--rot', (note.rot || 0) + 'deg');
-    card.style.left = note.x + 'px';
-    card.style.top = note.y + 'px';
-    card.style.width = note.w + 'px';
-    card.style.height = note.h + 'px';
+    if (note.pinned) {
+      card.classList.add('pinned');
+    } else {
+      card.style.left = note.x + 'px';
+      card.style.top = note.y + 'px';
+      card.style.width = note.w + 'px';
+      card.style.height = note.h + 'px';
+    }
     card.classList.add('pop-in');
     card.style.animationDelay = popDelayMs + 'ms';
     card.addEventListener('animationend', () => card.classList.remove('pop-in'), { once: true });
@@ -522,6 +742,7 @@
     const renderEl = card.querySelector('.note-render');
     const editEl = card.querySelector('.note-edit');
     const colorDot = card.querySelector('.note-color-dot');
+    const pinBtn = card.querySelector('.pin-btn');
     const expandBtn = card.querySelector('.expand-btn');
     const copyBtn = card.querySelector('.copy-btn');
     const deleteBtn = card.querySelector('.delete-btn');
@@ -531,18 +752,34 @@
     const formatActions = card.querySelector('.note-format-actions');
 
     renderEl.innerHTML = renderMarkdown(note.content);
+    pinBtn.classList.toggle('active', !!note.pinned);
 
-    const refs = { card, renderEl, editEl, colorDot, headActions, formatActions };
+    const refs = { card, renderEl, editEl, colorDot, pinBtn, headActions, formatActions };
     noteRefs.set(note.id, refs);
-    boardInner.appendChild(card);
+    (note.pinned ? pinnedLayer : boardInner).appendChild(card);
 
     wireFormatButtons(formatActions, editEl);
 
+    pinBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleNotePinned(note); });
+
+    // A checklist checkbox or a tag pill handles its own click (see
+    // below) — neither should start a card drag or fall through to
+    // click-to-edit.
+    renderEl.addEventListener('click', (e) => {
+      const cb = e.target.closest('.task-checkbox');
+      if (cb) { toggleChecklistLine(note, Number(cb.dataset.task)); return; }
+      const tagEl = e.target.closest('.tag-pill');
+      if (tagEl) toggleTagHighlight(tagEl.dataset.tag);
+    });
+
     // click-to-edit / drag from anywhere on the card body
     card.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.note-action, .note-color-dot, .note-resize-handle, .note-connect-handle, .note-format-actions')) return;
+      if (e.target.closest('.note-action, .note-color-dot, .note-resize-handle, .note-connect-handle, .note-format-actions, .task-item, .tag-pill')) return;
       if (e.target.tagName === 'TEXTAREA') return;
       e.preventDefault();
+      // Pinned notes live in a fixed column, not on the canvas — dragging
+      // one reorders it within that column instead of repositioning it.
+      if (note.pinned) { startPinnedReorder(e, note, card, refs); return; }
       bringToFront(note, card);
       setInteracting(true);
       const startX = e.clientX, startY = e.clientY;
@@ -559,16 +796,27 @@
           card.style.top = note.y + 'px';
           card.classList.add('dragging');
           updateConnectorsForNote(note.id);
+          trashZone.classList.add('armed');
+          const overTrash = pointOverTrash(ev.clientX, ev.clientY);
+          card.classList.toggle('will-delete', overTrash);
+          trashZone.classList.toggle('hover', overTrash);
         }
       }
-      function onUp() {
+      function onUp(ev) {
         document.removeEventListener('pointermove', onMove);
         document.removeEventListener('pointerup', onUp);
         card.classList.remove('dragging');
         setInteracting(false);
+        trashZone.classList.remove('armed', 'hover');
+        if (dragging && pointOverTrash(ev.clientX, ev.clientY)) {
+          deleteNote(note);
+          return;
+        }
+        card.classList.remove('will-delete');
         if (dragging) {
           note.updatedAt = Date.now();
           saveBoard();
+          syncOverlays();
         } else if (e.target.closest('.note-body') && editEl.hidden) {
           enterEditMode(note, refs);
         }
@@ -601,6 +849,7 @@
         setInteracting(false);
         note.updatedAt = Date.now();
         saveBoard();
+        syncOverlays();
       }
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
@@ -608,7 +857,11 @@
 
     colorDot.addEventListener('click', (e) => {
       e.stopPropagation();
-      openColorPopover(note, colorDot);
+      openColorPopover(colorDot, (color) => {
+        note.color = color;
+        saveBoard();
+        refreshNoteColor(note);
+      });
     });
     expandBtn.addEventListener('click', (e) => { e.stopPropagation(); openExpand(note); });
     copyBtn.addEventListener('click', (e) => { e.stopPropagation(); copyNoteText(note); });
@@ -642,6 +895,7 @@
       document.addEventListener('pointerup', onUp);
     });
 
+    if (activeTagHighlight) applyTagHighlight();
     return refs;
   }
 
@@ -729,6 +983,8 @@
     refs.renderEl.hidden = false;
     if (refs.headActions) refs.headActions.hidden = false;
     if (refs.formatActions) refs.formatActions.hidden = true;
+    if (activeTagHighlight) applyTagHighlight();
+    refreshStats();
   }
 
   function deleteNote(note) {
@@ -736,6 +992,7 @@
     if (idx === -1) return;
     const [removed] = notes.splice(idx, 1);
     saveBoard();
+    syncOverlays();
     removeConnectorsForNote(note.id);
     const refs = noteRefs.get(note.id);
     if (refs) refs.card.remove();
@@ -754,6 +1011,7 @@
     undoBtn.addEventListener('click', () => {
       notes.splice(Math.min(idx, notes.length), 0, removed);
       saveBoard();
+      syncOverlays();
       const newRefs = createNoteDOM(removed);
       bringToFront(removed, newRefs.card);
       maybeShowEmptyHint();
@@ -786,10 +1044,153 @@
     toast('Exported');
   }
 
+  // Breadth-first walk of the connector graph from startId — connectors
+  // have no direction in the UI (an A-B line means the same thing either
+  // way), so both c.from and c.to are followed. Returns notes in
+  // "this note, then what's directly connected, then what's connected to
+  // that" order, which is what makes the exported file read start-to-
+  // finish as a chain rather than a random bag of notes.
+  function collectConnectedNotes(startId) {
+    const visited = new Set([startId]);
+    const queue = [startId];
+    const order = [startId];
+    while (queue.length) {
+      const id = queue.shift();
+      for (const c of connectors) {
+        const otherId = c.from === id ? c.to : (c.to === id ? c.from : null);
+        if (otherId && !visited.has(otherId)) {
+          visited.add(otherId);
+          queue.push(otherId);
+          order.push(otherId);
+        }
+      }
+    }
+    return order.map((id) => getNote(id)).filter(Boolean);
+  }
+
+  function exportConnectorChain(note) {
+    const chain = collectConnectedNotes(note.id);
+    if (chain.length === 1) { toast('Nothing connected to this note yet'); return; }
+    const md = chain.map((n) => `## ${noteTitle(n)}\n\n${n.content}`).join('\n\n---\n\n');
+    downloadBlob(md, `${slugify(noteTitle(note))}-chain.md`, 'text/markdown');
+    toast(`Exported ${chain.length} connected notes`);
+  }
+
   function refreshNoteColor(note) {
     const refs = noteRefs.get(note.id);
     if (refs) refs.card.dataset.color = note.color;
     if (expandedId === note.id) expandCard.dataset.color = note.color;
+  }
+
+  // ---------------- tags ----------------
+
+  function noteHasTag(note, tag) {
+    const escaped = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp('(^|\\s)#' + escaped + '(?![\\w-])', 'i').test(note.content || '');
+  }
+
+  // Everything sharing the active tag stays full-strength; everything
+  // else dims rather than disappears, so the board's layout is still
+  // legible while scanning for matches (see .tag-dimmed/.tag-highlighted
+  // in style.css).
+  function applyTagHighlight() {
+    for (const n of notes) {
+      const refs = noteRefs.get(n.id);
+      if (!refs) continue;
+      if (!activeTagHighlight) {
+        refs.card.classList.remove('tag-dimmed', 'tag-highlighted');
+        continue;
+      }
+      const match = noteHasTag(n, activeTagHighlight);
+      refs.card.classList.toggle('tag-highlighted', match);
+      refs.card.classList.toggle('tag-dimmed', !match);
+    }
+  }
+
+  function toggleTagHighlight(tag) {
+    activeTagHighlight = activeTagHighlight === tag ? null : tag;
+    applyTagHighlight();
+    if (activeTagHighlight) toast(`Highlighting #${activeTagHighlight} — click the tag again to clear`);
+  }
+
+  // Moves the note's actual DOM element between .board-inner (canvas,
+  // board-space coordinates) and #pinnedLayer (fixed corner, no
+  // coordinates at all — CSS just stacks it in the column). note.x/y/w/h
+  // are left untouched while pinned, so unpinning drops it back exactly
+  // where it was.
+  function toggleNotePinned(note) {
+    note.pinned = !note.pinned;
+    note.updatedAt = Date.now();
+    saveBoard();
+    const refs = noteRefs.get(note.id);
+    if (refs) {
+      refs.card.classList.toggle('pinned', note.pinned);
+      refs.pinBtn.classList.toggle('active', note.pinned);
+      if (note.pinned) {
+        refs.card.style.left = '';
+        refs.card.style.top = '';
+        refs.card.style.width = '';
+        refs.card.style.height = '';
+        pinnedLayer.appendChild(refs.card);
+      } else {
+        refs.card.style.left = note.x + 'px';
+        refs.card.style.top = note.y + 'px';
+        refs.card.style.width = note.w + 'px';
+        refs.card.style.height = note.h + 'px';
+        boardInner.appendChild(refs.card);
+        bringToFront(note, refs.card);
+      }
+    }
+    if (expandedId === note.id) el('expandPinBtn').classList.toggle('active', note.pinned);
+    updateConnectorsForNote(note.id);
+    syncOverlays();
+  }
+
+  // Reordering within the pinned column. The dragged card gets a live
+  // translateY offset (via the --drag-y custom property the .reordering
+  // CSS rule reads) so it visibly follows the cursor; its siblings are
+  // ordinary flex items, so as soon as the drag crosses a neighbor's
+  // midpoint, physically moving the card in the DOM (insertBefore/After)
+  // makes that neighbor snap into the vacated slot for free — no manual
+  // layout math for anyone but the dragged card itself.
+  function startPinnedReorder(e, note, card, refs) {
+    setInteracting(true);
+    const startY = e.clientY;
+    let dragging = false;
+    function onMove(ev) {
+      const dy = ev.clientY - startY;
+      if (!dragging && Math.abs(dy) > 4) { dragging = true; card.classList.add('reordering'); }
+      if (!dragging) return;
+      card.style.setProperty('--drag-y', dy + 'px');
+      const cardRect = card.getBoundingClientRect();
+      const cardMid = cardRect.top + cardRect.height / 2;
+      for (const sib of pinnedLayer.querySelectorAll('.note-card.pinned')) {
+        if (sib === card) continue;
+        const sibRect = sib.getBoundingClientRect();
+        const sibMid = sibRect.top + sibRect.height / 2;
+        const cardIsBefore = !!(card.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING);
+        if (cardIsBefore && cardMid > sibMid) sib.after(card);
+        else if (!cardIsBefore && cardMid < sibMid) sib.before(card);
+      }
+    }
+    function onUp() {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      setInteracting(false);
+      card.classList.remove('reordering');
+      card.style.removeProperty('--drag-y');
+      if (dragging) {
+        const orderedNotes = [...pinnedLayer.querySelectorAll('.note-card.pinned')]
+          .map((el) => getNote(el.dataset.id));
+        let cursor = 0;
+        notes = notes.map((n) => (n.pinned ? orderedNotes[cursor++] : n));
+        saveBoard();
+      } else if (e.target.closest('.note-body') && refs.editEl.hidden) {
+        enterEditMode(note, refs);
+      }
+    }
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
   }
 
   // ---------------- color popover ----------------
@@ -798,7 +1199,9 @@
     if (currentPopover) { currentPopover.remove(); currentPopover = null; }
   }
 
-  function openColorPopover(note, anchorEl) {
+  // Shared by note and zone color pickers — the popover itself doesn't
+  // care what it's coloring, just hands the picked key to onPick.
+  function openColorPopover(anchorEl, onPick) {
     closeAnyOpenPopover();
     const pop = colorPopoverTemplate.content.firstElementChild.cloneNode(true);
     const rect = anchorEl.getBoundingClientRect();
@@ -809,9 +1212,7 @@
       e.stopPropagation();
       const btn = e.target.closest('button[data-color]');
       if (!btn) return;
-      note.color = btn.dataset.color;
-      saveBoard();
-      refreshNoteColor(note);
+      onPick(btn.dataset.color);
       closeAnyOpenPopover();
     });
     document.body.appendChild(pop);
@@ -838,6 +1239,15 @@
     const a = getNote(conn.from), b = getNote(conn.to);
     const refs = connectorRefs.get(conn.id);
     if (!a || !b || !refs) return;
+    // A pinned note has left the canvas for a fixed screen-space corner
+    // (see "pinned notes"), so its board-space x/y is a frozen, stale
+    // position — drawing a line to it would point at nowhere meaningful.
+    // Hide the connector (and its label) rather than delete it: the
+    // relationship comes back automatically as soon as the note unpins.
+    const hide = a.pinned || b.pinned;
+    refs.g.style.display = hide ? 'none' : '';
+    refs.labelEl.style.display = hide ? 'none' : '';
+    if (hide) return;
     const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
     const bx = b.x + b.w / 2, by = b.y + b.h / 2;
     const { d, mid } = quadPath(ax, ay, bx, by);
@@ -849,6 +1259,10 @@
     refs.delX1.setAttribute('x2', mid.x + 3); refs.delX1.setAttribute('y2', mid.y + 3);
     refs.delX2.setAttribute('x1', mid.x - 3); refs.delX2.setAttribute('y1', mid.y + 3);
     refs.delX2.setAttribute('x2', mid.x + 3); refs.delX2.setAttribute('y2', mid.y - 3);
+    // Offset below the exact midpoint so the label doesn't sit under the
+    // delete-× that appears there on hover.
+    refs.labelEl.style.left = mid.x + 'px';
+    refs.labelEl.style.top = (mid.y + 16) + 'px';
   }
 
   function updateConnectorsForNote(noteId) {
@@ -863,7 +1277,7 @@
     connectors.splice(idx, 1);
     saveConnectors();
     const refs = connectorRefs.get(conn.id);
-    if (refs) refs.g.remove();
+    if (refs) { refs.g.remove(); refs.labelEl.remove(); }
     connectorRefs.delete(conn.id);
   }
 
@@ -888,7 +1302,17 @@
     delX2.setAttribute('class', 'connector-delete-x');
     g.append(hit, line, delBg, delX1, delX2);
     connectorLayer.appendChild(g);
-    const refs = { g, hit, line, delBg, delX1, delX2 };
+
+    // A plain HTML div, not SVG text — it lives in .board-inner alongside
+    // note cards and zones, so it just uses board-space x/y directly and
+    // rides the same pan/zoom transform for free, same as they do.
+    const labelEl = document.createElement('div');
+    labelEl.className = 'connector-label';
+    labelEl.spellcheck = false;
+    labelEl.textContent = conn.label || '';
+    boardInner.appendChild(labelEl);
+
+    const refs = { g, hit, line, delBg, delX1, delX2, labelEl };
     connectorRefs.set(conn.id, refs);
     updateConnectorPath(conn);
 
@@ -897,6 +1321,35 @@
     delBg.addEventListener('click', onDeleteClick);
     delX1.addEventListener('click', onDeleteClick);
     delX2.addEventListener('click', onDeleteClick);
+
+    // The label lives outside the SVG group it's conceptually part of, so
+    // its own hover state can't be reached with a CSS sibling selector —
+    // mirror the group's hover into a class on the label by hand instead.
+    // Both elements need their OWN enter/leave pair, not just the group's:
+    // the label visually overlaps the group's hit-path, so moving the
+    // mouse from the path onto the label crosses out of `g`'s subtree
+    // (label isn't a descendant of it) and fires `g`'s pointerleave right
+    // as the cursor arrives — hiding the very label being moved onto. The
+    // label's own pointerenter fires immediately after in the same tick
+    // and re-adds the class, so it settles visible before the next paint.
+    const showLabelHint = () => labelEl.classList.add('hint-visible');
+    const hideLabelHint = () => labelEl.classList.remove('hint-visible');
+    g.addEventListener('pointerenter', showLabelHint);
+    g.addEventListener('pointerleave', hideLabelHint);
+    labelEl.addEventListener('pointerenter', showLabelHint);
+    labelEl.addEventListener('pointerleave', hideLabelHint);
+    labelEl.addEventListener('pointerdown', (e) => e.stopPropagation());
+    labelEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (labelEl.getAttribute('contenteditable') === 'true') return;
+      beginInlineTextEdit(labelEl);
+    });
+    labelEl.addEventListener('blur', () => {
+      labelEl.setAttribute('contenteditable', 'false');
+      conn.label = labelEl.textContent.trim();
+      labelEl.textContent = conn.label;
+      saveConnectors();
+    });
 
     return refs;
   }
@@ -907,7 +1360,7 @@
       toast('Already connected');
       return;
     }
-    const conn = { id: uid(), from: fromId, to: toId };
+    const conn = { id: uid(), from: fromId, to: toId, label: '' };
     connectors.push(conn);
     saveConnectors();
     createConnectorDOM(conn);
@@ -918,6 +1371,7 @@
   function openExpand(note) {
     expandedId = note.id;
     expandCard.dataset.color = note.color;
+    el('expandPinBtn').classList.toggle('active', !!note.pinned);
     expandRender.innerHTML = renderMarkdown(note.content);
     expandRender.hidden = false;
     expandEdit.hidden = true;
@@ -945,6 +1399,8 @@
     expandRender.hidden = false;
     const refs = noteRefs.get(note.id);
     if (refs && refs.editEl.hidden) refs.renderEl.innerHTML = renderMarkdown(note.content);
+    if (activeTagHighlight) applyTagHighlight();
+    refreshStats();
   }
 
   function closeExpand() {
@@ -953,9 +1409,13 @@
     expandedId = null;
   }
 
-  expandRender.addEventListener('click', () => {
+  expandRender.addEventListener('click', (e) => {
+    const cb = e.target.closest('.task-checkbox');
+    const tagEl = e.target.closest('.tag-pill');
     const note = getNote(expandedId);
     if (!note) return;
+    if (cb) { toggleChecklistLine(note, Number(cb.dataset.task)); return; }
+    if (tagEl) { toggleTagHighlight(tagEl.dataset.tag); return; }
     expandRender.hidden = true;
     expandEdit.hidden = false;
     expandEdit.value = note.content;
@@ -968,10 +1428,16 @@
   expandColorDot.addEventListener('click', (e) => {
     e.stopPropagation();
     const note = getNote(expandedId);
-    if (note) openColorPopover(note, expandColorDot);
+    if (note) openColorPopover(expandColorDot, (color) => {
+      note.color = color;
+      saveBoard();
+      refreshNoteColor(note);
+    });
   });
+  el('expandPinBtn').addEventListener('click', () => { const n = getNote(expandedId); if (n) toggleNotePinned(n); });
   el('expandCopyBtn').addEventListener('click', () => { const n = getNote(expandedId); if (n) copyNoteText(n); });
   el('expandExportBtn').addEventListener('click', () => { const n = getNote(expandedId); if (n) exportNote(n); });
+  el('expandChainBtn').addEventListener('click', () => { const n = getNote(expandedId); if (n) exportConnectorChain(n); });
   el('expandDeleteBtn').addEventListener('click', () => { const n = getNote(expandedId); if (n) deleteNote(n); });
   el('expandCloseBtn').addEventListener('click', closeExpand);
   expandOverlay.addEventListener('click', (e) => { if (e.target === expandOverlay) closeExpand(); });
@@ -980,6 +1446,26 @@
 
   el('newBtn').addEventListener('click', () => createNoteAtViewportCenter());
   el('emptyNewBtn').addEventListener('click', () => createNoteAtViewportCenter());
+
+  el('templateBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeAnyOpenPopover();
+    const pop = templatePopoverTemplate.content.firstElementChild.cloneNode(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    pop.style.position = 'fixed';
+    pop.style.left = rect.left + 'px';
+    pop.style.top = (rect.bottom + 8) + 'px';
+    pop.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const btn = ev.target.closest('button[data-template]');
+      if (!btn) return;
+      createNoteAtViewportCenter(NOTE_TEMPLATES[btn.dataset.template] || '');
+      closeAnyOpenPopover();
+    });
+    document.body.appendChild(pop);
+    currentPopover = pop;
+    setTimeout(() => document.addEventListener('click', closeAnyOpenPopover, { once: true }), 0);
+  });
 
   el('pasteBtn').addEventListener('click', async () => {
     try {
@@ -1055,6 +1541,7 @@
         color: ACCENTS.includes(n.color) ? n.color : pick(ACCENTS),
         shape: SHAPES.includes(n.shape) ? n.shape : pick(SHAPES),
         rot: typeof n.rot === 'number' ? n.rot : randomRot(),
+        pinned: !!n.pinned,
         createdAt: n.createdAt || Date.now(),
         updatedAt: n.updatedAt || Date.now(),
       }));
@@ -1065,17 +1552,19 @@
         w: typeof z.w === 'number' ? z.w : 560,
         h: typeof z.h === 'number' ? z.h : 380,
         label: typeof z.label === 'string' && z.label.trim() ? z.label : 'Untitled',
+        color: ACCENTS.includes(z.color) ? z.color : undefined,
       })) : zones;
       const noteIds = new Set(notes.map((n) => n.id));
       connectors = incomingConnectors
         .filter((c) => noteIds.has(c.from) && noteIds.has(c.to))
-        .map((c) => ({ id: c.id || uid(), from: c.from, to: c.to }));
+        .map((c) => ({ id: c.id || uid(), from: c.from, to: c.to, label: typeof c.label === 'string' ? c.label : '' }));
       saveBoard();
       saveZones();
       saveConnectors();
       boardInner.innerHTML = '';
       connectorLayer.innerHTML = '';
       boardInner.appendChild(connectorLayer);
+      pinnedLayer.innerHTML = '';
       noteRefs.clear();
       zoneRefs.clear();
       connectorRefs.clear();
@@ -1083,6 +1572,7 @@
       for (const n of notes) createNoteDOM(n);
       for (const c of connectors) createConnectorDOM(c);
       maybeShowEmptyHint();
+      syncOverlays();
       fitToContent(true);
       toast('Backup restored');
     };
@@ -1096,11 +1586,14 @@
     frame.style.zIndex = String(zoneZCounter);
   }
 
-  function beginRenameZone(labelEl) {
-    labelEl.setAttribute('contenteditable', 'true');
-    labelEl.focus();
+  // Shared by zone-label rename and connector-label edit — both are a
+  // plain contenteditable span entered by clicking it, focused with
+  // everything selected so typing replaces rather than appends.
+  function beginInlineTextEdit(el) {
+    el.setAttribute('contenteditable', 'true');
+    el.focus();
     const range = document.createRange();
-    range.selectNodeContents(labelEl);
+    range.selectNodeContents(el);
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
@@ -1111,9 +1604,45 @@
     if (idx === -1) return;
     zones.splice(idx, 1);
     saveZones();
+    syncOverlays();
     const refs = zoneRefs.get(zone.id);
     if (refs) refs.frame.remove();
     zoneRefs.delete(zone.id);
+  }
+
+  // Separate from deleteZone() (used by the × button, no undo — matches
+  // its existing, deliberately terse behavior) because dragging onto the
+  // trash is much easier to trigger by accident than clicking a small ×,
+  // so it gets the same undo-toast safety net deleteNote() already has.
+  function deleteZoneWithUndo(zone) {
+    const idx = zones.findIndex((z) => z.id === zone.id);
+    if (idx === -1) return;
+    zones.splice(idx, 1);
+    saveZones();
+    syncOverlays();
+    const refs = zoneRefs.get(zone.id);
+    if (refs) refs.frame.remove();
+    zoneRefs.delete(zone.id);
+
+    const wrap = document.createElement('span');
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.gap = '10px';
+    const label = document.createElement('span');
+    label.textContent = 'Category deleted';
+    const undoBtn = document.createElement('button');
+    undoBtn.textContent = 'Undo';
+    undoBtn.addEventListener('click', () => {
+      zones.splice(Math.min(idx, zones.length), 0, zone);
+      saveZones();
+      const newRefs = createZoneDOM(zone);
+      bringZoneToFront(newRefs.frame);
+      syncOverlays();
+      hideToast();
+    });
+    wrap.appendChild(label);
+    wrap.appendChild(undoBtn);
+    showToast(wrap, 6000);
   }
 
   function createZoneDOM(zone) {
@@ -1124,15 +1653,34 @@
     frame.style.width = zone.w + 'px';
     frame.style.height = zone.h + 'px';
 
+    const labelRow = frame.querySelector('.zone-label-row');
+    const colorDot = frame.querySelector('.zone-color-dot');
     const label = frame.querySelector('.zone-label');
+    const countEl = frame.querySelector('.zone-count');
     const deleteBtn = frame.querySelector('.zone-delete');
     const resizeHandle = frame.querySelector('.zone-resize-handle');
     const edges = frame.querySelectorAll('.zone-edge');
     label.textContent = zone.label;
+    if (zone.color) {
+      frame.dataset.color = zone.color;
+      colorDot.style.background = `var(--accent-${zone.color})`;
+      colorDot.style.borderColor = 'transparent';
+    }
 
-    const refs = { frame, label };
+    const refs = { frame, label, countEl, colorDot };
     zoneRefs.set(zone.id, refs);
     boardInner.insertBefore(frame, boardInner.firstChild);
+
+    colorDot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openColorPopover(colorDot, (color) => {
+        zone.color = color;
+        saveZones();
+        frame.dataset.color = color;
+        colorDot.style.background = `var(--accent-${color})`;
+        colorDot.style.borderColor = 'transparent';
+      });
+    });
 
     // Grab any edge of the outline (or the label) to move the whole zone —
     // there's no separate header bar now that zones are just a thin line.
@@ -1152,22 +1700,36 @@
           zone.y = startTop + dy;
           frame.style.left = zone.x + 'px';
           frame.style.top = zone.y + 'px';
+          trashZone.classList.add('armed');
+          const overTrash = pointOverTrash(ev.clientX, ev.clientY);
+          frame.classList.toggle('will-delete', overTrash);
+          trashZone.classList.toggle('hover', overTrash);
         }
       }
-      function onUp() {
+      function onUp(ev) {
         document.removeEventListener('pointermove', onMove);
         document.removeEventListener('pointerup', onUp);
         setInteracting(false);
-        if (dragging) saveZones();
-        else if (isLabel) beginRenameZone(label);
+        trashZone.classList.remove('armed', 'hover');
+        if (dragging && pointOverTrash(ev.clientX, ev.clientY)) {
+          deleteZoneWithUndo(zone);
+          return;
+        }
+        frame.classList.remove('will-delete');
+        if (dragging) { saveZones(); syncOverlays(); }
+        else if (isLabel) beginInlineTextEdit(label);
       }
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
     }
     edges.forEach((edge) => edge.addEventListener('pointerdown', (e) => startZoneMove(e, false)));
-    label.addEventListener('pointerdown', (e) => {
+    // Grabbing the row moves the zone whether the pointer landed on the
+    // label text or the count badge beside it; only a no-movement click
+    // that actually started on the label itself enters rename mode.
+    labelRow.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.zone-color-dot')) return;
       if (label.getAttribute('contenteditable') === 'true') return;
-      startZoneMove(e, true);
+      startZoneMove(e, !!e.target.closest('.zone-label'));
     });
 
     label.addEventListener('blur', () => {
@@ -1198,6 +1760,7 @@
         document.removeEventListener('pointerup', onUp);
         setInteracting(false);
         saveZones();
+        syncOverlays();
       }
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
@@ -1217,6 +1780,7 @@
     saveZones();
     const refs = createZoneDOM(zone);
     bringZoneToFront(refs.frame);
+    syncOverlays();
   });
 
   // ---------------- init ----------------
@@ -1225,6 +1789,7 @@
   notes.forEach((n, i) => createNoteDOM(n, Math.min(i, 8) * 40));
   for (const c of connectors) createConnectorDOM(c);
   maybeShowEmptyHint();
+  syncOverlays();
   // Only auto-fit if there's actually something to frame — with no preset
   // zones any more, a brand-new board has zero notes and zero zones, and
   // fitToContent() would otherwise show a "Nothing to fit yet" toast on

@@ -154,6 +154,33 @@ textarea, input { font-family: inherit; color: inherit; }
 
 .connector-drawing { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.8; pointer-events: none; }
 
+/* A plain HTML label riding the same pan/zoom transform as notes/zones
+   (see createConnectorDOM in app.js) — not SVG text, so it can just be a
+   contenteditable div like .zone-label already is. Sits just above the
+   connector layer (z-index 20) and below notes (50+), same occlusion
+   logic as the line itself. */
+.connector-label {
+  position: absolute;
+  z-index: 21;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  cursor: text;
+  outline: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.connector-label:not(:empty) { opacity: 0.9; pointer-events: auto; }
+.connector-label.hint-visible:empty { opacity: 0.5; pointer-events: auto; }
+.connector-label.hint-visible:empty::before { content: "+ label"; }
+.connector-label[contenteditable="true"] { opacity: 1 !important; pointer-events: auto; color: var(--text); }
+
 /* Subtle "double-click to drop a note here" affordance that follows the
    cursor over empty board space — replaces trying to detect a mid-
    double-click state (there's no such browser event) with a lighter,
@@ -188,6 +215,17 @@ textarea, input { font-family: inherit; color: inherit; }
   border-radius: 10px;
   pointer-events: none;
 }
+/* Opt-in only — zones stay the plain grey outline by default (see the
+   "Design constraints" note above about zones deliberately not being a
+   filled/colored box). Picking a color just thickens the top edge into a
+   slim accent, the same restraint notes already use instead of a fill. */
+.zone-frame[data-color] { border-top-width: 3px; }
+.zone-frame[data-color="clay"]  { border-top-color: var(--accent-clay); }
+.zone-frame[data-color="ink"]   { border-top-color: var(--accent-ink); }
+.zone-frame[data-color="moss"]  { border-top-color: var(--accent-moss); }
+.zone-frame[data-color="plum"]  { border-top-color: var(--accent-plum); }
+.zone-frame[data-color="ochre"] { border-top-color: var(--accent-ochre); }
+.zone-frame[data-color="berry"] { border-top-color: var(--accent-berry); }
 
 .zone-edge {
   position: absolute;
@@ -199,24 +237,52 @@ textarea, input { font-family: inherit; color: inherit; }
 .zone-edge.edge-left   { left: -5px; top: 8px; bottom: 8px; width: 10px; }
 .zone-edge.edge-right  { right: -5px; top: 8px; bottom: 8px; width: 10px; }
 
-.zone-label {
+.zone-label-row {
   position: absolute;
   top: -9px;
   left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   pointer-events: auto;
   cursor: move;
+  background: var(--bg);
+  padding: 0 6px;
+}
+/* An empty ring when the zone has no color yet (an invitation to pick
+   one), filled in solid once it does — same visual language as picking
+   "no color" vs. a color for a note. */
+.zone-color-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--muted);
+  background: transparent;
+  flex: none;
+}
+.zone-color-dot:hover { transform: scale(1.3); }
+
+.zone-label {
   font-family: var(--font-mono);
   font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
-  background: var(--bg);
-  padding: 0 6px;
   outline: none;
   min-width: 16px;
 }
-.zone-label[contenteditable="true"] { color: var(--text); }
+.zone-label[contenteditable="true"] { color: var(--text); cursor: text; }
+/* Read-only note count for this zone — a sibling of .zone-label rather
+   than text appended inside it, so it can never get swept up into the
+   contenteditable rename and saved as part of the label. */
+.zone-count {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--muted);
+  opacity: 0.65;
+}
+.zone-count:empty { display: none; }
 
 .zone-delete {
   position: absolute;
@@ -339,11 +405,33 @@ textarea, input { font-family: inherit; color: inherit; }
 
 /* ---------------- zoom control ---------------- */
 
-.zoom-control {
+/* Wraps the zoom control and the stats pill so they sit side by side off
+   the same right edge, without either one needing to know the other's
+   (variable, text-dependent) width to avoid overlapping it. */
+.bottom-right-cluster {
   position: fixed;
   right: 16px;
   bottom: 16px;
   z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-pill {
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  padding: 7px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.zoom-control {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -373,6 +461,153 @@ textarea, input { font-family: inherit; color: inherit; }
   color: var(--muted);
   min-width: 38px;
   text-align: center;
+}
+
+/* ---------------- trash zone ---------------- */
+
+/* Mirrors .zoom-control's bottom-right pill, on the opposite corner.
+   Two escalating states as a note/zone is dragged: "armed" (any drag in
+   progress — just proves the target exists) and "hover" (currently over
+   it — about to delete on release). See pointOverTrash()/the drag onMove
+   handlers in app.js. */
+.trash-zone {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 40;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.trash-zone.armed {
+  color: var(--danger);
+  border-color: var(--danger);
+  transform: scale(1.08);
+}
+.trash-zone.hover {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+  transform: scale(1.24);
+}
+
+/* Applied to the card/zone actually being dragged while it's over the
+   trash, so releasing feels like it's already halfway gone rather than
+   a surprise disappearance. */
+.note-card.will-delete {
+  opacity: 0.35;
+  transform: scale(0.82);
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+.zone-frame.will-delete {
+  opacity: 0.3;
+  border-color: var(--danger);
+}
+
+/* ---------------- pinned notes ---------------- */
+
+/* A note's card is a position:absolute child of .board-inner, which has
+   `transform` applied for pan/zoom — and per the CSS spec, an ancestor
+   with `transform` becomes the containing block for position:fixed
+   descendants too, not just absolute ones. So a pinned card can't just
+   flip to `position:fixed` while staying inside .board-inner; it would
+   still be positioned relative to the transformed box and pan/zoom right
+   along with everything else, defeating the point. toggleNotePinned() in
+   app.js physically moves the element to #pinnedLayer (a sibling of
+   .board, outside the transformed subtree entirely) instead. */
+.pinned-layer {
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  pointer-events: none;
+}
+.note-card.pinned {
+  position: static;
+  flex: none;
+  width: 230px;
+  height: 190px;
+  pointer-events: auto;
+  transform: none !important;
+}
+.note-card.pinned .note-resize-handle,
+.note-card.pinned .note-connect-handle { display: none; }
+
+/* Reordering within the pinned column: the dragged card follows the
+   cursor vertically while its siblings, being ordinary flex items, just
+   snap into place as startPinnedReorder() (app.js) reorders the DOM live.
+   Needs its own higher-specificity rule rather than an inline style,
+   since .note-card.pinned's own `transform: none !important` above would
+   otherwise beat a plain inline transform outright. */
+.note-card.pinned.reordering {
+  transform: translateY(var(--drag-y, 0px)) !important;
+  z-index: 10;
+}
+
+.note-action.active { opacity: 1; color: var(--accent); }
+
+/* ---------------- minimap ---------------- */
+
+/* A spatial thumbnail, not a text list — deliberately, see "No sidebar,
+   no note list" in CLAUDE.md. Dots carry no labels, just position and
+   note color, so this reads as "where is everything" rather than
+   reintroducing the rejected sidebar. Hidden entirely when the board is
+   empty, same as .empty-hint. */
+.minimap {
+  position: fixed;
+  top: 64px;
+  left: 16px;
+  width: 168px;
+  height: 112px;
+  z-index: 40;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.minimap-content {
+  position: absolute;
+  inset: 8px;
+}
+.minimap-dot {
+  position: absolute;
+  width: 6px;
+  height: 5px;
+  border-radius: 1.5px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+.minimap-zone-rect {
+  position: absolute;
+  border: 1px solid var(--zone-line);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+.minimap-viewport {
+  position: absolute;
+  border: 1.5px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* ---------------- empty hint ---------------- */
@@ -658,6 +893,18 @@ textarea, input { font-family: inherit; color: inherit; }
 .note-render pre code { background: none; padding: 0; font-size: 0.82em; }
 .note-render ul, .note-render ol { margin: 0.5em 0; padding-left: 1.3em; }
 .note-render li { margin: 0.2em 0; }
+.note-render .task-list { list-style: none; margin: 0.5em 0; padding-left: 0; }
+.note-render .task-item { margin: 0.3em 0; }
+.note-render .task-item label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.note-render .task-checkbox {
+  margin: 0.22em 0 0;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  accent-color: var(--note-accent, var(--accent));
+  cursor: pointer;
+}
+.note-render .task-done { text-decoration: line-through; opacity: 0.55; }
 .note-render blockquote {
   margin: 0.6em 0;
   padding-left: 12px;
@@ -680,6 +927,21 @@ textarea, input { font-family: inherit; color: inherit; }
 }
 .note-render .caps-text { text-transform: uppercase; letter-spacing: 0.03em; }
 .note-render a { color: inherit; text-decoration: underline; }
+.tag-pill {
+  cursor: pointer;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.02em 0.4em;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.tag-pill:hover { background: var(--accent-soft-2); }
+
+/* Clicking a tag spotlights every note that has it — everything else
+   dims instead of being hidden, so board layout/position stays legible
+   while you're scanning for the match. */
+.note-card.tag-dimmed { opacity: 0.25; }
+.note-card.tag-highlighted { box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
 
 .note-resize-handle {
   position: absolute;
@@ -723,6 +985,30 @@ textarea, input { font-family: inherit; color: inherit; }
   border: 1px solid rgba(0, 0, 0, 0.12);
 }
 .color-popover button:hover { transform: scale(1.15); }
+
+/* ---------------- template popover ---------------- */
+
+.template-popover {
+  position: absolute;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: var(--shadow);
+}
+.template-popover button {
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--text);
+}
+.template-popover button:hover { background: var(--panel-2); color: var(--accent); }
 
 /* ---------------- expand overlay ---------------- */
 

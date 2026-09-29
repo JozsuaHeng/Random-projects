@@ -35,6 +35,9 @@
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
         New
       </button>
+      <button class="icon-btn" id="templateBtn" title="New note from a template">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
       <button class="pill-btn" id="pasteBtn" title="Paste clipboard text as a new note">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>
         Paste
@@ -61,11 +64,26 @@
     </div>
   </header>
 
-  <div class="zoom-control" id="zoomControl">
-    <button id="zoomOutBtn" title="Zoom out">−</button>
-    <span id="zoomLabel">100%</span>
-    <button id="zoomInBtn" title="Zoom in">+</button>
+  <div class="bottom-right-cluster">
+    <div class="stats-pill" id="statsPill" hidden></div>
+    <div class="zoom-control" id="zoomControl">
+      <button id="zoomOutBtn" title="Zoom out">−</button>
+      <span id="zoomLabel">100%</span>
+      <button id="zoomInBtn" title="Zoom in">+</button>
+    </div>
   </div>
+
+  <div class="trash-zone" id="trashZone" title="Drag a note or category here to delete it">
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-8 0l1 13a1 1 0 001 1h6a1 1 0 001-1l1-13"/></svg>
+  </div>
+
+  <div class="minimap" id="minimap" hidden title="Board overview — click to jump">
+    <div class="minimap-content" id="minimapContent">
+      <div class="minimap-viewport" id="minimapViewport"></div>
+    </div>
+  </div>
+
+  <div class="pinned-layer" id="pinnedLayer"></div>
 
   <div class="empty-hint" id="emptyHint" hidden>
     <svg viewBox="0 0 24 24" width="28" height="28">
@@ -91,11 +109,17 @@
           <button data-format="caps" title="ALL CAPS">AA</button>
         </div>
         <div class="expand-head-actions" id="expandHeadActions">
+          <button class="note-action" id="expandPinBtn" title="Pin to the corner (stays fixed while you pan/zoom)">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a5 5 0 015 5c0 3.5-5 10-5 10s-5-6.5-5-10a5 5 0 015-5z"/><circle cx="12" cy="7" r="1.6" fill="currentColor" stroke="none"/></svg>
+          </button>
           <button class="note-action" id="expandCopyBtn" title="Copy text">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>
           </button>
           <button class="note-action" id="expandExportBtn" title="Export as .md">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+          </button>
+          <button class="note-action" id="expandChainBtn" title="Export this note + everything connected to it">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8L15.8 7.2M8.2 13.2l7.6 3.6"/></svg>
           </button>
           <button class="note-action danger" id="expandDeleteBtn" title="Delete note">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-8 0l1 13a1 1 0 001 1h6a1 1 0 001-1l1-13"/></svg>
@@ -128,6 +152,9 @@
           <button data-format="caps" title="ALL CAPS">AA</button>
         </div>
         <div class="note-head-actions">
+          <button class="note-action pin-btn" title="Pin to the corner (stays fixed while you pan/zoom)">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a5 5 0 015 5c0 3.5-5 10-5 10s-5-6.5-5-10a5 5 0 015-5z"/><circle cx="12" cy="7" r="1.6" fill="currentColor" stroke="none"/></svg>
+          </button>
           <button class="note-action expand-btn" title="Expand">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H5a1 1 0 00-1 1v4M15 4h4a1 1 0 011 1v4M9 20H5a1 1 0 01-1-1v-4M15 20h4a1 1 0 001-1v-4"/></svg>
           </button>
@@ -159,13 +186,25 @@
     </div>
   </template>
 
+  <template id="templatePopoverTemplate">
+    <div class="template-popover">
+      <button data-template="blank">Blank note</button>
+      <button data-template="meeting">Meeting notes</button>
+      <button data-template="todo">To-do list</button>
+    </div>
+  </template>
+
   <template id="zoneTemplate">
     <div class="zone-frame">
       <span class="zone-edge edge-top" title="Drag to move this zone"></span>
       <span class="zone-edge edge-right" title="Drag to move this zone"></span>
       <span class="zone-edge edge-bottom" title="Drag to move this zone"></span>
       <span class="zone-edge edge-left" title="Drag to move this zone"></span>
-      <span class="zone-label" spellcheck="false"></span>
+      <span class="zone-label-row">
+        <button class="zone-color-dot" title="Change zone color"></button>
+        <span class="zone-label" spellcheck="false"></span>
+        <span class="zone-count"></span>
+      </span>
       <button class="zone-delete" title="Remove this zone">
         <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>

@@ -172,6 +172,311 @@ cases at blur time that would be worth the complexity. No undo toast
 here (unlike the explicit trash-button path) since there was never
 anything written to lose.
 
+### Trash zone: drag a note or category onto it to delete it
+
+A small circular button, bottom-left (`#trashZone`, mirrors `.zoom-
+control`'s position on the opposite corner). `pointOverTrash()` hit-tests
+the pointer against its bounding rect with 16px of padding (a small
+circular target is otherwise hard to actually land on mid-drag). Both the
+note-card drag handler and `startZoneMove()` (zones) call it from their
+`onMove`, toggling `.armed` on the trash button the moment a drag starts
+(proves the target exists) and `.hover` + `.will-delete` on the dragged
+item itself once the pointer is actually over it (about to delete on
+release) — then check it again in `onUp` to decide delete-vs-normal-drop.
+**A note dropped on the trash reuses `deleteNote()`** (same undo-toast
+path as its own × button) rather than a separate code path. **Zones get a
+new `deleteZoneWithUndo()`**, parallel to but separate from the existing
+`deleteZone()` (still used by the zone's own × button, still no undo) —
+dragging is easier to trigger by accident than clicking a small ×, so
+only the drag path gets the undo-toast safety net.
+
+### Minimap: spatial overview, not a note list
+
+**This is not the sidebar/note-list `CLAUDE.md` already says was tried
+and rejected** (see "Design constraints" above) — it carries no text, no
+titles, nothing to read, just small colored dots (notes) and thin
+outlines (zones) positioned spatially, plus a rectangle showing the
+current viewport. `#minimap`/`#minimapContent`/`#minimapViewport`, hidden
+whenever there are zero notes and zero zones (same pattern as
+`emptyHint`).
+
+Split into two functions on purpose, for cost reasons:
+- `refreshMinimap()` is the expensive path — recomputes the board-space
+  bounding box over every note + zone, rebuilds the scale/offset mapping
+  (`minimapLayout`), and rebuilds every dot/outline element. Called only
+  when the actual set of notes/zones or their position/size changes
+  (create, delete, drag-end, resize-end, import, init) — **not** on every
+  drag frame.
+- `updateMinimapViewport()` is the cheap path — just repositions the one
+  viewport-rectangle element using the cached `minimapLayout`. Called
+  from inside `applyView()`, so it runs on every pan/zoom frame; it never
+  touches notes/zones so that's affordable.
+
+If a new note/zone mutation is ever added, it needs a `syncOverlays()`
+call at wherever the equivalent `saveBoard()`/`saveZones()` call already
+sits — easy to miss since nothing will error, the minimap (and zone note
+counts, see below) will just silently drift out of sync with the board.
+`syncOverlays()` is `refreshMinimap()` + `refreshZoneCounts()` together,
+since almost every mutation that invalidates one invalidates the other —
+call sites reach for `syncOverlays()`, not the two pieces separately.
+Where a zone is being newly created or undo-restored, create its DOM
+first and call `syncOverlays()` after — `refreshZoneCounts()` looks up
+`zoneRefs`, so calling it before the zone's ref exists silently skips
+that zone's badge for that one call.
+
+Clicking anywhere inside the minimap pans the view so that point becomes
+the new viewport center (zoom unchanged) — the inverse of the
+scale/offset math `refreshMinimap()` computed. This is the one place a
+click-to-jump exists in the whole app; deliberately not extended to
+drag-to-pan-from-the-minimap, to keep it to the one interaction actually
+asked for.
+
+A pinned note (see "Pinned notes" below) is left out of the bounding box
+and dots entirely — same reasoning as `fitToContent()` already excluding
+it: it no longer has a meaningful canvas position.
+
+### Checklists: `- [ ] foo` / `- [x] foo` as clickable checkboxes
+
+Extends `renderMarkdown()` with a rule checked **before** the generic
+bullet rule (`- [ ] foo` would otherwise become a bullet whose text is
+the literal string "[ ] foo"). Consecutive checklist lines group under
+one `<ul class="task-list">`, same `inList` mechanism the plain `ul`/`ol`
+rules already use — `closeList()` needed a `'task'` case added since
+that state doesn't map 1:1 to a closing tag the way `'ul'`/`'ol'` do.
+
+Each rendered checkbox carries `data-task="N"`, N being **the checklist
+line's occurrence order**, not its raw line number. This matters because
+the fenced-code-block collapse earlier in `renderMarkdown()` merges a
+multi-line code block into one placeholder line, which would throw off a
+raw line index for any checklist below it — but never throws off the
+*occurrence count*, since a checklist-looking line that was actually
+inside a fenced block never reached the render loop as its own line
+either way. `toggleChecklistLine()` (in app.js, not the renderer) redoes
+this same skip-fenced-interiors scan directly over `note.content` to
+find the Nth checklist line and flip its `[ ]`/`[x]`, so the two stay in
+sync regardless of what else is in the note.
+
+Checkboxes are wired via **event delegation** on each note's `renderEl`
+(and once on the shared `expandRender`), not a per-checkbox listener —
+the whole render gets rebuilt on every edit, so per-element listeners
+would just leak. `.task-item` is added to the card's drag-initiation
+exclusion list (alongside `.note-action`, `.note-color-dot`, etc.) so
+clicking a checkbox neither starts a card drag nor falls through to
+click-to-edit; `expandRender`'s click handler gets an explicit early
+branch for the same reason, since it otherwise unconditionally enters
+edit mode on any click.
+
+### Zone note counts
+
+A small badge (`.zone-count`) next to a zone's label, showing how many
+notes currently have their **center point** inside the zone's rectangle
+— simplest reasonable membership test, and consistent with zones being
+purely visual (there's still no stored membership list anywhere).
+`computeZoneNoteCount()`/`refreshZoneCounts()` recompute it for every
+zone on every `syncOverlays()` call, same triggers as the minimap.
+
+**The count element is a sibling of `.zone-label`, never text appended
+inside it** — `zone.label`'s blur handler saves `label.textContent`
+verbatim, so if the count were inside that same element it would
+eventually get typed over or saved as literal text the next time
+someone renames the zone. Both now live inside a wrapping
+`.zone-label-row`, which is what actually carries the position/
+background/move-cursor styling that `.zone-label` alone used to carry —
+**any new zone control still needs adding to `zoneControlSelector`** the
+same way this one was (`.zone-label-row`, not `.zone-label`, so the
+count badge is covered too) — see the existing warning above.
+
+### Connector labels
+
+A small text label at a connector's midpoint (offset 16px below the
+exact bezier midpoint, so it doesn't sit under the delete-× that also
+lives there on hover). **Deliberately a plain HTML `<div>`, not SVG
+text** — it's appended to `.board-inner` alongside note cards and zones,
+so it rides the same pan/zoom transform for free using plain board-space
+`left`/`top`, and can just be an ordinary `contenteditable` span reusing
+`beginInlineTextEdit()` (the same helper zone-label renaming uses — the
+two were identical code, factored out rather than duplicated) instead of
+fighting with SVG `foreignObject` or text-editing-in-SVG.
+
+**A real gotcha that cost real debugging time, worth knowing before
+touching this again:** the label is hidden (`opacity:0; pointer-events:
+none`) until its connector is hovered, mirrored via JS since the label
+lives outside the SVG `<g class="connector-group">` it's conceptually
+part of (no CSS sibling selector can reach across that gap). The first
+version only listened for `pointerenter`/`pointerleave` on `g` itself —
+which broke the moment the mouse actually moved from the connector's
+hit-path *onto the label*, because the label visually overlaps the
+hit-path but isn't a descendant of `g`, so that move fires `g`'s
+`pointerleave` right as the cursor arrives, hiding the very label being
+moved onto. Confirmed by scripted testing: `elementFromPoint` correctly
+resolved to the label div, but nothing was clickable there because CSS
+had already flipped it back to `pointer-events: none` by the time the
+click landed. **Fixed by giving the label its own matching
+`pointerenter`/`pointerleave` pair** that re-asserts/clears the same
+`.hint-visible` class — `g`'s pointerleave and the label's pointerenter
+both fire in the same synchronous dispatch when crossing that boundary,
+so the class settles correctly before the next paint either direction.
+If any other overlay element is ever positioned outside the element
+whose hover it's meant to track, expect this same gap and use the same
+fix (both sides own their own enter/leave, not just the "source" side).
+
+Deleting a connector (`deleteConnector()`) also removes `refs.labelEl`,
+not just `refs.g` — easy to forget since the label was bolted on after
+the SVG group already existed. A pinned note (see below) hides its
+connectors *and* their labels together in `updateConnectorPath()`, since
+a connector to a note that's left the canvas has nothing meaningful to
+draw a line — or a label — toward.
+
+### Pinned notes
+
+A note can leave the canvas entirely for a small fixed column in the
+top-right corner (`#pinnedLayer`, below the topbar, mirroring where the
+minimap sits on the opposite side) via a pin button in the note's own
+action row (and the expand overlay's). It stays there — not panning,
+not zooming — until unpinned, at which point it returns to exactly
+where it was (`note.x`/`y`/`w`/`h` are left untouched the whole time
+it's pinned; only the DOM element itself moves between containers).
+
+**Why it has to be a real DOM move, not just a CSS `position: fixed`
+toggle left in place:** `.note-card` is a `position: absolute` child of
+`.board-inner`, which has `transform` applied for pan/zoom. Per the CSS
+spec, an ancestor with `transform` becomes the containing block for
+`position: fixed` descendants too, not just `position: absolute` ones —
+a lesser-known rule most people only learn by hitting it. So a card
+can't just flip to `fixed` while staying inside `.board-inner`; it would
+still be positioned relative to the transformed box and pan/zoom right
+along with everything else, silently defeating the entire point.
+`toggleNotePinned()` in app.js physically re-parents the card between
+`.board-inner` (board-space coordinates restored) and `#pinnedLayer`
+(no coordinates at all — CSS just stacks it in a flex column) instead.
+
+A pinned card gets `transform: none !important` (`.note-card.pinned` in
+style.css) to cancel both its resting tilt and the hover/dragging
+un-tilt transforms — `!important` is rare in this codebase (the global
+`[hidden]` rule is the only other instance) but justified here: without
+it, cascade specificity ties against `.note-card:hover`/`.note-card.
+dragging` would be resolved by source order rather than intent, and a
+fixed HUD element should just never tilt, full stop.
+
+Pinned notes are excluded from: `fitToContent()`'s bounding box,
+`refreshMinimap()`'s bounding box and dots, and `computeZoneNoteCount()`
+— all for the same reason, they no longer have a meaningful canvas
+position. Resizing and drawing new connectors are disabled while pinned
+(the resize handle and connect handle are hidden via CSS) — but the
+card's own pointerdown handler still runs otherwise unchanged, so
+click-to-edit, the color popover, the format toolbar, copy/export/
+delete, and unpinning all keep working exactly as before without needing
+their own pinned-specific branches.
+
+**Reordering within the pinned column.** Dragging a pinned card (from
+the same pointerdown handler above — it now branches to
+`startPinnedReorder()` instead of the canvas-drag path when
+`note.pinned`) doesn't reposition it in board space; it reorders it
+within `#pinnedLayer`. The dragged card gets a live `translateY` offset
+via a `--drag-y` custom property (`.note-card.pinned.reordering` in
+style.css) so it visibly follows the cursor — a plain inline
+`style.transform` wouldn't work here, since `.note-card.pinned`'s own
+`transform: none !important` would beat it outright; `.reordering`'s
+higher selector specificity is what lets it win instead. Its siblings
+are ordinary flex items, so the moment the drag crosses a neighbor's
+vertical midpoint, physically moving the dragged card in the DOM
+(`sib.before()`/`sib.after()`) makes that neighbor snap into the
+vacated slot for free — no manual layout math for anything but the one
+card actually being dragged. On drop, the final order is read straight
+back out of the DOM (`#pinnedLayer`'s current child order) and spliced
+into `notes` at the same array *slots* the pinned notes already
+occupied, leaving every non-pinned note's position in the array alone —
+array order has no visual meaning for canvas notes, so this only needs
+to be "correct," not "preserve intent," for the non-pinned majority.
+
+### Note templates
+
+A small chevron button (`#templateBtn`) beside "New" opens a popover
+(`#templatePopoverTemplate`, same pattern as the color popover) listing
+"Blank note" / "Meeting notes" / "To-do list". Picking one just calls
+`createNoteAtViewportCenter()` with a starter string from the
+`NOTE_TEMPLATES` map instead of `''` — no new creation path, no new note
+fields, the template is purely "different initial text." Templates are
+plain strings (not objects with structure) specifically so they run
+through the exact same edit/save/checklist pipeline as anything a user
+types by hand — a to-do template is just a string that happens to start
+with `- [ ] ` lines, nothing checklist-specific had to know about it.
+
+### Zone accent color
+
+Opt-in only — a zone stays the plain grey outline by default. Picking a
+color (via `.zone-color-dot`, opening the same generalized
+`openColorPopover()` templates/notes already use) just thickens the top
+border into a slim accent (`.zone-frame[data-color]`), the same
+restraint notes use instead of a fill — **deliberately not extending the
+"zones are just a thin line" rule**, since this is additive/opt-in
+rather than a default that could reintroduce the "too obvious" complaint
+zones already went through several rounds to get away from (see "Design
+constraints"). `openColorPopover(anchorEl, onPick)` was generalized from
+note-only to accept a callback specifically to support this — the
+popover itself doesn't know or care whether it's coloring a note or a
+zone.
+
+**The color dot lives inside `.zone-label-row`, not floating on its
+own** — same reasoning as the note-count badge: it needs `pointer-events`
+and its own click handler, and needs to be excluded from the row's
+move-zone `pointerdown` handler (`e.target.closest('.zone-color-dot')`
+returns early there) or clicking it would drag the zone instead of
+opening the popover.
+
+### Connector chain export
+
+`expandChainBtn` (expand overlay only, not the compact card — the
+overlay is already where single-note export lives, and the card's
+action row is crowded enough) bundles a note and everything transitively
+reachable from it via connectors into one `.md` file.
+`collectConnectedNotes()` does a breadth-first walk of the connector
+graph — connectors have no direction in the UI, so both `c.from` and
+`c.to` are followed from whichever id is currently being visited — and
+returns notes in "this one, then what's directly connected, then what's
+connected to that" order, which is what makes the exported file read as
+a chain rather than an arbitrary bag of notes. Bails with a toast instead
+of downloading a useless one-note file if nothing is connected.
+
+### Tags
+
+`#word` in note text renders as a small pill (`.tag-pill`, via a rule
+appended near the end of `inlineMd()`) and is clickable to spotlight
+every note sharing that tag — matching notes stay full-strength,
+everything else dims (`.tag-dimmed`/`.tag-highlighted`), rather than
+non-matches being hidden outright, so the board's layout stays legible
+while scanning. Clicking the same tag again clears it; clicking a
+different tag switches to it. `activeTagHighlight` holds the one active
+tag (lowercased); `noteHasTag()` re-tests it against a note's raw content
+on demand rather than anything being precomputed or cached per note.
+
+**The tag regex runs after the link rule, not before, and requires a
+word-boundary before the `#`** (`(^|\s)#word`, not just `#word`)
+specifically so a URL's own `...#section` fragment — already tucked
+inside an `href="..."` attribute by the time this rule runs — is never
+misread as a tag. If tag matching is ever touched, keep both of those:
+running it earlier, or dropping the boundary requirement, reopens that
+hole.
+
+Newly created/restored notes call `applyTagHighlight()` once at the end
+of `createNoteDOM()` (cheap no-op when nothing's highlighted); a content
+edit re-applies it from `saveAndRender()`/`saveExpandEdit()`, since
+editing a note's text is the one thing that can change whether it
+matches the currently active tag.
+
+### Stats pill
+
+A small `#statsPill` ("N notes · M words") sits to the left of the zoom
+control — both now live inside a shared `.bottom-right-cluster` flex
+container specifically so neither one has to know the other's
+(text-dependent, variable) width to avoid overlapping it; `.zoom-control`
+itself dropped its own `position: fixed` once the wrapper took over that
+job. `refreshStats()` is folded into `syncOverlays()` (covers
+create/delete/import/init for free) but is also called directly from
+`saveAndRender()`/`saveExpandEdit()`, since a plain content edit changes
+the word count without changing anything `syncOverlays()`'s other
+triggers (position, existence) care about.
+
 ### Cursor "create here" ghost
 
 Replaces trying to detect a mid-double-click state, which no browser
