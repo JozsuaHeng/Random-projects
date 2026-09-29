@@ -5,9 +5,13 @@
   const VIEW_KEY = 'nook.view.v2';
   const THEME_KEY = 'nook.theme.v1';
   const OLD_NOTES_KEY = 'nook.notes.v1';
+  const FONT_SCALE_KEY = 'nook.fontScale.v1';
+  const FOCUS_KEY = 'nook.focus.v1';
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const MIN_ZOOM = 0.3;
   const MAX_ZOOM = 2.5;
+  const MIN_FONT_SCALE = 0.8;
+  const MAX_FONT_SCALE = 1.3;
   // Deep, slightly muted tones — deliberately not the "6 basic sticky-note
   // colors." Shapes vary how the accent is applied (stripe/fold/tab) so a
   // board of notes reads as a mixed set of index cards, not a uniform grid.
@@ -30,6 +34,7 @@
   const noteTemplate = el('noteTemplate');
   const colorPopoverTemplate = el('colorPopoverTemplate');
   const templatePopoverTemplate = el('templatePopoverTemplate');
+  const helpPopoverTemplate = el('helpPopoverTemplate');
   const zoneTemplate = el('zoneTemplate');
   const connectorLayer = el('connectorLayer');
   const createGhost = el('createGhost');
@@ -39,6 +44,9 @@
   const minimapContent = el('minimapContent');
   const minimapViewport = el('minimapViewport');
   const statsPill = el('statsPill');
+  const boardSummary = el('boardSummary');
+  const summaryTotals = el('summaryTotals');
+  const summaryZones = el('summaryZones');
 
   const expandOverlay = el('expandOverlay');
   const expandCard = el('expandCard');
@@ -393,6 +401,41 @@
     localStorage.setItem(THEME_KEY, next);
   });
 
+  // ---------------- note text size ----------------
+
+  // Sets the CSS custom property every note's font-size is already
+  // computed from (see .note-render/.note-edit in style.css) — that
+  // variable existed before these buttons did, just with nothing in the
+  // UI ever changing it from its default of 1.
+  function setFontScale(v) {
+    const scale = Math.round(clamp(v, MIN_FONT_SCALE, MAX_FONT_SCALE) * 100) / 100;
+    document.documentElement.style.setProperty('--note-font-scale', scale);
+    localStorage.setItem(FONT_SCALE_KEY, scale);
+  }
+  (function initFontScale() {
+    const saved = parseFloat(localStorage.getItem(FONT_SCALE_KEY));
+    if (!Number.isNaN(saved)) setFontScale(saved);
+  })();
+  el('fontDecBtn').addEventListener('click', () => {
+    const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--note-font-scale')) || 1;
+    setFontScale(current - 0.1);
+  });
+  el('fontIncBtn').addEventListener('click', () => {
+    const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--note-font-scale')) || 1;
+    setFontScale(current + 0.1);
+  });
+
+  // ---------------- focus mode ----------------
+
+  const focusBtn = el('focusBtn');
+  function setFocusMode(on) {
+    document.body.classList.toggle('focus-mode', on);
+    focusBtn.classList.toggle('active', on);
+    localStorage.setItem(FOCUS_KEY, on ? '1' : '0');
+  }
+  setFocusMode(localStorage.getItem(FOCUS_KEY) === '1');
+  focusBtn.addEventListener('click', () => setFocusMode(!document.body.classList.contains('focus-mode')));
+
   // ---------------- view (pan/zoom) ----------------
 
   function applyView() {
@@ -565,10 +608,23 @@
     const contentW = Math.max(1, maxX - minX);
     const contentH = Math.max(1, maxY - minY);
     const box = minimapContent.getBoundingClientRect();
-    const scale = Math.min(box.width / contentW, box.height / contentH);
+    // Scale has to satisfy two things at once: the content has to fit,
+    // AND the viewport rectangle (drawn by updateMinimapViewport, using
+    // this same scale) can never be allowed to exceed the minimap's own
+    // box — which it otherwise would the moment you zoomed out further
+    // than the content actually needed. Capping against the viewport size
+    // at MIN_ZOOM (the most zoomed-out the board can ever be) guarantees
+    // the viewport rect is at its absolute largest exactly when it fills
+    // the minimap edge-to-edge, never beyond it.
+    const maxViewportW = window.innerWidth / MIN_ZOOM;
+    const maxViewportH = window.innerHeight / MIN_ZOOM;
+    const scale = Math.min(
+      box.width / contentW, box.height / contentH,
+      box.width / maxViewportW, box.height / maxViewportH,
+    );
     const offsetX = (box.width - contentW * scale) / 2 - minX * scale;
     const offsetY = (box.height - contentH * scale) / 2 - minY * scale;
-    minimapLayout = { scale, offsetX, offsetY };
+    minimapLayout = { scale, offsetX, offsetY, mapW: box.width, mapH: box.height };
 
     minimapContent.querySelectorAll('.minimap-dot, .minimap-zone-rect').forEach((n) => n.remove());
     for (const z of zones) {
@@ -597,13 +653,22 @@
   // notes/zones at all.
   function updateMinimapViewport() {
     if (!minimapLayout || minimapEl.hidden) return;
-    const { scale, offsetX, offsetY } = minimapLayout;
+    const { scale, offsetX, offsetY, mapW, mapH } = minimapLayout;
     const topLeft = screenToBoard(0, 0);
     const bottomRight = screenToBoard(window.innerWidth, window.innerHeight);
-    minimapViewport.style.left = (topLeft.x * scale + offsetX) + 'px';
-    minimapViewport.style.top = (topLeft.y * scale + offsetY) + 'px';
-    minimapViewport.style.width = Math.max(4, (bottomRight.x - topLeft.x) * scale) + 'px';
-    minimapViewport.style.height = Math.max(4, (bottomRight.y - topLeft.y) * scale) + 'px';
+    const w = Math.max(4, (bottomRight.x - topLeft.x) * scale);
+    const h = Math.max(4, (bottomRight.y - topLeft.y) * scale);
+    // Clamp position only (never the size scale already capped) so the
+    // rectangle can't poke past the minimap's edge just because the
+    // current view isn't centered exactly where the content's own
+    // bounding box is — e.g. panned to one side while zoomed all the
+    // way out.
+    const left = clamp(topLeft.x * scale + offsetX, 0, Math.max(0, mapW - w));
+    const top = clamp(topLeft.y * scale + offsetY, 0, Math.max(0, mapH - h));
+    minimapViewport.style.left = left + 'px';
+    minimapViewport.style.top = top + 'px';
+    minimapViewport.style.width = w + 'px';
+    minimapViewport.style.height = h + 'px';
   }
 
   // ---------------- zone note counts ----------------
@@ -647,10 +712,44 @@
   // Notes/zones changing position, size, or existence affects both the
   // minimap and every zone's count at once — one call at each mutation
   // point instead of remembering to call both separately.
+  // Deterministic, not AI — a plain count-and-list of what's already on
+  // the board, computed the same way the zone-count badges and stats
+  // pill already are (no new membership model, just re-reading notes/
+  // zones/connectors directly each call).
+  function refreshBoardSummary() {
+    boardSummary.hidden = notes.length === 0;
+    if (!notes.length) return;
+    const pinnedCount = notes.filter((n) => n.pinned).length;
+    const parts = [`${notes.length} note${notes.length === 1 ? '' : 's'}`];
+    if (pinnedCount) parts.push(`${pinnedCount} pinned`);
+    if (zones.length) parts.push(`${zones.length} zone${zones.length === 1 ? '' : 's'}`);
+    if (connectors.length) parts.push(`${connectors.length} link${connectors.length === 1 ? '' : 's'}`);
+    summaryTotals.textContent = parts.join(' · ');
+
+    summaryZones.innerHTML = '';
+    for (const z of zones) {
+      const row = document.createElement('div');
+      row.className = 'summary-zone-row';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'summary-zone-name';
+      const dot = document.createElement('span');
+      dot.className = 'summary-zone-dot';
+      if (z.color) { dot.style.background = `var(--accent-${z.color})`; dot.style.opacity = '1'; }
+      const label = document.createElement('span');
+      label.textContent = z.label;
+      nameEl.append(dot, label);
+      const countEl = document.createElement('span');
+      countEl.textContent = String(computeZoneNoteCount(z));
+      row.append(nameEl, countEl);
+      summaryZones.appendChild(row);
+    }
+  }
+
   function syncOverlays() {
     refreshMinimap();
     refreshZoneCounts();
     refreshStats();
+    refreshBoardSummary();
   }
 
   minimapEl.addEventListener('pointerdown', (e) => {
@@ -1279,6 +1378,7 @@
     const refs = connectorRefs.get(conn.id);
     if (refs) { refs.g.remove(); refs.labelEl.remove(); }
     connectorRefs.delete(conn.id);
+    syncOverlays();
   }
 
   function removeConnectorsForNote(noteId) {
@@ -1364,6 +1464,7 @@
     connectors.push(conn);
     saveConnectors();
     createConnectorDOM(conn);
+    syncOverlays();
   }
 
   // ---------------- expand overlay ----------------
@@ -1462,6 +1563,20 @@
       createNoteAtViewportCenter(NOTE_TEMPLATES[btn.dataset.template] || '');
       closeAnyOpenPopover();
     });
+    document.body.appendChild(pop);
+    currentPopover = pop;
+    setTimeout(() => document.addEventListener('click', closeAnyOpenPopover, { once: true }), 0);
+  });
+
+  el('helpBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeAnyOpenPopover();
+    const pop = helpPopoverTemplate.content.firstElementChild.cloneNode(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    // Right-anchored, not left — helpBtn sits at the far right of the
+    // topbar, and a left-anchored popover this wide would run off-screen.
+    pop.style.right = (window.innerWidth - rect.right) + 'px';
+    pop.style.top = (rect.bottom + 8) + 'px';
     document.body.appendChild(pop);
     currentPopover = pop;
     setTimeout(() => document.addEventListener('click', closeAnyOpenPopover, { once: true }), 0);

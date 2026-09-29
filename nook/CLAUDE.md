@@ -212,6 +212,21 @@ Split into two functions on purpose, for cost reasons:
   from inside `applyView()`, so it runs on every pan/zoom frame; it never
   touches notes/zones so that's affordable.
 
+**The scale can't be derived from the content's bounding box alone** —
+that was the original approach, and it looked fine until you zoomed out
+further than the content actually needed, at which point the viewport
+rectangle (sized using that same scale) grew past the minimap's own box
+entirely. Fixed by also capping the scale against the viewport size at
+`MIN_ZOOM` (the most zoomed-out the board can ever go) — since that's
+the largest the viewport rectangle can ever get, forcing it to fit
+guarantees every less-zoomed-out state fits too. `updateMinimapViewport()`
+additionally clamps the rectangle's *position* (never its already-capped
+size) to the minimap's bounds, since the current viewport's center and
+the content's own center aren't necessarily the same point — without
+that, the rectangle could still be the right size and yet poke a few
+pixels past the edge when panned off to one side while zoomed all the
+way out.
+
 If a new note/zone mutation is ever added, it needs a `syncOverlays()`
 call at wherever the equivalent `saveBoard()`/`saveZones()` call already
 sits — easy to miss since nothing will error, the minimap (and zone note
@@ -476,6 +491,49 @@ create/delete/import/init for free) but is also called directly from
 `saveAndRender()`/`saveExpandEdit()`, since a plain content edit changes
 the word count without changing anything `syncOverlays()`'s other
 triggers (position, existence) care about.
+
+### Board summary panel
+
+`#boardSummary`, fixed directly below the minimap (`top: 184px` = the
+minimap's own `top: 64px` + `height: 112px` + an 8px gap — same
+fixed-offset-below-the-thing-above-it approach the minimap already uses
+relative to the brand pill). Shows note/pinned/zone/connector counts and
+a per-zone note-count breakdown — **deterministic, re-reading
+`notes`/`zones`/`connectors` directly on every call**, not an AI-
+generated summary and not backed by its own stored state. `refreshBoardSummary()`
+is folded into `syncOverlays()` like the minimap and zone counts are, so
+it inherited that pattern's blind spot too: connector create/delete
+didn't call `syncOverlays()` at all before this existed (nothing else
+needed to know), so `createConnector()`/`deleteConnector()` both gained
+a `syncOverlays()` call specifically so the "N links" figure here
+doesn't go stale — if a future feature adds another thing this panel
+counts, check whether its create/delete path already calls
+`syncOverlays()` before assuming it will.
+
+### Note text size, focus mode, and the help popover
+
+Three small, independent topbar additions, each a persisted preference
+following the exact same shape as the light/dark theme toggle just above
+them (`initX()` reads `localStorage` once at load, a `setX()` applies +
+persists, a button calls `setX()` on click):
+
+- **Text size** (`#fontDecBtn`/`#fontIncBtn`, plain "A" glyphs at two
+  font-sizes rather than new icons) steps `--note-font-scale` by ±0.1
+  between `MIN_FONT_SCALE`/`MAX_FONT_SCALE`. That CSS variable already
+  drove every note's font-size calc before these buttons existed —
+  nothing before this ever actually changed it from its default.
+- **Focus mode** (`#focusBtn`, toggles `body.focus-mode`) hides only the
+  minimap, board summary, and stats pill. Deliberately does **not** hide
+  the topbar, zoom control, trash, or pinned notes — those are things
+  you'd still need mid-task, not chrome you're trying to get away from a
+  distinction worth keeping if this is ever extended.
+- **Help popover** (`#helpBtn`) is a static list of the handful of things
+  that have no other on-screen hint (the ⌘B/I/U exception, minimap
+  click-to-jump, drag-to-trash, tag spotlighting). **Right-anchored, not
+  left** (`pop.style.right = ...`, unlike the color/template popovers'
+  `pop.style.left = ...`) — it sits at the far right end of the topbar,
+  and a ~240px-wide popover anchored from its left edge there would run
+  off the viewport.
 
 ### Cursor "create here" ghost
 

@@ -81,6 +81,14 @@ body {
 }
 
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* Focus mode — hides the meta/overview chrome (minimap, board summary,
+   stats pill) but deliberately leaves the topbar, zoom control, trash,
+   and pinned notes alone: those are still things you'd need mid-task,
+   not things you're trying to get away from. Toggled via #focusBtn. */
+body.focus-mode #minimap,
+body.focus-mode #boardSummary,
+body.focus-mode #statsPill { display: none; }
 textarea, input { font-family: inherit; color: inherit; }
 
 /* ---------------- board ---------------- */
@@ -284,24 +292,37 @@ textarea, input { font-family: inherit; color: inherit; }
 }
 .zone-count:empty { display: none; }
 
+/* Always at least partly visible — it used to only appear on
+   `.zone-frame:hover`, but the frame's interior has `pointer-events:
+   none` (see above), so hovering the middle of a zone — the natural
+   instinct for a big box — never actually triggers that hover state at
+   all. Only the thin edges/label/resize-handle can trigger it, which
+   made this effectively undiscoverable for anything but a small zone.
+   No hover-gating needed now; hovering the button itself just makes it
+   more obviously "about to delete." */
 .zone-delete {
   position: absolute;
-  top: -10px;
+  top: -11px;
   right: 6px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--muted);
   background: var(--bg);
-  opacity: 0;
-  transition: opacity 0.12s ease;
+  border: 1px solid var(--border);
+  opacity: 0.75;
+  transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
   pointer-events: auto;
 }
-.zone-frame:hover .zone-delete { opacity: 1; }
-.zone-delete:hover { color: var(--danger); }
+.zone-delete:hover {
+  opacity: 1;
+  color: #fff;
+  background: var(--danger);
+  border-color: var(--danger);
+}
 
 .zone-resize-handle {
   position: absolute;
@@ -341,7 +362,13 @@ textarea, input { font-family: inherit; color: inherit; }
   pointer-events: none;
 }
 
+/* Both pills get the same explicit height so they read as sitting on
+   the same line — .topbar-actions' height falls out naturally from its
+   32px icon-btn children plus 6px padding (32+6+6=44), but .brand's own
+   content (a 20px mark + italic serif text) would otherwise land a
+   visibly different height with only its own padding to go on. */
 .brand, .topbar-actions {
+  height: 44px;
   pointer-events: auto;
   display: flex;
   align-items: center;
@@ -354,7 +381,7 @@ textarea, input { font-family: inherit; color: inherit; }
 
 .brand {
   gap: 8px;
-  padding: 8px 16px 8px 12px;
+  padding: 0 16px 0 12px;
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 600;
@@ -398,6 +425,13 @@ textarea, input { font-family: inherit; color: inherit; }
   transition: background 0.12s ease, color 0.12s ease;
 }
 .icon-btn:hover { background: var(--panel-2); color: var(--accent); }
+.icon-btn.active { color: var(--accent); background: var(--accent-soft); }
+
+/* Plain "A" glyphs at two sizes, rather than new icons — the size
+   difference itself is the affordance. */
+.icon-btn.font-small, .icon-btn.font-large { font-family: var(--font-ui); font-weight: 700; }
+.icon-btn.font-small { font-size: 11px; }
+.icon-btn.font-large { font-size: 17px; }
 
 .icon-moon { display: none; }
 :root[data-theme="dark"] .icon-sun { display: none; }
@@ -608,6 +642,63 @@ textarea, input { font-family: inherit; color: inherit; }
   border-radius: 3px;
   pointer-events: none;
   z-index: 2;
+}
+
+/* ---------------- board summary ---------------- */
+
+/* Deterministic, not AI — a plain count-and-list of what's already on
+   the board (see refreshBoardSummary() in app.js), not a generated
+   description. top:184px = minimap's own top (64px) + height (112px) +
+   an 8px gap, same fixed-offset-below-the-thing-above-it approach the
+   minimap itself already uses relative to the brand pill. */
+.board-summary {
+  position: fixed;
+  top: 184px;
+  left: 16px;
+  width: 168px;
+  z-index: 40;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.summary-totals {
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+.summary-zones:not(:empty) {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+.summary-zone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 2px 0;
+}
+.summary-zone-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.summary-zone-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--muted);
+  opacity: 0.4;
 }
 
 /* ---------------- empty hint ---------------- */
@@ -994,21 +1085,52 @@ textarea, input { font-family: inherit; color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 160px;
+  min-width: 200px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 6px;
   box-shadow: var(--shadow);
 }
+/* A small abstract sketch of each template's structure (dashed empty
+   card / a header block + text lines / checkbox rows) sits to the left
+   of the label — the same "sketch, don't fully render" restraint as the
+   minimap's dots, rather than trying to render actual markdown at 10px. */
 .template-popover button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: left;
-  padding: 8px 10px;
+  padding: 6px 10px;
   border-radius: 8px;
   font-size: 12.5px;
   color: var(--text);
 }
 .template-popover button:hover { background: var(--panel-2); color: var(--accent); }
+.tmpl-preview { color: var(--muted); flex: none; }
+.template-popover button:hover .tmpl-preview { color: var(--accent); }
+
+/* ---------------- help popover ---------------- */
+
+.help-popover {
+  position: fixed;
+  z-index: 60;
+  width: 240px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.help-title {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.help-tip { color: var(--text-dim); margin: 5px 0; }
+.help-tip::before { content: "· "; color: var(--accent); font-weight: 700; }
 
 /* ---------------- expand overlay ---------------- */
 
