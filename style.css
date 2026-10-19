@@ -2311,24 +2311,23 @@ body {
 .st-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8, 20, 38, 0.92) 0%, rgba(8, 20, 38, 0.5) 34%, transparent 64%);
+  background: linear-gradient(to bottom, rgba(8, 20, 38, 0.88) 0%, rgba(8, 20, 38, 0.4) 32%, transparent 58%);
   pointer-events: none;
 }
 .st-label {
   left: 14px;
-  bottom: 10px;
+  top: 12px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: #fff;
-  font-family: "Fraunces", serif;
-  font-weight: 600;
-  font-size: 18px;
+  font-family: "Unbounded", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
-.st-pin { width: 15px; height: 15px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45)); }
-.st-pin path { fill: #f0544b; }
-.st-pin-dot { fill: #0b1f38; }
+.st-mark { width: 22px; height: 22px; flex-shrink: 0; border-radius: 6px; box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.5); }
 .tile[data-theme="stateline"] .go { color: #9ec5f4; }
 .tile[data-theme="stateline"] {
   border-color: rgba(57, 135, 229, 0.2);

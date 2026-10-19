@@ -1,9 +1,12 @@
-/* Paycheck Atlas
+/* StateLine
    Light/dark tokens follow the project convention used elsewhere in this
    repo: OS preference by default via @media, overridable by the toggle via
-   [data-theme]. Sequential blue ramp + status colors are the validated
-   default palette from the dataviz skill (references/palette.md) — swap
-   values here if the brand ramp ever changes, nothing else should need to. */
+   [data-theme]. Sequential blue ramp, categorical 8-hue palette, and status
+   colors are the validated default palette from the dataviz skill
+   (references/palette.md) — swap values here if the brand ramp ever
+   changes, nothing else should need to. The 8 categorical hues are
+   assigned in their fixed validated order, one per dock category, in
+   source order below (never cycled/reassigned per the skill's rule). */
 
 :root {
   color-scheme: light;
@@ -38,6 +41,16 @@
   --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --font-display: "Unbounded", var(--font-sans);
+  /* categorical 8-hue palette, light steps, in fixed assigned order */
+  --cat-income: #2a78d6;
+  --cat-local: #eb6834;
+  --cat-disability: #1baf7a;
+  --cat-leave: #eda100;
+  --cat-ui: #e87ba4;
+  --cat-wage: #008300;
+  --cat-reciprocity: #4a3aa7;
+  --cat-workerscomp: #e34948;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,6 +83,14 @@
     --seq-5: #5598e7;
     --seq-6: #86b6ef;
     --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+    --cat-income: #3987e5;
+    --cat-local: #d95926;
+    --cat-disability: #199e70;
+    --cat-leave: #c98500;
+    --cat-ui: #d55181;
+    --cat-wage: #008300;
+    --cat-reciprocity: #9085e9;
+    --cat-workerscomp: #e66767;
   }
 }
 :root[data-theme="dark"] {
@@ -101,12 +122,22 @@
   --seq-5: #5598e7;
   --seq-6: #86b6ef;
   --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  --cat-income: #3987e5;
+  --cat-local: #d95926;
+  --cat-disability: #199e70;
+  --cat-leave: #c98500;
+  --cat-ui: #d55181;
+  --cat-wage: #008300;
+  --cat-reciprocity: #9085e9;
+  --cat-workerscomp: #e66767;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(color-mix(in srgb, var(--text-primary) 7%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
   color: var(--text-primary);
   font-family: var(--font-sans);
   line-height: 1.55;
@@ -120,13 +151,15 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------- header ---------- */
 .top {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; padding: 18px 28px; border-bottom: 1px solid var(--border);
+  gap: 16px; padding: 16px 28px; border-bottom: 1px solid var(--border);
   position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(10px); z-index: 40;
 }
-.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand-text { display: flex; flex-direction: column; gap: 2px; }
+.logo-mark { width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; box-shadow: 0 3px 10px -3px rgba(24, 79, 149, 0.55); }
 .eyebrow { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
-.top h1 { font-size: 1.5rem; }
+.top h1 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; }
 .top-controls { display: flex; align-items: center; gap: 10px; }
 .search-wrap { position: relative; }
 #search {
@@ -344,15 +377,33 @@ button.feature-chip { cursor: pointer; }
 }
 .dock-scrim.is-visible { opacity: 1; pointer-events: auto; }
 
-.dock-header h2 { font-size: 1.6rem; }
-.dock-header .dock-capital { color: var(--text-muted); font-size: 0.86rem; margin-top: 2px; }
-.dock-add-compare {
-  margin-top: 14px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border-strong);
-  border-radius: 999px; padding: 7px 14px; background: var(--bg-sunken); color: var(--text-primary); font-size: 0.84rem; font-weight: 600;
+.dock-header {
+  margin: -24px -24px 22px; padding: 30px 24px 24px; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--accent-ink), var(--accent));
+  background-image: linear-gradient(135deg, var(--accent-ink), var(--accent)),
+    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: auto, 15px 15px;
 }
-.dock-section { margin-top: 26px; }
+.dock-header .eyebrow { color: rgba(255, 255, 255, 0.72); position: relative; }
+.dock-header h2 { font-size: 2rem; color: #fff; position: relative; font-family: var(--font-display); font-weight: 700; letter-spacing: -0.015em; }
+.dock-header .dock-capital { color: rgba(255, 255, 255, 0.82); font-size: 0.86rem; margin-top: 4px; position: relative; }
+.dock-add-compare {
+  margin-top: 16px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px; padding: 7px 14px; background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 0.84rem; font-weight: 600;
+  position: relative; backdrop-filter: blur(4px);
+}
+.dock-add-compare:hover { background: rgba(255, 255, 255, 0.24); }
+.dock-section { margin-top: 24px; padding-left: 14px; border-left: 3px solid var(--border); border-radius: 2px; }
 .dock-section h3 { font-size: 0.98rem; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.dock-section h3 .dock-icon { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; }
+.dock-section h3 .dock-icon { width: 20px; height: 20px; flex-shrink: 0; }
+.dock-cat-income { border-color: var(--cat-income); } .dock-cat-income .dock-icon { color: var(--cat-income); }
+.dock-cat-local { border-color: var(--cat-local); } .dock-cat-local .dock-icon { color: var(--cat-local); }
+.dock-cat-disability { border-color: var(--cat-disability); } .dock-cat-disability .dock-icon { color: var(--cat-disability); }
+.dock-cat-leave { border-color: var(--cat-leave); } .dock-cat-leave .dock-icon { color: var(--cat-leave); }
+.dock-cat-ui { border-color: var(--cat-ui); } .dock-cat-ui .dock-icon { color: var(--cat-ui); }
+.dock-cat-wage { border-color: var(--cat-wage); } .dock-cat-wage .dock-icon { color: var(--cat-wage); }
+.dock-cat-reciprocity { border-color: var(--cat-reciprocity); } .dock-cat-reciprocity .dock-icon { color: var(--cat-reciprocity); }
+.dock-cat-workerscomp { border-color: var(--cat-workerscomp); } .dock-cat-workerscomp .dock-icon { color: var(--cat-workerscomp); }
 .dock-fact { background: var(--bg-sunken); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
 .dock-fact .fact-value { font-family: var(--font-mono); font-weight: 600; font-size: 1.02rem; color: var(--text-primary); }
 .dock-fact .fact-note { font-size: 0.85rem; margin: 6px 0 0; }
@@ -370,6 +421,24 @@ button.feature-chip { cursor: pointer; }
 .badge-critical { background: color-mix(in srgb, var(--critical) 18%, transparent); color: var(--critical); }
 .pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .pill { background: var(--bg-sunken); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; font-size: 0.78rem; }
+
+.bracket-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.84rem; background: var(--bg-sunken); border-radius: 10px; overflow: hidden; }
+.bracket-table caption {
+  caption-side: top; text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-muted); font-weight: 700; padding: 10px 12px 6px;
+}
+.bracket-table th {
+  text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted);
+  padding: 5px 12px 7px; border-bottom: 1px solid var(--border);
+}
+.bracket-table th:last-child, .bracket-table td.bracket-rate { text-align: right; }
+.bracket-table td { padding: 6px 12px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.bracket-table tbody tr:last-child td {
+  border-bottom: none; font-weight: 700; color: var(--text-primary);
+  background: color-mix(in srgb, var(--cat-income) 12%, transparent);
+}
+.bracket-table .bracket-rate { font-family: var(--font-mono); font-weight: 600; color: var(--text-primary); }
+.bracket-flat-note { font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-sunken); border-radius: 10px; padding: 10px 12px; margin-top: 8px; }
 
 /* ---------- compare overlay ---------- */
 .compare-overlay, .modal-overlay {

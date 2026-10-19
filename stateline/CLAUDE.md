@@ -142,6 +142,53 @@ every other project in `ai-slop/` (see `factlas/`, `corporate-radar/`).
   `hidden` attribute (not a class), it needs the same explicit override —
   don't rely on the browser default once you've set `display` in CSS.
 
+## Design system (2026-10-19, "more aesthetic + character" pass)
+
+- **`data.js`**: every taxed state (42 of 51 — all but the 9 no-income-tax
+  states) now has `incomeTax.bracketsSingle`: an array of
+  `{ rate, upTo }` pairs, single-filer, same shape as
+  `FEDERAL.incomeTax.bracketsSingle`. Flat-tax states get a one-entry
+  array (`upTo: null`); progressive states get the full ladder. This
+  powers the real bracket table in the dock — `bracketTableHTML()` in
+  `app.js` renders a `<table>` from it (or a one-line "flat rate" note
+  for a single-entry array, or nothing for a no-tax state). If you ever
+  add a new state field that needs this granularity, follow the same
+  `{ rate, upTo }` shape rather than inventing a new one.
+- **Categorical color system**: the 8 dock sections (income tax, local
+  tax, disability, paid leave, UI, minimum wage, reciprocity, workers'
+  comp) each get one hue from the dataviz skill's validated 8-hue
+  categorical palette, assigned in **fixed source order** (never cycled —
+  see `--cat-*` tokens in `style.css`, light + both dark blocks). Each
+  section's left border and icon (`CATEGORY_ICONS` in `app.js`, via
+  `catIcon()`) pick up that color through a `.dock-cat-*` class on the
+  section wrapper. Adding a 9th section would need a new hue decision,
+  not just reusing one — the skill's categorical slots cap out around 8
+  before CVD-safety guarantees degrade.
+- **Logo mark**: a small rounded-square badge (navy + lighter-blue
+  diagonal wedge, a dashed white line as the literal "state line," a
+  white dot) — inline SVG, duplicated in `index.html`'s header
+  (`.logo-mark`) and in the Quagmire hub tile (`ai-slop/index.html`'s
+  `.st-mark`, inside the tile's own inline map SVG). Keep both copies in
+  sync if the mark ever changes; it's intentionally the same icon in
+  both places for brand continuity between the hub and the app.
+- **Fonts**: `--font-display` (Unbounded, loaded alongside Fraunces/
+  Inter/JetBrains Mono) is reserved for the brand wordmark only — the
+  header `<h1>`, the dock's state-name `<h2>` on its colored banner, and
+  the hub tile's label. Section headings elsewhere (`"Color the map
+  by…"`, `"What do these terms mean?"`, etc.) stay on `--font-serif`
+  (Fraunces) — don't swap those to Unbounded, the pairing is deliberate
+  (Unbounded = brand/identity moments, Fraunces = editorial body
+  headings).
+- **Dock header banner**: `.dock-header` is a full-bleed gradient block
+  (negative-margined to `.dock-inner`'s own padding, so don't change that
+  padding without checking this still lines up) using a fixed brand-blue
+  gradient — deliberately NOT tied to the state's own map color/metric,
+  since the dock can stay open across a metric change and re-deriving the
+  banner color live added complexity for little payoff.
+- **Background texture**: `body` has a very low-opacity dot-grid
+  (`radial-gradient` repeating at 22px) behind everything — subtle on
+  purpose, should read as texture, not pattern, in both themes.
+
 ## Testing this project
 
 No test suite — it's static content + DOM manipulation. The real

@@ -329,11 +329,51 @@ function initCompareModeToggle() {
 
 /* ---------------- dock (state detail) ---------------- */
 function factCard(value, note, extraClass) {
-  return `<div class="dock-fact ${extraClass || ""}"><div class="fact-value">${value}</div>${noteHTML(note)}</div>`;
+  return `<div class="dock-fact ${extraClass || ""}">${value ? `<div class="fact-value">${value}</div>` : ""}${noteHTML(note)}</div>`;
 }
 
 function badge(yes, yesText, noText) {
   return yes ? `<span class="badge badge-yes">${yesText || "Yes"}</span>` : `<span class="badge badge-no">${noText || "No"}</span>`;
+}
+
+/* One icon per dock category, in the dataviz skill's fixed categorical
+   order (see the --cat-* tokens in style.css) — stroke-based line icons
+   so they inherit color via currentColor from the section's accent. */
+const CATEGORY_ICONS = {
+  income: '<circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/><line x1="18" y1="6" x2="6" y2="18"/>',
+  local: '<rect x="4" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="16" y="15" width="4" height="6"/>',
+  disability: '<path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/>',
+  leave: '<rect x="4" y="5" width="16" height="15" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  ui: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 012-2h4a2 2 0 012 2v2"/>',
+  wage: '<circle cx="12" cy="12" r="8"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" stroke="none" fill="currentColor">$</text>',
+  reciprocity: '<path d="M4 8h13M17 8l-3-3M17 8l-3 3M20 16H7M7 16l3-3M7 16l3 3"/>',
+  workerscomp: '<path d="M4 16a8 8 0 0116 0z"/><path d="M2 16h20"/>',
+};
+
+function catIcon(key) {
+  return `<svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${CATEGORY_ICONS[key]}</svg>`;
+}
+
+function bracketTableHTML(brackets) {
+  if (!brackets || !brackets.length) return "";
+  if (brackets.length === 1) {
+    return `<p class="bracket-flat-note">Flat rate — <strong>${brackets[0].rate}%</strong> on all taxable income, no brackets to climb.</p>`;
+  }
+  const rows = brackets.map((b, i) => {
+    const prevUpTo = i === 0 ? 0 : brackets[i - 1].upTo;
+    const range = b.upTo === null
+      ? `Over ${fmtMoney(prevUpTo)}`
+      : i === 0
+        ? `Up to ${fmtMoney(b.upTo)}`
+        : `${fmtMoney(prevUpTo)}–${fmtMoney(b.upTo)}`;
+    return `<tr><td>${range}</td><td class="bracket-rate">${b.rate}%</td></tr>`;
+  }).join("");
+  return `
+    <table class="bracket-table">
+      <caption>Single filer, by taxable income</caption>
+      <thead><tr><th>Bracket</th><th>Rate</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 
 function renderStateDockContent(abbr) {
@@ -349,44 +389,46 @@ function renderStateDockContent(abbr) {
       </button>
     </div>
 
-    <div class="dock-section">
-      <h3>Income tax ${badge(s.incomeTax.type !== "none", s.incomeTax.type === "flat" ? "Flat" : "Progressive", "No income tax")}</h3>
-      ${factCard(s.incomeTax.type === "none" ? "0%" : s.incomeTax.topRate + "%" + (s.incomeTax.type === "flat" ? " flat" : " top rate"), s.incomeTax.notes)}
+    <div class="dock-section dock-cat-income">
+      <h3>${catIcon("income")} Income tax ${badge(s.incomeTax.type !== "none", s.incomeTax.type === "flat" ? "Flat" : "Progressive", "No income tax")}</h3>
+      ${s.incomeTax.type === "none"
+        ? factCard("0%", s.incomeTax.notes)
+        : `${factCard(s.incomeTax.topRate + "%" + (s.incomeTax.type === "flat" ? " flat" : " top rate"), s.incomeTax.notes)}${bracketTableHTML(s.incomeTax.bracketsSingle)}`}
     </div>
 
-    <div class="dock-section">
-      <h3>Local / city income tax ${badge(s.localTax.exists)}</h3>
+    <div class="dock-section dock-cat-local">
+      <h3>${catIcon("local")} Local / city income tax ${badge(s.localTax.exists)}</h3>
       ${factCard(s.localTax.exists ? "Layered on top of state tax" : "None", s.localTax.notes)}
     </div>
 
-    <div class="dock-section">
-      <h3>State disability insurance ${badge(s.disability.has)}</h3>
+    <div class="dock-section dock-cat-disability">
+      <h3>${catIcon("disability")} State disability insurance ${badge(s.disability.has)}</h3>
       ${s.disability.has ? factCard(s.disability.program, (s.disability.employeeRate ? "Employee pays: " + s.disability.employeeRate + ". " : "") + (s.disability.notes || "")) : factCard("Not required", s.disability.notes)}
     </div>
 
-    <div class="dock-section">
-      <h3>Paid family / medical leave ${badge(s.paidLeave.has, s.paidLeave.status === "active" ? "Active" : s.paidLeave.status)}</h3>
+    <div class="dock-section dock-cat-leave">
+      <h3>${catIcon("leave")} Paid family / medical leave ${badge(s.paidLeave.has, s.paidLeave.status === "active" ? "Active" : s.paidLeave.status)}</h3>
       ${s.paidLeave.has ? factCard(s.paidLeave.program, (s.paidLeave.employeeRate ? "Employee pays: " + s.paidLeave.employeeRate + ". " : "") + (s.paidLeave.notes || "")) : factCard("No program", s.paidLeave.notes)}
     </div>
 
-    <div class="dock-section">
-      <h3>Unemployment insurance (employer-paid)</h3>
+    <div class="dock-section dock-cat-ui">
+      <h3>${catIcon("ui")} Unemployment insurance (employer-paid)</h3>
       ${factCard(fmtMoney(s.ui.wageBase) + " wage base", `New-employer rate ${s.ui.newEmployerRate}, full range ${s.ui.rateRange}.` + (s.ui.notes ? " " + s.ui.notes : ""))}
     </div>
 
-    <div class="dock-section">
-      <h3>Minimum wage</h3>
+    <div class="dock-section dock-cat-wage">
+      <h3>${catIcon("wage")} Minimum wage</h3>
       ${factCard(s.minWage.rate, s.minWage.notes)}
     </div>
 
-    <div class="dock-section">
-      <h3>Reciprocity & commuter tax rules ${s.reciprocity.convenienceRule ? '<span class="badge badge-critical">Convenience rule</span>' : ""}</h3>
+    <div class="dock-section dock-cat-reciprocity">
+      <h3>${catIcon("reciprocity")} Reciprocity & commuter tax rules ${s.reciprocity.convenienceRule ? '<span class="badge badge-critical">Convenience rule</span>' : ""}</h3>
       ${s.reciprocity.agreements.length ? `<div class="pill-list">${s.reciprocity.agreements.map((a) => `<span class="pill">${STATES[a] ? STATES[a].name : a}</span>`).join("")}</div>` : ""}
       ${factCard(s.reciprocity.agreements.length ? "Reciprocity with " + s.reciprocity.agreements.length + " neighbor" + (s.reciprocity.agreements.length > 1 ? "s" : "") : "No reciprocity agreements", s.reciprocity.notes)}
     </div>
 
-    <div class="dock-section">
-      <h3>Workers' comp & overtime quirks</h3>
+    <div class="dock-section dock-cat-workerscomp">
+      <h3>${catIcon("workerscomp")} Workers' comp & overtime quirks</h3>
       ${factCard("", s.workersComp.notes)}
     </div>
   `;

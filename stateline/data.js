@@ -74,7 +74,7 @@ const FEDERAL = {
 const STATES = {
   AL: {
     name: "Alabama", capital: "Montgomery",
-    incomeTax: { type: "progressive", topRate: 5.0, brackets: 3, notes: "Rates of 2%/4%/5%; the 5% top bracket starts very low ($3,000 single), so most earners are effectively at the top rate." },
+    incomeTax: { type: "progressive", topRate: 5.0, bracketsSingle: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: null }], brackets: 3, notes: "Rates of 2%/4%/5%; the 5% top bracket starts very low ($3,000 single), so most earners are effectively at the top rate." },
     localTax: { exists: true, notes: "Several cities/counties (Birmingham, Bessemer, Gadsden and others) levy an 'occupational tax' of roughly 1–2% on wages earned there — functions like a local payroll tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid family/medical leave program; federal unpaid FMLA only (for eligible employers/employees)." },
@@ -96,7 +96,7 @@ const STATES = {
   },
   AZ: {
     name: "Arizona", capital: "Phoenix",
-    incomeTax: { type: "flat", topRate: 2.5, brackets: 1, notes: "Lowest flat-tax rate in the country, phased in 2023–2024." },
+    incomeTax: { type: "flat", topRate: 2.5, bracketsSingle: [{ rate: 2.5, upTo: null }], brackets: 1, notes: "Lowest flat-tax rate in the country, phased in 2023–2024." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state wage-replacement PFML, but Arizona does mandate accrued paid sick time (Prop 206) for most employers." },
@@ -107,7 +107,7 @@ const STATES = {
   },
   AR: {
     name: "Arkansas", capital: "Little Rock",
-    incomeTax: { type: "progressive", topRate: 3.9, brackets: 3, notes: "Top rate cut several times in recent years, now one of the lower progressive-state rates." },
+    incomeTax: { type: "progressive", topRate: 3.9, bracketsSingle: [{ rate: 2, upTo: 5300 }, { rate: 3.4, upTo: 10600 }, { rate: 3.9, upTo: null }], brackets: 3, notes: "Top rate cut several times in recent years, now one of the lower progressive-state rates." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -118,7 +118,7 @@ const STATES = {
   },
   CA: {
     name: "California", capital: "Sacramento",
-    incomeTax: { type: "progressive", topRate: 13.3, brackets: 10, notes: "Highest top marginal rate in the US: up to 12.3% plus a 1% 'Mental Health Services Tax' surcharge on income over $1M, with no cap on the surcharge." },
+    incomeTax: { type: "progressive", topRate: 13.3, bracketsSingle: [{ rate: 1, upTo: 10756 }, { rate: 2, upTo: 25499 }, { rate: 4, upTo: 40245 }, { rate: 6, upTo: 55866 }, { rate: 8, upTo: 70606 }, { rate: 9.3, upTo: 360659 }, { rate: 10.3, upTo: 432787 }, { rate: 11.3, upTo: 721314 }, { rate: 12.3, upTo: 1000000 }, { rate: 13.3, upTo: null }], brackets: 10, notes: "Highest top marginal rate in the US: up to 12.3% plus a 1% 'Mental Health Services Tax' surcharge on income over $1M, with no cap on the surcharge." },
     localTax: { exists: false, notes: "No broad local income tax (California relies on sales/property tax locally instead)." },
     disability: { has: true, program: "CA State Disability Insurance (SDI)", employeeRate: "1.1% of ALL wages", notes: "Since 2024 the old taxable-wage cap was removed (SB 951) — SDI is now withheld on 100% of wages, no matter how high. Funds both short-term disability and CA's Paid Family Leave below." },
     paidLeave: { has: true, status: "active", program: "CA Paid Family Leave (PFL)", notes: "Up to 8 weeks of wage-replacement leave, funded through the same SDI payroll deduction above — no separate line item on a CA paystub." },
@@ -129,7 +129,7 @@ const STATES = {
   },
   CO: {
     name: "Colorado", capital: "Denver",
-    incomeTax: { type: "flat", topRate: 4.4, brackets: 1, notes: "Flat rate, lowered from 4.55% in 2024; can drop further via a statutory formula when state revenue exceeds caps." },
+    incomeTax: { type: "flat", topRate: 4.4, bracketsSingle: [{ rate: 4.4, upTo: null }], brackets: 1, notes: "Flat rate, lowered from 4.55% in 2024; can drop further via a statutory formula when state revenue exceeds caps." },
     localTax: { exists: false, notes: "No broad local wage income tax, though Denver and a few cities levy a small flat monthly 'Occupational Privilege Tax' (a few dollars/month, not a % of wages)." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "FAMLI (Family and Medical Leave Insurance)", employeeRate: "0.45% (half of the 0.9% total premium)", notes: "Up to 12 weeks (16 for pregnancy complications) of paid leave, started paying benefits in 2024." },
@@ -140,7 +140,7 @@ const STATES = {
   },
   CT: {
     name: "Connecticut", capital: "Hartford",
-    incomeTax: { type: "progressive", topRate: 6.99, brackets: 7, notes: "Top bracket starts at $500,000 (single). A 2024 rate cut lowered the bottom two brackets from 3%→2% and 5%→4.5%." },
+    incomeTax: { type: "progressive", topRate: 6.99, bracketsSingle: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.9, upTo: 500000 }, { rate: 6.99, upTo: null }], brackets: 7, notes: "Top bracket starts at $500,000 (single). A 2024 rate cut lowered the bottom two brackets from 3%→2% and 5%→4.5%." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance (separate from its paid leave program below)." },
     paidLeave: { has: true, status: "active", program: "CT Paid Leave (CTPL)", employeeRate: "0.5%", notes: "Up to 12 weeks paid leave; employee-funded only (no employer contribution)." },
@@ -151,7 +151,7 @@ const STATES = {
   },
   DE: {
     name: "Delaware", capital: "Dover",
-    incomeTax: { type: "progressive", topRate: 6.6, brackets: 7, notes: "Top rate applies above $60,000 — a notably low threshold to hit the top bracket." },
+    incomeTax: { type: "progressive", topRate: 6.6, bracketsSingle: [{ rate: 0, upTo: 2000 }, { rate: 2.2, upTo: 5000 }, { rate: 3.9, upTo: 10000 }, { rate: 4.8, upTo: 20000 }, { rate: 5.2, upTo: 25000 }, { rate: 5.55, upTo: 60000 }, { rate: 6.6, upTo: null }], brackets: 7, notes: "Top rate applies above $60,000 — a notably low threshold to hit the top bracket." },
     localTax: { exists: true, notes: "Wilmington levies its own city wage tax (~1.25% on residents and on nonresidents working there)." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Delaware Paid Leave", notes: "Contributions began 2025, benefits became payable starting Jan 2026: up to 12 weeks combined across parental/family-caregiving/medical leave (6 weeks for medical-only in some cases)." },
@@ -173,7 +173,7 @@ const STATES = {
   },
   GA: {
     name: "Georgia", capital: "Atlanta",
-    incomeTax: { type: "flat", topRate: 5.19, brackets: 1, notes: "Moved from a progressive 6-bracket system to a flat rate in 2024, with small annual cuts scheduled toward ~4.99%." },
+    incomeTax: { type: "flat", topRate: 5.19, bracketsSingle: [{ rate: 5.19, upTo: null }], brackets: 1, notes: "Moved from a progressive 6-bracket system to a flat rate in 2024, with small annual cuts scheduled toward ~4.99%." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -184,7 +184,7 @@ const STATES = {
   },
   HI: {
     name: "Hawaii", capital: "Honolulu",
-    incomeTax: { type: "progressive", topRate: 11.0, brackets: 12, notes: "Highest nominal top state income-tax rate in the US, with the most brackets of any state." },
+    incomeTax: { type: "progressive", topRate: 11.0, bracketsSingle: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: null }], brackets: 12, notes: "Highest nominal top state income-tax rate in the US, with the most brackets of any state." },
     localTax: { exists: false, notes: "No local income tax (Hawaii's counties instead rely heavily on property tax)." },
     disability: { has: true, program: "Hawaii Temporary Disability Insurance (TDI)", employeeRate: "up to 0.5% of wages, capped weekly, employer can require employee to pay up to half the premium", notes: "Mostly employer-funded via approved private plans; no separate paid-family-leave program exists on top of it." },
     paidLeave: { has: false, status: "none", notes: "TDI covers short-term disability only — Hawaii has no separate paid family leave insurance program." },
@@ -195,7 +195,7 @@ const STATES = {
   },
   ID: {
     name: "Idaho", capital: "Boise",
-    incomeTax: { type: "flat", topRate: 5.3, brackets: 1, notes: "Simplified to a flat rate in 2024." },
+    incomeTax: { type: "flat", topRate: 5.3, bracketsSingle: [{ rate: 5.3, upTo: null }], brackets: 1, notes: "Simplified to a flat rate in 2024." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -206,7 +206,7 @@ const STATES = {
   },
   IL: {
     name: "Illinois", capital: "Springfield",
-    incomeTax: { type: "flat", topRate: 4.95, brackets: 1, notes: "Flat rate; the state constitution actually requires a flat (non-graduated) income tax — a 2020 ballot measure to allow graduated rates was rejected by voters." },
+    incomeTax: { type: "flat", topRate: 4.95, bracketsSingle: [{ rate: 4.95, upTo: null }], brackets: 1, notes: "Flat rate; the state constitution actually requires a flat (non-graduated) income tax — a 2020 ballot measure to allow graduated rates was rejected by voters." },
     localTax: { exists: false, notes: "No broad local income tax (though Chicago and others layer on other taxes/fees)." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "accrual-only", notes: "The Paid Leave for All Workers Act (2024) mandates up to 40 hrs/year of accrued paid time off for any reason — a real benefit, but accrued PTO, not wage-replacement insurance like CA/NY/NJ's programs." },
@@ -217,7 +217,7 @@ const STATES = {
   },
   IN: {
     name: "Indiana", capital: "Indianapolis",
-    incomeTax: { type: "flat", topRate: 3.05, brackets: 1, notes: "Scheduled to keep declining toward 2.9% by 2027 under existing statute." },
+    incomeTax: { type: "flat", topRate: 3.05, bracketsSingle: [{ rate: 3.05, upTo: null }], brackets: 1, notes: "Scheduled to keep declining toward 2.9% by 2027 under existing statute." },
     localTax: { exists: true, notes: "Every Indiana county levies its own flat 'county income tax' on top of the state rate, typically 0.5%–3%, collected via the state return." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -228,7 +228,7 @@ const STATES = {
   },
   IA: {
     name: "Iowa", capital: "Des Moines",
-    incomeTax: { type: "flat", topRate: 3.8, brackets: 1, notes: "Moved to a flat rate in 2025, down from a top graduated rate of 8.53% just a few years earlier — one of the fastest tax-structure changes of any state this decade." },
+    incomeTax: { type: "flat", topRate: 3.8, bracketsSingle: [{ rate: 3.8, upTo: null }], brackets: 1, notes: "Moved to a flat rate in 2025, down from a top graduated rate of 8.53% just a few years earlier — one of the fastest tax-structure changes of any state this decade." },
     localTax: { exists: false, notes: "No broad local wage income tax, though some school districts levy a small income-tax surtax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -239,7 +239,7 @@ const STATES = {
   },
   KS: {
     name: "Kansas", capital: "Topeka",
-    incomeTax: { type: "progressive", topRate: 5.58, brackets: 2, notes: "" },
+    incomeTax: { type: "progressive", topRate: 5.58, bracketsSingle: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: null }], brackets: 2, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax (a small local 'intangibles tax' on interest/dividends exists in a few counties, not wages)." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -250,7 +250,7 @@ const STATES = {
   },
   KY: {
     name: "Kentucky", capital: "Frankfort",
-    incomeTax: { type: "flat", topRate: 3.5, brackets: 1, notes: "Flat rate that ratchets DOWN by 0.5 points every couple of years whenever state revenue triggers are met — it was 5% as recently as 2022." },
+    incomeTax: { type: "flat", topRate: 3.5, bracketsSingle: [{ rate: 3.5, upTo: null }], brackets: 1, notes: "Flat rate that ratchets DOWN by 0.5 points every couple of years whenever state revenue triggers are met — it was 5% as recently as 2022." },
     localTax: { exists: true, notes: "Most cities/counties levy an 'occupational license fee' on wages — functions as a local payroll tax, e.g. Louisville is around 2.2% combined." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -261,7 +261,7 @@ const STATES = {
   },
   LA: {
     name: "Louisiana", capital: "Baton Rouge",
-    incomeTax: { type: "flat", topRate: 3.0, brackets: 1, notes: "Moved to a flat 3% in a sweeping 2024 tax-reform package, down from a graduated top rate of 4.25%." },
+    incomeTax: { type: "flat", topRate: 3.0, bracketsSingle: [{ rate: 3, upTo: null }], brackets: 1, notes: "Moved to a flat 3% in a sweeping 2024 tax-reform package, down from a graduated top rate of 4.25%." },
     localTax: { exists: false, notes: "No broad local income tax (Louisiana leans on sales tax locally instead)." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -272,7 +272,7 @@ const STATES = {
   },
   ME: {
     name: "Maine", capital: "Augusta",
-    incomeTax: { type: "progressive", topRate: 7.15, brackets: 3, notes: "" },
+    incomeTax: { type: "progressive", topRate: 7.15, bracketsSingle: [{ rate: 5.8, upTo: 26050 }, { rate: 6.75, upTo: 61600 }, { rate: 7.15, upTo: null }], brackets: 3, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Maine Paid Family and Medical Leave", notes: "Contributions began 2025; benefits became payable starting May 2026. Up to 12 weeks." },
@@ -283,7 +283,7 @@ const STATES = {
   },
   MD: {
     name: "Maryland", capital: "Annapolis",
-    incomeTax: { type: "progressive", topRate: 5.75, brackets: 8, notes: "State rate alone tops out at 5.75%, but see the local 'piggyback' tax below — total can run noticeably higher." },
+    incomeTax: { type: "progressive", topRate: 5.75, bracketsSingle: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 5.75, upTo: null }], brackets: 8, notes: "State rate alone tops out at 5.75%, but see the local 'piggyback' tax below — total can run noticeably higher." },
     localTax: { exists: true, notes: "Every Maryland county (plus Baltimore City) adds its own 'piggyback' income tax of roughly 2.25%–3.2%, collected on the same state return — so your real marginal rate is state + county combined, e.g. up to ~8.95% in some counties." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Maryland FAMLI", notes: "Contributions began July 2025; benefits become payable starting 2026 after a delayed rollout. Up to 12 weeks (24 in some combined cases)." },
@@ -294,7 +294,7 @@ const STATES = {
   },
   MA: {
     name: "Massachusetts", capital: "Boston",
-    incomeTax: { type: "progressive", topRate: 9.0, brackets: 2, notes: "A flat 5% on most income, PLUS a 4% 'Millionaire's Tax' surtax on income over roughly $1,083,150 — effectively a 2-bracket system (5% / 9%)." },
+    incomeTax: { type: "progressive", topRate: 9.0, bracketsSingle: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: null }], brackets: 2, notes: "A flat 5% on most income, PLUS a 4% 'Millionaire's Tax' surtax on income over roughly $1,083,150 — effectively a 2-bracket system (5% / 9%)." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No separate state-mandated short-term disability insurance (covered functionally by the paid leave program below)." },
     paidLeave: { has: true, status: "active", program: "MA Paid Family and Medical Leave (PFML)", employeeRate: "~0.46% of the ~0.88% total premium (employer covers the rest for medical leave at larger employers)", notes: "Up to 26 weeks combined per year across family + medical leave." },
@@ -305,7 +305,7 @@ const STATES = {
   },
   MI: {
     name: "Michigan", capital: "Lansing",
-    incomeTax: { type: "flat", topRate: 4.25, brackets: 1, notes: "" },
+    incomeTax: { type: "flat", topRate: 4.25, bracketsSingle: [{ rate: 4.25, upTo: null }], brackets: 1, notes: "" },
     localTax: { exists: true, notes: "24 Michigan cities levy their own income tax, most around 1% resident/0.5% nonresident — Detroit is highest at 2.4% resident/1.2% nonresident." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "accrual-only", notes: "Michigan's Earned Sick Time Act (2025) mandates accrued paid sick leave, but there is no wage-replacement PFML insurance program." },
@@ -316,7 +316,7 @@ const STATES = {
   },
   MN: {
     name: "Minnesota", capital: "St. Paul",
-    incomeTax: { type: "progressive", topRate: 9.85, brackets: 4, notes: "One of the highest top state rates in the country." },
+    incomeTax: { type: "progressive", topRate: 9.85, bracketsSingle: [{ rate: 5.35, upTo: 31690 }, { rate: 6.8, upTo: 104090 }, { rate: 7.85, upTo: 193240 }, { rate: 9.85, upTo: null }], brackets: 4, notes: "One of the highest top state rates in the country." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "MN Paid Leave", notes: "Contributions began 2025; benefits start being payable January 2026. Up to 12 weeks each for family and medical leave (20 combined max)." },
@@ -327,7 +327,7 @@ const STATES = {
   },
   MS: {
     name: "Mississippi", capital: "Jackson",
-    incomeTax: { type: "flat", topRate: 4.4, brackets: 1, notes: "On a legislated glide path of annual cuts, with a long-run (conditional) target of eventually reaching 0%." },
+    incomeTax: { type: "flat", topRate: 4.4, bracketsSingle: [{ rate: 4.4, upTo: null }], brackets: 1, notes: "On a legislated glide path of annual cuts, with a long-run (conditional) target of eventually reaching 0%." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -338,7 +338,7 @@ const STATES = {
   },
   MO: {
     name: "Missouri", capital: "Jefferson City",
-    incomeTax: { type: "progressive", topRate: 4.7, brackets: 2, notes: "Simplified and cut substantially in recent reforms, with further automatic cuts possible if revenue triggers are met." },
+    incomeTax: { type: "progressive", topRate: 4.7, bracketsSingle: [{ rate: 2, upTo: 1273 }, { rate: 4.7, upTo: null }], brackets: 2, notes: "Simplified and cut substantially in recent reforms, with further automatic cuts possible if revenue triggers are met." },
     localTax: { exists: true, notes: "St. Louis and Kansas City each levy their own 1% earnings tax on residents and on nonresidents working there." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -349,7 +349,7 @@ const STATES = {
   },
   MT: {
     name: "Montana", capital: "Helena",
-    incomeTax: { type: "progressive", topRate: 5.9, brackets: 2, notes: "Simplified from 7 brackets down to 2 in a 2024 reform." },
+    incomeTax: { type: "progressive", topRate: 5.9, bracketsSingle: [{ rate: 4.7, upTo: 20500 }, { rate: 5.9, upTo: null }], brackets: 2, notes: "Simplified from 7 brackets down to 2 in a 2024 reform." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -360,7 +360,7 @@ const STATES = {
   },
   NE: {
     name: "Nebraska", capital: "Lincoln",
-    incomeTax: { type: "progressive", topRate: 5.2, brackets: 3, notes: "On a multi-year statutory glide path cutting the top rate toward 3.99% by 2027." },
+    incomeTax: { type: "progressive", topRate: 5.2, bracketsSingle: [{ rate: 2.46, upTo: 3700 }, { rate: 3.51, upTo: 22170 }, { rate: 5.2, upTo: null }], brackets: 3, notes: "On a multi-year statutory glide path cutting the top rate toward 3.99% by 2027." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -393,7 +393,7 @@ const STATES = {
   },
   NJ: {
     name: "New Jersey", capital: "Trenton",
-    incomeTax: { type: "progressive", topRate: 10.75, brackets: 7, notes: "Top rate ('millionaire's tax') applies above $1,000,000." },
+    incomeTax: { type: "progressive", topRate: 10.75, bracketsSingle: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 35000 }, { rate: 3.5, upTo: 40000 }, { rate: 5.525, upTo: 75000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: null }], brackets: 7, notes: "Top rate ('millionaire's tax') applies above $1,000,000." },
     localTax: { exists: false, notes: "No broad local income tax (New Jersey leans heavily on property tax locally instead — among the highest in the US)." },
     disability: { has: true, program: "NJ Temporary Disability Insurance (TDI)", employeeRate: "varies by year depending on state fund balance (recent years: at or near 0% for many employees as the fund ran a surplus; can rise again)", notes: "Employer-funded share also varies by experience rating." },
     paidLeave: { has: true, status: "active", program: "NJ Family Leave Insurance (FLI)", notes: "Up to 12 weeks, funded through the same wage-deduction mechanism as TDI." },
@@ -404,7 +404,7 @@ const STATES = {
   },
   NM: {
     name: "New Mexico", capital: "Santa Fe",
-    incomeTax: { type: "progressive", topRate: 5.9, brackets: 6, notes: "" },
+    incomeTax: { type: "progressive", topRate: 5.9, bracketsSingle: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 11000 }, { rate: 4.3, upTo: 16000 }, { rate: 4.7, upTo: 210000 }, { rate: 4.9, upTo: 315000 }, { rate: 5.9, upTo: null }], brackets: 6, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program (New Mexico does mandate accrued paid sick leave via the Healthy Workplaces Act)." },
@@ -415,7 +415,7 @@ const STATES = {
   },
   NY: {
     name: "New York", capital: "Albany",
-    incomeTax: { type: "progressive", topRate: 10.9, brackets: 9, notes: "Brackets: 4% / 4.5% / 5.25% / 5.85% / 6.25% / 6.85% / 9.65% / 10.3% / 10.9%, topping out above $25,000,000." },
+    incomeTax: { type: "progressive", topRate: 10.9, bracketsSingle: [{ rate: 4, upTo: 8500 }, { rate: 4.5, upTo: 11700 }, { rate: 5.25, upTo: 13900 }, { rate: 5.85, upTo: 80650 }, { rate: 6.25, upTo: 215400 }, { rate: 6.85, upTo: 1077550 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.3, upTo: 25000000 }, { rate: 10.9, upTo: null }], brackets: 9, notes: "Brackets: 4% / 4.5% / 5.25% / 5.85% / 6.25% / 6.85% / 9.65% / 10.3% / 10.9%, topping out above $25,000,000." },
     localTax: { exists: true, notes: "New York City residents pay a SEPARATE NYC resident income tax (3.078%–3.876%, progressive, on top of the state tax) filed on the same NY return — this is the tax most new NYC employees notice for the first time. Yonkers residents instead pay a 16.75% surcharge calculated on their NY State tax liability (not a separate wage-bracket tax); Yonkers NONresidents who work there pay a small 0.5% earnings tax. Only NYC and Yonkers have this — the rest of NY State has no local income tax." },
     disability: { has: true, program: "NY Disability Benefits Law (DBL)", employeeRate: "max $0.60/week ($31.20/year) — a flat statutory cap, not a % of wages", notes: "Employer pays the rest; unusually small compared to CA/NJ/RI's wage-based SDI." },
     paidLeave: { has: true, status: "active", program: "NY Paid Family Leave (PFL)", employeeRate: "0.432% of wages (2026), capped at $411.91/year", notes: "Up to 12 weeks; funded entirely through this employee payroll deduction." },
@@ -426,7 +426,7 @@ const STATES = {
   },
   NC: {
     name: "North Carolina", capital: "Raleigh",
-    incomeTax: { type: "flat", topRate: 4.25, brackets: 1, notes: "On a legislated multi-year decline, scheduled to keep falling (toward ~3.99% and potentially lower depending on revenue triggers)." },
+    incomeTax: { type: "flat", topRate: 4.25, bracketsSingle: [{ rate: 4.25, upTo: null }], brackets: 1, notes: "On a legislated multi-year decline, scheduled to keep falling (toward ~3.99% and potentially lower depending on revenue triggers)." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -437,7 +437,7 @@ const STATES = {
   },
   ND: {
     name: "North Dakota", capital: "Bismarck",
-    incomeTax: { type: "progressive", topRate: 2.5, brackets: 3, notes: "Lowest top rate of any state that still has a broad-based income tax." },
+    incomeTax: { type: "progressive", topRate: 2.5, bracketsSingle: [{ rate: 0, upTo: 47150 }, { rate: 1.95, upTo: 238200 }, { rate: 2.5, upTo: null }], brackets: 3, notes: "Lowest top rate of any state that still has a broad-based income tax." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -448,7 +448,7 @@ const STATES = {
   },
   OH: {
     name: "Ohio", capital: "Columbus",
-    incomeTax: { type: "progressive", topRate: 3.5, brackets: 2, notes: "Simplified to essentially 2 brackets: 0% below ~$26,050, then a flat-ish 3.5% above it." },
+    incomeTax: { type: "progressive", topRate: 3.5, bracketsSingle: [{ rate: 0, upTo: 26050 }, { rate: 3.5, upTo: null }], brackets: 2, notes: "Simplified to essentially 2 brackets: 0% below ~$26,050, then a flat-ish 3.5% above it." },
     localTax: { exists: true, notes: "Nearly every Ohio municipality (600+) levies its own local income tax, typically 1%–3%, usually collected by a regional agency (RITA or CCA) rather than the state — genuinely one of the most fragmented local-tax systems in the US. Some school districts add a further small income-tax surtax on top." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -459,7 +459,7 @@ const STATES = {
   },
   OK: {
     name: "Oklahoma", capital: "Oklahoma City",
-    incomeTax: { type: "progressive", topRate: 4.75, brackets: 6, notes: "" },
+    incomeTax: { type: "progressive", topRate: 4.75, bracketsSingle: [{ rate: 0.25, upTo: 1000 }, { rate: 0.75, upTo: 2500 }, { rate: 1.75, upTo: 3750 }, { rate: 2.75, upTo: 4900 }, { rate: 3.75, upTo: 7200 }, { rate: 4.75, upTo: null }], brackets: 6, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -470,7 +470,7 @@ const STATES = {
   },
   OR: {
     name: "Oregon", capital: "Salem",
-    incomeTax: { type: "progressive", topRate: 9.9, brackets: 4, notes: "High income tax is the trade-off for Oregon having no state sales tax at all." },
+    incomeTax: { type: "progressive", topRate: 9.9, bracketsSingle: [{ rate: 4.75, upTo: 4300 }, { rate: 6.75, upTo: 10750 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: null }], brackets: 4, notes: "High income tax is the trade-off for Oregon having no state sales tax at all." },
     localTax: { exists: true, notes: "The Portland metro area layers on two extra income-tax surcharges on high earners: the Metro Supportive Housing Services tax (1% over ~$125k single/$200k joint) and Multnomah County's Preschool for All tax (1.5%–3% over similar thresholds) — together they can add several points on top of the state rate for high earners working in Portland." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Paid Leave Oregon", employeeRate: "~0.6% (60% of the ~1% total contribution; employer covers the rest at larger employers)", notes: "Up to 12 weeks (14 for pregnancy-related conditions)." },
@@ -481,7 +481,7 @@ const STATES = {
   },
   PA: {
     name: "Pennsylvania", capital: "Harrisburg",
-    incomeTax: { type: "flat", topRate: 3.07, brackets: 1, notes: "One of the lowest flat state rates — but see local tax below, which often matters more." },
+    incomeTax: { type: "flat", topRate: 3.07, bracketsSingle: [{ rate: 3.07, upTo: null }], brackets: 1, notes: "One of the lowest flat state rates — but see local tax below, which often matters more." },
     localTax: { exists: true, notes: "Pennsylvania has roughly 2,900 separate local Earned Income Tax (EIT) jurisdictions — nearly every municipality plus school district layers on its own combined rate, typically 1%–3.9% total. Philadelphia runs its own separate, much higher Wage Tax outside that system: about 3.75% for residents and 3.44% for nonresidents working in the city, regardless of where the local EIT system would otherwise put them." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -492,7 +492,7 @@ const STATES = {
   },
   RI: {
     name: "Rhode Island", capital: "Providence",
-    incomeTax: { type: "progressive", topRate: 5.99, brackets: 3, notes: "" },
+    incomeTax: { type: "progressive", topRate: 5.99, bracketsSingle: [{ rate: 3.75, upTo: 77450 }, { rate: 4.75, upTo: 176050 }, { rate: 5.99, upTo: null }], brackets: 3, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: true, program: "RI Temporary Disability Insurance (TDI)", employeeRate: "~1.1% of wages up to the TDI wage base", notes: "One fund covers both short-term disability and the caregiver/bonding leave below (branded together as TDI/TCI)." },
     paidLeave: { has: true, status: "active", program: "RI Temporary Caregiver Insurance (TCI)", notes: "Up to 7 weeks, funded through the same TDI payroll deduction." },
@@ -503,7 +503,7 @@ const STATES = {
   },
   SC: {
     name: "South Carolina", capital: "Columbia",
-    incomeTax: { type: "progressive", topRate: 6.2, brackets: 3, notes: "On a multi-year statutory decline from a former 7% top rate." },
+    incomeTax: { type: "progressive", topRate: 6.2, bracketsSingle: [{ rate: 0, upTo: 3560 }, { rate: 3, upTo: 17830 }, { rate: 6.2, upTo: null }], brackets: 3, notes: "On a multi-year statutory decline from a former 7% top rate." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -547,7 +547,7 @@ const STATES = {
   },
   UT: {
     name: "Utah", capital: "Salt Lake City",
-    incomeTax: { type: "flat", topRate: 4.55, brackets: 1, notes: "Recently cut from 4.65%; small further cuts have happened in multiple recent years." },
+    incomeTax: { type: "flat", topRate: 4.55, bracketsSingle: [{ rate: 4.55, upTo: null }], brackets: 1, notes: "Recently cut from 4.65%; small further cuts have happened in multiple recent years." },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -558,7 +558,7 @@ const STATES = {
   },
   VT: {
     name: "Vermont", capital: "Montpelier",
-    incomeTax: { type: "progressive", topRate: 8.75, brackets: 4, notes: "" },
+    incomeTax: { type: "progressive", topRate: 8.75, bracketsSingle: [{ rate: 3.35, upTo: 47900 }, { rate: 6.6, upTo: 116100 }, { rate: 7.6, upTo: 242000 }, { rate: 8.75, upTo: null }], brackets: 4, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: false, status: "voluntary", notes: "Vermont runs a small voluntary paid family leave insurance program employers can opt into — not a universal mandate." },
@@ -569,7 +569,7 @@ const STATES = {
   },
   VA: {
     name: "Virginia", capital: "Richmond",
-    incomeTax: { type: "progressive", topRate: 5.75, brackets: 4, notes: "Top bracket starts at just $17,000 — one of the lowest thresholds to reach the top rate of any state." },
+    incomeTax: { type: "progressive", topRate: 5.75, bracketsSingle: [{ rate: 2, upTo: 3000 }, { rate: 3, upTo: 5000 }, { rate: 5, upTo: 17000 }, { rate: 5.75, upTo: null }], brackets: 4, notes: "Top bracket starts at just $17,000 — one of the lowest thresholds to reach the top rate of any state." },
     localTax: { exists: false, notes: "No broad local income tax (Virginia relies on local property/vehicle tax instead)." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -591,7 +591,7 @@ const STATES = {
   },
   WV: {
     name: "West Virginia", capital: "Charleston",
-    incomeTax: { type: "progressive", topRate: 4.82, brackets: 5, notes: "Cut several times since 2023 (from a former 6.5% top rate), with further automatic trigger-based cuts possible." },
+    incomeTax: { type: "progressive", topRate: 4.82, bracketsSingle: [{ rate: 2.36, upTo: 10000 }, { rate: 3.15, upTo: 25000 }, { rate: 3.54, upTo: 40000 }, { rate: 4.72, upTo: 60000 }, { rate: 4.82, upTo: null }], brackets: 5, notes: "Cut several times since 2023 (from a former 6.5% top rate), with further automatic trigger-based cuts possible." },
     localTax: { exists: false, notes: "No broad local income tax (a few municipalities levy a small flat 'service fee' on workers, not a % of wages)." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -602,7 +602,7 @@ const STATES = {
   },
   WI: {
     name: "Wisconsin", capital: "Madison",
-    incomeTax: { type: "progressive", topRate: 7.65, brackets: 4, notes: "" },
+    incomeTax: { type: "progressive", topRate: 7.65, bracketsSingle: [{ rate: 3.5, upTo: 14680 }, { rate: 4.4, upTo: 29370 }, { rate: 5.3, upTo: 323290 }, { rate: 7.65, upTo: null }], brackets: 4, notes: "" },
     localTax: { exists: false, notes: "No broad local income tax." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
@@ -624,7 +624,7 @@ const STATES = {
   },
   DC: {
     name: "District of Columbia", capital: "—", isDistrict: true,
-    incomeTax: { type: "progressive", topRate: 10.75, brackets: 7, notes: "Top rate matches New Jersey's, applying above $1,000,000." },
+    incomeTax: { type: "progressive", topRate: 10.75, bracketsSingle: [{ rate: 4, upTo: 10000 }, { rate: 6, upTo: 40000 }, { rate: 6.5, upTo: 60000 }, { rate: 8.5, upTo: 250000 }, { rate: 9.25, upTo: 500000 }, { rate: 9.75, upTo: 1000000 }, { rate: 10.75, upTo: null }], brackets: 7, notes: "Top rate matches New Jersey's, applying above $1,000,000." },
     localTax: { exists: false, notes: "N/A — DC has no further 'local' layer, it IS the local jurisdiction." },
     disability: { has: false, notes: "No separate disability insurance program." },
     paidLeave: { has: true, status: "active", program: "DC Paid Family Leave", notes: "Fully employer-funded (no employee payroll deduction) via a 0.26% payroll tax on employers. Up to 12 weeks." },
