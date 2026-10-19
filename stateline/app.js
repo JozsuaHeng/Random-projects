@@ -216,7 +216,7 @@ function initStateList() {
     const row = e.target.closest(".state-row");
     if (!row) return;
     if (state.compareMode) toggleCompare(row.dataset.abbr);
-    else openDock(row.dataset.abbr);
+    else selectState(row.dataset.abbr);
   });
   list.addEventListener("mouseover", (e) => {
     const row = e.target.closest(".state-row");
@@ -278,7 +278,7 @@ function initMapInteraction() {
     node.addEventListener("mouseleave", () => { tooltip.hidden = true; highlightLinked(abbr, false); });
     node.addEventListener("click", () => {
       if (state.compareMode) toggleCompare(abbr);
-      else openDock(abbr);
+      else selectState(abbr);
     });
   });
 }
@@ -321,7 +321,6 @@ function initCompareModeToggle() {
     state.compareMode = !state.compareMode;
     btn.setAttribute("aria-pressed", String(state.compareMode));
     wrap.classList.toggle("is-compare-mode", state.compareMode);
-    if (state.compareMode && state.openAbbr) closeDock();
     hint.innerHTML = state.compareMode
       ? "Click states to add or remove them from the comparison tray below."
       : "Click a state for its full profile. Turn on <strong>Compare mode</strong> to click states onto the tray instead.";
@@ -377,7 +376,59 @@ function bracketTableHTML(brackets) {
     </table>`;
 }
 
-function renderStateDockContent(abbr) {
+/* The combined "federal + state + local" picture — the exact thing a
+   NYC hire is missing when they only see one line on an offer letter.
+   Bars are scaled relative to the combined total, not to some fixed
+   max, so the stack always fills the track regardless of how high the
+   actual numbers run. */
+function taxStackHTML(s) {
+  const fedBrackets = FEDERAL.incomeTax.bracketsSingle;
+  const fedTop = fedBrackets[fedBrackets.length - 1].rate;
+  const stateTop = s.incomeTax.type === "none" ? 0 : s.incomeTax.topRate;
+  const hasLocalRate = s.localTax.exists && typeof s.localTax.topRate === "number";
+  const localTop = hasLocalRate ? s.localTax.topRate : 0;
+  const combined = fedTop + stateTop + localTop;
+
+  const layers = [
+    { label: "Federal", rate: fedTop, sub: "Same in every state", color: "var(--text-muted)" },
+    {
+      label: s.name + " state",
+      rate: stateTop,
+      sub: s.incomeTax.type === "none" ? "No state income tax" : s.incomeTax.type === "flat" ? "Flat rate" : "Top bracket",
+      color: "var(--cat-income)",
+    },
+  ];
+  if (s.localTax.exists) {
+    layers.push({
+      label: s.localTax.topRateLabel ? s.localTax.topRateLabel.replace(/\s*\(.*\)$/, "") : "Local / city",
+      rate: hasLocalRate ? localTop : null,
+      sub: hasLocalRate ? "Top of range" : "Varies by city — see below",
+      color: "var(--cat-local)",
+    });
+  }
+
+  const rows = layers.map((l) => {
+    const pct = l.rate ? Math.max((l.rate / combined) * 100, 3) : 0;
+    return `
+      <div class="stack-row">
+        <div class="stack-label">${l.label}<span class="stack-sub">${l.sub}</span></div>
+        <div class="stack-track"><div class="stack-fill" style="width:${pct}%; background:${l.color}"></div></div>
+        <span class="stack-value">${l.rate !== null ? l.rate + "%" : "—"}</span>
+      </div>`;
+  }).join("");
+
+  return `
+    <div class="tax-stack">
+      <div class="tax-stack-title">Your full tax stack — top marginal rates</div>
+      ${rows}
+      <div class="tax-stack-total">
+        Combined top marginal: <strong>~${combined.toFixed(combined % 1 === 0 ? 0 : 1)}%</strong>
+        <span class="stack-caveat">adds each layer's own top rate — a rough ceiling, not how deductions or credits actually interact</span>
+      </div>
+    </div>`;
+}
+
+function renderStateBreakdown(abbr) {
   const s = STATES[abbr];
   const inCompare = state.compare.includes(abbr);
   return `
@@ -385,11 +436,17 @@ function renderStateDockContent(abbr) {
       <span class="eyebrow">${s.isDistrict ? "Federal district" : "State"}</span>
       <h2>${s.name}</h2>
       <div class="dock-capital">Capital: ${s.capital}</div>
-      <button class="dock-add-compare" data-action="toggle-compare" data-abbr="${abbr}" ${!inCompare && state.compare.length >= 3 ? "disabled" : ""}>
-        ${inCompare ? "✓ In comparison" : "＋ Add to comparison"}
-      </button>
+      <div class="breakdown-actions">
+        <button class="dock-add-compare" data-action="toggle-compare" data-abbr="${abbr}" ${!inCompare && state.compare.length >= 3 ? "disabled" : ""}>
+          ${inCompare ? "✓ In comparison" : "＋ Add to comparison"}
+        </button>
+        <button class="breakdown-clear" data-action="clear-selection" type="button">✕ Clear</button>
+      </div>
     </div>
 
+    ${taxStackHTML(s)}
+
+    <div class="breakdown-grid">
     <div class="dock-section dock-cat-income">
       <h3>${catIcon("income")} Income tax ${badge(s.incomeTax.type !== "none", s.incomeTax.type === "flat" ? "Flat" : "Progressive", "No income tax")}</h3>
       ${s.incomeTax.type === "none"
@@ -432,35 +489,47 @@ function renderStateDockContent(abbr) {
       <h3>${catIcon("workerscomp")} Workers' comp & overtime quirks</h3>
       ${factCard("", s.workersComp.notes)}
     </div>
+    </div>
   `;
 }
 
-function openDock(abbr) {
+/* Renders the full breakdown inline (no more slide-in panel/overlay —
+   this used to be a dock the user described as feeling like "a pop
+   up"). `scroll` is false on initial page load (NY is pre-selected so
+   the page isn't just an empty placeholder) and true for every actual
+   click, so the page brings the result into view without the user
+   having to go find it. */
+function selectState(abbr, scroll) {
+  if (scroll === undefined) scroll = true;
   state.openAbbr = abbr;
-  document.getElementById("dock-content").innerHTML = renderStateDockContent(abbr);
-  document.getElementById("dock").classList.add("is-open");
-  document.getElementById("dock").setAttribute("aria-hidden", "false");
-  document.getElementById("dock-scrim").classList.add("is-visible");
+  document.getElementById("state-breakdown-content").innerHTML = renderStateBreakdown(abbr);
   refreshMapSelectionClasses();
+  if (scroll) {
+    document.getElementById("state-breakdown").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
-function closeDock() {
+function clearSelection() {
   state.openAbbr = null;
-  document.getElementById("dock").classList.remove("is-open");
-  document.getElementById("dock").setAttribute("aria-hidden", "true");
-  document.getElementById("dock-scrim").classList.remove("is-visible");
+  document.getElementById("state-breakdown-content").innerHTML = `
+    <div class="breakdown-placeholder">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-6.1-9.5-10.2C.7 7 2.3 3 6.5 3 9 3 11 4.5 12 6c1-1.5 3-3 5.5-3 4.2 0 5.8 4 3.9 7.8C19.5 14.9 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      Click a state on the map, in the list, or search above — its full federal + state + local breakdown appears right here.
+    </div>`;
   refreshMapSelectionClasses();
 }
 
-function initDock() {
-  document.getElementById("dock-close").addEventListener("click", closeDock);
-  document.getElementById("dock-scrim").addEventListener("click", closeDock);
-  document.getElementById("dock-content").addEventListener("click", (e) => {
+function initBreakdown() {
+  document.getElementById("state-breakdown-content").addEventListener("click", (e) => {
     handleNoteToggle(e);
+    if (e.target.closest('[data-action="clear-selection"]')) {
+      clearSelection();
+      return;
+    }
     const btn = e.target.closest('[data-action="toggle-compare"]');
     if (!btn) return;
     toggleCompare(btn.dataset.abbr);
-    document.getElementById("dock-content").innerHTML = renderStateDockContent(state.openAbbr);
+    document.getElementById("state-breakdown-content").innerHTML = renderStateBreakdown(state.openAbbr);
   });
 }
 
@@ -631,7 +700,7 @@ function initSearch() {
   }
 
   function select(abbr) {
-    openDock(abbr);
+    selectState(abbr);
     input.value = "";
     results.hidden = true;
   }
@@ -657,14 +726,14 @@ function initSearch() {
 
 /* ---------------- federal strip ---------------- */
 function initFederalStrip() {
-  const grid = document.getElementById("federal-grid");
   const f = FEDERAL;
-  grid.innerHTML = `
-    <div class="federal-card">
-      <div class="fed-label">Federal income tax</div>
-      <div class="fed-value">10%–37%</div>
-      <p class="fed-note">7 brackets, same nationwide.</p>
-    </div>
+
+  document.getElementById("federal-deduction-note").textContent =
+    `Standard deduction: ${fmtMoney(f.incomeTax.standardDeduction.single)} single / ` +
+    `${fmtMoney(f.incomeTax.standardDeduction.mfj)} joint (2026).`;
+  document.getElementById("federal-bracket-table").innerHTML = bracketTableHTML(f.incomeTax.bracketsSingle);
+
+  document.getElementById("federal-grid").innerHTML = `
     <div class="federal-card">
       <div class="fed-label">Social Security</div>
       <div class="fed-value">6.2% + 6.2%</div>
@@ -718,7 +787,6 @@ document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!document.getElementById("compare-overlay").hidden) document.getElementById("compare-overlay").hidden = true;
   else if (!document.getElementById("disclaimer-overlay").hidden) document.getElementById("disclaimer-overlay").hidden = true;
-  else if (document.getElementById("dock").classList.contains("is-open")) closeDock();
 });
 
 /* ---------------- init ---------------- */
@@ -726,7 +794,7 @@ initMetricSelect();
 initMapInteraction();
 initStateList();
 initCompareModeToggle();
-initDock();
+initBreakdown();
 initCompareTray();
 initCompareOverlay();
 initSearch();
@@ -736,3 +804,4 @@ initDisclaimer();
 initSpotlight();
 paintMap();
 pulseStateOnce("NY");
+selectState("NY", false);

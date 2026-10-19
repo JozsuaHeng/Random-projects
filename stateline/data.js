@@ -75,7 +75,7 @@ const STATES = {
   AL: {
     name: "Alabama", capital: "Montgomery",
     incomeTax: { type: "progressive", topRate: 5.0, bracketsSingle: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: null }], brackets: 3, notes: "Rates of 2%/4%/5%; the 5% top bracket starts very low ($3,000 single), so most earners are effectively at the top rate." },
-    localTax: { exists: true, notes: "Several cities/counties (Birmingham, Bessemer, Gadsden and others) levy an 'occupational tax' of roughly 1–2% on wages earned there — functions like a local payroll tax." },
+    localTax: { exists: true, topRate: 2.0, topRateLabel: "example city rate", notes: "Several cities/counties (Birmingham, Bessemer, Gadsden and others) levy an 'occupational tax' of roughly 1–2% on wages earned there — functions like a local payroll tax." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid family/medical leave program; federal unpaid FMLA only (for eligible employers/employees)." },
     ui: { wageBase: 8000, newEmployerRate: "2.7%", rateRange: "0.2%–6.8%" },
@@ -152,7 +152,7 @@ const STATES = {
   DE: {
     name: "Delaware", capital: "Dover",
     incomeTax: { type: "progressive", topRate: 6.6, bracketsSingle: [{ rate: 0, upTo: 2000 }, { rate: 2.2, upTo: 5000 }, { rate: 3.9, upTo: 10000 }, { rate: 4.8, upTo: 20000 }, { rate: 5.2, upTo: 25000 }, { rate: 5.55, upTo: 60000 }, { rate: 6.6, upTo: null }], brackets: 7, notes: "Top rate applies above $60,000 — a notably low threshold to hit the top bracket." },
-    localTax: { exists: true, notes: "Wilmington levies its own city wage tax (~1.25% on residents and on nonresidents working there)." },
+    localTax: { exists: true, topRate: 1.25, topRateLabel: "Wilmington wage tax", notes: "Wilmington levies its own city wage tax (~1.25% on residents and on nonresidents working there)." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Delaware Paid Leave", notes: "Contributions began 2025, benefits became payable starting Jan 2026: up to 12 weeks combined across parental/family-caregiving/medical leave (6 weeks for medical-only in some cases)." },
     ui: { wageBase: 12500, newEmployerRate: "1.8%", rateRange: "0.3%–8.2%" },
@@ -218,7 +218,7 @@ const STATES = {
   IN: {
     name: "Indiana", capital: "Indianapolis",
     incomeTax: { type: "flat", topRate: 3.05, bracketsSingle: [{ rate: 3.05, upTo: null }], brackets: 1, notes: "Scheduled to keep declining toward 2.9% by 2027 under existing statute." },
-    localTax: { exists: true, notes: "Every Indiana county levies its own flat 'county income tax' on top of the state rate, typically 0.5%–3%, collected via the state return." },
+    localTax: { exists: true, topRate: 3.0, topRateLabel: "highest county rate", notes: "Every Indiana county levies its own flat 'county income tax' on top of the state rate, typically 0.5%–3%, collected via the state return." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
     ui: { wageBase: 9500, newEmployerRate: "2.5%", rateRange: "0.5%–7.4%" },
@@ -251,7 +251,7 @@ const STATES = {
   KY: {
     name: "Kentucky", capital: "Frankfort",
     incomeTax: { type: "flat", topRate: 3.5, bracketsSingle: [{ rate: 3.5, upTo: null }], brackets: 1, notes: "Flat rate that ratchets DOWN by 0.5 points every couple of years whenever state revenue triggers are met — it was 5% as recently as 2022." },
-    localTax: { exists: true, notes: "Most cities/counties levy an 'occupational license fee' on wages — functions as a local payroll tax, e.g. Louisville is around 2.2% combined." },
+    localTax: { exists: true, topRate: 2.2, topRateLabel: "Louisville example", notes: "Most cities/counties levy an 'occupational license fee' on wages — functions as a local payroll tax, e.g. Louisville is around 2.2% combined." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
     ui: { wageBase: 11400, newEmployerRate: "2.7%", rateRange: "0.3%–9.0%" },
@@ -284,7 +284,7 @@ const STATES = {
   MD: {
     name: "Maryland", capital: "Annapolis",
     incomeTax: { type: "progressive", topRate: 5.75, bracketsSingle: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 5.75, upTo: null }], brackets: 8, notes: "State rate alone tops out at 5.75%, but see the local 'piggyback' tax below — total can run noticeably higher." },
-    localTax: { exists: true, notes: "Every Maryland county (plus Baltimore City) adds its own 'piggyback' income tax of roughly 2.25%–3.2%, collected on the same state return — so your real marginal rate is state + county combined, e.g. up to ~8.95% in some counties." },
+    localTax: { exists: true, topRate: 3.2, topRateLabel: "highest county piggyback", notes: "Every Maryland county (plus Baltimore City) adds its own 'piggyback' income tax of roughly 2.25%–3.2%, collected on the same state return — so your real marginal rate is state + county combined, e.g. up to ~8.95% in some counties." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Maryland FAMLI", notes: "Contributions began July 2025; benefits become payable starting 2026 after a delayed rollout. Up to 12 weeks (24 in some combined cases)." },
     ui: { wageBase: 8500, newEmployerRate: "2.3%", rateRange: "1.0%–10.5%" },
@@ -306,7 +306,7 @@ const STATES = {
   MI: {
     name: "Michigan", capital: "Lansing",
     incomeTax: { type: "flat", topRate: 4.25, bracketsSingle: [{ rate: 4.25, upTo: null }], brackets: 1, notes: "" },
-    localTax: { exists: true, notes: "24 Michigan cities levy their own income tax, most around 1% resident/0.5% nonresident — Detroit is highest at 2.4% resident/1.2% nonresident." },
+    localTax: { exists: true, topRate: 2.4, topRateLabel: "Detroit resident", notes: "24 Michigan cities levy their own income tax, most around 1% resident/0.5% nonresident — Detroit is highest at 2.4% resident/1.2% nonresident." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "accrual-only", notes: "Michigan's Earned Sick Time Act (2025) mandates accrued paid sick leave, but there is no wage-replacement PFML insurance program." },
     ui: { wageBase: 9500, newEmployerRate: "2.7%", rateRange: "0.06%–10.3%" },
@@ -339,7 +339,7 @@ const STATES = {
   MO: {
     name: "Missouri", capital: "Jefferson City",
     incomeTax: { type: "progressive", topRate: 4.7, bracketsSingle: [{ rate: 2, upTo: 1273 }, { rate: 4.7, upTo: null }], brackets: 2, notes: "Simplified and cut substantially in recent reforms, with further automatic cuts possible if revenue triggers are met." },
-    localTax: { exists: true, notes: "St. Louis and Kansas City each levy their own 1% earnings tax on residents and on nonresidents working there." },
+    localTax: { exists: true, topRate: 1.0, topRateLabel: "St. Louis / KC earnings tax", notes: "St. Louis and Kansas City each levy their own 1% earnings tax on residents and on nonresidents working there." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
     ui: { wageBase: 9500, newEmployerRate: "2.511%", rateRange: "0%–6.231%" },
@@ -416,7 +416,7 @@ const STATES = {
   NY: {
     name: "New York", capital: "Albany",
     incomeTax: { type: "progressive", topRate: 10.9, bracketsSingle: [{ rate: 4, upTo: 8500 }, { rate: 4.5, upTo: 11700 }, { rate: 5.25, upTo: 13900 }, { rate: 5.85, upTo: 80650 }, { rate: 6.25, upTo: 215400 }, { rate: 6.85, upTo: 1077550 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.3, upTo: 25000000 }, { rate: 10.9, upTo: null }], brackets: 9, notes: "Brackets: 4% / 4.5% / 5.25% / 5.85% / 6.25% / 6.85% / 9.65% / 10.3% / 10.9%, topping out above $25,000,000." },
-    localTax: { exists: true, notes: "New York City residents pay a SEPARATE NYC resident income tax (3.078%–3.876%, progressive, on top of the state tax) filed on the same NY return — this is the tax most new NYC employees notice for the first time. Yonkers residents instead pay a 16.75% surcharge calculated on their NY State tax liability (not a separate wage-bracket tax); Yonkers NONresidents who work there pay a small 0.5% earnings tax. Only NYC and Yonkers have this — the rest of NY State has no local income tax." },
+    localTax: { exists: true, topRate: 3.876, topRateLabel: "NYC resident (top of range)", notes: "New York City residents pay a SEPARATE NYC resident income tax (3.078%–3.876%, progressive, on top of the state tax) filed on the same NY return — this is the tax most new NYC employees notice for the first time. Yonkers residents instead pay a 16.75% surcharge calculated on their NY State tax liability (not a separate wage-bracket tax); Yonkers NONresidents who work there pay a small 0.5% earnings tax. Only NYC and Yonkers have this — the rest of NY State has no local income tax." },
     disability: { has: true, program: "NY Disability Benefits Law (DBL)", employeeRate: "max $0.60/week ($31.20/year) — a flat statutory cap, not a % of wages", notes: "Employer pays the rest; unusually small compared to CA/NJ/RI's wage-based SDI." },
     paidLeave: { has: true, status: "active", program: "NY Paid Family Leave (PFL)", employeeRate: "0.432% of wages (2026), capped at $411.91/year", notes: "Up to 12 weeks; funded entirely through this employee payroll deduction." },
     ui: { wageBase: 12800, newEmployerRate: "4.1%", rateRange: "2.1%–9.9%" },
@@ -449,7 +449,7 @@ const STATES = {
   OH: {
     name: "Ohio", capital: "Columbus",
     incomeTax: { type: "progressive", topRate: 3.5, bracketsSingle: [{ rate: 0, upTo: 26050 }, { rate: 3.5, upTo: null }], brackets: 2, notes: "Simplified to essentially 2 brackets: 0% below ~$26,050, then a flat-ish 3.5% above it." },
-    localTax: { exists: true, notes: "Nearly every Ohio municipality (600+) levies its own local income tax, typically 1%–3%, usually collected by a regional agency (RITA or CCA) rather than the state — genuinely one of the most fragmented local-tax systems in the US. Some school districts add a further small income-tax surtax on top." },
+    localTax: { exists: true, topRate: 3.0, topRateLabel: "typical municipal max", notes: "Nearly every Ohio municipality (600+) levies its own local income tax, typically 1%–3%, usually collected by a regional agency (RITA or CCA) rather than the state — genuinely one of the most fragmented local-tax systems in the US. Some school districts add a further small income-tax surtax on top." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
     ui: { wageBase: 9000, newEmployerRate: "2.7%", rateRange: "0.5%–10.2%" },
@@ -471,7 +471,7 @@ const STATES = {
   OR: {
     name: "Oregon", capital: "Salem",
     incomeTax: { type: "progressive", topRate: 9.9, bracketsSingle: [{ rate: 4.75, upTo: 4300 }, { rate: 6.75, upTo: 10750 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: null }], brackets: 4, notes: "High income tax is the trade-off for Oregon having no state sales tax at all." },
-    localTax: { exists: true, notes: "The Portland metro area layers on two extra income-tax surcharges on high earners: the Metro Supportive Housing Services tax (1% over ~$125k single/$200k joint) and Multnomah County's Preschool for All tax (1.5%–3% over similar thresholds) — together they can add several points on top of the state rate for high earners working in Portland." },
+    localTax: { exists: true, topRate: 4.0, topRateLabel: "Portland-area surcharges combined", notes: "The Portland metro area layers on two extra income-tax surcharges on high earners: the Metro Supportive Housing Services tax (1% over ~$125k single/$200k joint) and Multnomah County's Preschool for All tax (1.5%–3% over similar thresholds) — together they can add several points on top of the state rate for high earners working in Portland." },
     disability: { has: false, notes: "No state-mandated short-term disability insurance." },
     paidLeave: { has: true, status: "active", program: "Paid Leave Oregon", employeeRate: "~0.6% (60% of the ~1% total contribution; employer covers the rest at larger employers)", notes: "Up to 12 weeks (14 for pregnancy-related conditions)." },
     ui: { wageBase: 54300, newEmployerRate: "~2.1%", rateRange: "0.9%–5.4%" },
@@ -482,7 +482,7 @@ const STATES = {
   PA: {
     name: "Pennsylvania", capital: "Harrisburg",
     incomeTax: { type: "flat", topRate: 3.07, bracketsSingle: [{ rate: 3.07, upTo: null }], brackets: 1, notes: "One of the lowest flat state rates — but see local tax below, which often matters more." },
-    localTax: { exists: true, notes: "Pennsylvania has roughly 2,900 separate local Earned Income Tax (EIT) jurisdictions — nearly every municipality plus school district layers on its own combined rate, typically 1%–3.9% total. Philadelphia runs its own separate, much higher Wage Tax outside that system: about 3.75% for residents and 3.44% for nonresidents working in the city, regardless of where the local EIT system would otherwise put them." },
+    localTax: { exists: true, topRate: 3.75, topRateLabel: "Philadelphia resident wage tax", notes: "Pennsylvania has roughly 2,900 separate local Earned Income Tax (EIT) jurisdictions — nearly every municipality plus school district layers on its own combined rate, typically 1%–3.9% total. Philadelphia runs its own separate, much higher Wage Tax outside that system: about 3.75% for residents and 3.44% for nonresidents working in the city, regardless of where the local EIT system would otherwise put them." },
     disability: { has: false, notes: "No state-mandated disability insurance." },
     paidLeave: { has: false, status: "none", notes: "No state paid leave program." },
     ui: { wageBase: 10000, newEmployerRate: "3.822%", rateRange: "1.419%–10.3734%", notes: "PA is one of only 3 states (with AK, NJ) where employees also contribute to state unemployment insurance — currently 0.07% of wages, no wage cap on the employee share." },

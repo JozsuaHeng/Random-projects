@@ -85,7 +85,9 @@ every other project in `ai-slop/` (see `factlas/`, `corporate-radar/`).
     light-ramp flip) per that skill's guidance — dark mode uses the
     *brighter* end of the same ramp so values still "pop" against the
     dark surface instead of receding into it the way they do on light.
-  - The right-side **dock** (`openDock`/`renderStateDockContent`) is the
+  - **State breakdown** (`selectState`/`renderStateBreakdown`, inline in
+    `#state-breakdown-content` — see the dedicated section below; this
+    used to be a slide-in `dock`/overlay, replaced 2026-10-19) is the
     full per-state profile; the **compare overlay** (`openCompare`/
     `renderCompareContent`) renders the same categories as a table for up
     to 3 states at once. Both read straight from `STATES`, so a `data.js`
@@ -94,7 +96,7 @@ every other project in `ai-slop/` (see `factlas/`, `corporate-radar/`).
     vs CT" chip just hardcodes that array and calls `openCompare`
     directly, bypassing the tray. **Compare mode**
     (`state.compareMode`, toggled by `#compare-mode-toggle`) changes what
-    a map click does: off (default) opens the dock, on calls
+    a map click does: off (default) calls `selectState()`, on calls
     `toggleCompare()` directly — `.map-wrap.is-compare-mode` swaps the
     cursor so it's visually obvious which mode is active.
   - **Ranked list panel** (`renderStateList()`/`initStateList()`, beside
@@ -246,6 +248,59 @@ own attributes in `index.html`:
   change only these tokens; don't touch the brand accent tokens unless
   asked separately.
 
+## State breakdown moved inline (2026-10-19, "below instead of a pop up")
+
+The per-state profile was a slide-in panel (`<aside class="dock">`, fixed
+position, `transform: translateX`, a full-screen `.dock-scrim` behind it)
+— the user described this as feeling like "a pop up" and asked for it
+inline instead. It's now a normal section in the page flow:
+
+- **`index.html`**: `<section class="breakdown-section">` sits right
+  after the map section (before the federal strip), containing
+  `<div class="breakdown-panel" id="state-breakdown">` →
+  `#state-breakdown-content`, which `renderStateBreakdown()` fills. No
+  more `#dock`, `#dock-scrim`, `#dock-close`, `#dock-inner` — all
+  removed, don't recreate them.
+- **`app.js`**: `openDock(abbr)` → `selectState(abbr, scroll = true)`,
+  which fills `#state-breakdown-content` and (unless `scroll` is
+  `false`) calls `scrollIntoView({ behavior: "smooth" })` on the section
+  — so clicking a state from anywhere (map, ranked list, search) brings
+  the result down to you instead of sliding a panel over the page.
+  `closeDock()` → `clearSelection()`, now triggered by an explicit
+  "✕ Clear" button (`data-action="clear-selection"`, delegated in
+  `initBreakdown()`) rather than a scrim click or Escape, since there's
+  no overlay to dismiss anymore. **NY is pre-selected on page load**
+  (`selectState("NY", false)` at the end of the init sequence) so a
+  first-time visitor sees a filled-in example immediately instead of an
+  empty placeholder — the `false` skips the scroll since there's nothing
+  to scroll to yet on initial load.
+- **Tax stack** (`taxStackHTML()`): a new component inside the
+  breakdown, directly above the existing category grid — a grouped bar
+  chart of Federal / state / local top marginal rates stacked together,
+  plus a naive summed "combined top marginal" figure with an explicit
+  caveat that it's a rough ceiling (sum of top rates), not an accurate
+  effective-rate calculation. This is what actually answers "what's my
+  full tax picture" for a specific state, which the always-visible
+  federal strip (generic, not state-specific) can't do on its own.
+  Needs `localTax.topRate` (a number) to show a local figure — only the
+  11 local-tax states have this field (`data.js`, added alongside
+  `topRateLabel` for the bar's caption); a local-tax state without a
+  parseable top rate still shows in the stack but with "varies by city"
+  instead of a number, rather than inventing a figure.
+- **Category grid**: what used to stack single-column in the narrow dock
+  is now `.breakdown-grid`, a `repeat(auto-fit, minmax(300px, 1fr))`
+  responsive grid (collapses to 1 column on mobile) — reuses the same
+  `.dock-section`/`.dock-cat-*`/`.dock-fact` class names from before,
+  just in a wider container, so don't rename those classes without
+  checking both this grid and nothing else that might reference them.
+- **Federal section also expanded** in the same pass ("breakdown this
+  section further"): `#federal-bracket-table` now renders the real
+  7-bracket federal table via the same `bracketTableHTML()` the state
+  breakdown uses, in its own `.federal-income-block` above the 3
+  remaining summary cards (Social Security / Medicare / FUTA — income
+  tax's own card was removed from that grid since it has its own block
+  now).
+
 ## Testing this project
 
 No test suite — it's static content + DOM manipulation. The real
@@ -253,7 +308,7 @@ verification that caught the bug above was driving it with Playwright
 (`chromium.launch()`, no project dependency — installed ad hoc in a
 scratch folder, not checked into this repo) against a plain
 `python3 -m http.server`, then screenshotting every major interaction
-(map paint, state click → dock, metric switch, compare overlay, search,
+(map paint, state click → inline breakdown, metric switch, compare overlay, search,
 dark-mode toggle) and reading `console --errors`. If you make a UI change
 here, that's the fastest way to catch a real browser bug instead of a
 plausible-looking static read.
