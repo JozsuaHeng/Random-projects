@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Paycheck Atlas — how your paycheck changes by state</title>
-<meta name="description" content="An exhaustive, state-by-state map of income tax, payroll tax, disability insurance, paid leave, minimum wage, and commuter-tax rules across all 50 states and DC." />
+<title>StateLine — how your paycheck changes by state</title>
+<meta name="description" content="A state-by-state map of income tax, payroll tax, disability insurance, paid leave, minimum wage, and commuter-tax rules across all 50 states and DC." />
 <link rel="icon" href="favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="style.css" />
 <script>
   try {
-    var t = localStorage.getItem("paycheck-atlas-theme");
+    var t = localStorage.getItem("stateline-theme");
     if (t) document.documentElement.setAttribute("data-theme", t);
   } catch (e) {}
 </script>
@@ -22,7 +22,7 @@
 <header class="top">
   <div class="brand">
     <span class="eyebrow">50 states, 50 paychecks</span>
-    <h1>Paycheck Atlas</h1>
+    <h1>StateLine</h1>
   </div>
   <div class="top-controls">
     <div class="search-wrap">
@@ -38,47 +38,31 @@
 
 <main>
 
-  <section class="intro">
-    <p>
-      I'm job-hunting in New York City right now, and the first offer letter I read
-      had a line I'd never seen before: a <strong>New York State</strong> tax
-      <em>and</em> a separate <strong>New York City</strong> tax, stacked on top
-      of the usual federal withholding. That sent me down a rabbit hole — every
-      state runs its own version of this. So I built the map I wished I'd had.
+  <section class="hero">
+    <p class="hero-desc">
+      Built after a NYC offer letter showed both a state tax and a separate
+      city tax. StateLine covers income tax, payroll tax, disability
+      insurance, paid leave, minimum wage, and commuter-tax rules — for all
+      50 states + DC.
     </p>
-    <p class="intro-sub">
-      Click any state for its full breakdown, or compare up to three side by side.
-      Figures are compiled for comparison, not filing —
-      <button class="link-btn" id="open-disclaimer" type="button">see the fine print</button>.
-    </p>
-  </section>
-
-  <section class="spotlight" id="spotlight" aria-labelledby="spotlight-title">
-    <h2 id="spotlight-title">Why a NYC paycheck looks the way it does</h2>
-    <div class="spotlight-grid">
-      <article class="spotlight-card">
-        <span class="spotlight-tag">1. State tax</span>
-        <h3>New York State income tax</h3>
-        <p>Progressive, up to <strong>10.9%</strong> — one of the highest top rates in the country, on top of federal withholding everyone pays.</p>
-      </article>
-      <article class="spotlight-card">
-        <span class="spotlight-tag">2. City tax</span>
-        <h3>+ a separate NYC resident tax</h3>
-        <p>If you <em>live</em> in NYC, there's a second, separate progressive tax (3.078%–3.876%) on top of the state tax — most states have no city-level income tax at all. If you only work in NYC but live elsewhere, this one doesn't apply to you.</p>
-      </article>
-      <article class="spotlight-card">
-        <span class="spotlight-tag">3. The commuter trap</span>
-        <h3>NY taxes remote work by "convenience"</h3>
-        <p>NY has <strong>no reciprocity</strong> with neighboring states. Work remotely for a NY employer from NJ or CT? NY's "convenience of the employer" rule can tax those wages anyway, unless your home office meets a specific legal test.</p>
-      </article>
+    <div class="hero-row">
+      <span class="feature-chip">50 states + DC</span>
+      <span class="feature-chip">9 map views</span>
+      <span class="feature-chip">Compare up to 3</span>
+      <button class="feature-chip feature-chip-cta" id="spotlight-compare" type="button">🗽 Try NY vs NJ vs CT →</button>
+      <button class="feature-chip feature-chip-ghost" id="open-disclaimer" type="button">Fine print</button>
     </div>
-    <button class="spotlight-cta" id="spotlight-compare" type="button">Compare NY · NJ · CT side by side →</button>
   </section>
 
   <section class="map-section" aria-labelledby="map-title">
     <div class="map-header">
       <h2 id="map-title">Color the map by…</h2>
-      <select id="metric-select"></select>
+      <div class="map-header-controls">
+        <select id="metric-select"></select>
+        <button class="mode-toggle" id="compare-mode-toggle" type="button" aria-pressed="false">
+          <span class="mode-toggle-dot"></span> Compare mode
+        </button>
+      </div>
     </div>
     <div class="map-area">
       <div class="map-wrap" id="map-wrap">
@@ -151,7 +135,14 @@
       </div>
       <div class="map-side">
         <div class="legend" id="legend"></div>
-        <p class="map-hint">Click a state to open its full profile. Use the <strong>＋</strong> on a state card to add it to a comparison (up to 3).</p>
+        <div class="list-panel">
+          <div class="list-panel-header">
+            <span class="list-panel-title">All states</span>
+            <button class="sort-toggle" id="sort-toggle" type="button">High → Low</button>
+          </div>
+          <ul class="state-list" id="state-list"></ul>
+        </div>
+        <p class="map-hint" id="map-hint">Click a state for its full profile. Turn on <strong>Compare mode</strong> to click states onto the tray instead.</p>
         <div class="compare-tray" id="compare-tray">
           <span class="compare-tray-label">Comparing:</span>
           <div class="compare-chips" id="compare-chips"></div>
@@ -166,10 +157,10 @@
     <div class="federal-grid" id="federal-grid"></div>
   </section>
 
-  <section class="glossary" aria-labelledby="glossary-title">
-    <h2 id="glossary-title">What these categories mean</h2>
+  <details class="glossary">
+    <summary>What do these terms mean?</summary>
     <div class="glossary-grid" id="glossary-grid"></div>
-  </section>
+  </details>
 
 </main>
 

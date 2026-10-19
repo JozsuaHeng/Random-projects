@@ -2,20 +2,37 @@
 
 ## What this project is
 
-**Paycheck Atlas** — an exhaustive, state-by-state map of how a paycheck
-differs across all 50 states + DC: state income tax (including local/city
-layers), Social Security & Medicare (federal, shown as a baseline), state
-disability insurance, paid family/medical leave, unemployment insurance
-(employer-paid), minimum wage, interstate tax reciprocity, the "convenience
-of the employer" rule, and workers'-comp/overtime quirks.
+**StateLine** (originally built as "Paycheck Atlas" — renamed 2026-10-19,
+see naming options offered to the user) — a state-by-state map of how a
+paycheck differs across all 50 states + DC: state income tax (including
+local/city layers), Social Security & Medicare (federal, shown as a
+baseline), state disability insurance, paid family/medical leave,
+unemployment insurance (employer-paid), minimum wage, interstate tax
+reciprocity, the "convenience of the employer" rule, and workers'-comp/
+overtime quirks.
 
 Built from a real problem: the user is job-hunting in NYC and noticed a
 separate NY State tax *and* a separate NYC resident tax stacked on top of
-federal withholding — the "spotlight" section at the top of the page exists
-specifically to explain that (NY state tax → NYC resident tax → the
-"convenience of the employer" rule that catches NJ/CT remote workers), and
-the map's default view and the hero CTA both point at a live NY/NJ/CT
-comparison.
+federal withholding. The hero's "Try NY vs NJ vs CT →" chip (`#spotlight-compare`
+— id kept from the original build) exists specifically to surface that:
+NY state tax → NYC resident tax → the "convenience of the employer" rule
+that catches NJ/CT remote workers. NY also gets a brief pulse animation on
+first load (`pulseStateOnce("NY")` in `app.js`) as a quiet nudge toward it.
+
+**Design iteration (2026-10-19)**: the first build had a long first-person
+intro paragraph, a 3-card essay explaining the NY/NJ/CT situation, and an
+always-visible glossary grid — user feedback was "too much words," wanting
+a short description + feature highlights up top with the map right below,
+and "more intuitive." Response: intro cut to 2 sentences + a row of
+feature chips (`.hero-row`), the 3-card essay collapsed into one hero chip
++ CTA, the glossary became a collapsed native `<details>` (zero JS), dock/
+compare-table notes now truncate via `noteHTML()` with a "more"/"less"
+toggle instead of showing full prose by default, the map tooltip got
+richer (shows tax rate + min wage + badges for every hover, not just the
+selected metric), and a **Compare mode** toggle
+(`#compare-mode-toggle`/`state.compareMode`) was added so clicking states
+can add them straight to the compare tray instead of always opening the
+dock first.
 
 ## Architecture
 
@@ -73,14 +90,48 @@ every other project in `ai-slop/` (see `factlas/`, `corporate-radar/`).
     `renderCompareContent`) renders the same categories as a table for up
     to 3 states at once. Both read straight from `STATES`, so a `data.js`
     edit shows up in both places automatically.
-  - `state.compare` caps at 3 (`toggleCompare`); the spotlight's "Compare
-    NY · NJ · CT" button just hardcodes that array and calls
-    `openCompare` directly, bypassing the tray.
+  - `state.compare` caps at 3 (`toggleCompare`); the hero's "Try NY vs NJ
+    vs CT" chip just hardcodes that array and calls `openCompare`
+    directly, bypassing the tray. **Compare mode**
+    (`state.compareMode`, toggled by `#compare-mode-toggle`) changes what
+    a map click does: off (default) opens the dock, on calls
+    `toggleCompare()` directly — `.map-wrap.is-compare-mode` swaps the
+    cursor so it's visually obvious which mode is active.
+  - **Ranked list panel** (`renderStateList()`/`initStateList()`, beside
+    the map): same 51 rows as the map, sorted by whatever metric is
+    active (`state.listSortAsc` flips direction for numeric metrics; a
+    boolean metric groups Yes-then-No instead and hides the sort
+    button). It reads `state.currentMetric`/`state.currentEdges`, which
+    `paintMap()` now stashes on `state` precisely so the list doesn't
+    recompute quantile bins separately and risk drifting from the map's
+    own coloring. Map and list are **hover-linked both directions** via
+    `highlightLinked(abbr, on)` — hovering a row adds `.is-hover-linked`
+    to the matching SVG node, and vice versa; `refreshMapSelectionClasses()`
+    was extended to also sync `.is-selected`/`.is-comparing` onto
+    `.state-row` elements so the two views never disagree about what's
+    open/compared.
+  - `noteHTML(text, max)` truncates any note field to a sentence/word
+    boundary near `max` chars with a "more" toggle (`handleNoteToggle`,
+    delegated on both `#dock-content` and `#compare-content`) — used by
+    `factCard()` and the compare table's note cells. If you add a new
+    fact with a long note, route it through `noteHTML()` rather than
+    interpolating the raw string, or it'll reintroduce the "too much
+    text" problem this was built to fix.
 - **`style.css`** — light/dark via the same convention used elsewhere in
   this repo: OS preference by default (`@media (prefers-color-scheme:
   dark)` scoped to `:root:not([data-theme="light"])`), overridable by the
   header toggle via `:root[data-theme="dark"]`/`[data-theme="light"]`,
-  persisted to `localStorage["paycheck-atlas-theme"]`.
+  persisted to `localStorage["stateline-theme"]`. `main`'s max-width was
+  widened from 1180px to 1420px (2026-10-19, "bigger map" feedback) —
+  **don't use a viewport-relative breakout** (`calc(50vw - Npx)` margin
+  tricks) to make the map section alone wider than the rest of the page;
+  an earlier attempt did that and it silently misaligned the map against
+  the hero text above it, because `main` is itself centered via
+  `margin: 0 auto`, not pinned to the viewport edge — a breakout computed
+  against `100vw` doesn't know about that centering offset. Widening
+  `main` itself was the fix; if the map ever needs to be wider than the
+  rest of the page again, compute the breakout relative to `main`'s own
+  box, not the viewport.
   **Gotcha already hit once**: `.compare-overlay`/`.modal-overlay` set
   `display: flex` unconditionally for centering — that silently overrides
   the browser's built-in `[hidden] { display: none }` default (same
@@ -107,5 +158,5 @@ plausible-looking static read.
 
 Static hosting only, served as part of the shared `ai-slop` GitHub Pages
 site (linked from "The Quagmire" hub at the `ai-slop/` root, tile
-`data-theme="paycheck"`). No environment variables, API keys, or build
+`data-theme="stateline"`). No environment variables, API keys, or build
 step required.

@@ -1,6 +1,6 @@
-/* Paycheck Atlas — interaction logic. Reads STATES/FEDERAL/META from data.js. */
+/* StateLine — interaction logic. Reads STATES/FEDERAL/META from data.js. */
 
-const THEME_KEY = "paycheck-atlas-theme";
+const THEME_KEY = "stateline-theme";
 const STATE_ABBRS = Object.keys(STATES).sort((a, b) => STATES[a].name.localeCompare(STATES[b].name));
 
 const METRICS = [
@@ -16,25 +16,62 @@ const METRICS = [
 ];
 
 const GLOSSARY = [
-  ["State income tax", "A tax your state (sometimes also your city or county) takes out of your paycheck, on top of federal tax. Nine states have none at all."],
-  ["Local / city income tax", "A second, separate wage tax layered on by a city, county, or school district — on top of the state's own rate. Most states don't have this; a handful (NY, PA, OH, MD, and others) do."],
-  ["Social Security & Medicare", "Together called \"FICA\" on a paystub — federal payroll taxes that fund retirement and healthcare programs. Same rate in every state, split between you and your employer."],
-  ["State disability insurance (SDI)", "A payroll deduction that funds short-term pay if you can't work due to a non-work injury or illness. Only 5 states require it."],
-  ["Paid family / medical leave (PFML)", "Insurance-funded paid time off for a new child, a seriously ill family member, or your own serious health condition — distinct from unpaid federal FMLA, which only guarantees job protection, not pay."],
-  ["Unemployment insurance (UI / SUTA)", "A payroll tax your employer pays (not you, in most states) that funds unemployment benefits. The \"wage base\" is how much of each employee's pay gets taxed for this each year."],
-  ["Reciprocity agreement", "A deal between two states where a resident of one who works in the other only pays income tax to their home state — no dual filing."],
-  ["\"Convenience of the employer\" rule", "Lets a state tax a remote worker's wages as if they worked in-state, even if they never set foot there, unless their home office meets a strict legal test."],
-  ["Minimum wage", "The lowest hourly wage an employer can legally pay. The federal floor ($7.25) hasn't moved since 2009 — about a third of states still just use that."],
+  ["State income tax", "A tax your state takes from your paycheck, on top of federal tax. Nine states have none at all."],
+  ["Local / city income tax", "A second wage tax from a city, county, or school district — on top of the state's own rate. Most states don't have one."],
+  ["Social Security & Medicare", "Federal payroll taxes (\"FICA\" on a paystub) that fund retirement and healthcare. Same rate everywhere, split with your employer."],
+  ["State disability insurance (SDI)", "Payroll-funded short-term pay if you can't work due to a non-work injury or illness. Only 5 states require it."],
+  ["Paid family / medical leave (PFML)", "Paid time off for a new child, a sick family member, or your own illness — unlike unpaid federal FMLA, which only protects your job."],
+  ["Unemployment insurance (UI / SUTA)", "A tax your employer (usually not you) pays to fund unemployment benefits."],
+  ["Reciprocity agreement", "A deal where working across a state line doesn't mean filing two income tax returns."],
+  ["\"Convenience of the employer\" rule", "Lets a state tax your wages as if you worked there, even if you're fully remote."],
+  ["Minimum wage", "The lowest hourly wage an employer can legally pay. The federal floor ($7.25) hasn't moved since 2009."],
 ];
 
 let state = {
   metric: "topIncomeTaxRate",
   compare: [],
   openAbbr: null,
+  compareMode: false,
+  listSortAsc: false,
+  currentMetric: null,
+  currentEdges: null,
 };
 
 function fmtMoney(n) {
   return "$" + n.toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* Truncates a note to roughly `max` chars (cut at a sentence/word
+   boundary) with a "more"/"less" toggle — keeps dock/compare cells from
+   turning into paragraphs while the full text stays one click away. */
+function noteHTML(text, max) {
+  max = max || 110;
+  if (!text) return "";
+  if (text.length <= max) return `<p class="fact-note">${text}</p>`;
+  let cut = text.indexOf(". ", Math.min(max, text.length - 1));
+  if (cut === -1 || cut > max + 50) {
+    cut = text.lastIndexOf(" ", max);
+    if (cut <= 0) cut = max;
+  } else {
+    cut = cut + 1;
+  }
+  const short = text.slice(0, cut).trim();
+  return `<p class="fact-note" data-short="${escapeAttr(short)}…" data-full="${escapeAttr(text)}" data-expanded="false">${short}… <button class="note-toggle" type="button">more</button></p>`;
+}
+
+function handleNoteToggle(e) {
+  const btn = e.target.closest(".note-toggle");
+  if (!btn) return;
+  const p = btn.closest(".fact-note");
+  const expanded = p.dataset.expanded === "true";
+  p.innerHTML = expanded
+    ? `${p.dataset.short} <button class="note-toggle" type="button">more</button>`
+    : `${p.dataset.full} <button class="note-toggle" type="button">less</button>`;
+  p.dataset.expanded = expanded ? "false" : "true";
 }
 
 /* ---------------- theme ---------------- */
@@ -84,6 +121,8 @@ function paintMap() {
   const nodes = getInteractiveMapNodes();
   const allValues = STATE_ABBRS.map((abbr) => metric.get(STATES[abbr]));
   const edges = metric.kind === "seq" ? quantileBins(allValues, 6) : null;
+  state.currentMetric = metric;
+  state.currentEdges = edges;
 
   nodes.forEach((node) => {
     const parts = colorablePartsFor(node);
@@ -101,6 +140,7 @@ function paintMap() {
   });
 
   renderLegend(metric, allValues, edges);
+  renderStateList();
 }
 
 function renderLegend(metric, allValues, edges) {
@@ -127,6 +167,71 @@ function renderLegend(metric, allValues, edges) {
   }
 }
 
+/* ---------------- ranked list (side panel, linked to the map) ---------------- */
+function renderStateList() {
+  const metric = state.currentMetric;
+  const edges = state.currentEdges;
+  const list = document.getElementById("state-list");
+  const sortBtn = document.getElementById("sort-toggle");
+  sortBtn.hidden = metric.kind !== "seq";
+  sortBtn.textContent = state.listSortAsc ? "Low → High" : "High → Low";
+
+  let abbrs = [...STATE_ABBRS];
+  if (metric.kind === "seq") {
+    abbrs.sort((a, b) => (state.listSortAsc ? 1 : -1) * (metric.get(STATES[a]) - metric.get(STATES[b])));
+  } else {
+    abbrs.sort((a, b) => {
+      const av = metric.get(STATES[a]) ? 1 : 0;
+      const bv = metric.get(STATES[b]) ? 1 : 0;
+      if (av !== bv) return bv - av;
+      return STATES[a].name.localeCompare(STATES[b].name);
+    });
+  }
+
+  list.innerHTML = abbrs.map((abbr) => {
+    const s = STATES[abbr];
+    const val = metric.get(s);
+    const display = metric.kind === "bool" ? (val ? "Yes" : "No") : metric.fmt(val);
+    const swatchClass = metric.kind === "bool" ? (val ? "yes" : "no") : "bin-" + binIndex(val, edges);
+    const isSelected = abbr === state.openAbbr;
+    const isComparing = state.compare.includes(abbr);
+    return `<li class="state-row${isSelected ? " is-selected" : ""}${isComparing ? " is-comparing" : ""}" data-abbr="${abbr}">
+      <span class="state-row-swatch ${swatchClass}"></span>
+      <span class="state-row-name">${s.name}</span>
+      <span class="state-row-value">${display}</span>
+    </li>`;
+  }).join("");
+}
+
+function highlightLinked(abbr, on) {
+  const node = document.getElementById(abbr);
+  if (node) colorablePartsFor(node).forEach((p) => p.classList.toggle("is-hover-linked", on));
+  const row = document.querySelector(`.state-row[data-abbr="${abbr}"]`);
+  if (row) row.classList.toggle("is-hover", on);
+}
+
+function initStateList() {
+  const list = document.getElementById("state-list");
+  list.addEventListener("click", (e) => {
+    const row = e.target.closest(".state-row");
+    if (!row) return;
+    if (state.compareMode) toggleCompare(row.dataset.abbr);
+    else openDock(row.dataset.abbr);
+  });
+  list.addEventListener("mouseover", (e) => {
+    const row = e.target.closest(".state-row");
+    if (row) highlightLinked(row.dataset.abbr, true);
+  });
+  list.addEventListener("mouseout", (e) => {
+    const row = e.target.closest(".state-row");
+    if (row) highlightLinked(row.dataset.abbr, false);
+  });
+  document.getElementById("sort-toggle").addEventListener("click", () => {
+    state.listSortAsc = !state.listSortAsc;
+    renderStateList();
+  });
+}
+
 function initMetricSelect() {
   const sel = document.getElementById("metric-select");
   sel.innerHTML = METRICS.map((m) => `<option value="${m.key}">${m.label}</option>`).join("");
@@ -149,7 +254,18 @@ function initMapInteraction() {
       const s = STATES[abbr];
       const val = metric.get(s);
       const display = metric.kind === "bool" ? (val ? "Yes" : "No") : metric.fmt(val);
-      tooltip.innerHTML = `<strong>${s.name}</strong>${metric.label}: ${display}`;
+      const badges = [
+        s.localTax.exists ? '<span class="mini-badge">Local tax</span>' : "",
+        s.disability.has ? '<span class="mini-badge">SDI</span>' : "",
+        s.paidLeave.has ? '<span class="mini-badge">PFL</span>' : "",
+        s.reciprocity.convenienceRule ? '<span class="mini-badge mini-badge-warn">Convenience rule</span>' : "",
+      ].filter(Boolean).join("");
+      tooltip.innerHTML = `
+        <strong>${s.name}</strong>
+        <div class="tooltip-stats">Tax ${s.incomeTax.type === "none" ? "none" : s.incomeTax.topRate + "%"} · Min wage $${s.minWage.value.toFixed(2)}</div>
+        ${badges ? `<div class="tooltip-badges">${badges}</div>` : ""}
+        <div class="tooltip-metric">${metric.label}: <strong>${display}</strong></div>
+      `;
       tooltip.hidden = false;
       const rect = wrap.getBoundingClientRect();
       let x = evt.clientX - rect.left + 14;
@@ -158,9 +274,12 @@ function initMapInteraction() {
       tooltip.style.top = y + "px";
     };
     node.addEventListener("mousemove", show);
-    node.addEventListener("mouseenter", show);
-    node.addEventListener("mouseleave", () => { tooltip.hidden = true; });
-    node.addEventListener("click", () => openDock(abbr));
+    node.addEventListener("mouseenter", (evt) => { show(evt); highlightLinked(abbr, true); });
+    node.addEventListener("mouseleave", () => { tooltip.hidden = true; highlightLinked(abbr, false); });
+    node.addEventListener("click", () => {
+      if (state.compareMode) toggleCompare(abbr);
+      else openDock(abbr);
+    });
   });
 }
 
@@ -175,11 +294,42 @@ function refreshMapSelectionClasses() {
       p.classList.toggle("is-comparing", isComparing && !isSelected);
     });
   });
+  document.querySelectorAll(".state-row").forEach((row) => {
+    const abbr = row.dataset.abbr;
+    row.classList.toggle("is-selected", abbr === state.openAbbr);
+    row.classList.toggle("is-comparing", state.compare.includes(abbr) && abbr !== state.openAbbr);
+  });
+}
+
+/* Briefly glows one state on first load — a quiet nudge toward the
+   state the whole page was built around, instead of making the visitor
+   hunt for it. */
+function pulseStateOnce(abbr) {
+  const node = document.getElementById(abbr);
+  if (!node) return;
+  const parts = colorablePartsFor(node);
+  parts.forEach((p) => p.classList.add("pulse-intro"));
+  setTimeout(() => parts.forEach((p) => p.classList.remove("pulse-intro")), 1700);
+}
+
+/* ---------------- compare mode (click-to-add straight from the map) ---------------- */
+function initCompareModeToggle() {
+  const btn = document.getElementById("compare-mode-toggle");
+  const wrap = document.getElementById("map-wrap");
+  const hint = document.getElementById("map-hint");
+  btn.addEventListener("click", () => {
+    state.compareMode = !state.compareMode;
+    btn.setAttribute("aria-pressed", String(state.compareMode));
+    wrap.classList.toggle("is-compare-mode", state.compareMode);
+    hint.innerHTML = state.compareMode
+      ? "Click states to add or remove them from the comparison tray below."
+      : "Click a state for its full profile. Turn on <strong>Compare mode</strong> to click states onto the tray instead.";
+  });
 }
 
 /* ---------------- dock (state detail) ---------------- */
 function factCard(value, note, extraClass) {
-  return `<div class="dock-fact ${extraClass || ""}"><div class="fact-value">${value}</div>${note ? `<p class="fact-note">${note}</p>` : ""}</div>`;
+  return `<div class="dock-fact ${extraClass || ""}"><div class="fact-value">${value}</div>${noteHTML(note)}</div>`;
 }
 
 function badge(yes, yesText, noText) {
@@ -263,6 +413,7 @@ function initDock() {
   document.getElementById("dock-close").addEventListener("click", closeDock);
   document.getElementById("dock-scrim").addEventListener("click", closeDock);
   document.getElementById("dock-content").addEventListener("click", (e) => {
+    handleNoteToggle(e);
     const btn = e.target.closest('[data-action="toggle-compare"]');
     if (!btn) return;
     toggleCompare(btn.dataset.abbr);
@@ -311,16 +462,16 @@ function renderCompareContent(abbrs) {
     <table class="compare-table">
       <thead><tr><th></th>${states.map((s) => `<th>${s.name}</th>`).join("")}</tr></thead>
       <tbody>
-        ${compareRow("Income tax", states.map((s) => `<span class="fact-value">${s.incomeTax.type === "none" ? "0%" : s.incomeTax.topRate + "%"}</span>${s.incomeTax.notes || ""}`))}
-        ${compareRow("Local / city tax", states.map((s) => (s.localTax.exists ? `<span class="badge badge-yes">Yes</span> ${s.localTax.notes}` : `<span class="badge badge-no">No</span>`)))}
+        ${compareRow("Income tax", states.map((s) => `<span class="fact-value">${s.incomeTax.type === "none" ? "0%" : s.incomeTax.topRate + "%"}</span>${noteHTML(s.incomeTax.notes, 90)}`))}
+        ${compareRow("Local / city tax", states.map((s) => (s.localTax.exists ? `<span class="badge badge-yes">Yes</span> ${noteHTML(s.localTax.notes, 90)}` : `<span class="badge badge-no">No</span>`)))}
         ${compareRow("Disability insurance", states.map((s) => (s.disability.has ? `<span class="fact-value">${s.disability.program}</span>${s.disability.employeeRate || ""}` : "None")))}
         ${compareRow("Paid family/medical leave", states.map((s) => (s.paidLeave.has ? `<span class="fact-value">${s.paidLeave.program}</span>` : "None")))}
         ${compareRow("Unemployment insurance (employer)", states.map((s) => `<span class="fact-value">${fmtMoney(s.ui.wageBase)} base</span>${s.ui.newEmployerRate} new-employer rate`))}
         ${compareRow("Minimum wage", states.map((s) => `<span class="fact-value">${s.minWage.rate}</span>`))}
         ${compareRow("Reciprocity", states.map((s) => (s.reciprocity.agreements.length ? s.reciprocity.agreements.map((a) => (STATES[a] ? STATES[a].name : a)).join(", ") : "None")))}
         ${compareRow('"Convenience" rule', states.map((s) => (s.reciprocity.convenienceRule ? '<span class="badge badge-critical">Yes</span>' : '<span class="badge badge-no">No</span>')))}
-        ${compareRow("Reciprocity / commuter notes", states.map((s) => s.reciprocity.notes || "—"))}
-        ${compareRow("Workers' comp & overtime", states.map((s) => s.workersComp.notes))}
+        ${compareRow("Reciprocity / commuter notes", states.map((s) => noteHTML(s.reciprocity.notes, 90) || "—"))}
+        ${compareRow("Workers' comp & overtime", states.map((s) => noteHTML(s.workersComp.notes, 90)))}
       </tbody>
     </table>
   `;
@@ -339,30 +490,55 @@ function initCompareOverlay() {
   document.getElementById("compare-overlay").addEventListener("click", (e) => {
     if (e.target.id === "compare-overlay") document.getElementById("compare-overlay").hidden = true;
   });
+  document.getElementById("compare-content").addEventListener("click", handleNoteToggle);
 }
 
 /* ---------------- search ---------------- */
 function initSearch() {
   const input = document.getElementById("search");
   const results = document.getElementById("search-results");
+  let matches = [];
+  let activeIndex = -1;
 
   function render(query) {
     const q = query.trim().toLowerCase();
-    if (!q) { results.hidden = true; results.innerHTML = ""; return; }
-    const matches = STATE_ABBRS.filter((abbr) => STATES[abbr].name.toLowerCase().includes(q) || abbr.toLowerCase() === q).slice(0, 8);
+    activeIndex = -1;
+    if (!q) { results.hidden = true; results.innerHTML = ""; matches = []; return; }
+    matches = STATE_ABBRS.filter((abbr) => STATES[abbr].name.toLowerCase().includes(q) || abbr.toLowerCase() === q).slice(0, 8);
     if (!matches.length) { results.hidden = true; results.innerHTML = ""; return; }
     results.innerHTML = matches.map((abbr) => `<button type="button" data-abbr="${abbr}">${STATES[abbr].name}</button>`).join("");
     results.hidden = false;
   }
 
+  function setActive(i) {
+    const buttons = results.querySelectorAll("button");
+    buttons.forEach((b) => b.classList.remove("active"));
+    activeIndex = i;
+    if (i >= 0 && buttons[i]) {
+      buttons[i].classList.add("active");
+      buttons[i].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function select(abbr) {
+    openDock(abbr);
+    input.value = "";
+    results.hidden = true;
+  }
+
   input.addEventListener("input", () => render(input.value));
   input.addEventListener("focus", () => { if (input.value) render(input.value); });
+  input.addEventListener("keydown", (e) => {
+    if (results.hidden || !matches.length) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive(Math.min(activeIndex + 1, matches.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActive(Math.max(activeIndex - 1, 0)); }
+    else if (e.key === "Enter") { e.preventDefault(); select(matches[activeIndex >= 0 ? activeIndex : 0]); }
+    else if (e.key === "Escape") { results.hidden = true; }
+  });
   results.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-abbr]");
     if (!btn) return;
-    openDock(btn.dataset.abbr);
-    input.value = "";
-    results.hidden = true;
+    select(btn.dataset.abbr);
   });
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".search-wrap")) results.hidden = true;
@@ -377,22 +553,22 @@ function initFederalStrip() {
     <div class="federal-card">
       <div class="fed-label">Federal income tax</div>
       <div class="fed-value">10%–37%</div>
-      <p class="fed-note">7 brackets, same nationwide. Standard deduction: ${fmtMoney(f.incomeTax.standardDeduction.single)} single / ${fmtMoney(f.incomeTax.standardDeduction.mfj)} joint (2026).</p>
+      <p class="fed-note">7 brackets, same nationwide.</p>
     </div>
     <div class="federal-card">
       <div class="fed-label">Social Security</div>
       <div class="fed-value">6.2% + 6.2%</div>
-      <p class="fed-note">Only on the first ${fmtMoney(f.socialSecurity.wageBase2026)} of 2026 wages — the cap above which this tax simply stops.</p>
+      <p class="fed-note">Capped at ${fmtMoney(f.socialSecurity.wageBase2026)} of 2026 wages.</p>
     </div>
     <div class="federal-card">
       <div class="fed-label">Medicare</div>
       <div class="fed-value">1.45% + 1.45%</div>
-      <p class="fed-note">No wage cap, plus an extra 0.9% employee-only surtax above ${f.medicare.additionalMedicareTax.threshold.split("/")[0].trim()} (single).</p>
+      <p class="fed-note">No cap, +0.9% above $200K (single).</p>
     </div>
     <div class="federal-card">
       <div class="fed-label">FUTA (employer-only)</div>
       <div class="fed-value">~0.6%</div>
-      <p class="fed-note">On the first ${fmtMoney(f.futa.wageBase)} of wages — nearly every employer gets the full 5.4% credit, so this is the real-world rate.</p>
+      <p class="fed-note">On the first ${fmtMoney(f.futa.wageBase)} of wages.</p>
     </div>
   `;
 }
@@ -418,7 +594,7 @@ function initDisclaimer() {
   });
 }
 
-/* ---------------- spotlight CTA ---------------- */
+/* ---------------- NY/NJ/CT quick-compare CTA ---------------- */
 function initSpotlight() {
   document.getElementById("spotlight-compare").addEventListener("click", () => {
     state.compare = ["NY", "NJ", "CT"];
@@ -438,6 +614,8 @@ document.addEventListener("keydown", (e) => {
 /* ---------------- init ---------------- */
 initMetricSelect();
 initMapInteraction();
+initStateList();
+initCompareModeToggle();
 initDock();
 initCompareTray();
 initCompareOverlay();
@@ -447,3 +625,4 @@ initGlossary();
 initDisclaimer();
 initSpotlight();
 paintMap();
+pulseStateOnce("NY");
