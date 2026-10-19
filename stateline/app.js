@@ -321,6 +321,7 @@ function initCompareModeToggle() {
     state.compareMode = !state.compareMode;
     btn.setAttribute("aria-pressed", String(state.compareMode));
     wrap.classList.toggle("is-compare-mode", state.compareMode);
+    if (state.compareMode && state.openAbbr) closeDock();
     hint.innerHTML = state.compareMode
       ? "Click states to add or remove them from the comparison tray below."
       : "Click a state for its full profile. Turn on <strong>Compare mode</strong> to click states onto the tray instead.";
@@ -464,12 +465,35 @@ function initDock() {
 }
 
 /* ---------------- compare tray / overlay ---------------- */
+/* Comparison-slot colors: the first 3 categorical hues, the only subset
+   the dataviz skill validates CVD-safe for all pairwise comparisons at
+   once (see --series-* tokens) — assigned by selection order, not by
+   state identity, since the compared set changes every time. */
+const SERIES_VARS = ["var(--series-1)", "var(--series-2)", "var(--series-3)"];
+
+function pulseCompareGo() {
+  const go = document.getElementById("compare-go");
+  go.classList.remove("is-ready-pulse");
+  void go.offsetWidth;
+  go.classList.add("is-ready-pulse");
+}
+
+function shakeCompareTray() {
+  const tray = document.getElementById("compare-tray");
+  tray.classList.remove("is-maxed");
+  void tray.offsetWidth;
+  tray.classList.add("is-maxed");
+}
+
 function toggleCompare(abbr) {
   const idx = state.compare.indexOf(abbr);
   if (idx >= 0) {
     state.compare.splice(idx, 1);
   } else if (state.compare.length < 3) {
     state.compare.push(abbr);
+    if (state.compare.length === 2) pulseCompareGo();
+  } else {
+    shakeCompareTray();
   }
   renderCompareTray();
   refreshMapSelectionClasses();
@@ -478,7 +502,7 @@ function toggleCompare(abbr) {
 function renderCompareTray() {
   const chips = document.getElementById("compare-chips");
   chips.innerHTML = state.compare
-    .map((abbr) => `<span class="compare-chip">${STATES[abbr].name} <button data-abbr="${abbr}" aria-label="Remove">×</button></span>`)
+    .map((abbr, i) => `<span class="compare-chip" style="border-color:${SERIES_VARS[i]}"><span class="legend-swatch" style="background:${SERIES_VARS[i]}"></span>${STATES[abbr].name} <button data-abbr="${abbr}" aria-label="Remove">×</button></span>`)
     .join("");
   const go = document.getElementById("compare-go");
   go.disabled = state.compare.length < 2;
@@ -490,32 +514,76 @@ function initCompareTray() {
     if (!btn) return;
     toggleCompare(btn.dataset.abbr);
   });
-  document.getElementById("compare-go").addEventListener("click", () => openCompare(state.compare));
+  document.getElementById("compare-go").addEventListener("click", () => {
+    document.getElementById("compare-go").classList.remove("is-ready-pulse");
+    openCompare(state.compare);
+  });
 }
 
-function compareRow(label, cells) {
-  return `<tr><th>${label}</th>${cells.map((c) => `<td>${c}</td>`).join("")}</tr>`;
+function compareBarChart(metricKey, abbrs) {
+  const metric = METRICS.find((m) => m.key === metricKey);
+  const allValues = STATE_ABBRS.map((a) => metric.get(STATES[a]));
+  const max = Math.max(...allValues) || 1;
+  const rows = abbrs.map((abbr, i) => {
+    const val = metric.get(STATES[abbr]);
+    const pct = val > 0 ? Math.max((val / max) * 100, 2) : 0;
+    return `
+      <div class="cbar-row">
+        <span class="cbar-label">${STATES[abbr].name}</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:${pct}%; background:${SERIES_VARS[i]}"></div></div>
+        <span class="cbar-value">${metric.fmt(val)}</span>
+      </div>`;
+  }).join("");
+  return `<div class="compare-chart"><div class="compare-chart-title">${metric.label}</div>${rows}</div>`;
+}
+
+function compareMatrixRow(label, abbrs, getter, trueText) {
+  const cells = abbrs.map((abbr) => {
+    const v = getter(STATES[abbr]);
+    return `<td>${v ? `<span class="badge badge-yes">✓ ${trueText || "Yes"}</span>` : `<span class="badge badge-no">No</span>`}</td>`;
+  }).join("");
+  return `<tr><th>${label}</th>${cells}</tr>`;
+}
+
+function renderCompareMatrix(abbrs) {
+  const header = abbrs.map((a) => `<th>${STATES[a].name}</th>`).join("");
+  const rows = [
+    compareMatrixRow("Local / city tax", abbrs, (s) => s.localTax.exists),
+    compareMatrixRow("Disability insurance", abbrs, (s) => s.disability.has),
+    compareMatrixRow("Paid family/medical leave", abbrs, (s) => s.paidLeave.has),
+    compareMatrixRow("Reciprocity with a neighbor", abbrs, (s) => s.reciprocity.agreements.length > 0),
+    compareMatrixRow('"Convenience" rule', abbrs, (s) => s.reciprocity.convenienceRule),
+  ].join("");
+  return `<table class="compare-matrix"><thead><tr><th></th>${header}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderCompareDetailCards(abbrs) {
+  return `<div class="compare-detail-grid">${abbrs.map((abbr, i) => {
+    const s = STATES[abbr];
+    const bracketPart = s.incomeTax.type === "none"
+      ? `<p class="bracket-flat-note">No state income tax.</p>`
+      : bracketTableHTML(s.incomeTax.bracketsSingle);
+    const commuterPart = s.reciprocity.notes ? `<p><strong>Commuter rules:</strong></p>${noteHTML(s.reciprocity.notes, 130)}` : "";
+    return `
+      <div class="compare-detail-card" style="--card-color:${SERIES_VARS[i]}">
+        <h4>${s.name}</h4>
+        ${bracketPart}
+        ${commuterPart}
+      </div>`;
+  }).join("")}</div>`;
 }
 
 function renderCompareContent(abbrs) {
-  const states = abbrs.map((a) => STATES[a]);
+  const stateChips = abbrs.map((abbr, i) => `<span class="compare-state-chip" style="background:${SERIES_VARS[i]}"><span class="swatch"></span>${STATES[abbr].name}</span>`).join("");
   return `
     <h2>Side by side</h2>
-    <table class="compare-table">
-      <thead><tr><th></th>${states.map((s) => `<th>${s.name}</th>`).join("")}</tr></thead>
-      <tbody>
-        ${compareRow("Income tax", states.map((s) => `<span class="fact-value">${s.incomeTax.type === "none" ? "0%" : s.incomeTax.topRate + "%"}</span>${noteHTML(s.incomeTax.notes, 90)}`))}
-        ${compareRow("Local / city tax", states.map((s) => (s.localTax.exists ? `<span class="badge badge-yes">Yes</span> ${noteHTML(s.localTax.notes, 90)}` : `<span class="badge badge-no">No</span>`)))}
-        ${compareRow("Disability insurance", states.map((s) => (s.disability.has ? `<span class="fact-value">${s.disability.program}</span>${s.disability.employeeRate || ""}` : "None")))}
-        ${compareRow("Paid family/medical leave", states.map((s) => (s.paidLeave.has ? `<span class="fact-value">${s.paidLeave.program}</span>` : "None")))}
-        ${compareRow("Unemployment insurance (employer)", states.map((s) => `<span class="fact-value">${fmtMoney(s.ui.wageBase)} base</span>${s.ui.newEmployerRate} new-employer rate`))}
-        ${compareRow("Minimum wage", states.map((s) => `<span class="fact-value">${s.minWage.rate}</span>`))}
-        ${compareRow("Reciprocity", states.map((s) => (s.reciprocity.agreements.length ? s.reciprocity.agreements.map((a) => (STATES[a] ? STATES[a].name : a)).join(", ") : "None")))}
-        ${compareRow('"Convenience" rule', states.map((s) => (s.reciprocity.convenienceRule ? '<span class="badge badge-critical">Yes</span>' : '<span class="badge badge-no">No</span>')))}
-        ${compareRow("Reciprocity / commuter notes", states.map((s) => noteHTML(s.reciprocity.notes, 90) || "—"))}
-        ${compareRow("Workers' comp & overtime", states.map((s) => noteHTML(s.workersComp.notes, 90)))}
-      </tbody>
-    </table>
+    <div class="compare-states">${stateChips}</div>
+    ${compareBarChart("topIncomeTaxRate", abbrs)}
+    ${compareBarChart("minWage", abbrs)}
+    ${compareBarChart("uiWageBase", abbrs)}
+    ${renderCompareMatrix(abbrs)}
+    <div class="compare-detail-title">Income tax brackets &amp; commuter notes</div>
+    ${renderCompareDetailCards(abbrs)}
   `;
 }
 

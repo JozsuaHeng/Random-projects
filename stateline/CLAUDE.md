@@ -189,6 +189,62 @@ every other project in `ai-slop/` (see `factlas/`, `corporate-radar/`).
   (`radial-gradient` repeating at 22px) behind everything — subtle on
   purpose, should read as texture, not pattern, in both themes.
 
+## Compare view (2026-10-19, "visualize the data better" pass)
+
+The compare overlay (`renderCompareContent()`) used to be a plain text
+table — user feedback was that it didn't feel like it was "really
+working" even though it was, mechanically; the real problem was the
+output had no visual structure. Rebuilt around three pieces, all keyed
+off `SERIES_VARS` (comparison-slot colors 1–3, the first three
+categorical hues — the only subset the dataviz skill validates
+all-pairs CVD-safe, which is exactly this "up to 3 things side by side"
+case): a grouped horizontal bar chart per numeric metric
+(`compareBarChart()`, for top income tax rate / minimum wage / UI wage
+base), a yes/no matrix for boolean facts (`renderCompareMatrix()`), and
+a row of per-state detail cards with a full bracket table each
+(`renderCompareDetailCards()`, reusing `bracketTableHTML()` from the
+dock). The same slot colors carry through the state chips at the top,
+the bars, the detail cards' top border, and the compare tray's chips —
+assigned by **selection order**, not state identity, since the compared
+set changes every time.
+
+Two small compare-mode robustness fixes landed alongside this: clicking
+a 4th state while already at the 3-state cap now shakes the tray
+(`shakeCompareTray()`) instead of silently doing nothing, and the
+"Compare →" button pulses once (`pulseCompareGo()`) the moment a 2nd
+state is added, so it's obvious there's now something to click. (Turning
+on Compare mode also closes an open dock, though in practice the dock's
+own full-screen scrim already blocks every other click while it's open,
+so a user can never actually reach the toggle with a dock open — this is
+defensive, not reachable in normal use.)
+
+## Map styling (2026-10-19, "more professional, less AI-generated" pass)
+
+Two changes to `.map-wrap`/`#us-svg-map`, both in `style.css` + the SVG's
+own attributes in `index.html`:
+
+- **Height**: `.map-area` went from `align-items: start` to `stretch`,
+  and `.map-wrap` is now a flex column with `#us-svg-map { flex: 1 1
+  auto; min-height: 0; }` — the map card now always matches the side
+  column's height (legend + ranked list + tray) instead of stopping
+  short and leaving a gap. The SVG's `preserveAspectRatio` changed from
+  `xMinYMin meet` (letterbox, top-left anchored) to `xMidYMid slice`
+  (crop-to-fill, centered) so the actual map art fills that taller box
+  rather than floating in extra whitespace. If the side column ever gets
+  much taller (e.g. a much longer ranked list), check the crop isn't
+  eating into AK/HI at the bottom — it was fine at the heights tested,
+  but `slice` will crop further if the height gap grows a lot.
+- **Choropleth palette**: `--seq-1`..`--seq-6` and `--map-fill-yes` (in
+  all three light/dark token blocks) were swapped from the saturated
+  "SaaS blue" ramp to a muted, desaturated slate-to-ink-navy ramp —
+  deliberately *not* the same hue as `--accent`/`--cat-income`/
+  `--series-1` (those stayed the vivid brand blue; this was a
+  map-specific complaint, not a full rebrand). Still one hue, light→dark
+  monotonic, same method as the dataviz skill's default — just a more
+  editorial/muted instance of it. If the map ever needs re-tuning again,
+  change only these tokens; don't touch the brand accent tokens unless
+  asked separately.
+
 ## Testing this project
 
 No test suite — it's static content + DOM manipulation. The real

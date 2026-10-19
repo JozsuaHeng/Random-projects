@@ -27,15 +27,20 @@
   --map-fill: #d8d6cc;
   --map-stroke: #fcfcfb;
   --map-fill-no: #e7e5dc;
-  --map-fill-yes: #2a78d6;
+  --map-fill-yes: #3d5a70;
   --map-hover-stroke: #16150f;
   --map-selected-stroke: #c23a3a;
-  --seq-1: #cde2fb;
-  --seq-2: #9ec5f4;
-  --seq-3: #6da7ec;
-  --seq-4: #3987e5;
-  --seq-5: #1c5cab;
-  --seq-6: #0d366b;
+  /* Muted slate-ink ramp for the choropleth specifically — deliberately
+     desaturated vs. the brand accent blue used elsewhere (buttons,
+     header), so the map itself reads as a printed/editorial atlas
+     rather than a bright "app gradient." Still one hue, light->dark,
+     monotonic — same method as the skill's default, different hue. */
+  --seq-1: #e2e7ec;
+  --seq-2: #c2ccd6;
+  --seq-3: #9fb0bd;
+  --seq-4: #70869a;
+  --seq-5: #4a657c;
+  --seq-6: #223a4c;
   --shadow: 0 16px 40px -12px rgba(22, 21, 15, 0.18);
   --radius: 14px;
   --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
@@ -51,6 +56,12 @@
   --cat-wage: #008300;
   --cat-reciprocity: #4a3aa7;
   --cat-workerscomp: #e34948;
+  /* comparison slots 1-3: first three categorical hues, the only subset
+     the dataviz skill validates all-pairs CVD-safe in both modes —
+     exactly the "up to 3 states side by side" case this is used for */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,15 +84,15 @@
     --map-fill: #3a3934;
     --map-stroke: #1a1a19;
     --map-fill-no: #2b2a26;
-    --map-fill-yes: #3987e5;
+    --map-fill-yes: #6a8ba3;
     --map-hover-stroke: #ffffff;
     --map-selected-stroke: #e66767;
-    --seq-1: #184f95;
-    --seq-2: #1c5cab;
-    --seq-3: #256abf;
-    --seq-4: #2a78d6;
-    --seq-5: #5598e7;
-    --seq-6: #86b6ef;
+    --seq-1: #2c3d4d;
+    --seq-2: #3d5468;
+    --seq-3: #547086;
+    --seq-4: #7392a8;
+    --seq-5: #9ab4c6;
+    --seq-6: #c9d8e2;
     --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
     --cat-income: #3987e5;
     --cat-local: #d95926;
@@ -91,6 +102,9 @@
     --cat-wage: #008300;
     --cat-reciprocity: #9085e9;
     --cat-workerscomp: #e66767;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
   }
 }
 :root[data-theme="dark"] {
@@ -112,15 +126,15 @@
   --map-fill: #3a3934;
   --map-stroke: #1a1a19;
   --map-fill-no: #2b2a26;
-  --map-fill-yes: #3987e5;
+  --map-fill-yes: #6a8ba3;
   --map-hover-stroke: #ffffff;
   --map-selected-stroke: #e66767;
-  --seq-1: #184f95;
-  --seq-2: #1c5cab;
-  --seq-3: #256abf;
-  --seq-4: #2a78d6;
-  --seq-5: #5598e7;
-  --seq-6: #86b6ef;
+  --seq-1: #2c3d4d;
+  --seq-2: #3d5468;
+  --seq-3: #547086;
+  --seq-4: #7392a8;
+  --seq-5: #9ab4c6;
+  --seq-6: #c9d8e2;
   --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
   --cat-income: #3987e5;
   --cat-local: #d95926;
@@ -130,6 +144,9 @@
   --cat-wage: #008300;
   --cat-reciprocity: #9085e9;
   --cat-workerscomp: #e66767;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
 }
 
 * { box-sizing: border-box; }
@@ -228,13 +245,17 @@ button.feature-chip { cursor: pointer; }
 .mode-toggle[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 14%, var(--bg-raised)); border-color: var(--accent); color: var(--accent); }
 .mode-toggle[aria-pressed="true"] .mode-toggle-dot { background: var(--accent); }
 .map-wrap.is-compare-mode #us-svg-map path, .map-wrap.is-compare-mode #us-svg-map circle { cursor: copy; }
-.map-area { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; margin-top: 22px; align-items: start; }
+.map-area { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; margin-top: 22px; align-items: stretch; }
 .map-wrap {
   position: relative; background: var(--bg-raised); border: 1px solid var(--border); border-radius: 20px;
-  padding: 28px; box-shadow: var(--shadow);
+  padding: 28px; box-shadow: var(--shadow); display: flex; flex-direction: column;
   background-image: radial-gradient(ellipse 85% 70% at 50% 42%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
 }
-#us-svg-map { width: 100%; height: auto; display: block; }
+/* Stretches to match the side column's height (legend + list + tray),
+   so the map fills down to the same bottom edge instead of stopping
+   short — preserveAspectRatio="slice" on the SVG itself (index.html)
+   crops gently rather than leaving empty card below the art. */
+#us-svg-map { width: 100%; flex: 1 1 auto; min-height: 0; display: block; }
 #us-svg-map path, #us-svg-map circle {
   fill: var(--map-fill); stroke: var(--map-stroke); stroke-width: 1.1; stroke-linejoin: round;
   transition: fill 0.15s ease, filter 0.15s ease, stroke-width 0.1s ease; cursor: pointer;
@@ -336,6 +357,17 @@ button.feature-chip { cursor: pointer; }
 .compare-chip button { background: none; border: none; color: var(--text-muted); font-size: 1rem; line-height: 1; padding: 0; }
 .compare-go { background: var(--accent); color: #fff; border: none; border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 0.86rem; }
 .compare-go:disabled { background: var(--border-strong); color: var(--text-muted); cursor: not-allowed; }
+@keyframes go-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 50%, transparent); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+.compare-go.is-ready-pulse { animation: go-pulse 1s ease-out 2; }
+@keyframes tray-shake {
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+.compare-tray.is-maxed { animation: tray-shake 0.4s ease; }
 
 /* ---------- federal strip ---------- */
 .federal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
@@ -447,18 +479,46 @@ button.feature-chip { cursor: pointer; }
 }
 .compare-overlay[hidden], .modal-overlay[hidden] { display: none; }
 .compare-panel {
-  background: var(--bg-raised); border-radius: 18px; max-width: 1000px; width: 100%; max-height: 88vh;
-  overflow-y: auto; padding: 28px 28px 36px; position: relative; box-shadow: var(--shadow);
+  background: var(--bg-raised); border-radius: 18px; max-width: 1080px; width: 100%; max-height: 88vh;
+  overflow-y: auto; padding: 28px 32px 36px; position: relative; box-shadow: var(--shadow);
 }
 .compare-close, .modal-close {
   position: sticky; top: 0; float: right; width: 34px; height: 34px; border-radius: 50%;
   border: 1px solid var(--border-strong); background: var(--bg-raised); font-size: 1.3rem; z-index: 5;
 }
-.compare-table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 0.88rem; }
-.compare-table th, .compare-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.compare-table thead th { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text-primary); background: var(--bg-sunken); position: sticky; top: 0; }
-.compare-table tbody tr th { white-space: nowrap; color: var(--text-muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; width: 160px; }
-.compare-table td .fact-value { font-family: var(--font-mono); font-weight: 600; display: block; margin-bottom: 3px; }
+
+/* state-identity chips: comparison slot 1/2/3, in order selected */
+.compare-states { display: flex; gap: 10px; margin: 16px 0 28px; flex-wrap: wrap; }
+.compare-state-chip {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+  font-weight: 700; font-size: 0.92rem; color: #fff;
+}
+.compare-state-chip .swatch { width: 10px; height: 10px; border-radius: 50%; background: #fff; opacity: 0.85; }
+
+/* grouped horizontal bar charts, one per numeric metric */
+.compare-chart { margin-bottom: 26px; }
+.compare-chart-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 10px; }
+.cbar-row { display: grid; grid-template-columns: 110px 1fr 90px; align-items: center; gap: 10px; margin-bottom: 7px; }
+.cbar-label { font-size: 0.86rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cbar-track { background: var(--bg-sunken); border-radius: 6px; height: 18px; overflow: hidden; }
+.cbar-fill { height: 100%; border-radius: 6px; min-width: 3px; transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.cbar-value { font-family: var(--font-mono); font-size: 0.86rem; font-weight: 600; color: var(--text-primary); text-align: right; }
+
+/* yes/no matrix for boolean facts */
+.compare-matrix { width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 0.86rem; }
+.compare-matrix th, .compare-matrix td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.compare-matrix thead th { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 700; }
+.compare-matrix tbody th { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+.compare-matrix td { vertical-align: top; }
+
+/* per-state detail cards: brackets + short notes, side by side */
+.compare-detail-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 30px 0 12px; }
+.compare-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.compare-detail-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; border-top: 3px solid var(--card-color, var(--accent)); }
+.compare-detail-card h4 { font-family: var(--font-display); font-size: 1rem; margin-bottom: 8px; }
+.compare-detail-card .bracket-table { font-size: 0.78rem; }
+.compare-detail-card .bracket-table caption { display: none; }
+.compare-detail-card p { font-size: 0.82rem; margin: 8px 0 0; }
 
 /* ---------- modal ---------- */
 .modal-panel { background: var(--bg-raised); border-radius: 18px; max-width: 560px; width: 100%; padding: 28px 28px 32px; box-shadow: var(--shadow); }
