@@ -274,19 +274,13 @@ inline instead. It's now a normal section in the page flow:
   first-time visitor sees a filled-in example immediately instead of an
   empty placeholder — the `false` skips the scroll since there's nothing
   to scroll to yet on initial load.
-- **Tax stack** (`taxStackHTML()`): a new component inside the
-  breakdown, directly above the existing category grid — a grouped bar
-  chart of Federal / state / local top marginal rates stacked together,
-  plus a naive summed "combined top marginal" figure with an explicit
-  caveat that it's a rough ceiling (sum of top rates), not an accurate
-  effective-rate calculation. This is what actually answers "what's my
-  full tax picture" for a specific state, which the always-visible
-  federal strip (generic, not state-specific) can't do on its own.
-  Needs `localTax.topRate` (a number) to show a local figure — only the
-  11 local-tax states have this field (`data.js`, added alongside
-  `topRateLabel` for the bar's caption); a local-tax state without a
-  parseable top rate still shows in the stack but with "varies by city"
-  instead of a number, rather than inventing a figure.
+- **Tax stack, v1 → replaced same day**: the first version
+  (`taxStackHTML()`) showed each layer's top MARGINAL bracket rate
+  (federal 37%, etc.) stacked together. The user flagged this almost
+  immediately as misleading — 37% is the rate on income over $640,600,
+  not "your" rate — so it was replaced by the salary calculator below.
+  `taxStackHTML()` no longer exists; don't resurrect a top-rate-only
+  summary as the headline number for "what will I actually pay."
 - **Category grid**: what used to stack single-column in the narrow dock
   is now `.breakdown-grid`, a `repeat(auto-fit, minmax(300px, 1fr))`
   responsive grid (collapses to 1 column on mobile) — reuses the same
@@ -300,6 +294,50 @@ inline instead. It's now a normal section in the page flow:
   remaining summary cards (Social Security / Medicare / FUTA — income
   tax's own card was removed from that grid since it has its own block
   now).
+
+## Salary calculator (2026-10-19, replaced the top-marginal tax stack)
+
+`computePaycheck(s, salary)` is the real math — a standard progressive
+bracket calculator (`computeBracketTax(brackets, income)`: sums tax
+owed through each bracket up to `income`, not `income * top rate`)
+applied to federal (minus the federal standard deduction — we don't
+model state-specific deductions, flagged in the UI via
+`.paycheck-note`), FICA (Social Security capped at the wage base, plus
+Medicare with the 0.9% additional-Medicare kicker over $200k), state
+(flat-rate states just multiply; progressive states use
+`incomeTax.bracketsSingle`), and local (uses `localTax.bracketsSingle`
+where it exists — **only NY has this**, the real NYC bracket ladder,
+since NYC is the flagship example this whole app is built around; every
+other local-tax state falls back to `localTax.topRate` as a flat
+approximation, flagged with "(approx.)" in the label and a
+`.paycheck-note` under the bar).
+
+- **`state.salary`** (default `65000` — a round, defensible "example"
+  full-time-worker figure, not tied to any one state) persists across
+  state switches, so comparing NY vs. TX at the same salary doesn't
+  require retyping it.
+- **`salaryBoxHTML()`** renders the `#salary-input` text field — always
+  pre-filled with a real computed example (never an empty placeholder
+  the user has to clear first). `initBreakdown()` listens for `input` on
+  it (live, every keystroke) and re-renders *only*
+  `#paycheck-breakdown`'s innerHTML, not the whole breakdown section —
+  critical, because replacing the input element itself on every
+  keystroke would steal focus/cursor position. Reformatting with commas
+  happens on `focusout` (bubbles, unlike `blur`, so one delegated
+  listener on `#state-breakdown-content` catches it) rather than on
+  every keystroke, so the user isn't fighting a cursor that jumps around
+  while they type.
+- **`paycheckBreakdownHTML()`** renders one stacked bar
+  (`.paycheck-bar`/`.paycheck-segment`, width % of each segment relative
+  to gross salary) plus a line-item legend with both the dollar amount
+  and effective % — take-home first (green, `--good`), then federal
+  (muted gray), FICA (`--cat-reciprocity`, violet — deliberately NOT
+  reusing the state-tax blue, an earlier pass had FICA in
+  `--accent-ink` and it read as too close to `--cat-income` in dark
+  mode), state (`--cat-income`, blue), local (`--cat-local`, orange).
+  State/local segments are omitted entirely for a no-income-tax state
+  (not shown as a 0%-width segment) — check `s.incomeTax.type !==
+  "none"` / `s.localTax.exists` before pushing into the `segments` array.
 
 ## Testing this project
 

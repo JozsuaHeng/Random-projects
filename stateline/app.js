@@ -35,6 +35,7 @@ let state = {
   listSortAsc: false,
   currentMetric: null,
   currentEdges: null,
+  salary: 65000,
 };
 
 function fmtMoney(n) {
@@ -376,56 +377,113 @@ function bracketTableHTML(brackets) {
     </table>`;
 }
 
-/* The combined "federal + state + local" picture — the exact thing a
-   NYC hire is missing when they only see one line on an offer letter.
-   Bars are scaled relative to the combined total, not to some fixed
-   max, so the stack always fills the track regardless of how high the
-   actual numbers run. */
-function taxStackHTML(s) {
-  const fedBrackets = FEDERAL.incomeTax.bracketsSingle;
-  const fedTop = fedBrackets[fedBrackets.length - 1].rate;
-  const stateTop = s.incomeTax.type === "none" ? 0 : s.incomeTax.topRate;
-  const hasLocalRate = s.localTax.exists && typeof s.localTax.topRate === "number";
-  const localTop = hasLocalRate ? s.localTax.topRate : 0;
-  const combined = fedTop + stateTop + localTop;
+/* Standard progressive bracket math: sums tax owed through every
+   bracket up to `income`, not just "income * top rate" — that's the
+   whole fix for the earlier version, which showed the top MARGINAL
+   bracket (37% federal) as if it were everyone's rate. */
+function computeBracketTax(brackets, income) {
+  if (!brackets || !brackets.length || income <= 0) return 0;
+  let tax = 0;
+  let prevUpTo = 0;
+  for (const b of brackets) {
+    const upTo = b.upTo === null ? Infinity : b.upTo;
+    if (income > prevUpTo) tax += (Math.min(income, upTo) - prevUpTo) * (b.rate / 100);
+    prevUpTo = upTo;
+    if (income <= upTo) break;
+  }
+  return tax;
+}
 
-  const layers = [
-    { label: "Federal", rate: fedTop, sub: "Same in every state", color: "var(--text-muted)" },
-    {
-      label: s.name + " state",
-      rate: stateTop,
-      sub: s.incomeTax.type === "none" ? "No state income tax" : s.incomeTax.type === "flat" ? "Flat rate" : "Top bracket",
-      color: "var(--cat-income)",
-    },
-  ];
+/* State/local brackets are applied to gross salary directly (no
+   state-specific standard deduction modeled — we don't have 51 of
+   those) — flagged in the UI, not hidden. Local tax uses real brackets
+   where we have them (NY), otherwise a flat approximation off
+   localTax.topRate, also flagged. */
+function computePaycheck(s, salary) {
+  salary = Math.max(0, Math.round(salary || 0));
+  const fedTaxable = Math.max(0, salary - FEDERAL.incomeTax.standardDeduction.single);
+  const federalTax = computeBracketTax(FEDERAL.incomeTax.bracketsSingle, fedTaxable);
+
+  const socialSecurity = Math.min(salary, FEDERAL.socialSecurity.wageBase2026) * (FEDERAL.socialSecurity.employeeRate / 100);
+  const medicare = salary * (FEDERAL.medicare.employeeRate / 100) +
+    Math.max(0, salary - 200000) * (FEDERAL.medicare.additionalMedicareTax.rate / 100);
+  const fica = socialSecurity + medicare;
+
+  let stateTax = 0;
+  if (s.incomeTax.type === "flat") stateTax = salary * (s.incomeTax.topRate / 100);
+  else if (s.incomeTax.type === "progressive") stateTax = computeBracketTax(s.incomeTax.bracketsSingle, salary);
+
+  let localTax = 0;
+  let localApprox = false;
   if (s.localTax.exists) {
-    layers.push({
-      label: s.localTax.topRateLabel ? s.localTax.topRateLabel.replace(/\s*\(.*\)$/, "") : "Local / city",
-      rate: hasLocalRate ? localTop : null,
-      sub: hasLocalRate ? "Top of range" : "Varies by city — see below",
-      color: "var(--cat-local)",
-    });
+    if (s.localTax.bracketsSingle) {
+      localTax = computeBracketTax(s.localTax.bracketsSingle, salary);
+    } else if (typeof s.localTax.topRate === "number") {
+      localTax = salary * (s.localTax.topRate / 100);
+      localApprox = true;
+    }
   }
 
-  const rows = layers.map((l) => {
-    const pct = l.rate ? Math.max((l.rate / combined) * 100, 3) : 0;
-    return `
-      <div class="stack-row">
-        <div class="stack-label">${l.label}<span class="stack-sub">${l.sub}</span></div>
-        <div class="stack-track"><div class="stack-fill" style="width:${pct}%; background:${l.color}"></div></div>
-        <span class="stack-value">${l.rate !== null ? l.rate + "%" : "—"}</span>
-      </div>`;
+  const totalTax = federalTax + fica + stateTax + localTax;
+  return { salary, federalTax, fica, stateTax, localTax, localApprox, takeHome: Math.max(0, salary - totalTax), totalTax };
+}
+
+function parseSalaryInput(raw) {
+  const digits = String(raw || "").replace(/[^0-9]/g, "");
+  return digits ? Math.min(parseInt(digits, 10), 50000000) : 0;
+}
+
+function salaryBoxHTML(salary) {
+  return `
+    <div class="salary-box">
+      <label for="salary-input">Try it with a salary</label>
+      <div class="salary-input-wrap">
+        <span class="salary-prefix">$</span>
+        <input type="text" inputmode="numeric" id="salary-input" value="${salary.toLocaleString("en-US")}" aria-label="Annual salary" />
+        <span class="salary-suffix">/ year</span>
+      </div>
+      <p class="salary-hint">Showing an example salary — type your own above to see your real numbers.</p>
+    </div>`;
+}
+
+/* The actual paycheck picture for a given salary: one stacked bar
+   (take-home + each tax layer, proportional to gross) plus a line-item
+   legend with both $ and effective %. This is what replaced the old
+   "top marginal rate" stack after it was flagged as misleading. */
+function paycheckBreakdownHTML(s, salary) {
+  const p = computePaycheck(s, salary);
+  const safeSalary = p.salary || 1;
+
+  const segments = [
+    { label: "Take-home", amount: p.takeHome, color: "var(--good)" },
+    { label: "Federal income tax", amount: p.federalTax, color: "var(--text-muted)" },
+    { label: "Social Security + Medicare", amount: p.fica, color: "var(--cat-reciprocity)" },
+  ];
+  if (s.incomeTax.type !== "none") {
+    segments.push({ label: s.name + " state tax", amount: p.stateTax, color: "var(--cat-income)" });
+  }
+  if (s.localTax.exists) {
+    const baseLabel = s.localTax.topRateLabel ? s.localTax.topRateLabel.replace(/\s*\(.*\)$/, "") : "Local tax";
+    segments.push({ label: baseLabel + (p.localApprox ? " (approx.)" : ""), amount: p.localTax, color: "var(--cat-local)" });
+  }
+
+  const bar = segments.map((seg) => {
+    const pct = Math.max((seg.amount / safeSalary) * 100, seg.amount > 0 ? 0.6 : 0);
+    return `<div class="paycheck-segment" style="width:${pct}%; background:${seg.color}" title="${seg.label}: ${fmtMoney(seg.amount)}"></div>`;
   }).join("");
 
+  const lines = segments.map((seg) => `
+    <div class="paycheck-line">
+      <span class="paycheck-dot" style="background:${seg.color}"></span>
+      <span class="paycheck-line-label">${seg.label}</span>
+      <span class="paycheck-line-value">${fmtMoney(seg.amount)} <span class="paycheck-line-pct">(${((seg.amount / safeSalary) * 100).toFixed(1)}%)</span></span>
+    </div>`).join("");
+
   return `
-    <div class="tax-stack">
-      <div class="tax-stack-title">Your full tax stack — top marginal rates</div>
-      ${rows}
-      <div class="tax-stack-total">
-        Combined top marginal: <strong>~${combined.toFixed(combined % 1 === 0 ? 0 : 1)}%</strong>
-        <span class="stack-caveat">adds each layer's own top rate — a rough ceiling, not how deductions or credits actually interact</span>
-      </div>
-    </div>`;
+    <div class="paycheck-bar">${bar}</div>
+    <div class="paycheck-legend">${lines}</div>
+    ${p.localApprox ? `<p class="paycheck-note">Local tax is approximated as a flat rate here — the real brackets vary by city/county.</p>` : ""}
+    <p class="paycheck-note">State/local figures apply brackets to gross salary (no state-specific deductions modeled) — your real bill is likely a little lower.</p>`;
 }
 
 function renderStateBreakdown(abbr) {
@@ -444,7 +502,8 @@ function renderStateBreakdown(abbr) {
       </div>
     </div>
 
-    ${taxStackHTML(s)}
+    ${salaryBoxHTML(state.salary)}
+    <div id="paycheck-breakdown">${paycheckBreakdownHTML(s, state.salary)}</div>
 
     <div class="breakdown-grid">
     <div class="dock-section dock-cat-income">
@@ -520,7 +579,8 @@ function clearSelection() {
 }
 
 function initBreakdown() {
-  document.getElementById("state-breakdown-content").addEventListener("click", (e) => {
+  const content = document.getElementById("state-breakdown-content");
+  content.addEventListener("click", (e) => {
     handleNoteToggle(e);
     if (e.target.closest('[data-action="clear-selection"]')) {
       clearSelection();
@@ -530,6 +590,19 @@ function initBreakdown() {
     if (!btn) return;
     toggleCompare(btn.dataset.abbr);
     document.getElementById("state-breakdown-content").innerHTML = renderStateBreakdown(state.openAbbr);
+  });
+  // Recompute live as the user types — only the paycheck block is
+  // replaced (not the input itself), so focus/cursor position survive.
+  content.addEventListener("input", (e) => {
+    if (e.target.id !== "salary-input") return;
+    state.salary = parseSalaryInput(e.target.value);
+    const out = document.getElementById("paycheck-breakdown");
+    if (out && state.openAbbr) out.innerHTML = paycheckBreakdownHTML(STATES[state.openAbbr], state.salary);
+  });
+  // focusout (not blur) bubbles, so this works via one delegated listener.
+  content.addEventListener("focusout", (e) => {
+    if (e.target.id !== "salary-input") return;
+    e.target.value = state.salary.toLocaleString("en-US");
   });
 }
 

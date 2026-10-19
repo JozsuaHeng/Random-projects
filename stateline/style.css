@@ -486,20 +486,35 @@ button.feature-chip { cursor: pointer; }
 .bracket-table .bracket-rate { font-family: var(--font-mono); font-weight: 600; color: var(--text-primary); }
 .bracket-flat-note { font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-sunken); border-radius: 10px; padding: 10px 12px; margin-top: 8px; }
 
-/* ---------- tax stack (federal + state + local, combined) ---------- */
-.tax-stack { background: var(--bg-sunken); border-radius: 14px; padding: 18px 20px 16px; margin-bottom: 24px; }
-.tax-stack-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 14px; }
-.stack-row { display: grid; grid-template-columns: 150px 1fr 64px; align-items: center; gap: 12px; margin-bottom: 10px; }
-.stack-label { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); line-height: 1.25; }
-.stack-sub { display: block; font-size: 0.74rem; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
-.stack-track { background: var(--bg-raised); border: 1px solid var(--border); border-radius: 7px; height: 20px; overflow: hidden; }
-.stack-fill { height: 100%; border-radius: 6px; transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
-.stack-value { font-family: var(--font-mono); font-weight: 700; font-size: 0.92rem; color: var(--text-primary); text-align: right; }
-.tax-stack-total {
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-primary);
+/* ---------- salary input (prominent — this drives the whole breakdown) ---------- */
+.salary-box {
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg-sunken)); border: 1.5px solid var(--accent);
+  border-radius: 14px; padding: 16px 20px; margin-bottom: 18px;
 }
-.tax-stack-total strong { font-family: var(--font-mono); color: var(--accent); font-size: 1.05rem; }
-.stack-caveat { display: block; font-size: 0.76rem; color: var(--text-muted); font-weight: 400; margin-top: 3px; }
+.salary-box label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 8px; }
+.salary-input-wrap {
+  display: inline-flex; align-items: center; gap: 2px; background: var(--bg-raised); border: 1px solid var(--border-strong);
+  border-radius: 10px; padding: 8px 14px; transition: border-color 0.15s ease;
+}
+.salary-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.salary-prefix, .salary-suffix { color: var(--text-muted); font-size: 1.1rem; font-weight: 600; }
+.salary-suffix { font-size: 0.82rem; margin-left: 6px; }
+#salary-input {
+  border: none; background: none; outline: none; font-family: var(--font-mono); font-size: 1.3rem; font-weight: 700;
+  color: var(--text-primary); width: 150px; padding: 0 2px;
+}
+.salary-hint { font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0; }
+
+/* ---------- paycheck breakdown (stacked bar + line items) ---------- */
+.paycheck-bar { display: flex; height: 34px; border-radius: 10px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 0 0 1px var(--border) inset; }
+.paycheck-segment { transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); min-width: 0; }
+.paycheck-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px 18px; margin-bottom: 8px; }
+.paycheck-line { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; }
+.paycheck-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.paycheck-line-label { color: var(--text-secondary); flex: 1; min-width: 0; }
+.paycheck-line-value { font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); white-space: nowrap; }
+.paycheck-line-pct { font-weight: 500; color: var(--text-muted); }
+.paycheck-note { font-size: 0.78rem; color: var(--text-muted); margin: 4px 0 0; }
 
 /* ---------- compare overlay ---------- */
 .compare-overlay, .modal-overlay {
