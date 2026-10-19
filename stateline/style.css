@@ -251,10 +251,14 @@ button.feature-chip { cursor: pointer; }
   padding: 28px; box-shadow: var(--shadow); display: flex; flex-direction: column;
   background-image: radial-gradient(ellipse 85% 70% at 50% 42%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
 }
-/* Stretches to match the side column's height (legend + list + tray),
-   so the map fills down to the same bottom edge instead of stopping
-   short — preserveAspectRatio="slice" on the SVG itself (index.html)
-   crops gently rather than leaving empty card below the art. */
+/* The card stretches to match the side column's height (legend + list +
+   tray), so it fills down to the same bottom edge instead of stopping
+   short. The map itself stays preserveAspectRatio="xMidYMid meet" (see
+   index.html) — fully uncropped, letterboxed/centered within the taller
+   box — the card's own radial-gradient background shows through any
+   letterbox margin rather than leaving flat empty space. Don't switch
+   this to "slice": it was tried and cropped the edges, which read as
+   the map being cut off. */
 #us-svg-map { width: 100%; flex: 1 1 auto; min-height: 0; display: block; }
 #us-svg-map path, #us-svg-map circle {
   fill: var(--map-fill); stroke: var(--map-stroke); stroke-width: 1.1; stroke-linejoin: round;

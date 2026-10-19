@@ -227,13 +227,14 @@ own attributes in `index.html`:
   and `.map-wrap` is now a flex column with `#us-svg-map { flex: 1 1
   auto; min-height: 0; }` — the map card now always matches the side
   column's height (legend + ranked list + tray) instead of stopping
-  short and leaving a gap. The SVG's `preserveAspectRatio` changed from
-  `xMinYMin meet` (letterbox, top-left anchored) to `xMidYMid slice`
-  (crop-to-fill, centered) so the actual map art fills that taller box
-  rather than floating in extra whitespace. If the side column ever gets
-  much taller (e.g. a much longer ranked list), check the crop isn't
-  eating into AK/HI at the bottom — it was fine at the heights tested,
-  but `slice` will crop further if the height gap grows a lot.
+  short and leaving a gap. **`preserveAspectRatio` is `xMidYMid meet`**
+  (centered, fully uncropped) — a same-day follow-up tried `xMidYMid
+  slice` (crop-to-fill) to avoid letterbox margins, but that cropped the
+  map's edges, and the user flagged it as looking "cut off." Reverted:
+  `meet` shows 100% of the map, letterboxed/centered within the taller
+  card, with the card's own radial-gradient background showing through
+  the margin instead of flat empty space. Don't switch back to `slice`
+  for this reason — it was deliberately tried and rejected.
 - **Choropleth palette**: `--seq-1`..`--seq-6` and `--map-fill-yes` (in
   all three light/dark token blocks) were swapped from the saturated
   "SaaS blue" ramp to a muted, desaturated slate-to-ink-navy ramp —
